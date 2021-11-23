@@ -11,6 +11,7 @@ struct ContentView: View {
     
     @State private var showImagePicker: Bool = true
     @State private var image: Image? = nil
+    @State private var text: String = ""
     
     var body: some View {
         NavigationView{
@@ -43,7 +44,7 @@ struct ContentView: View {
                                     .padding(.bottom, 60)
                             })
                         NavigationLink(
-                            destination: compilerView(),
+                            destination: compilerView(text: $text),
                             label: {
                                 Image(systemName: "waveform.circle.fill")
                                     .resizable()
