@@ -52,21 +52,6 @@ class App extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        // padding: 50,
-        // <View style={{zIndex: 2}}>
-        //     {this.state.active && (
-        //         <Shadow>
-        //             <View style={styles.sidebar}>
-        //                 <Text>
-        //                     {'Hi,\nUser'}
-        //                 </Text>
-        //                 <Text>
-        //                     {'About Us\nContact Us\nSettings\nHelp\Logout'}
-        //                 </Text>
-        //             </View>
-        //         </Shadow>
-        //     )}
-        // </View>
         flex: 1,
     },
     main: {
@@ -76,8 +61,6 @@ const styles = StyleSheet.create({
     target: {
         fontSize: 40,
         paddingTop: 50,
-        // marginHorizontal: 50,
-        // marginVertical: 50,
         textAlign: 'center',
         color: 'black',
     },
