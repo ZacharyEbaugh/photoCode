@@ -14,16 +14,6 @@ class Header extends React.Component {
         onPress: PropTypes.func.isRequired,
     };
 
-    // state = {
-    //     active: false,
-    // };
-    //
-    // openMenu = () => {
-    //     this.setState({active: !this.state.active});
-    //     console.warn(this.state.active);
-    // };
-
-
     render () {
         return (
             <View style={styles.header}>
@@ -42,7 +32,6 @@ class Header extends React.Component {
                     </TouchableOpacity>
                     <TextInput
                         style={styles.search}
-                        // inlineImageLeft='../assets/images/search.png'
                         placeholder='Search Folders'
                     />
                 </View>
