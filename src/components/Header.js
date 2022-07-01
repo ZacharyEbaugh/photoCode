@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'black',
         width: windowWidth,
+        // fontFamily: 'JetBrainsMono-Regular',
     },
     hamburgerMenu: {
         paddingTop: 30,

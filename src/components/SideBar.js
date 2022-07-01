@@ -1,19 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import { View, Pressable, Text, Image, Alert, Dimensions, StyleSheet } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 
+
+import { GoToSettings } from './SideBarButtonFunctions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
+const showAlert = () =>
+  Alert.alert(
+    "Are you\nsure?",
+    "",
+    [
+        {
+            text: 'Logout',
+            onPress: () => console.warn('logged out'),
+        },
+        {
+            text: 'Cancel',
+            onPress: () => console.warn('canceled'),
+        },
+    ],
+  );
+
 
 class SideBar extends React.Component {
+
     static propTypes = {
         onPress: PropTypes.func.isRequired,
     };
+
 
     state = {
         aboutUs: false,
@@ -21,7 +40,8 @@ class SideBar extends React.Component {
         settings: false,
         help: false,
         logout: false,
-    }
+    };
+
 
     render () {
         return (
@@ -39,7 +59,7 @@ class SideBar extends React.Component {
                         </View>
                         <View>
                             <Pressable
-                                onPress={() => {
+                                onPressOut={() => {
                                     this.setState({aboutUs: !this.state.aboutUs})
                                 }}
                                 onPressIn={() => {
@@ -52,7 +72,7 @@ class SideBar extends React.Component {
                                 </Text>
                             </Pressable>
                             <Pressable
-                                onPress={() => {
+                                onPressOut={() => {
                                     this.setState({contactUs: !this.state.contactUs})
                                 }}
                                 onPressIn={() => {
@@ -64,21 +84,9 @@ class SideBar extends React.Component {
                                     {'Contact Us'}
                                 </Text>
                             </Pressable>
+                            <GoToSettings />
                             <Pressable
-                                onPress={() => {
-                                    this.setState({settings: !this.state.settings})
-                                }}
-                                onPressIn={() => {
-                                    this.setState({settings: !this.state.settings})
-                                }}
-                                style={[styles.button, this.state.settings && styles.updateBackground]}
-                            >
-                                <Text style={styles.options}>
-                                    {'Settings'}
-                                </Text>
-                            </Pressable>
-                            <Pressable
-                                onPress={() => {
+                                onPressOut={() => {
                                     this.setState({help: !this.state.help})
                                 }}
                                 onPressIn={() => {
@@ -91,7 +99,8 @@ class SideBar extends React.Component {
                                 </Text>
                             </Pressable>
                             <Pressable
-                                onPress={() => {
+                                onPress={showAlert}
+                                onPressOut={() => {
                                     this.setState({logout: !this.state.logout})
                                 }}
                                 onPressIn={() => {

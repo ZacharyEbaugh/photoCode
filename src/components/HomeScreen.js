@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import { Shadow } from 'react-native-shadow-2';
 
 import ActionButtons from './ActionButtons';
@@ -12,8 +11,8 @@ import SideBar from './SideBar';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-
 class App extends React.Component {
+
     state = {
         active: false,
     };
