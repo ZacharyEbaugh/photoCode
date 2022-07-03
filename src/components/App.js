@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import HomeScreen from './HomeScreen';
 import Settings from './Settings';
+import ProjectFolder from './ProjectFolder';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,7 +23,10 @@ class App extends React.Component {
                     <Stack.Screen
                         name="Settings"
                         component={Settings}
-                        options={{ title: 'My Home'}}
+                    />
+                    <Stack.Screen
+                        name="ProjectFolder"
+                        component={ProjectFolder}
                     />
                 </Stack.Navigator>
             </NavigationContainer>

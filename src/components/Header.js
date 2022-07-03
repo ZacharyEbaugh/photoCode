@@ -32,7 +32,7 @@ class Header extends React.Component {
                     </TouchableOpacity>
                     <TextInput
                         style={styles.search}
-                        placeholder='Search Folders'
+                        placeholder='Search Projects'
                     />
                 </View>
             </View>

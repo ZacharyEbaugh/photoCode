@@ -7,15 +7,37 @@ import { Shadow } from 'react-native-shadow-2';
 import ActionButtons from './ActionButtons';
 import Header from './Header';
 import SideBar from './SideBar';
+import { GoToProject } from './ProjectBlock';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
+var PROJECT_IMAGES = [
+  {
+    title: 'Portfolio Website',
+    imageFile: require('../assets/images/siteIcon.png'),
+    languageOne: 'HTML',
+    languageTwo: 'CSS',
+    languageThree: 'JavaScript',
+    date: '5/27/2022',
+  },
+  {
+    title: 'SkipList Visual',
+    imageFile: require('../assets/images/skipList-Icon.png'),
+    languageOne: 'Java',
+    languageTwo: 'JavaScript',
+    languageThree: 'Shell',
+    date: '10/22/2021',
+  },
+];
 
 class App extends React.Component {
 
     state = {
         active: false,
     };
+
+
 
     openMenu = () => {
         this.setState({active: !this.state.active});
@@ -38,9 +60,17 @@ class App extends React.Component {
                         />
 
                         <View style={styles.main}>
-                            <Text style={styles.target}>
-                                {'PhotoCode'}
-                            </Text>
+                            {PROJECT_IMAGES.map((project, i) => (
+                                <GoToProject
+                                    key={i}
+                                    imageSource={project.imageFile}
+                                    projectName={project.title}
+                                    languageOne={project.languageOne}
+                                    languageTwo={project.languageTwo}
+                                    languageThree={project.languageThree}
+                                    date={project.date}
+                                />
+                            ))}
                         </View>
                         <ActionButtons />
                     </View>
@@ -56,12 +86,80 @@ const styles = StyleSheet.create({
     main: {
         backgroundColor: '#FFFFFF',
         flex: 5,
+        // {PROJECT_IMAGES.map((project, i) => (
+        //     <ProjectBlock
+        //         key={i}
+        //         projectName={project.title}
+        //         projectImageSource={project.file}
+        //         languageOne={project.languageOne}
+        //         languageTwo={project.languageTwo}
+        //         languageThree={project.languageThree}
+        //         date={project.date}
+        //     />
+        // ))}
+        // <ProjectBlock
+        //     key={i}
+        //     projectName={project.title}
+        //     projectImageSource={project.file}
+        //     languageOne={project.languageOne}
+        //     languageTwo={project.languageTwo}
+        //     languageThree={project.languageThree}
+        //     date={project.date}
+        // />
     },
     target: {
         fontSize: 40,
         paddingTop: 50,
         textAlign: 'center',
         color: 'black',
+    },
+    projectBlock: {
+        // flex: 1,
+        // justifyContent: 'center',
+        // alignItems: 'center',
+
+        alignSelf: 'center',
+        width: windowWidth * 0.8,
+        marginVertical: 10,
+         // overflow: 'hidden',
+    },
+    projectContent: {
+        flexDirection: 'row',
+    },
+    projectImage: {
+        marginVertical: 10,
+        marginHorizontal: 15,
+        height: 75,
+        width: 75,
+    },
+    textBlock: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    projectText: {
+        fontSize: 30,
+    },
+    infoBlock: {
+        marginVertical: 10,
+    },
+    commonLanguage: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        marginVertical: 1,
+    },
+    languageCircle: {
+         width: 10,
+         height: 10,
+         borderRadius: 10 / 2,
+         backgroundColor: '#00C853',
+         marginHorizontal: 5,
+    },
+    date: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 1,
     },
 });
 
