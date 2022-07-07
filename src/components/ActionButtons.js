@@ -1,27 +1,69 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet } from 'react-native';
+import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, Alert, StyleSheet } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 
+const scanAlert = () =>
+  Alert.alert(
+    "Scan to Document",
+    "",
+    [
+        {
+            text: 'New Document',
+            onPress: () => console.warn('new doc'),
+        },
+        {
+            text: 'Code Snippet',
+            onPress: () => console.warn('code snippet'),
+        },
+        {
+            text: 'Cancel',
+            onPress: () => console.warn('canceled'),
+        },
+    ],
+  );
+
+
 class ActionButtons extends React.Component {
+
+    state = {
+        scanPressed: false,
+        newDocPressed: false,
+    };
 
     render () {
         return (
             <Shadow viewStyle={{alignSelf: 'stretch'}}>
                 <View style={styles.actionView}>
-                    <TouchableOpacity onPress={() => {}}>
+                    <Pressable
+                        onPress={scanAlert}
+                        onPressIn={() => {
+                            this.setState({scanPressed: !this.state.scanPressed })
+                        }}
+                        onPressOut={() => {
+                            this.setState({scanPressed: !this.state.scanPressed })
+                        }}
+                    >
                         <Image
-                            style={styles.scanToTextImage}
+                            style={[styles.scanToTextImage, this.state.scanPressed && styles.highlight]}
                             source={require('../assets/images/scan-to-text.png')}
                         />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {}}>
+                    </Pressable>
+                    <Pressable
+                        onPress={() => {}}
+                        onPressIn={() => {
+                            this.setState({newDocPressed: !this.state.newDocPressed })
+                        }}
+                        onPressOut={() => {
+                            this.setState({newDocPressed: !this.state.newDocPressed })
+                        }}
+                    >
                         <Image
-                            style={styles.newFileImage}
+                            style={[styles.newFileImage, this.state.newDocPressed && styles.highlight]}
                             source={require('../assets/images/new-file.png')}
                         />
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
             </Shadow>
         );
@@ -43,6 +85,9 @@ const styles = StyleSheet.create({
     newFileImage: {
         height: 75,
         width: 75,
+    },
+    highlight: {
+        opacity: 0.5,
     },
 });
 

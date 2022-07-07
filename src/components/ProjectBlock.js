@@ -59,64 +59,11 @@ export function GoToProject({ imageSource, projectName, languageOne, languageTwo
     );
 }
 
-// class ProjectBlock extends React.Component {
-//
-//     static propTypes = {
-//         projectName: PropTypes.string.isRequired,
-//         projectImageSource: PropTypes.number.isRequired,
-//         languageOne: PropTypes.string.isRequired,
-//         languageTwo: PropTypes.string.isRequired,
-//         languageThree: PropTypes.string.isRequired,
-//         date: PropTypes.string.isRequired,
-//     };
-//
-//     render () {
-//         return (
-//
-//         );
-//     }
-// }
-
 const styles = StyleSheet.create({
     projectBlock: {
         alignSelf: 'center',
         width: windowWidth * 0.8,
         marginVertical: 10,
-        // <View style={styles.projectContent}>
-        //
-        //     <Image style={styles.projectImage} source={this.props.projectImageSource} />
-        //
-        //     <View style={styles.textBlock}>
-        //         <Text style={styles.projectText}>
-        //             {this.props.projectName}
-        //         </Text>
-        //     </View>
-        //     <View style={styles.infoBlock}>
-        //         <View style={styles.commonLanguage}>
-        //             <Text>
-        //                 {this.props.languageOne}
-        //             </Text>
-        //              <View style={[styles.languageCircle, styles.languageOneColor]} />
-        //         </View>
-        //         <View style={styles.commonLanguage}>
-        //             <Text>
-        //                 {this.props.languageTwo}
-        //             </Text>
-        //              <View style={[styles.languageCircle, styles.languageTwoColor]} />
-        //         </View>
-        //         <View style={styles.commonLanguage}>
-        //             <Text>
-        //                 {this.props.languageThree}
-        //             </Text>
-        //              <View style={[styles.languageCircle, styles.languageThreeColor]} />
-        //         </View>
-        //         <View style={styles.date}>
-        //             <Text>
-        //                 {this.props.date}
-        //             </Text>
-        //         </View>
-        //     </View>
-        // </View>
     },
     projectContent: {
         flexDirection: 'row',
@@ -165,5 +112,3 @@ const styles = StyleSheet.create({
         marginVertical: 1,
     },
 });
-
-// export default ProjectBlock;

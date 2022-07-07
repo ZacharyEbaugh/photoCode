@@ -12,10 +12,12 @@ import { GoToProject } from './ProjectBlock';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-var PROJECT_IMAGES = [
+var userName = 'Brandon';
+
+var PROJECT_INFO= [
   {
     title: 'Portfolio Website',
-    imageFile: require('../assets/images/siteIcon.png'),
+    imageFile: require('../userProjects/Brandon_Portfolio_Website/images/siteIcon.png'),
     languageOne: 'HTML',
     languageTwo: 'CSS',
     languageThree: 'JavaScript',
@@ -23,7 +25,7 @@ var PROJECT_IMAGES = [
   },
   {
     title: 'SkipList Visual',
-    imageFile: require('../assets/images/skipList-Icon.png'),
+    imageFile: require('../userProjects/Brandon_SkipList_Visual/images/skipList-Icon.png'),
     languageOne: 'Java',
     languageTwo: 'JavaScript',
     languageThree: 'Shell',
@@ -60,7 +62,7 @@ class App extends React.Component {
                         />
 
                         <View style={styles.main}>
-                            {PROJECT_IMAGES.map((project, i) => (
+                            {PROJECT_INFO.map((project, i) => (
                                 <GoToProject
                                     key={i}
                                     imageSource={project.imageFile}
