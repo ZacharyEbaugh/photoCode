@@ -1,6 +1,6 @@
 import React from 'react';
 
-import HomeScreen from './LoginRegisterButtons';
+import HomeScreen from './HomeScreen';
 import Register from './Register';
 
 
