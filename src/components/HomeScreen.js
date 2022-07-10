@@ -17,7 +17,7 @@ var userName = 'Brandon';
 var PROJECT_INFO= [
   {
     title: 'Portfolio Website',
-    imageFile: require('../userProjects/Brandon_Portfolio_Website/images/siteIcon.png'),
+    imageFile: require('../assets/images/siteIcon.png'),
     languageOne: 'HTML',
     languageTwo: 'CSS',
     languageThree: 'JavaScript',
@@ -25,7 +25,7 @@ var PROJECT_INFO= [
   },
   {
     title: 'SkipList Visual',
-    imageFile: require('../userProjects/Brandon_SkipList_Visual/images/skipList-Icon.png'),
+    imageFile: require('../assets/images/skipList-Icon.png'),
     languageOne: 'Java',
     languageTwo: 'JavaScript',
     languageThree: 'Shell',
@@ -33,7 +33,7 @@ var PROJECT_INFO= [
   },
 ];
 
-class App extends React.Component {
+class HomeScreen extends React.Component {
 
     state = {
         active: false,
@@ -165,4 +165,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default App;
+export default HomeScreen;

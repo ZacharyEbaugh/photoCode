@@ -27,7 +27,7 @@ function GoToButton({ screenName }) {
   );
 }
 
-class App extends React.Component {
+class Settings extends React.Component {
 
     state = {
         usernamePressed: false,
@@ -312,4 +312,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default App;
+export default Settings;
