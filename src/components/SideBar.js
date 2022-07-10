@@ -6,6 +6,9 @@ import { Shadow } from 'react-native-shadow-2';
 
 
 import { GoToSettings } from './SideBarButtonFunctions';
+import { GoToAbout } from './SideBarButtonFunctions';
+import { GoToContact } from './SideBarButtonFunctions';
+import { GoToLogout } from './SideBarButtonFunctions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -58,7 +61,7 @@ class SideBar extends React.Component {
                             </Text>
                         </View>
                         <View>
-                            <Pressable
+                            {/* <Pressable
                                 onPressOut={() => {
                                     this.setState({aboutUs: !this.state.aboutUs})
                                 }}
@@ -70,8 +73,8 @@ class SideBar extends React.Component {
                                 <Text style={styles.options}>
                                     {'About Us'}
                                 </Text>
-                            </Pressable>
-                            <Pressable
+                            </Pressable> */}
+                            {/* <Pressable
                                 onPressOut={() => {
                                     this.setState({contactUs: !this.state.contactUs})
                                 }}
@@ -83,7 +86,9 @@ class SideBar extends React.Component {
                                 <Text style={styles.options}>
                                     {'Contact Us'}
                                 </Text>
-                            </Pressable>
+                            </Pressable> */}
+                            <GoToAbout/>
+                            <GoToContact/>
                             <GoToSettings />
                             <Pressable
                                 onPressOut={() => {
@@ -98,8 +103,8 @@ class SideBar extends React.Component {
                                     {'Help'}
                                 </Text>
                             </Pressable>
-                            <Pressable
-                                onPress={showAlert}
+                            {/* <Pressable
+                            onPress={[showAlert, navigation.navigate('SplashPage')]}
                                 onPressOut={() => {
                                     this.setState({logout: !this.state.logout})
                                 }}
@@ -111,7 +116,8 @@ class SideBar extends React.Component {
                                 <Text style={styles.options}>
                                     {'Logout'}
                                 </Text>
-                            </Pressable>
+                            </Pressable> */}
+                            <GoToLogout/>
                         </View>
                         <View>
                             <View style={styles.creatorInfo}>
