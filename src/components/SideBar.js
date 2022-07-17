@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import PropTypes from 'prop-types';
 
-import { View, Pressable, Text, Image, Alert, Dimensions, StyleSheet } from 'react-native';
+import { View, Pressable, Text, Image, Alert, Linking, Dimensions, StyleSheet } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 
 
@@ -12,6 +12,45 @@ import { GoToLogout } from './SideBarButtonFunctions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
+const zacGitHub = "https://github.com/ZacharyEbaugh";
+const zacLinkedIn = "https://www.linkedin.com/in/zachary-ebaugh-1a3271224/";
+
+const brandonGitHub = "https://github.com/brandonspangler2";
+const brandonLinkedIn = "https://www.linkedin.com/in/brandon-spangler-0680291a0/";
+
+const OpenURLButton = ({ url, children }) => {
+    // States for opacity onpress
+    const [isPressed, setIsPressed] = useState(false);
+
+    const handlePress = useCallback(async () => {
+        // Checking if the link is supported for links with custom URL scheme.
+        const supported = await Linking.canOpenURL(url);
+
+        if (supported) {
+            // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+            // by some browser in the mobile
+            await Linking.openURL(url);
+        } else {
+            Alert.alert(`Don't know how to open this URL: ${url}`);
+        }
+    }, [url]);
+
+    return (<Pressable
+                style={[isPressed && styles.opacity]}
+                onPress={handlePress}
+                onPressIn={() => {
+                    setIsPressed(current => !current);
+                }}
+                onPressOut={() => {
+                    setIsPressed(current => !current);
+                }}
+            >
+                {children}
+            </Pressable>
+        );
+};
+
 
 const showAlert = () =>
   Alert.alert(
@@ -43,6 +82,10 @@ class SideBar extends React.Component {
         settings: false,
         help: false,
         logout: false,
+        zleGitHub: false,
+        zleLinkedIn: false,
+        bssGitHub: false,
+        bssLinkedIn: false,
     };
 
 
@@ -52,7 +95,7 @@ class SideBar extends React.Component {
                     <View style={styles.sidebar}>
                         <View>
                             <Pressable onPress={this.props.onPress}>
-                                <Image style={styles.searchImage} source={require('../assets/images/search.png')} />
+                                <Image style={styles.searchImage} source={require('../assets/images/CrossButton.png')} />
                             </Pressable>
                         </View>
                         <View>
@@ -124,31 +167,31 @@ class SideBar extends React.Component {
                                 <Text style={styles.creatorName}>
                                     {'zle'}
                                 </Text>
-                                <Pressable
-                                    onPress={() => {}}
-                                >
-                                    <Image style={styles.searchImage} source={require('../assets/images/GitHub-Mark.png')} />
-                                </Pressable>
-                                <Pressable
-                                    onPress={() => {}}
-                                >
-                                    <Image style={styles.searchImage} source={require('../assets/images/linkedInLogo-Black.png')} />
-                                </Pressable>
+                                <OpenURLButton url={zacGitHub} children={<Image
+                                    style={styles.searchImage}
+                                    source={require('./../assets/images/GitHub-Mark.png')}
+                                    />}>
+                                </OpenURLButton>
+                                <OpenURLButton url={zacLinkedIn} children={<Image
+                                    style={styles.searchImage}
+                                    source={require('./../assets/images/linkedInLogo-Black.png')}
+                                    />}>
+                                </OpenURLButton>
                             </View>
                             <View style={styles.creatorInfo}>
                                 <Text style={styles.creatorName}>
                                     {'bss'}
                                 </Text>
-                                <Pressable
-                                    onPress={() => {}}
-                                >
-                                    <Image style={styles.searchImage} source={require('../assets/images/GitHub-Mark.png')} />
-                                </Pressable>
-                                <Pressable
-                                    onPress={() => {}}
-                                >
-                                    <Image style={styles.searchImage} source={require('../assets/images/linkedInLogo-Black.png')} />
-                                </Pressable>
+                                <OpenURLButton url={brandonGitHub} children={<Image
+                                    style={styles.searchImage}
+                                    source={require('./../assets/images/GitHub-Mark.png')}
+                                    />}>
+                                </OpenURLButton>
+                                <OpenURLButton url={brandonLinkedIn} children={<Image
+                                    style={styles.searchImage}
+                                    source={require('./../assets/images/linkedInLogo-Black.png')}
+                                    />}>
+                                </OpenURLButton>
                             </View>
                         </View>
                         <View style={styles.logoContainer}>
@@ -208,6 +251,9 @@ const styles = StyleSheet.create({
     logo: {
         height: 150,
         width: 150,
+    },
+    opacity: {
+        opacity: 0.5,
     },
 });
 

@@ -18,7 +18,7 @@ class Header extends React.Component {
         return (
             <View style={styles.header}>
                 <Pressable onPress={this.props.onPress} style={styles.hamburgerMenu}>
-                    <Image style={styles.searchImage} source={require('../assets/images/search.png')} />
+                    <Image style={styles.searchImage} source={require('../assets/images/MenuButton.png')} />
                 </Pressable>
 
                 <Text style={styles.title}>
