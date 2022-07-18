@@ -12,7 +12,7 @@ class SplashPage extends React.Component {
         return (
             <View style = {styles.container}>
                 <Text style = {styles.PText}>P</Text>
-                <Text style={styles.TitleText}>PhotoCodes</Text>
+                <Text style={styles.TitleText}>PhotoCode</Text>
                 <Text style={styles.SubTitleText}>Scan-in Repository</Text>
                 <Text style={styles.CText}>C</Text>
                 <LoginButtons />
