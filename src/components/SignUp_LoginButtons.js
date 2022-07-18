@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Login from './Login';
+// import Login from './Login';
 
 import {
     View,
@@ -39,7 +39,7 @@ function SignUpButton({ screenName }) {
 
     return (
         <Pressable style={styles.SignUpButton}
-            onPress={() => 
+            onPress={() =>
                 [Alert.alert("Verify Email"),
                 navigation.navigate(screenName)]}
         >
@@ -57,11 +57,11 @@ class Login_SignUp extends React.Component {
         return (
             <View style={styles.container}>
                 <View>
-                    <SignUpButton screenName={Login} action={1} />
+                    <SignUpButton screenName={'Login'} action={1} />
                 </View>
                 <View style={styles.line}></View>
                 <View>
-                    <LoginButton screenName={Login} action={0} />
+                    <LoginButton screenName={'Login'} action={0} />
                 </View>
             </View>
         );

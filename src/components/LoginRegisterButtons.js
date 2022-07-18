@@ -1,15 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import LoginScreen from './Login';
 import RegisterScreen from './Register';
-import Splash from './SplashPage';
+// import Splash from './SplashPage';
 
-import 
-    { 
-        View, 
-        Text, 
-        Pressable, 
-        StyleSheet,    
+import
+    {
+        View,
+        Text,
+        Pressable,
+        StyleSheet,
     } from 'react-native';
 
 const actionNames = ['Login', 'Register'];
@@ -19,14 +19,23 @@ import { useNavigation } from '@react-navigation/native';
 function GoToButton({ screenName, action }) {
     const navigation = useNavigation();
 
+    const [isPressed, setIsPressed] = useState(false);
+
     return (
         <Pressable
+            style={[isPressed && styles.opacity]}
             onPress={() => navigation.navigate(screenName)}
+            onPressIn={() => {
+                setIsPressed(current => !current);
+            }}
+            onPressOut={() => {
+                setIsPressed(current => !current);
+            }}
         >
             <Text style={styles.buttons}>
                 {actionNames[action]}
             </Text>
-        
+
         </Pressable>
 
     );
@@ -72,6 +81,9 @@ const styles = StyleSheet.create ({
         marginBottom: 20,
         zIndex: 9999,
         elevation: 9999,
+    },
+    opacity: {
+        opacity: 0.8,
     },
 });
 

@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 
 import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, Alert, StyleSheet } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
+import CameraView from './CameraView';
+
+import { GoToCamera } from './ProjectBlock';
 
 const scanAlert = () =>
   Alert.alert(
@@ -11,7 +14,7 @@ const scanAlert = () =>
     [
         {
             text: 'New Document',
-            onPress: () => console.warn('new doc'),
+            onPress: () => {<GoToCamera />},
         },
         {
             text: 'Code Snippet',
@@ -36,20 +39,7 @@ class ActionButtons extends React.Component {
         return (
             <Shadow viewStyle={{alignSelf: 'stretch'}}>
                 <View style={styles.actionView}>
-                    <Pressable
-                        onPress={scanAlert}
-                        onPressIn={() => {
-                            this.setState({scanPressed: !this.state.scanPressed })
-                        }}
-                        onPressOut={() => {
-                            this.setState({scanPressed: !this.state.scanPressed })
-                        }}
-                    >
-                        <Image
-                            style={[styles.scanToTextImage, this.state.scanPressed && styles.highlight]}
-                            source={require('../assets/images/scan-to-text.png')}
-                        />
-                    </Pressable>
+                    <GoToCamera />
                     <Pressable
                         onPress={() => {}}
                         onPressIn={() => {

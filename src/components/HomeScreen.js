@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet } from 'react-native';
+import { View, Animated, Pressable, Text, Button, Linking, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 
 import ActionButtons from './ActionButtons';
 import Header from './Header';
 import SideBar from './SideBar';
 import { GoToProject } from './ProjectBlock';
+
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;

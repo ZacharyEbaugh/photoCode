@@ -59,6 +59,25 @@ export function GoToProject({ imageSource, projectName, languageOne, languageTwo
     );
 }
 
+export function GoToCamera() {
+    const navigation = useNavigation();
+
+    return (
+        <Pressable
+            onPress={() => {
+                navigation.navigate('CameraView');
+            }}
+        >
+
+            <Image
+                style={[styles.scanToTextImage]}
+                source={require('../assets/images/scan-to-text.png')}
+            />
+
+        </Pressable>
+    );
+}
+
 const styles = StyleSheet.create({
     projectBlock: {
         alignSelf: 'center',
@@ -110,5 +129,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginVertical: 1,
+    },
+    scanToTextImage: {
+        height: 100,
+        width: 100,
     },
 });
