@@ -13,6 +13,7 @@ import HomeScreen from './HomeScreen';
 import Settings from './Settings';
 import ProjectFolder from './ProjectFolder';
 import CameraView from './CameraView';
+import ActualCamera from './ActualCamera';
 
 const Stack = createNativeStackNavigator();
 
@@ -63,6 +64,10 @@ class App extends React.Component {
                     <Stack.Screen
                         name="CameraView"
                         component={CameraView}
+                    />
+                    <Stack.Screen
+                        name="ActualCamera"
+                        component={ActualCamera}
                     />
                 </Stack.Navigator>
             </NavigationContainer>

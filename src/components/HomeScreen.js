@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { View, Animated, Pressable, Text, Button, Linking, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet } from 'react-native';
+import { View, Animated, Pressable, Text, Button, Linking, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, Easing } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 
 import ActionButtons from './ActionButtons';
@@ -36,27 +36,51 @@ var PROJECT_INFO= [
 
 class HomeScreen extends React.Component {
 
+
     state = {
         active: false,
     };
 
+    sideBarXPos = new Animated.Value(-windowWidth * 0.7);
+    animateSideBarOpen = () => {
+        Animated.timing(this.sideBarXPos, {
+            toValue: 0,
+            duration: 500,
+            easing: Easing.bounce,
+            useNativeDriver: false,
+        }).start();
+    };
+    animateSideBarClose = () => {
+        Animated.timing(this.sideBarXPos, {
+            toValue: -windowWidth * 0.7,
+            duration: 150,
+            // easing: Easing.ease,
+            useNativeDriver: false,
+        }).start(() => {
+            this.setState({active: !this.state.active});
+        });
+    };
 
 
     openMenu = () => {
         this.setState({active: !this.state.active});
-        // console.warn(this.state.active);
+        this.animateSideBarOpen();
+    };
+
+    closeMenu = () => {
+        this.animateSideBarClose();
     };
 
     render () {
         return (
                 <View style={styles.container}>
-                    <View style={{zIndex: 2}}>
+                    <Animated.View style={[{zIndex: 2}, { left: this.sideBarXPos}]}>
                         {this.state.active && (
                             <SideBar
-                                onPress={this.openMenu}
+                                onPress={this.closeMenu}
                             />
                         )}
-                    </View>
+                    </Animated.View>
                     <View style={{zIndex: 1, position: 'absolute', height: windowHeight, alignSelf: 'center'}}>
                         <Header
                             onPress={this.openMenu}

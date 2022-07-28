@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import PropTypes from 'prop-types';
 
-import { View, Pressable, Text, Image, Alert, Linking, Dimensions, StyleSheet } from 'react-native';
+import { View, Pressable, Text, Image, Alert, Linking, Dimensions, StyleSheet, Animated, Easing } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 
 
@@ -18,6 +18,8 @@ const zacLinkedIn = "https://www.linkedin.com/in/zachary-ebaugh-1a3271224/";
 
 const brandonGitHub = "https://github.com/brandonspangler2";
 const brandonLinkedIn = "https://www.linkedin.com/in/brandon-spangler-0680291a0/";
+
+
 
 const OpenURLButton = ({ url, children }) => {
     // States for opacity onpress
@@ -71,6 +73,7 @@ const showAlert = () =>
 
 class SideBar extends React.Component {
 
+
     static propTypes = {
         onPress: PropTypes.func.isRequired,
     };
@@ -104,32 +107,6 @@ class SideBar extends React.Component {
                             </Text>
                         </View>
                         <View>
-                            {/* <Pressable
-                                onPressOut={() => {
-                                    this.setState({aboutUs: !this.state.aboutUs})
-                                }}
-                                onPressIn={() => {
-                                    this.setState({aboutUs: !this.state.aboutUs})
-                                }}
-                                style={[styles.button, this.state.aboutUs && styles.updateBackground]}
-                            >
-                                <Text style={styles.options}>
-                                    {'About Us'}
-                                </Text>
-                            </Pressable> */}
-                            {/* <Pressable
-                                onPressOut={() => {
-                                    this.setState({contactUs: !this.state.contactUs})
-                                }}
-                                onPressIn={() => {
-                                    this.setState({contactUs: !this.state.contactUs})
-                                }}
-                                style={[styles.button, this.state.contactUs && styles.updateBackground]}
-                            >
-                                <Text style={styles.options}>
-                                    {'Contact Us'}
-                                </Text>
-                            </Pressable> */}
                             <GoToAbout/>
                             <GoToContact/>
                             <GoToSettings />
@@ -146,20 +123,6 @@ class SideBar extends React.Component {
                                     {'Help'}
                                 </Text>
                             </Pressable>
-                            {/* <Pressable
-                            onPress={[showAlert, navigation.navigate('SplashPage')]}
-                                onPressOut={() => {
-                                    this.setState({logout: !this.state.logout})
-                                }}
-                                onPressIn={() => {
-                                    this.setState({logout: !this.state.logout})
-                                }}
-                                style={[styles.button, this.state.logout && styles.updateBackground]}
-                            >
-                                <Text style={styles.options}>
-                                    {'Logout'}
-                                </Text>
-                            </Pressable> */}
                             <GoToLogout/>
                         </View>
                         <View>

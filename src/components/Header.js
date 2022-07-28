@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet } from 'react-native';
+import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, Easing } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 
 
@@ -14,10 +14,22 @@ class Header extends React.Component {
         onPress: PropTypes.func.isRequired,
     };
 
+    // sideBarXPos = new Animated.Value(0);
+    // animateSideBar = () => {
+    //     Animated.timing(sideBarXPos, {
+    //         toValue: windowWidth,
+    //         duration: 1000,
+    //         // easing: ,
+    //     }).start();
+    // }
+
     render () {
         return (
             <View style={styles.header}>
-                <Pressable onPress={this.props.onPress} style={styles.hamburgerMenu}>
+                <Pressable
+                    onPress={this.props.onPress}
+                    style={styles.hamburgerMenu}
+                >
                     <Image style={styles.searchImage} source={require('../assets/images/MenuButton.png')} />
                 </Pressable>
 
