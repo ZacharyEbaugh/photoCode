@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, Alert, StyleSheet } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
-import CameraView from './CameraView';
 
 import { GoToCamera } from './ProjectBlock';
 
