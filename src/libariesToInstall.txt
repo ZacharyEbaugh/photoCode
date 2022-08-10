@@ -16,3 +16,53 @@ Install React-Native-Navigation:
     pod install
     // https://reactnavigation.org/docs/getting-started
     // https://reactnavigation.org/docs/hello-react-navigation
+
+Install React-Native-Image-Picker: 
+    npm i react-native-image-picker
+    cd ios
+    pod install
+    // update ios/PhotoCode/Info.plist
+    // Add following tags in outermost <dict> section
+        <key>NSCameraUsageDescription</key>
+        <string>$(PRODUCT_NAME) would like to use your camera</string>
+        <key>NSMicrophoneUsageDescription</key>
+        <string>$(PRODUCT_NAME) would like to your microphone (for videos)</string>
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>$(PRODUCT_NAME) would like access to your photo gallery</string>
+    // https://github.com/react-native-image-picker/react-native-image-picker
+
+Install React-Native-Firebase
+    npm install --save @react-native-firebase/app
+    cd ios
+
+    * add file to ios/PhotoCode.xcworkspace in Xcode * 
+        1. Right click on 'PhotoCode' and click add file
+        2. Check "Copy items if needed"
+        3. Choose file "GoogleService-Info.plist"
+
+    * do two updates in /ios/PhotoCode/AppDelegate.m in Xcode *
+        * add header at top of file * 
+            #import <Firebase.h>
+        
+        * update method "- (BOOL)application:(UIApplication *)application 
+        didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {"
+        add line to top of method *
+            [FIRApp configure];
+
+
+    *
+        before pod install add these lines to ios/Podfile 
+        in section "target 'PhotoCode' do" 
+        after line "flags = get_default_flags()"
+    *
+        pod 'Firebase', :modular_headers => true
+        pod 'FirebaseCore', :modular_headers => true
+        pod 'GoogleUtilities', :modular_headers => true
+        $RNFirebaseAsStaticFramework = true
+
+    * enable flipper. Add line after "target 'PhotoCodeTests' do" ends* 
+    use_flipper!()
+
+    pod install
+    // https://github.com/invertase/react-native-firebase
+    // https://rnfirebase.io 

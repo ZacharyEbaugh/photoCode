@@ -5,6 +5,8 @@ import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextI
 import { Shadow } from 'react-native-shadow-2';
 
 import { GoToCamera } from './ProjectBlock';
+import CameraView from './CameraView';
+
 
 const scanAlert = () =>
   Alert.alert(
