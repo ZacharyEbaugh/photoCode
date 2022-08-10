@@ -45,8 +45,8 @@ class HomeScreen extends React.Component {
     animateSideBarOpen = () => {
         Animated.timing(this.sideBarXPos, {
             toValue: 0,
-            duration: 500,
-            easing: Easing.bounce,
+            duration: 200,
+            easing: Easing.inertia,
             useNativeDriver: false,
         }).start();
     };

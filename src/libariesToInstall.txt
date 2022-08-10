@@ -49,7 +49,6 @@ Install React-Native-Firebase
         add line to top of method *
             [FIRApp configure];
 
-
     *
         before pod install add these lines to ios/Podfile 
         in section "target 'PhotoCode' do" 
