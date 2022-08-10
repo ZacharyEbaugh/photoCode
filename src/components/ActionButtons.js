@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, Alert, StyleSheet } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 
-import { GoToCamera } from './ProjectBlock';
-import CameraView from './CameraView';
+import { useNavigation } from '@react-navigation/native';
 
+// const navigation = useNavigation();
 
 const scanAlert = () =>
   Alert.alert(
@@ -15,7 +15,8 @@ const scanAlert = () =>
     [
         {
             text: 'New Document',
-            onPress: () => {<GoToCamera />},
+            onPress: () => console.warn('new doc'),
+            // onPress: () => navigation.navigate('textEditor')
         },
         {
             text: 'Code Snippet',
@@ -27,6 +28,31 @@ const scanAlert = () =>
         },
     ],
   );
+
+function ToNewDoc() {
+    const navigation = useNavigation();
+    return(
+        <Pressable
+            onPress={() => {
+                navigation.navigate('TextEditor', {
+                    fileName: '',
+                });
+            }}
+            // onPressIn={() => {
+            //     this.setState({ newDocPressed: !this.state.newDocPressed })
+            // }}
+            // onPressOut={() => {
+            //     this.setState({ newDocPressed: !this.state.newDocPressed })
+            // }}
+        >
+            <Image
+                // style={[styles.newFileImage, this.state.newDocPressed && styles.highlight]}
+                style={styles.newFileImage}
+                source={require('../assets/images/new-file.png')}
+            />
+        </Pressable>
+    );
+};
 
 
 class ActionButtons extends React.Component {
@@ -40,21 +66,21 @@ class ActionButtons extends React.Component {
         return (
             <Shadow viewStyle={{alignSelf: 'stretch'}}>
                 <View style={styles.actionView}>
-                    <GoToCamera />
                     <Pressable
-                        onPress={() => {}}
+                        onPress={scanAlert}
                         onPressIn={() => {
-                            this.setState({newDocPressed: !this.state.newDocPressed })
+                            this.setState({scanPressed: !this.state.scanPressed })
                         }}
                         onPressOut={() => {
-                            this.setState({newDocPressed: !this.state.newDocPressed })
+                            this.setState({scanPressed: !this.state.scanPressed })
                         }}
                     >
                         <Image
-                            style={[styles.newFileImage, this.state.newDocPressed && styles.highlight]}
-                            source={require('../assets/images/new-file.png')}
+                            style={[styles.scanToTextImage, this.state.scanPressed && styles.highlight]}
+                            source={require('../assets/images/scan-to-text.png')}
                         />
                     </Pressable>
+                    <ToNewDoc/>
                 </View>
             </Shadow>
         );
