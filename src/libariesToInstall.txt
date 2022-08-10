@@ -31,6 +31,10 @@ Install React-Native-Image-Picker:
         <string>$(PRODUCT_NAME) would like access to your photo gallery</string>
     // https://github.com/react-native-image-picker/react-native-image-picker
 
+    npm install react-native-select-dropdown
+    npm install @react-native-community/hooks
+    npm install @rivascva/react-native-code-editor
+
 Install React-Native-Firebase
     npm install --save @react-native-firebase/app
     cd ios

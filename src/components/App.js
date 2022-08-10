@@ -8,6 +8,8 @@ import Login from './Login';
 import Register from './Register';
 import AboutUs from './AboutUs';
 import ContactUs from './ContactUs';
+import TextEditor from './TextEditor';
+import SaveDoc from './SaveDoc';
 
 import HomeScreen from './HomeScreen';
 import Settings from './Settings';
@@ -63,6 +65,14 @@ class App extends React.Component {
                     <Stack.Screen
                         name="CameraView"
                         component={CameraView}
+                    />
+                    <Stack.Screen
+                        name="TextEditor"
+                        component={TextEditor}
+                    />
+                    <Stack.Screen
+                        name="SaveDoc"
+                        component={SaveDoc}
                     />
                 </Stack.Navigator>
             </NavigationContainer>

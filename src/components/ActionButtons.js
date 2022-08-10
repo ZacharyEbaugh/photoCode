@@ -5,6 +5,7 @@ import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextI
 import { Shadow } from 'react-native-shadow-2';
 
 import { useNavigation } from '@react-navigation/native';
+import { GoToCamera } from './ProjectBlock';
 
 // const navigation = useNavigation();
 
@@ -66,20 +67,7 @@ class ActionButtons extends React.Component {
         return (
             <Shadow viewStyle={{alignSelf: 'stretch'}}>
                 <View style={styles.actionView}>
-                    <Pressable
-                        onPress={scanAlert}
-                        onPressIn={() => {
-                            this.setState({scanPressed: !this.state.scanPressed })
-                        }}
-                        onPressOut={() => {
-                            this.setState({scanPressed: !this.state.scanPressed })
-                        }}
-                    >
-                        <Image
-                            style={[styles.scanToTextImage, this.state.scanPressed && styles.highlight]}
-                            source={require('../assets/images/scan-to-text.png')}
-                        />
-                    </Pressable>
+                   <GoToCamera />
                     <ToNewDoc/>
                 </View>
             </Shadow>
