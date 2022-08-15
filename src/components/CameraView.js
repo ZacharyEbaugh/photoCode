@@ -7,12 +7,21 @@ import { Shadow } from 'react-native-shadow-2';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import { DemoResponse } from './DemoResponse';
 
+import {NativeModules} from 'react-native';
+
+console.log(NativeModules.TextRecognition);
+// NativeModules.TextRecognition.getText(value => {
+//   console.log("The result is: " + value);
+// });
+
 
 /* toggle includeExtra */
 const includeExtra = true;
 
 export default function CameraView() {
   const [response, setResponse] = useState(null);
+  const [imageScanned, setImageScanned] = useState(false);
+  const [imageText, setImageText] = useState(String);
 
   const onButtonPress = useCallback((type, options) => {
 
@@ -24,6 +33,7 @@ export default function CameraView() {
     }
     // ImagePicker.launchCamera(options, setResponse);
   }, []);
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -53,8 +63,27 @@ export default function CameraView() {
                 style={{width: 200, height: 200}}
                 source={{uri: uri}}
               />
+              <TouchableOpacity
+              onPress={() => NativeModules.TextRecognition.recognizeText(uri.substring(7), value => {
+                console.log("The result is: " + value);
+                setImageText(value);
+                setImageScanned(current => !current);
+              })}
+              >
+            <Text>
+              {"Recognize Text"}
+            </Text>
+          </TouchableOpacity>
             </View>
           ))}
+
+        {imageScanned && 
+            <Text>
+              {imageText}
+            </Text>
+        }
+
+       
       </ScrollView>
     </SafeAreaView>
   );
@@ -71,7 +100,7 @@ const styles = StyleSheet.create({
 
   },
   button: {
-    marginVertical: 20,
+    marginVertical: 10,
   },
 
   image: {

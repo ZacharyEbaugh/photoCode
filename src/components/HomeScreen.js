@@ -1,13 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { View, Animated, Pressable, Text, Button, Linking, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, Easing } from 'react-native';
-import { Shadow } from 'react-native-shadow-2';
+import {    
+    View, 
+    Animated, 
+    Pressable, 
+    Image, 
+    Dimensions, 
+    StyleSheet, 
+    Easing } from 'react-native';
 
-import ActionButtons from './ActionButtons';
+import { Shadow } from 'react-native-shadow-2';
+import { useNavigation } from '@react-navigation/native';
+
 import Header from './Header';
 import SideBar from './SideBar';
 import { GoToProject } from './ProjectBlock';
+import GoToCamera from './GoToCamera';
+import CameraOptions from './CameraOptions';
+
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -34,13 +45,15 @@ var PROJECT_INFO= [
   },
 ];
 
+
 class HomeScreen extends React.Component {
 
-
     state = {
-        active: false,
+        sideBarActive: false,
+        cameraOptionsActive: false,
     };
-
+    
+    //#region Sidebar Animations
     sideBarXPos = new Animated.Value(-windowWidth * 0.7);
     animateSideBarOpen = () => {
         Animated.timing(this.sideBarXPos, {
@@ -57,54 +70,116 @@ class HomeScreen extends React.Component {
             // easing: Easing.ease,
             useNativeDriver: false,
         }).start(() => {
-            this.setState({active: !this.state.active});
+            this.setState({sideBarActive: !this.state.sideBarActive});
         });
     };
 
-
-    openMenu = () => {
-        this.setState({active: !this.state.active});
+    openSidebar = () => {
+        this.setState({sideBarActive: !this.state.sideBarActive});
         this.animateSideBarOpen();
     };
 
-    closeMenu = () => {
+    closeSidebar = () => {
         this.animateSideBarClose();
     };
+    //#endregion
+
+    //#region Camera Option Animation
+    cameraOptionsYPos = new Animated.Value(windowHeight);
+    animateCameraOptionsOpen = () => {
+        Animated.timing(this.cameraOptionsYPos, {
+            toValue: (windowHeight/2 - (windowHeight * 0.25)/2),
+            duration: 200,
+            easing: Easing.inertia,
+            useNativeDriver: false,
+        }).start();
+    };
+    animateCameraOptionsClose = () => {
+        Animated.timing(this.cameraOptionsYPos, {
+            toValue: windowHeight,
+            duration: 150,
+            // easing: Easing.ease,
+            useNativeDriver: false,
+        }).start(() => {
+            this.setState({cameraOptionsActive: !this.state.cameraOptionsActive});
+        });
+    };
+
+    openCameraOptions = () => {
+        this.setState({cameraOptionsActive: !this.state.cameraOptionsActive});
+        this.animateCameraOptionsOpen();
+    };
+
+    closeCameraOptions = () => {
+        this.setState({cameraOptionsActive: !this.state.cameraOptionsActive});
+        this.animateCameraOptionsClose();
+    };
+    //#endregion
 
     render () {
         return (
-                <View style={styles.container}>
-                    <Animated.View style={[{zIndex: 2}, { left: this.sideBarXPos}]}>
-                        {this.state.active && (
-                            <SideBar
-                                onPress={this.closeMenu}
-                            />
-                        )}
-                    </Animated.View>
-                    <View style={{zIndex: 1, position: 'absolute', height: windowHeight, alignSelf: 'center'}}>
-                        <Header
-                            onPress={this.openMenu}
+            <View style={styles.container}>
+                <Animated.View style={[{zIndex: 3}, { left: this.sideBarXPos}]}>
+                    {this.state.sideBarActive && (
+                        <SideBar
+                            onPress={this.closeSidebar}
                         />
+                    )}
+                </Animated.View>
 
-                        <View style={styles.main}>
-                            {PROJECT_INFO.map((project, i) => (
-                                <GoToProject
-                                    key={i}
-                                    imageSource={project.imageFile}
-                                    projectName={project.title}
-                                    languageOne={project.languageOne}
-                                    languageTwo={project.languageTwo}
-                                    languageThree={project.languageThree}
-                                    date={project.date}
-                                />
-                            ))}
-                        </View>
-                        <ActionButtons />
+                <Animated.View style={[{zIndex: 2}, { top: this.cameraOptionsYPos}, {left: windowWidth/2-(windowWidth * 0.6)/2}]}>
+                        <CameraOptions onPress={this.closeCameraOptions}/>
+                </Animated.View>
+
+                <View style={{zIndex: 1, position: 'absolute', height: windowHeight, alignSelf: 'center'}}>
+                    <Header
+                        onPress={this.openSidebar}
+                    />
+
+                    <View style={styles.main}>
+                        {PROJECT_INFO.map((project, i) => (
+                            <GoToProject
+                                key={i}
+                                imageSource={project.imageFile}
+                                projectName={project.title}
+                                languageOne={project.languageOne}
+                                languageTwo={project.languageTwo}
+                                languageThree={project.languageThree}
+                                date={project.date}
+                            />
+                        ))}
                     </View>
+
+                    <Shadow viewStyle={{alignSelf: 'stretch'}}>
+                        <View style={styles.actionView}>
+                            <GoToCamera onPress={this.openCameraOptions}/>
+                            <ToNewDoc/>
+                        </View>
+                    </Shadow>
                 </View>
+            </View>
         );
     }
 }
+
+function ToNewDoc() {
+    const navigation = useNavigation();
+
+    return(
+        <Pressable
+            onPress={() => {
+                navigation.navigate('TextEditor', {
+                    fileName: '',
+                });
+            }}
+        >
+            <Image
+                style={styles.newFileImage}
+                source={require('../assets/images/new-file.png')}
+            />
+        </Pressable>
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -113,26 +188,6 @@ const styles = StyleSheet.create({
     main: {
         backgroundColor: '#FFFFFF',
         flex: 5,
-        // {PROJECT_IMAGES.map((project, i) => (
-        //     <ProjectBlock
-        //         key={i}
-        //         projectName={project.title}
-        //         projectImageSource={project.file}
-        //         languageOne={project.languageOne}
-        //         languageTwo={project.languageTwo}
-        //         languageThree={project.languageThree}
-        //         date={project.date}
-        //     />
-        // ))}
-        // <ProjectBlock
-        //     key={i}
-        //     projectName={project.title}
-        //     projectImageSource={project.file}
-        //     languageOne={project.languageOne}
-        //     languageTwo={project.languageTwo}
-        //     languageThree={project.languageThree}
-        //     date={project.date}
-        // />
     },
     target: {
         fontSize: 40,
@@ -141,14 +196,9 @@ const styles = StyleSheet.create({
         color: 'black',
     },
     projectBlock: {
-        // flex: 1,
-        // justifyContent: 'center',
-        // alignItems: 'center',
-
         alignSelf: 'center',
         width: windowWidth * 0.8,
         marginVertical: 10,
-         // overflow: 'hidden',
     },
     projectContent: {
         flexDirection: 'row',
@@ -187,6 +237,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginVertical: 1,
+    },
+    actionView: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        paddingBottom: 30,
+        paddingTop: 20,
+    },
+    newFileImage: {
+        height: 75,
+        width: 75,
     },
 });
 

@@ -14,15 +14,6 @@ class Header extends React.Component {
         onPress: PropTypes.func.isRequired,
     };
 
-    // sideBarXPos = new Animated.Value(0);
-    // animateSideBar = () => {
-    //     Animated.timing(sideBarXPos, {
-    //         toValue: windowWidth,
-    //         duration: 1000,
-    //         // easing: ,
-    //     }).start();
-    // }
-
     render () {
         return (
             <View style={styles.header}>
@@ -63,9 +54,9 @@ const styles = StyleSheet.create({
         fontSize: 40,
         marginTop: -100,
         textAlign: 'center',
-        color: 'black',
+        color: 'white',
         width: windowWidth,
-        // fontFamily: 'JetBrainsMono-Regular',
+        fontFamily: 'JetBrainsMono-Regular',
     },
     hamburgerMenu: {
         paddingTop: 30,
