@@ -36,6 +36,7 @@ class Header extends React.Component {
                     <TextInput
                         style={styles.search}
                         placeholder='Search Projects'
+                        placeholderTextColor='darkgrey' 
                     />
                 </View>
             </View>
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'white',
         width: windowWidth,
-        fontFamily: 'JetBrainsMono-Regular',
+        fontFamily: 'JetBrainsMono-Medium',
     },
     hamburgerMenu: {
         paddingTop: 30,
@@ -75,9 +76,10 @@ const styles = StyleSheet.create({
     search: {
         width: windowWidth * 0.75,
         height: 40,
-        fontSize: 30,
+        fontSize: 25,
         textAlign: 'left',
         paddingLeft: 20,
+        fontFamily: 'JetBrainsMono-Regular',
     },
     searchImage: {
         width: 30,

@@ -29,25 +29,25 @@ export function GoToProject({ imageSource, projectName, languageOne, languageTwo
                         </View>
                         <View style={styles.infoBlock}>
                             <View style={styles.commonLanguage}>
-                                <Text>
+                                <Text style={styles.sideText}>
                                     {languageOne}
                                 </Text>
                                  <View style={[styles.languageCircle, styles.languageOneColor]} />
                             </View>
                             <View style={styles.commonLanguage}>
-                                <Text>
+                                <Text style={styles.sideText}>
                                     {languageTwo}
                                 </Text>
                                  <View style={[styles.languageCircle, styles.languageTwoColor]} />
                             </View>
                             <View style={styles.commonLanguage}>
-                                <Text>
+                                <Text style={styles.sideText}>
                                     {languageThree}
                                 </Text>
                                  <View style={[styles.languageCircle, styles.languageThreeColor]} />
                             </View>
                             <View style={styles.date}>
-                                <Text>
+                                <Text style={styles.sideText}>
                                     {date}
                                 </Text>
                             </View>
@@ -80,16 +80,22 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     projectText: {
-        fontSize: 30,
+        fontSize: windowWidth * 0.055,
+        fontFamily: 'JetBrainsMono-Regular',
+    },
+    sideText: {
+        fontSize: windowWidth * 0.03,
+        fontFamily: 'JetBrainsMono-Regular',
     },
     infoBlock: {
         marginVertical: 10,
+        justifyContent: 'center',
     },
     commonLanguage: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-end',
-        marginVertical: 1,
+        marginVertical: 1, 
     },
     languageCircle: {
          width: 10,

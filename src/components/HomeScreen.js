@@ -123,6 +123,7 @@ class HomeScreen extends React.Component {
                     {this.state.sideBarActive && (
                         <SideBar
                             onPress={this.closeSidebar}
+                            userName={userName}
                         />
                     )}
                 </Animated.View>

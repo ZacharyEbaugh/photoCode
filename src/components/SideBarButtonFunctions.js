@@ -129,7 +129,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#C2C2C2',
     },
     options: {
-        marginLeft: 20,
-        fontSize: 25,
+        marginLeft: windowWidth * 0.025,
+        fontSize: windowWidth * 0.09,
+        fontFamily: 'JetBrainsMono-Bold',
     },
 });

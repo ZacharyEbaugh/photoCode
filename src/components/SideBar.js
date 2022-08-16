@@ -76,6 +76,7 @@ class SideBar extends React.Component {
 
     static propTypes = {
         onPress: PropTypes.func.isRequired,
+        userName: PropTypes.string.isRequired,
     };
 
 
@@ -96,14 +97,14 @@ class SideBar extends React.Component {
         return (
                 <Shadow distance={20}>
                     <View style={styles.sidebar}>
-                        <View>
+                        <View style={styles.crossButtonWrapper}>
                             <Pressable onPress={this.props.onPress}>
-                                <Image style={styles.searchImage} source={require('../assets/images/CrossButton.png')} />
+                                <Image style={styles.crossButton} source={require('../assets/images/CrossButton.png')} />
                             </Pressable>
                         </View>
                         <View>
                             <Text style={styles.userDisplay}>
-                                {'Hi,\nUser'}
+                                {'Hi,\n' + this.props.userName}
                             </Text>
                         </View>
                         <View>
@@ -131,12 +132,12 @@ class SideBar extends React.Component {
                                     {'zle'}
                                 </Text>
                                 <OpenURLButton url={zacGitHub} children={<Image
-                                    style={styles.searchImage}
+                                    style={styles.creatorLogos}
                                     source={require('./../assets/images/GitHub-Mark.png')}
                                     />}>
                                 </OpenURLButton>
                                 <OpenURLButton url={zacLinkedIn} children={<Image
-                                    style={styles.searchImage}
+                                    style={styles.creatorLogos}
                                     source={require('./../assets/images/linkedInLogo-Black.png')}
                                     />}>
                                 </OpenURLButton>
@@ -146,12 +147,12 @@ class SideBar extends React.Component {
                                     {'bss'}
                                 </Text>
                                 <OpenURLButton url={brandonGitHub} children={<Image
-                                    style={styles.searchImage}
+                                    style={styles.creatorLogos}
                                     source={require('./../assets/images/GitHub-Mark.png')}
                                     />}>
                                 </OpenURLButton>
                                 <OpenURLButton url={brandonLinkedIn} children={<Image
-                                    style={styles.searchImage}
+                                    style={styles.creatorLogos}
                                     source={require('./../assets/images/linkedInLogo-Black.png')}
                                     />}>
                                 </OpenURLButton>
@@ -170,23 +171,27 @@ const styles = StyleSheet.create({
     sidebar: {
         backgroundColor: '#0066FF',
         height: windowHeight,
-        width: windowWidth * 0.66,
+        width: windowWidth * 0.7,
         flex: 1,
         alignItems: 'flex-start',
         justifyContent: 'space-around',
         borderColor: 'black',
         borderRightWidth: 3,
     },
-    searchImage: {
+    crossButtonWrapper: {
+        marginTop: windowWidth * 0.1,
+        marginLeft: windowWidth * 0.025,
+    },
+    crossButton: {
         width: 30,
         height: 30,
-        marginLeft: 10,
+        // marginLeft: windowWidth * 0.025,
     },
     userDisplay: {
-        fontSize: 25,
-        marginLeft: 20,
+        fontSize: windowWidth * 0.11,
+        marginLeft: windowWidth * 0.025,
         color: 'white',
-        marginBottom: 30,
+        fontFamily: 'JetBrainsMono-Regular',
     },
     button: {
         // backgroundColor: 'white',
@@ -197,23 +202,32 @@ const styles = StyleSheet.create({
         backgroundColor: '#C2C2C2',
     },
     options: {
-        marginLeft: 20,
-        fontSize: 25,
+        marginLeft: windowWidth * 0.025,
+        fontSize: windowWidth * 0.09,
+        fontFamily: 'JetBrainsMono-Bold',
     },
     creatorInfo: {
         flexDirection: 'row',
+        marginVertical: 10,
     },
     creatorName: {
-        fontSize: 30,
-        marginLeft: 20,
+        fontSize: windowWidth * 0.12,
+        marginLeft: windowWidth * 0.025,
+        fontFamily: 'JetBrainsMono-ExtraBold',
+    },
+    creatorLogos: {
+        width: windowWidth * 0.13,
+        height: windowWidth * 0.13,
+        marginLeft: 10,
     },
     logoContainer: {
         alignItems: 'center',
         width: windowWidth * 0.66 - 3
     },
     logo: {
-        height: 150,
-        width: 150,
+        height: windowHeight * 0.15,
+        width: windowHeight * 0.15,
+        marginBottom: 20,
     },
     opacity: {
         opacity: 0.5,

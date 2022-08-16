@@ -233,11 +233,12 @@ const styles = StyleSheet.create({
         width: windowWidth * 0.6,
     },
     buttonText: {
-        fontSize: 30,
+        fontSize: 26,
         marginHorizontal: 20,
         marginVertical: 10,
         textAlign: 'center',
         color: 'white',
+        fontFamily: 'JetBrainsMono-Regular'
     },
     sidebar: {
         // flex: 1,
