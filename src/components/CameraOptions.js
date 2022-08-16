@@ -72,7 +72,8 @@ function TakePhoto() {
                           navigation.navigate('TextEditor', {
                             fileName: '',
                             initialText: JSON.stringify(value, null, 1).slice(1, -1).replaceAll(',', '').replaceAll('"', '').trim(),
-                          });       
+                          });
+                          setResponse(null);       
                         })
                       ))}
                   </View>
