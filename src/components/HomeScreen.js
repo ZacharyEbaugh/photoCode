@@ -170,6 +170,7 @@ function ToNewDoc() {
             onPress={() => {
                 navigation.navigate('TextEditor', {
                     fileName: '',
+                    initialText: '',
                 });
             }}
         >

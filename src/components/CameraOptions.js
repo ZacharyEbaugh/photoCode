@@ -15,11 +15,12 @@ const includeExtra = true;
 
 function TakePhoto() {
     const [response, setResponse] = useState(null);
+    const navigation = useNavigation();
+
     const onButtonPress = useCallback((type, options) => {
   
         if (type === 'capture') {
           launchCamera(options, setResponse);
-          console.warn('capture');
         } else {
           launchImageLibrary(options, setResponse);
         }
@@ -60,6 +61,23 @@ function TakePhoto() {
                         {'Select Image'}
                     </Text>
                   </TouchableOpacity>
+
+                  <View>
+                    {response?.assets &&
+                      response?.assets.map(({uri}) => (
+                        NativeModules.TextRecognition.recognizeText(uri.substring(7), value => {
+                          console.log("The result is: " + value);
+                          // setImageText(value);
+                          // setImageScanned(current => !current);
+                          navigation.navigate('TextEditor', {
+                            fileName: '',
+                            initialText: JSON.stringify(value, null, 1).slice(1, -1).replaceAll(',', '').replaceAll('"', '').trim(),
+                          });       
+                        })
+                      ))}
+                  </View>
+
+
             </View>
         </SafeAreaView>
       );
@@ -78,6 +96,12 @@ export function CameraView() {
         console.warn('capture');
       } else {
         launchImageLibrary(options, setResponse);
+        NativeModules.TextRecognition.recognizeText(uri.substring(7), value => {
+          console.log("The result is: " + value);
+          // setImageText(value);
+          // setImageScanned(current => !current);
+
+        });
       }
       // ImagePicker.launchCamera(options, setResponse);
     }, []);

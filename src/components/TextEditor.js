@@ -24,6 +24,10 @@ function Example ({language}) {
     const keyboard = useKeyboard();
     const insets = useSafeAreaInsets();
 
+    const route = useRoute();
+    const { initialText } = route.params;
+
+
     return (
         <SafeAreaView style={styles.codeEditorBox}>
             <CodeEditor
@@ -43,6 +47,7 @@ function Example ({language}) {
                 language={language}
                 syntaxStyle={CodeEditorSyntaxStyles.vs2015}
                 showLineNumbers
+                initialValue={initialText}
             />
         </SafeAreaView>
     );
