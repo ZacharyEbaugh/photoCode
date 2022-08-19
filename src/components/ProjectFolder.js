@@ -98,14 +98,15 @@ const styles = StyleSheet.create({
     backText: {
         fontSize: 20,
         color: '#FFFFFF',
+        fontFamily: 'JetBrainsMono-Medium',
     },
     title: {
-        fontSize: 40,
+        fontSize: 35,
         // marginTop: -100,
         textAlign: 'center',
         width: windowWidth,
         color: '#FFFFFF',
-        // fontFamily: 'JetBrainsMono-Regular',
+        fontFamily: 'JetBrainsMono-Medium',
     },
     projectBlock: {
         alignSelf: 'center',

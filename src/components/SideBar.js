@@ -179,8 +179,10 @@ const styles = StyleSheet.create({
         borderRightWidth: 3,
     },
     crossButtonWrapper: {
-        marginTop: windowWidth * 0.1,
-        marginLeft: windowWidth * 0.025,
+        // marginTop: windowWidth * 0.1,
+        // marginLeft: windowWidth * 0.025,
+        marginTop: windowWidth * 0.07,
+        marginLeft: windowWidth * 0.09,
     },
     crossButton: {
         width: 30,
@@ -212,7 +214,7 @@ const styles = StyleSheet.create({
     },
     creatorName: {
         fontSize: windowWidth * 0.12,
-        marginLeft: windowWidth * 0.025,
+        marginLeft: windowWidth * 0.07,
         fontFamily: 'JetBrainsMono-ExtraBold',
     },
     creatorLogos: {

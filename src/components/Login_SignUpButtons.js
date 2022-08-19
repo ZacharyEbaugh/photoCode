@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
 
     loginText: {
         fontSize: 40,
+        fontFamily: 'JetBrainsMono-Medium',
     },
 
     line: {
@@ -116,6 +117,7 @@ const styles = StyleSheet.create({
 
     signUpText: {
         fontSize: 40,
+        fontFamily: 'JetBrainsMono-Medium',
     }
 });
 

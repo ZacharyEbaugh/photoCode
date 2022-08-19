@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
     backText: {
         fontSize: 20,
         color: '#FFFFFF',
+        fontFamily: 'JetBrainsMono-Medium',
     },
 
     titleBox: {
@@ -141,6 +142,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         width: windowWidth,
         color: '#FFFFFF',
+        fontFamily: 'JetBrainsMono-Bold',
     },
 
     subTitle: {
@@ -149,6 +151,7 @@ const styles = StyleSheet.create({
         width: windowWidth,
         color: '#FFFFFF',
         marginTop: windowHeight * -0.006,
+        fontFamily: 'JetBrainsMono-Medium',
     },
 
     main: {
@@ -171,13 +174,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         // alignItems: 'center',
         // backgroundColor: 'black'
+        fontFamily: 'JetBrainsMono-Medium',
     },
 
     subjectTitle: {
         fontSize: 35,
         // padding: 5,
         alignSelf: 'flex-start',
-        fontWeight: '600'
+        fontWeight: '600',
+        fontFamily: 'JetBrainsMono-Medium',
     },
 
     underLine: {
@@ -199,6 +204,7 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderRadius: windowHeight * 0.011,
         alignSelf: 'center',
+        fontFamily: 'JetBrainsMono-Regular',
     },
 
     Message: {
@@ -223,6 +229,7 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         borderWidth: 2,
         borderColor: 'black',
+        fontFamily: 'JetBrainsMono-Regular',
     },
 
     SendButton: {
@@ -242,6 +249,7 @@ const styles = StyleSheet.create({
     SendText: {
         fontSize: 50,
         color: 'white',
+        fontFamily: 'JetBrainsMono-Medium',
     },
 });
 

@@ -230,6 +230,7 @@ const styles = StyleSheet.create({
     backText: {
         fontSize: 20,
         color: '#FFFFFF',
+        fontFamily: 'JetBrainsMono-Medium',
     },
 
     titleAndLanguage: {
@@ -255,7 +256,8 @@ const styles = StyleSheet.create({
 
     dropDownButton: {
         borderRadius: 15,
-        width: windowWidth * 0.3
+        width: windowWidth * 0.3,
+        fontFamily: 'JetBrainsMono-Medium',
     },
 
     title: {
@@ -265,7 +267,7 @@ const styles = StyleSheet.create({
         marginLeft: windowWidth * 0.02,
         width: windowWidth,
         color: '#FFFFFF',
-        // fontFamily: 'JetBrainsMono-Regular',
+                fontFamily: 'JetBrainsMono-Medium',
     },
 
     titleInput: {
@@ -273,6 +275,7 @@ const styles = StyleSheet.create({
         width: windowWidth * 0.6,
         marginLeft: windowWidth * 0.02,
         color: 'white',
+        fontFamily: 'JetBrainsMono-Medium',
         
     },
 
@@ -291,7 +294,7 @@ const styles = StyleSheet.create({
         width: windowWidth * 1.02,
         alignSelf: 'center',
         backgroundColor: '#0066FF',
-        marginTop: -windowHeight * 0.1,
+        marginTop: -windowHeight * 0.11,
     },
 
     SendText: {
@@ -299,6 +302,7 @@ const styles = StyleSheet.create({
         fontSize: 40,
         textAlign: 'center',
         marginTop: '5%',
+        fontFamily: 'JetBrainsMono-Medium',
     }
 
 

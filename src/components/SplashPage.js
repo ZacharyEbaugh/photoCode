@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
         elevation: -1,
         top: -200,
         left: -60,
+        fontFamily: 'JetBrainsMono-Medium',
         // backgroundColor: 'white',
 
     },
@@ -57,6 +58,7 @@ const styles = StyleSheet.create({
         elevation: -2,
         top: 270,
         left: 60,
+        fontFamily: 'JetBrainsMono-Medium',
         // backgroundColor: 'white',
 
     },
@@ -65,17 +67,18 @@ const styles = StyleSheet.create({
         color:'white',
         fontSize: 70,
         position: 'absolute',
-        top: 180,
-        left: -130,
+        top: 190,
+        left: -155,
         transform: [{ rotate: '90deg' }],
-
+        fontFamily: 'JetBrainsMono-Medium',
     },
 
     SubTitleText: {
         color: 'white',
-        fontSize: 50,
+        fontSize: 45,
         top: 310,
         left: 95,
+        fontFamily: 'JetBrainsMono-Medium',
     }
 
 });

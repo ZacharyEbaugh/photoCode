@@ -12,7 +12,7 @@ import
         StyleSheet,
     } from 'react-native';
 
-const actionNames = ['Login', 'Register'];
+const actionNames = ['Login', "Sign Up"];
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -72,7 +72,7 @@ const styles = StyleSheet.create ({
         fontSize: 40,
         backgroundColor: '#0066FF',
         color: 'white',
-        // fontFamily: 'JetBrainsMono-Regular',
+        fontFamily: 'JetBrainsMono-Medium',
         borderWidth: 3,
         borderColor: 'white',
         borderRadius: 14,

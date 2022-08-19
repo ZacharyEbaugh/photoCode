@@ -123,7 +123,7 @@ export function GoToLogout() {
 
 const styles = StyleSheet.create({
     button: {
-        width: windowWidth * 0.66 - 3,
+        width: windowWidth * 0.69,
     },
     updateBackground: {
         backgroundColor: '#C2C2C2',

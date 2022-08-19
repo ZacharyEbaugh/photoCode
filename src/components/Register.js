@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
         elevation: -1,
         top: -200,
         left: -60,
+        fontFamily: 'JetBrainsMono-Medium',
     },
 
     CText: {
@@ -72,12 +73,15 @@ const styles = StyleSheet.create({
         elevation: -2,
         top: 270,
         left: 60,
+        fontFamily: 'JetBrainsMono-Medium',
     },
 
     message: {
-        fontSize: 90,
+        fontSize: 70,
         color: 'white',
+        marginLeft: windowWidth * -0.05,
         marginTop: windowHeight * 0.1,
+        fontFamily: 'JetBrainsMono-Medium',
     },
 
     inputBox: {

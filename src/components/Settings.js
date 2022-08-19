@@ -199,8 +199,7 @@ const styles = StyleSheet.create({
     },
     header: {
         backgroundColor: '#0066FF',
-
-        flex: 1,
+        flex: 1.15,
         // justifyContent: 'space-around',
 
     },
@@ -215,17 +214,19 @@ const styles = StyleSheet.create({
     },
     darkThemeText: {
         color: 'black',
+        fontFamily: 'JetBrainsMono-Medium',
     },
     darkThemeButtons: {
         backgroundColor: '#A6A6A6',
     },
     title: {
-        fontSize: 40,
+        fontSize: 50,
         // marginTop: -100,
         textAlign: 'center',
         width: windowWidth,
         color: '#FFFFFF',
-        // fontFamily: 'JetBrainsMono-Regular',
+        marginTop: windowHeight * 0.004,
+        fontFamily: 'JetBrainsMono-Bold',
     },
     backButton: {
         marginTop: 40,
@@ -234,6 +235,7 @@ const styles = StyleSheet.create({
     backText: {
         fontSize: 20,
         color: '#FFFFFF',
+        fontFamily: 'JetBrainsMono-Medium',
     },
     optionWrapper: {
         width: windowWidth * 0.8,
@@ -244,6 +246,8 @@ const styles = StyleSheet.create({
         fontSize: 25,
         color: '#989898',
         marginVertical: 10,
+        marginLeft: windowWidth * 0.05,
+        fontFamily: 'JetBrainsMono-Medium',
     },
     blackLine: {
         borderWidth: 2,
@@ -261,12 +265,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 24,
         fontWeight: 'bold',
+        fontFamily: 'JetBrainsMono-Medium',
     },
     deleteText: {
         textAlign: 'center',
         fontSize: 24,
         color: 'red',
         fontWeight: 'bold',
+        fontFamily: 'JetBrainsMono-Medium',
     },
     opacity: {
         opacity: 0.5,
@@ -282,6 +288,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         marginBottom: 10,
         marginTop: 15,
+        fontFamily: 'JetBrainsMono-Medium',
     },
     themeButtonWrapper: {
         backgroundColor: '#D9D9D9',
@@ -309,6 +316,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 50,
         color: 'white',
+        fontFamily: 'JetBrainsMono-Medium',
     },
 });
 
