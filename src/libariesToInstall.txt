@@ -1,3 +1,10 @@
+Add Google ML Text Recognition: 
+    updated podfile platform to 
+    "platform :ios, '15.0'"
+    add inside "target 'PhotoCode' do"
+    # Google ML Text recogniztion 
+    pod 'GoogleMLKit/TextRecognition', '3.2.0'
+
 Install React-Native-SVG:  
     npm install react-native-svg
     cd ios
