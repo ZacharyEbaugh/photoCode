@@ -12,9 +12,11 @@
 
 @interface RCT_EXTERN_MODULE(TextRecognition, NSObject)
 
-RCT_EXTERN_METHOD(init)
-
 RCT_EXTERN_METHOD(recognizeText:
+                  (NSString *)iLink
+                  callback:(RCTResponseSenderBlock)callback)
+
+RCT_EXTERN_METHOD(recognizeTextGoogle:
                   (NSString *)iLink
                   callback:(RCTResponseSenderBlock)callback)
 

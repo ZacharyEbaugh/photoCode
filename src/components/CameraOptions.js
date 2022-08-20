@@ -15,6 +15,7 @@ const includeExtra = true;
 
 function TakePhoto() {
     const [response, setResponse] = useState(null);
+    const [isSet, setIsSet] = useState(false);
     const navigation = useNavigation();
 
     const onButtonPress = useCallback((type, options) => {
@@ -30,6 +31,8 @@ function TakePhoto() {
       return (
         <SafeAreaView style={styles.container}>
             <View style={styles.buttonContainer}>
+              {!isSet && 
+                <View>
                   <TouchableOpacity
                     style={styles.button}
                     key={'capture'}
@@ -43,7 +46,7 @@ function TakePhoto() {
                         {'Take Photo'}
                     </Text>
                   </TouchableOpacity>
-
+              
                   <View style={styles.line}/>
 
                   <TouchableOpacity
@@ -61,24 +64,29 @@ function TakePhoto() {
                         {'Select Image'}
                     </Text>
                   </TouchableOpacity>
+                  </View>
+                }
 
-                  <View>
-                    {response?.assets &&
+                {isSet && 
+                  <Animated.View>
+                  <Text style={styles.loadingText}>{'Loading'}</Text>
+                </Animated.View>
+                }
+
+                  {response?.assets &&
                       response?.assets.map(({uri}) => (
-                        NativeModules.TextRecognition.recognizeText(uri.substring(7), value => {
+                        setIsSet(current => !current),
+                        NativeModules.TextRecognition.recognizeTextGoogle(uri.substring(7), value => {
                           console.log("The result is: " + value);
-                          // setImageText(value);
-                          // setImageScanned(current => !current);
+                          setIsSet(current => !current),
                           navigation.navigate('TextEditor', {
                             fileName: '',
-                            initialText: JSON.stringify(value, null, 1).slice(1, -1).replaceAll(',', '').replaceAll('"', '').trim(),
-                          });
-                          setResponse(null);       
-                        })
-                      ))}
-                  </View>
-
-
+                            // initialText: JSON.stringify(value, null, 1).slice(1, -1).replaceAll(',', '').replaceAll('"', '').replaceAll('\n', '!').trim(),
+                            initialText: value,
+                          })
+                        })),
+                        setResponse(null) 
+                      )}
             </View>
         </SafeAreaView>
       );
@@ -257,6 +265,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
 
         // alignSelf: 'center',
+    },
+    loadingText: {
+      zIndex: 10, 
+      fontSize: 30, 
+      justifyContent: 'center', 
+      marginBottom: 10,
+      fontFamily: 'JetBrainsMono-Regular',
+      color: 'white',
     },
 });
 

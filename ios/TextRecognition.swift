@@ -9,26 +9,48 @@ import Foundation
 import Vision
 import SwiftUI
 
+import MLKit
+
+
 @objc(TextRecognition)
 class TextRecognition: NSObject {
     
-    private var imageLink: String = "example1"
+  private var result: [String] = []
+  private var imageText: String = "undefined"
   
-//    let nsDocumentDirectory = FileManager.SearchPathDirectory.documentDirectory
-//    let nsUserDomainMask    = FileManager.SearchPathDomainMask.userDomainMask
-//    let paths               = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
-//    if let dirPath          = paths.first
-//    {
-//       let imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent("example1.png")
-//    }
+  @objc
+  func recognizeTextGoogle(_ iLink:String, callback:RCTResponseSenderBlock) {
     
-    private var result: [String] = []
+    guard let uiimage = UIImage(named: iLink) else { return }
     
-//    @objc
-//    init(link: String) {
-//        imageLink = link
-//    }
-    @objc
+    let latinOptions = TextRecognizerOptions()
+    lazy var textRecognizer = TextRecognizer.textRecognizer(options:latinOptions)
+    
+    let visionImage = VisionImage(image: uiimage)
+    visionImage.orientation = uiimage.imageOrientation
+    
+    
+    textRecognizer.process(visionImage) { result1, error in
+      guard error == nil, let result1 = result1 else {
+        // Error handling
+        print("error")
+        return
+      }
+      // Recognized text
+      let resultText = result1.text
+      self.processResult(resultText)
+    }
+    
+    sleep(1)
+    callback([imageText])
+  }
+  
+  func processResult(_ result: String) {
+      imageText = result
+   }
+
+
+  @objc
   func recognizeText(_ iLink:String, callback:RCTResponseSenderBlock) {
     let options = [kCGImageSourceShouldCache: false] as CFDictionary
 //    let url = URL(fileURLWithPath: "/Users/brandonspangler/PhotoCode/ios/example1.png")
