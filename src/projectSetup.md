@@ -1,7 +1,7 @@
 Table of Contents: 
 - [Project Setup Overview](#project-setup-overview)
-  - [Install React Native](#install-react-native)
-  - [Initialize Project](#initialize-project)
+  - [## Install React Native](#-install-react-native)
+  - [## Initialize Project](#-initialize-project)
 - [Update Podfile](#update-podfile)
 - [Install Project Dependencies](#install-project-dependencies)
   - [React-Native-SVG](#react-native-svg)
@@ -17,45 +17,49 @@ Table of Contents:
 
 
 # Project Setup Overview
-    Here is the walk-through of setting up the project on your machine. 
+&nbsp; &nbsp; Here is the walk-through of setting up the project on your machine. 
 
 ## Install React Native 
-    Follow the instructions at [reactnative.dev](https://reactnative.dev/docs/environment-setup) for setting up the environment for IOS. 
+---
+&nbsp; &nbsp; Follow the instructions at [reactnative.dev](https://reactnative.dev/docs/environment-setup) for setting up the environment for IOS. 
 
 ## Initialize Project
-    Run the following commands to create the project.  
-        npx react-native init PhotoCode 
-        npx react-native run-ios 
+---
+&nbsp; &nbsp; Run the following commands to create the project.  
+
+    npx react-native init PhotoCode 
+    npx react-native run-ios 
 
 
 
 # Update Podfile
-    Once the project is initialized and the first build is complete update the podfile. 
-      1. change IOS version to 15.0 
+&nbsp; &nbsp; Once the project is initialized and the first build is complete update the podfile. 
+
+  1. change IOS version to 15.0 
+         
          platform :ios, '15.0'
 
-      2. Add Google ML Kit pod for text recognition. Inside the "target 'PhotoCode' do" tag add: 
-         # Google ML Text recognition 
-         pod 'GoogleMLKit/TextRecognition', '3.2.0'
+   2. Add Google ML Kit pod for text recognition. Inside the "target 'PhotoCode' do" tag add: 
+   
+          # Google ML Text recognition 
+          pod 'GoogleMLKit/TextRecognition', '3.2.0'
 
 # Install Project Dependencies
-    The following dependencies are required to build and run the project.
+&nbsp; &nbsp; The following dependencies are required to build and run the project.
 
-## React-Native-SVG
+## [React-Native-SVG](https://github.com/SrBrahma/react-native-shadow-2#readme)
     npm install react-native-svg
-    [GitHub](https://github.com/SrBrahma/react-native-shadow-2#readme)
 
-## React-Native-Shadows
+## [React-Native-Shadows](https://github.com/SrBrahma/react-native-shadow-2#readme)
     npm install react-native-svg
-    [GitHub](https://github.com/SrBrahma/react-native-shadow-2#readme)
+ 
 
-## React-Native-Navigation
+## [React-Native-Navigation](https://reactnavigation.org/docs/getting-started)
     npm install @react-navigation/native
     npm install react-native-screens react-native-safe-area-context
     npm install @react-navigation/native-stack
-    [reactnavigation.org](https://reactnavigation.org/docs/getting-started)
 
-## React-Native-Image-Picker
+## [React-Native-Image-Picker](https://github.com/react-native-image-picker/react-native-image-picker)
     1. npm i react-native-image-picker
     2. Update ios/PhotoCode/Info.plist
        a. Add following tags in outermost <dict> section
@@ -65,19 +69,15 @@ Table of Contents:
             string>$(PRODUCT_NAME) would like to your microphone (for videos)</string>
             <key>NSPhotoLibraryUsageDescription</key>
             <string>$(PRODUCT_NAME) would like access to your photo gallery</string>
-    [GitHub](https://github.com/react-native-image-picker/react-native-image-picker)
 
-## React-Native-Select-Dropdown
+## [React-Native-Select-Dropdown](https://github.com/AdelRedaa97/react-native-select-dropdown)
     npm install react-native-select-dropdown
-    [GitHub](https://github.com/AdelRedaa97/react-native-select-dropdown)
 
-## React-Native-Commmunity/Hooks
+## [React-Native-Commmunity/Hooks](https://github.com/react-native-community/hooks)
     npm install @react-native-community/hooks
-    [GitHub](https://github.com/react-native-community/hooks)
 
-## React-Native-Code-Editor
+## [React-Native-Code-Editor](https://github.com/RivasCVA/react-native-code-editor)
     npm install @rivascva/react-native-code-editor
-    [GitHub](https://github.com/RivasCVA/react-native-code-editor)
 
 ## Install React-Native-Firebase
     npm install --save @react-native-firebase/app
@@ -115,15 +115,22 @@ Table of Contents:
     // https://rnfirebase.io 
 
 # Pod Install
-    After installing all of the dependencies run the following commands from the project root to install them for IOS:
-        cd ios
-        pod install
-        cd ..
+&nbsp; &nbsp; After installing all of the dependencies run the following commands from the project root to install them for IOS:
+
+    cd ios
+    pod install
+    cd ..
 
 # Final Build 
-    Add the necessary files from the GitHub repository into the project root: 
-        1. Add 'src' folder to in project folder
-        2. Update index.js and add react-native-config.js to project folder
-           a. run 'npx react-native-asset' to install fonts
-        3. Add files in IOS folder to the IOS folder in the project folder
-        4. Finally run 'npx react-native run-ios' to build and run the project.
+&nbsp; &nbsp; Add the necessary files from the GitHub repository into the project root: 
+
+  1. Add 'src' folder to in project folder
+  2. Update index.js and add react-native-config.js to project folder
+     1. Run the following command to install the fonts
+   
+            npx react-native-asset
+
+  3. Add files in IOS folder to the IOS folder in the project folder
+  4. Finally run the build command to build and run the project.
+   
+         npx react-native run-ios
