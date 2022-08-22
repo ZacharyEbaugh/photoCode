@@ -1,7 +1,7 @@
 Table of Contents: 
 - [Project Setup Overview](#project-setup-overview)
-  - [## Install React Native](#-install-react-native)
-  - [## Initialize Project](#-initialize-project)
+  - [Install React Native](#install-react-native)
+  - [Initialize Project](#initialize-project)
 - [Update Podfile](#update-podfile)
 - [Install Project Dependencies](#install-project-dependencies)
   - [React-Native-SVG](#react-native-svg)
@@ -20,10 +20,12 @@ Table of Contents:
 &nbsp; &nbsp; Here is the walk-through of setting up the project on your machine. 
 
 ## Install React Native 
+
 ---
 &nbsp; &nbsp; Follow the instructions at [reactnative.dev](https://reactnative.dev/docs/environment-setup) for setting up the environment for IOS. 
 
 ## Initialize Project
+
 ---
 &nbsp; &nbsp; Run the following commands to create the project.  
 
