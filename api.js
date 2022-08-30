@@ -9,7 +9,9 @@ require('mongodb');
 // const Health = require("./models/Health.js");
 // const Diary = require("./models/Diary.js");
 
-// exports.setApp = function ( app, client )
+exports.setApp = function ( app, client )
+{
+}
 // {   //
 //     app.post('/api/login', async (req, res, next) => 
 //     {
