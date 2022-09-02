@@ -251,37 +251,37 @@ exports.setApp = function ( app, client )
 
         const newUser = User({Username:username, Password:password, First_Name:firstName, Last_Name:lastName, Email:email, First_Time_Login:firstTimeLogin, Email_Verify:emailVerify, Email_Token:tok.accessToken, FP_Token:forgotPasswordToken});
         
-        try
-        {
-            newUser.save();
+//         try
+//         {
+//             newUser.save();
         
-            // using Twilio SendGrid's v3 Node.js Library
-            // https://github.com/sendgrid/sendgrid-nodejs
-            //javascript
-            const sgMail = require('@sendgrid/mail')
-            sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-            const msg = {
-                to: email,
-                from: 'cop43318@gmail.com',
-                template_id: 'd-32c150b4de8043edba973cd21ace99f5',
-                dynamic_template_data: {
-                    firstName: firstName,
-                    ahjst: tok.accessToken
-                }
-            }
-            sgMail
-                .send(msg)
-                .then(() => {
-                    console.log('Email sent')
-                })
-                .catch((error) => {
-                    console.error(error)
-                })
-        }
-        catch(e)
-        {
-            error = e.toString();
-        }
+//             // using Twilio SendGrid's v3 Node.js Library
+//             // https://github.com/sendgrid/sendgrid-nodejs
+//             //javascript
+//             const sgMail = require('@sendgrid/mail')
+//             sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+//             const msg = {
+//                 to: email,
+//                 from: 'cop43318@gmail.com',
+//                 template_id: 'd-32c150b4de8043edba973cd21ace99f5',
+//                 dynamic_template_data: {
+//                     firstName: firstName,
+//                     ahjst: tok.accessToken
+//                 }
+//             }
+//             sgMail
+//                 .send(msg)
+//                 .then(() => {
+//                     console.log('Email sent')
+//                 })
+//                 .catch((error) => {
+//                     console.error(error)
+//                 })
+//         }
+//         catch(e)
+//         {
+//             error = e.toString();
+//         }
 
         let ret = {error:error};
         res.status(200).json(ret);
