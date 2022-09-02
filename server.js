@@ -13,8 +13,8 @@ app.use(bodyParser.json());
 require('dotenv').config();
 const url = process.env.MONGODB_URI;
 const mongoose = require("mongoose");
-mongoose.connect(url).then(() => console.log("Mongo DB connected")).catch(err => console.log(err));
-// mongoose.connect(`mongodb+srv://PhotoCodeDev:pcdev1486!@photocode.dmeexuq.mongodb.net/myFirstDatabase`).then(() => console.log("Mongo DB connected")).catch(err => console.log(err));
+// mongoose.connect(url).then(() => console.log("Mongo DB connected")).catch(err => console.log(err));
+mongoose.connect(`mongodb+srv://PhotoCodeDev:pcdev1486!@photocode.dmeexuq.mongodb.net/myFirstDatabase`).then(() => console.log("Mongo DB connected")).catch(err => console.log(err));
 
 var api = require('./api.js');
 api.setApp( app, mongoose );
