@@ -5,51 +5,49 @@ require('mongodb');
 const User = require("./models/User.js");
 
 exports.setApp = function ( app, client )
-{
-}
-// {   //
-//     app.post('/api/login', async (req, res, next) => 
-//     {
-//         // incoming: Login, Password.
-//         // outgoing: UserId, First_Name, Last_Name, First_Time_Login, Email_Verify, Error.
+{   
+    app.post('/api/login', async (req, res, next) => 
+    {
+        // incoming: Login, Password.
+        // outgoing: UserId, First_Name, Last_Name, First_Time_Login, Email_Verify, Error.
 
-//         let id = -1;
-//         let fn = '';
-//         let ln = '';
-//         let ev = -1;
-//         let ftl = -1;
-//         var ret;
+        let id = -1;
+        let fn = '';
+        let ln = '';
+        let ev = -1;
+        let ftl = -1;
+        var ret;
 
-//         const {login, password} = req.body;
-//         const results = await User.find({$or:[{Username: login}, {Email:login}], Password: password});
+        const {login, password} = req.body;
+        const results = await User.find({$or:[{Username: login}, {Email:login}], Password: password});
 
-//         if( results.length > 0 )
-//         {
-//             id = results[0]._id.toString();
-//             fn = results[0].First_Name;
-//             ln = results[0].Last_Name;
-//             ftl = results[0].First_Time_Login;
-//             ev = results[0].Email_Verify;
+        if( results.length > 0 )
+        {
+            id = results[0]._id.toString();
+            fn = results[0].First_Name;
+            ln = results[0].Last_Name;
+            ftl = results[0].First_Time_Login;
+            ev = results[0].Email_Verify;
 
-//             try
-//             {
-//                 const token = require("./createJWT.js");
-//                 tok = token.createToken(fn, ln, id);
-//                 ret = {ev:ev, ftl:ftl, token:tok};
-//             }
-//             catch(e)
-//             {
-//                 ret = {error:e.message};
-//             }
-//         }
-//         else
-//         {
-//             ret = {error:"Login/Password incorrect"};
-//         }
+            try
+            {
+                const token = require("./createJWT.js");
+                tok = token.createToken(fn, ln, id);
+                ret = {ev:ev, ftl:ftl, token:tok};
+            }
+            catch(e)
+            {
+                ret = {error:e.message};
+            }
+        }
+        else
+        {
+            ret = {error:"Login/Password incorrect"};
+        }
 
-//         res.status(200).json(ret);
-//     });
-//     //
+        res.status(200).json(ret);
+    });
+ 
 //     app.post('/api/ftlogin', async (req, res, next) => 
 //     {
 //         // incoming: UserID, Activity Level, Height, Age, Goal Weight, Starting Weight, Daily Calorie Goal.
@@ -232,62 +230,63 @@ exports.setApp = function ( app, client )
 
 
 //     //
-//     app.post('/api/register', async (req, res, next) =>
-//     {
-//         // incoming: Username, Password, First_Name, Last_Name, Email.
-//         // outgoing: Error.
+    app.post('/api/register', async (req, res, next) =>
+    {
+        // incoming: Username, Password, First_Name, Last_Name, Email.
+        // outgoing: Error.
             
-//         let error = '';
+        let error = '';
 
-//         const {username, password, firstName, lastName, email, firstTimeLogin, emailVerify, forgotPasswordToken} = req.body;
+        const {username, password, firstName, lastName, email, firstTimeLogin, emailVerify, forgotPasswordToken} = req.body;
 
-//         try
-//         {
-//             const token = require("./createJWT.js");
-//             var tok = token.createToken(username, firstName, lastName);
-//         }
-//         catch(e)
-//         {
-//             ret = {error:e.message};
-//         }
+        try
+        {
+            const token = require("./createJWT.js");
+            var tok = token.createToken(username, firstName, lastName);
+        }
+        catch(e)
+        {
+            ret = {error:e.message};
+        }
 
-//         const newUser = User({Username:username, Password:password, First_Name:firstName, Last_Name:lastName, Email:email, First_Time_Login:firstTimeLogin, Email_Verify:emailVerify, Email_Token:tok.accessToken, FP_Token:forgotPasswordToken});
+        const newUser = User({Username:username, Password:password, First_Name:firstName, Last_Name:lastName, Email:email, First_Time_Login:firstTimeLogin, Email_Verify:emailVerify, Email_Token:tok.accessToken, FP_Token:forgotPasswordToken});
         
-//         try
-//         {
-//             newUser.save();
+        try
+        {
+            newUser.save();
         
-//             // using Twilio SendGrid's v3 Node.js Library
-//             // https://github.com/sendgrid/sendgrid-nodejs
-//             //javascript
-//             const sgMail = require('@sendgrid/mail')
-//             sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-//             const msg = {
-//                 to: email,
-//                 from: 'cop43318@gmail.com',
-//                 template_id: 'd-32c150b4de8043edba973cd21ace99f5',
-//                 dynamic_template_data: {
-//                     firstName: firstName,
-//                     ahjst: tok.accessToken
-//                 }
-//             }
-//             sgMail
-//                 .send(msg)
-//                 .then(() => {
-//                     console.log('Email sent')
-//                 })
-//                 .catch((error) => {
-//                     console.error(error)
-//                 })
-//         }
-//         catch(e)
-//         {
-//             error = e.toString();
-//         }
+            // using Twilio SendGrid's v3 Node.js Library
+            // https://github.com/sendgrid/sendgrid-nodejs
+            //javascript
+            const sgMail = require('@sendgrid/mail')
+            sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+            const msg = {
+                to: email,
+                from: 'cop43318@gmail.com',
+                template_id: 'd-32c150b4de8043edba973cd21ace99f5',
+                dynamic_template_data: {
+                    firstName: firstName,
+                    ahjst: tok.accessToken
+                }
+            }
+            sgMail
+                .send(msg)
+                .then(() => {
+                    console.log('Email sent')
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
+        }
+        catch(e)
+        {
+            error = e.toString();
+        }
 
-//         let ret = {error:error};
-//         res.status(200).json(ret);
-//     });
+        let ret = {error:error};
+        res.status(200).json(ret);
+    });
+}
 //     //
 //     app.post('/api/edituser', async(req, res, next) =>
 //     {
