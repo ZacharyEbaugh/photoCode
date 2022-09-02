@@ -1,8 +1,8 @@
 require('express');
 require('mongodb');
 
-const Document = require("./models/Document.js");
-const User = require("./models/User.js");
+// const Document = require("./models/Document.js");
+// const User = require("./models/User.js");
 
 exports.setApp = function ( app, client )
 {
