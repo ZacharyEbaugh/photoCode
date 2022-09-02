@@ -251,9 +251,9 @@ exports.setApp = function ( app, client )
 
         const newUser = User({Username:username, Password:password, First_Name:firstName, Last_Name:lastName, Email:email, First_Time_Login:firstTimeLogin, Email_Verify:emailVerify, Email_Token:tok.accessToken, FP_Token:forgotPasswordToken});
         
-//         try
-//         {
-//             newUser.save();
+        try
+        {
+            newUser.save();
         
 //             // using Twilio SendGrid's v3 Node.js Library
 //             // https://github.com/sendgrid/sendgrid-nodejs
@@ -277,11 +277,11 @@ exports.setApp = function ( app, client )
 //                 .catch((error) => {
 //                     console.error(error)
 //                 })
-//         }
-//         catch(e)
-//         {
-//             error = e.toString();
-//         }
+        }
+        catch(e)
+        {
+            error = e.toString();
+        }
 
         let ret = {error:error};
         res.status(200).json(ret);
