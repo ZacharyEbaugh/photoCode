@@ -2,12 +2,6 @@ require('express');
 require('mongodb');
 
 const User = require("./models/User.js");
-const Card = require("./models/Card.js");
-const Food = require("./models/Food.js");
-const Meal = require("./models/Meal.js");
-const Diet = require("./models/Diet.js");
-const Health = require("./models/Health.js");
-const Diary = require("./models/Diary.js");
 
 exports.setApp = function ( app, client )
 {   //
