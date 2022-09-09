@@ -1,4 +1,4 @@
-const app_name = 'elan4331'
+const app_name = 'photocode-deployment'
 
 exports.buildPath =
 function buildPath(route)
