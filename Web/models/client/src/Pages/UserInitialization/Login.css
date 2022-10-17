@@ -1,0 +1,285 @@
+@font-face {
+    font-family: "Mono-Regular";   /*Can be any text*/
+    src: local("JetBrainsMono-Regular"),
+      url("../.././fonts/JetBrainsMono-Regular.ttf") format("truetype");
+  }
+  
+  @font-face {
+    font-family: "Mono-Medium";   /*Can be any text*/
+    src: local("JetBrainsMono-Medium"),
+      url("../.././fonts/JetBrainsMono-Medium.ttf") format("truetype");
+  }
+  
+  @font-face {
+    font-family: "Mono-Bold";   /*Can be any text*/
+    src: local("JetBrainsMono-Bold"),
+      url("../.././fonts/JetBrainsMono-Bold.ttf") format("truetype");
+  }
+  
+  @font-face {
+    font-family: "Mono-ExtraBold";   /*Can be any text*/
+    src: local("JetBrainsMono-ExtraBold"),
+      url("../.././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
+  }
+  
+  .Register {
+    width: 100%;
+    height: 100vh;
+    text-align: center;
+    display: flex;
+    background-image: linear-gradient(#0066FF, #ff5e0085);
+  }
+  
+  .Registration {
+    width: 65%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    box-shadow: 5px 10px 2vw #000000c8;
+  }
+  
+  .RegisterTitle h1 {
+    font-size: 5rem;
+    font-family: "Mono-Regular";
+  }
+  
+  .RegisterTitle h2 {
+    font-size: 3rem;
+    font-weight: 1;
+    font-family: "Mono-Regular";
+    color: #CBCBCB;
+  }
+  
+  .RegisterOptions {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .googleIcon {
+    width: 3vw;
+    height: 3vw;
+    padding: 0.5vw;
+    background-image: linear-gradient(#e8f7ff, #33b59090);
+    border-radius: 20px;
+    margin-right: 2vw;
+    cursor: pointer;
+  }
+  
+  .LinkedInIcon {
+    width: 3vw;
+    height: 3vw;
+    padding: 0.5vw;
+    background-image: linear-gradient(#e8f7ff, #0077b58e);
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  
+  .FacebookIcon {
+    width: 3vw;
+    height: 3vw;
+    padding: 0.5vw;
+    background-image: linear-gradient(#e8f7ff, #ff5e0085);
+    border-radius: 20px;
+    margin-left: 2vw;
+    cursor: pointer;
+  }
+  
+  .RegisterOptions h1 {
+    width: 3vw;
+    height: 3vw;
+    font-size: 3rem;
+    margin-left: 1vw;
+    margin-right: 1vw;
+    background-color: #0066FF;
+    border-radius: 20vw;
+  }
+  
+  .orSeparator {
+    width: 100%;
+    height: 5%;
+    display: flex;
+    /* background-color: grey; */
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .orSeparator h1 {
+    font-size: 3rem;
+    font-weight: 1;
+    font-family: "Mono-Regular";
+    color: #c4c4c4;
+    margin-bottom: 1.5vw;
+  }
+  
+  .line {
+    width: 32%;
+    height: 5%;
+    border-radius: 200px;
+    margin-left: 1vw;
+    margin-right: 1vw;
+    background-color: #c4c4c4;
+  }
+  
+  .RegisterFields {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    /* height: 50%; */
+    /* background-color: grey; */
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .input {
+    width: 95%;
+    height: 4vw;
+    display: flex;
+    background-color: #e6e6e6;
+    border: none;
+    border-radius: 35px;
+    margin-bottom: 2vw;
+    justify-content: center;
+    
+  }
+  
+  .EmailIcon {
+    width: 3.5vw;
+    height: 3.5vw;
+    margin-top: 0.3vw;
+    left: 13vw;
+    position: absolute;
+  }
+  
+  .UserIcon {
+    width: 3.5vw;
+    height: 3.3vw;
+    margin-top: 0.3vw;
+    left: 13vw;
+    position: absolute;
+  }
+  
+  .PasswordIcon {
+    width: 3.5vw;
+    height: 3.3vw;
+    margin-top: 0.3vw;
+    left: 13vw;
+    position: absolute;
+  }
+  
+  .emailInput {
+    width: 100%;
+    height: 3.9vw;
+    background-color: #e6e6e6;
+    border: none;
+    border-radius: 35px;
+    font-size: 3rem;
+    font-family: "Mono-Regular";
+    padding-left: 7vw;
+  }
+  
+  .emailInput::placeholder {
+    font-size: 3rem;
+    font-family: "Mono-Regular";
+    color: black;
+  }
+  
+  .usernameInput {
+    width: 100%;
+    height: 3.9vw;
+    background-color: #e6e6e6;
+    border: none;
+    border-radius: 35px;
+    font-size: 3rem;
+    font-family: "Mono-Regular";
+    padding-left: 7vw;
+  }
+  
+  .usernameInput::placeholder {
+    font-size: 3rem;
+    font-family: "Mono-Regular";
+    color: black;
+  }
+  
+  .usernameInput:focus {
+    border-color: #e6e6e6;
+    border-width: 0;
+  }
+  
+  .passwordInput {
+    width: 110%;
+    height: 3.9vw;
+    background-color: #e6e6e6;
+    border: none;
+    border-radius: 35px;
+    font-size: 3rem;
+    font-family: "Mono-Regular";
+    padding-left: 7vw;
+    
+  }
+  
+  .passwordInput::placeholder {
+    font-size: 3rem;
+    font-family: "Mono-Regular";
+    color: black;
+  }
+  
+  .passwordInput:focus {
+    border-color: #e6e6e6;
+    border-width: 0;
+  }
+  
+  .registerButton {
+    padding-left: 2vw;
+    padding-right: 2vw;
+    border-radius: 100px;
+    border: none;
+    background-color: #0066FF;
+    font-size: 4rem;
+    font-family: "Mono-Regular";
+    color: white;
+    /* font-weight: bold; */
+    cursor: pointer;
+  }
+  
+  .WelcomeInfo {
+    height: 100%;
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .WelcomeTitle {
+    font-size: 5rem;
+    font-family: "Mono-Regular";
+    color: white;
+  }
+  
+  .WelcomeText {
+    width: 65%;
+    margin-top: 1vw;
+    font-size: 2rem;
+    font-family: "Mono-Regular";
+    color: white;
+  }
+  
+  .gotoLogin {
+    margin-top: 1vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    border-radius: 100px;
+    border: none;
+    background-color: white;
+    font-size: 4rem;
+    font-family: "Mono-Regular";
+    color: #0066FF;
+    cursor: pointer;
+  }
+  
+  
+  
+  

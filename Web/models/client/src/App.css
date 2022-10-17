@@ -1,0 +1,36 @@
+@font-face {
+  font-family: "Mono-Regular";   /*Can be any text*/
+  src: local("JetBrainsMono-Regular"),
+    url("./fonts/JetBrainsMono-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Mono-Medium";   /*Can be any text*/
+  src: local("JetBrainsMono-Medium"),
+    url("./fonts/JetBrainsMono-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Mono-Bold";   /*Can be any text*/
+  src: local("JetBrainsMono-Bold"),
+    url("./fonts/JetBrainsMono-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Mono-ExtraBold";   /*Can be any text*/
+  src: local("JetBrainsMono-ExtraBold"),
+    url("./fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
+}
+
+.App {
+  width: 100%;
+  height: 100vh;
+  text-align: center;
+  display: flex;
+  background-image: linear-gradient(#0066FF, #ff5e0085);
+}
+
+
+
+
+
