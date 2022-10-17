@@ -4,7 +4,7 @@ PhotoCode is an in progress IOS app developed using ReactNative, mongoDB, Expres
 
 # Project Setup
 
-Please follow the sets [here](src/projectSetup.md) to set up the project.
+Please follow the sets [here](Mobile/src/projectSetup.md) to set up the project.
 
 ## Authors
   PhotoCode Authors: [Zachary Ebaugh](https://github.com/ZacharyEbaugh) and [Brandon Spangler](https://github.com/brandonspangler2)
