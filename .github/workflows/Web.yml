@@ -36,7 +36,7 @@ jobs:
     - run: npm run build --if-present
 
     - name: Merge stage -> main
-      uses: devmasx/merge-branch@main
+      uses: devmasx/merge-branch@master
       with:
         label_name: 'merged in main'
         target_branch: 'main'
