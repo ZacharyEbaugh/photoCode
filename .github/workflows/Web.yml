@@ -5,11 +5,11 @@ name: Web CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "deploy" ]
     paths: 
       - 'Web/**'
   pull_request:
-    branches: [ "main" ]
+    branches: [ "deploy" ]
 
 jobs:
   build:
