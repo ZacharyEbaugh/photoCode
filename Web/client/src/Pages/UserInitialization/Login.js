@@ -31,7 +31,7 @@ function Login() {
 
         <div className="RegisterTitle">
           {/* <h1>Login to Your Account</h1> */}
-          <h2>Login using</h2>
+          {/* <h2>Login using</h2> */}
         </div>
 
         <div className="RegisterOptions">
