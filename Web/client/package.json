@@ -20,7 +20,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "predeploy": "npm run build-win",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "build": "CI=false && react-scripts build",
     "build-win": "set CI=false&&react-scripts build",
