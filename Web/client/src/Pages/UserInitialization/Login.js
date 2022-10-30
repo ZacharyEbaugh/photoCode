@@ -42,7 +42,7 @@ function Login() {
 
         <div className="orSeparator">
           <div className="line"></div>
-          <h1>or</h1>
+          {/* <h1>or</h1> */}
           <div className="line"></div>
         </div>
 

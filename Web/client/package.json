@@ -20,9 +20,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "predeploy": "npm run build",
+    "predeploy": "npm run build-win",
     "deploy": "gh-pages -d build",
     "build": "CI=false && react-scripts build",
+    "build-win": "set CI=false&&react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
