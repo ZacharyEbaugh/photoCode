@@ -5,9 +5,10 @@ name: Web CI
 
 on:
   push:
-    branches: [ "stage" ]
+    branches: [ "main" ]
+    
   pull_request:
-    branches: [ "stage" ]
+    branches: [ "main" ]
       paths: 
       - 'Web/**'
 
