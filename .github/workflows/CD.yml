@@ -18,7 +18,7 @@ jobs:
     - name: Up Merge
       uses: bambamboole/gha-upmerge@master
       with:
-        stable_branch: 'master'
-        development_branch: 'develop'
+        stable_branch: 'main'
+        development_branch: 'stage'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
