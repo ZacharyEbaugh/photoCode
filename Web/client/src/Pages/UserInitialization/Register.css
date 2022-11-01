@@ -139,7 +139,7 @@
     display: flex;
     background-color: #e6e6e6;
     border: none;
-    border-radius: 35px;
+    border-radius: 15px;
     margin-bottom: 2vw;
     justify-content: center;
     
@@ -174,7 +174,7 @@
     height: 3.9vw;
     background-color: #e6e6e6;
     border: none;
-    border-radius: 35px;
+    border-radius: 15px;
     font-size: 3rem;
     font-family: "Mono-Regular";
     padding-left: 7vw;
@@ -191,7 +191,7 @@
     height: 3.9vw;
     background-color: #e6e6e6;
     border: none;
-    border-radius: 35px;
+    border-radius: 15px;
     font-size: 3rem;
     font-family: "Mono-Regular";
     padding-left: 7vw;
@@ -213,7 +213,7 @@
     height: 3.9vw;
     background-color: #e6e6e6;
     border: none;
-    border-radius: 35px;
+    border-radius: 15px;
     font-size: 3rem;
     font-family: "Mono-Regular";
     padding-left: 7vw;
@@ -232,8 +232,8 @@
   }
   
   .registerButton {
-    padding-left: 2vw;
-    padding-right: 2vw;
+    padding-left: 3vw;
+    padding-right: 3vw;
     border-radius: 100px;
     border: none;
     background-color: #0066FF;

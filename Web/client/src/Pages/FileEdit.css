@@ -1,0 +1,189 @@
+@font-face {
+    font-family: "Mono-Regular";
+    src: local("JetBrainsMono-Regular"),
+      url(".././fonts/JetBrainsMono-Regular.ttf") format("truetype");
+  }
+  
+  @font-face {
+    font-family: "Mono-Medium";
+    src: local("JetBrainsMono-Medium"),
+      url(".././fonts/JetBrainsMono-Medium.ttf") format("truetype");
+  }
+  
+  @font-face {
+    font-family: "Mono-Bold";
+    src: local("JetBrainsMono-Bold"),
+      url(".././fonts/JetBrainsMono-Bold.ttf") format("truetype");
+  }
+  
+  @font-face {
+    font-family: "Mono-ExtraBold"; 
+    src: local("JetBrainsMono-ExtraBold"),
+      url(".././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
+  }
+  
+  .container {
+    height: 50vw;
+    width: 100%;
+    background: linear-gradient(180deg, #0066FF 0%, #FFFFFF 100%);
+    display: flex;
+    flex-direction: row;
+  }
+
+  .directory {
+    /* background-color: black; */
+    width: 30%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* padding: 3vw; */
+  }
+
+  .dirBlock {
+    width: 80%;
+    height: 80%;
+    background: #FFFFFF;
+    box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
+    border-radius: 11px;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+  }
+
+  .dirBlock h1 {
+    font-family: "Mono-Regular";
+    font-size: 2.5vw;
+  }
+
+  .create_search_file {
+    /* background-color: black; */
+    width: 100%;
+    height: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .createFile {
+    /* width: 10%; */
+    /* height: 80%; */
+    border: none;
+    background-color: #6DE959;
+    border-radius: 0.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.3vw;
+  }
+
+  .fileIcon {
+    width: 1.5vw;
+    height: 1.5vw;
+    /* padding: 0.vw; */
+  }
+
+  .searchFile {
+    width: 60%;
+    height: 80%;
+    font-family: "Mono-Regular";
+    font-size: 1.5vw;
+    display: flex;
+    background-color: #e6e6e6;
+    border: none;
+    border-radius: 7.76322px;
+    margin-left: 1rem;
+    justify-content: center;
+    padding: 0.3vw;
+  }
+
+  .folderDisplay {
+    width: 100%;
+  }
+
+  .folders {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #D8D8D8;
+  }
+
+  .folders h1 {
+    font-size: 1.5vw;
+    margin-left: 5%;
+  }
+
+  .folderIcon {
+    height: 3vw;
+    width: 3vw;
+    margin-left: 10%;
+  }
+
+  .Edit_Commit {
+    width: 75%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .editor {
+    height: 65%;
+    width: 90%;
+  }
+
+  .commit_information {
+    width: 80%;
+    height: 13%;
+    margin-top: 2%;
+  }
+
+  .titleUpdate {
+    width: 100%;
+    height: 40%;
+  }
+
+  .titleName {
+    width: 80%;
+    height: 100%;
+    border: none;
+    background: #FFFFFF;
+    box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
+    border-radius: 11px;
+    font-family: "Mono-Regular";
+    font-size: 1.5vw;
+    padding-left: 2%;
+  }
+
+  .updateFile {
+    width: 15%;
+    height: 100%;
+    border: none;
+    background-color: #0066FF;
+    color: white;
+    font-family: "Mono-Regular";
+    font-size: 1.5vw;
+    border-radius: 11px;
+    margin-left: 2%;
+    cursor: pointer;
+  }
+
+  .description {
+    width: 100%;
+    height: 60%;
+    margin-top: 2%;
+    border: none;
+    background: #FFFFFF;
+    box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
+    border-radius: 11px;
+    font-family: "Mono-Regular";
+    font-size: 1.5vw;
+    resize: none;
+    padding-left: 2%;
+    padding-top: 1%;
+  }
+
+
+

@@ -1,11 +1,21 @@
 import "./Register.css";
 import {useState, useEffect} from "react";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import {FaRegEnvelope, FaUser, FaLock, FaLinkedinIn} from "react-icons/fa";
 import {ImFacebook} from "react-icons/im";
 import {FcGoogle} from "react-icons/fc";
 
 function Register() {
+  const navigate = useNavigate();
+  const Login = () => {
+      navigate("/Login");
+  }
+
+  const Home = () => {
+      navigate("/");
+  }
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
@@ -16,6 +26,7 @@ function Register() {
       username,
       password,
     })
+    navigate("/");
   };
   return (
     <div className="Register">
@@ -74,7 +85,7 @@ function Register() {
       <div className="WelcomeInfo">
         <text className="WelcomeTitle">Welcome to PhotoCode</text>
         <text className="WelcomeText">Scan any writing using Google's VisionAI, edit as a text file, store and transfer to or from the cloud </text>
-        <button className="gotoLogin" onClick={createUser}> Login </button>
+        <button className="gotoLogin" onClick={Login}> Login </button>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import "./Login.css";
+import { useNavigate } from "react-router-dom";
 import {
     useState, 
     useEffect
@@ -19,19 +20,26 @@ function Login() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(() => {
+  const navigate = useNavigate();
+  const Register = () => {
+      navigate("/Register");
+  }
+
+  // useEffect(() => {
+  const GetUsers = () => {
     Axios.get("http://localhost:3001/getUsers").then((response) => {
       setListOfUsers(response.data);
     });
-  }, []);
+    navigate("/");
+  }
+  // }, []);
 
   return (
     <div className="Register">
       <div className="Registration">
-
         <div className="RegisterTitle">
           <h1>Login to Your Account</h1>
-          {/* <h2>Login using</h2> */}
+          <h2>Login using</h2>
         </div>
 
         <div className="RegisterOptions">
@@ -42,7 +50,7 @@ function Login() {
 
         <div className="orSeparator">
           <div className="line"></div>
-          {/* <h1>or</h1> */}
+          <h1>or</h1>
           <div className="line"></div>
         </div>
 
@@ -71,10 +79,10 @@ function Login() {
             />
           </div>
 
-          <button className="registerButton"> Login </button>
+          <button onClick={GetUsers} className="registerButton"> Login </button>
         </div>
       </div>
-      <div className="usersDisplay">
+      {/* <div className="usersDisplay">
         {listOfUsers.map((user) => {
           return (
             <div>
@@ -84,12 +92,12 @@ function Login() {
             </div>
           );
         })}
-      </div>
+      </div> */}
       
       <div className="WelcomeInfo">
         <text className="WelcomeTitle">Welcome back</text>
         <text className="WelcomeText">Scan any writing using Google's VisionAI, edit as a text file, store and transfer to or from the cloud </text>
-        <button className="gotoLogin"> Register </button>
+        <button onClick={Register} className="gotoRegister"> Register </button>
 
       </div>
 
