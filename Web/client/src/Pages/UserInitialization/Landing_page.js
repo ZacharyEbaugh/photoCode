@@ -34,7 +34,7 @@ export default function Landing_page() {
   }   
 
   return (
-    <div className="container">
+    <div className="LandingPageContainer">
         <div className="SplashSection">
             <div className="topNav">
                 <div className="NavLinks">
