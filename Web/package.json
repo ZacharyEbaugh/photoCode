@@ -6,6 +6,7 @@
     "@mui/styled-engine-sc": "^5.10.6",
     "axios": "^1.1.2",
     "font-awesome": "^4.7.0",
+    "monaco-editor": "^0.34.1",
     "react-icons": "^4.4.0",
     "react-router-dom": "^6.4.2",
     "styled-components": "^5.3.6"
