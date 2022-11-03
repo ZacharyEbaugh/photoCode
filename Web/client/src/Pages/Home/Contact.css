@@ -1,0 +1,181 @@
+/* || Fonts */
+/* #region */
+@font-face {
+    font-family: "Mono-Regular";   /*Can be any text*/
+    src: local("JetBrainsMono-Regular"),
+      url("../.././fonts/JetBrainsMono-Regular.ttf") format("truetype");
+}
+
+@font-face {
+font-family: "Mono-Medium";   /*Can be any text*/
+src: local("JetBrainsMono-Medium"),
+    url("../.././fonts/JetBrainsMono-Medium.ttf") format("truetype");
+}
+
+@font-face {
+font-family: "Mono-Bold";   /*Can be any text*/
+src: local("JetBrainsMono-Bold"),
+    url("../.././fonts/JetBrainsMono-Bold.ttf") format("truetype");
+}
+
+@font-face {
+font-family: "Mono-ExtraBold";   /*Can be any text*/
+src: local("JetBrainsMono-ExtraBold"),
+    url("../.././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
+}
+/* #endregion */
+
+* {
+    font-size: 12px;
+}
+
+button, a {
+    cursor: pointer;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    background-image: linear-gradient(#0066FF, #FFFFFF);
+    min-height: 100vh;
+}
+
+.main {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+/* || Profile Box */
+/* #region */
+.profileCardWrapper {
+    width: 46.5rem;
+    margin: 0 0 0 5rem;
+}
+
+.profileCard {
+    width: 31rem;
+    height: 25rem;
+    background-color: white;
+    box-shadow: inset 0px 0px 8px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 1.4rem;
+    margin: 6.2rem 0 0 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.offset {
+    margin: 6.2rem 0 11.7rem 15.5rem;
+}
+
+.profileName {
+    font-family: 'Mono-Regular';
+    font-size: 3rem;
+    text-align: center;
+    margin: 1rem 0 1rem 0;
+}
+
+.contactInfoWrapper {
+    display: flex;
+    align-items: center;
+    margin: 0 0 1rem 0;
+}
+
+.profilePicture {
+    height: 9.8rem;
+    width: 9.8rem;
+    border-radius: 100%;
+    margin: 0 2.33rem 0 1.4rem;
+}
+
+.socialLinksWrapper {
+
+}
+
+.socialNameWrapper {
+    display: flex;
+    align-items: center;
+    margin: 1.25rem 0;
+}
+
+.socialIcon {
+    height: 2.5rem;
+    width: 2.5rem;
+}
+
+.socialName {
+    font-family: 'Mono-Regular';
+    font-size: 2rem;
+    color: #0066FF;
+    margin: 0 0 0 1.58rem;
+
+}
+/* #endregion */
+
+/* || Contact Form Styles */
+/* #region */
+.contactForm {
+    width: 46.5rem;
+    height: 50rem;
+    background-color: white;
+    border-radius: 1.33rem;
+    box-shadow: inset 0px 0px 8px 4px rgba(0, 0, 0, 0.1);
+    padding: 0 4.5rem 0 3rem;
+    margin: 6.2rem 2rem 0 0;
+}
+
+.contactTitle {
+    font-family: 'Mono-Regular';
+    font-size: 2.5rem;
+    color: black;
+}
+
+.companyInputWrapper {
+
+}
+
+.inputTitle {
+    font-family: 'Mono-Regular';
+    font-size: 2rem;
+    color: black;
+    margin: 2rem 0 0.5rem 0;
+}
+
+.companyInput {
+    width: 100%;
+    height: 3.75rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #E6E6E6;
+    font-family: 'Mono-Regular';
+    font-size: 1.75rem;
+    padding: 0 0 0 0.5rem;
+}
+
+.contactMessageWrapper {
+    padding: 0 0 3.1rem 0;
+}
+
+.messageInput {
+    width: 100%;
+    height: 28.47rem;
+    background-color: #E6E6E6;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 1rem 0 0 0.5rem;
+    font-family: 'Mono-Regular';
+    font-size: 1.75rem;
+}
+/* #endregion */
+
+/* || Media Styles */
+/* #region */
+@media screen and (max-width: 1300px) {
+    .main {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}
+/* #endregion */
