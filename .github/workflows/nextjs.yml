@@ -18,6 +18,11 @@ permissions:
   pages: write
   id-token: write
 
+# Set directory for job to take place
+defaults:
+  run:
+    working-directory: Web/client
+
 # Allow one concurrent deployment
 concurrency:
   group: "pages"
