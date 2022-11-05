@@ -33,10 +33,10 @@ jobs:
       - run: yarn install --frozen-lockfile
 
       - run: pod install
-        working-directory: ios
+        working-directory: Mobile/ios
 
       - run: xcodebuild clean archive -workspace testCiCdReactNative.xcworkspace -scheme testCiCdReactNative -archivePath testCiCdReactNative.xcarchive CODE_SIGNING_ALLOWED=NO | xcpretty
-        working-directory: ios
+        working-directory: Mobile/ios
 
 
   build-android:
