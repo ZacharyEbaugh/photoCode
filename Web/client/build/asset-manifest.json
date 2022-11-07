@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/photoCode/static/css/main.755850db.css",
+    "main.js": "/photoCode/static/js/main.28d3969a.js",
+    "static/js/787.0c3f432a.chunk.js": "/photoCode/static/js/787.0c3f432a.chunk.js",
+    "static/media/Mobile_Card_Showcase.png": "/photoCode/static/media/Mobile_Card_Showcase.3ca6b7b21c9fcfc0c8c8.png",
+    "static/media/Hero_Img.png": "/photoCode/static/media/Hero_Img.343d8d459acc02e92e15.png",
+    "static/media/BrandonProfile.png": "/photoCode/static/media/BrandonProfile.7ede2cd1b0f969ff3001.png",
+    "static/media/ZacProfile.png": "/photoCode/static/media/ZacProfile.7f644fc7ad9fe868b4ca.png",
+    "static/media/JetBrainsMono-ExtraBold.ttf": "/photoCode/static/media/JetBrainsMono-ExtraBold.5126545feb5adb952461.ttf",
+    "static/media/JetBrainsMono-Bold.ttf": "/photoCode/static/media/JetBrainsMono-Bold.0a15be8e7fee0ebfd0a0.ttf",
+    "static/media/JetBrainsMono-Medium.ttf": "/photoCode/static/media/JetBrainsMono-Medium.75fe82ce0758dfca6bdd.ttf",
+    "static/media/JetBrainsMono-Regular.ttf": "/photoCode/static/media/JetBrainsMono-Regular.7c5472ddd3b056b938b5.ttf",
+    "static/media/ProfileToContact.png": "/photoCode/static/media/ProfileToContact.c164f2d92026ba64f822.png",
+    "static/media/AppStoreButton.png": "/photoCode/static/media/AppStoreButton.89a36840163cdf1bbe5d.png",
+    "static/media/GooglePlayButton.png": "/photoCode/static/media/GooglePlayButton.1cee29001c4b4697135c.png",
+    "index.html": "/photoCode/index.html",
+    "main.755850db.css.map": "/photoCode/static/css/main.755850db.css.map",
+    "main.28d3969a.js.map": "/photoCode/static/js/main.28d3969a.js.map",
+    "787.0c3f432a.chunk.js.map": "/photoCode/static/js/787.0c3f432a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.755850db.css",
+    "static/js/main.28d3969a.js"
+  ]
+}
