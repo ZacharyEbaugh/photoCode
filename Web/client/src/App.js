@@ -5,6 +5,7 @@ import Register from "./Pages/UserInitialization/Register";
 import Login from "./Pages/UserInitialization/Login";
 import FileEdit from "./Pages/FileEdit";
 import ErrorPage from "./Pages/ErrorPage";
+import NavBar from "./Pages/NavBar";
 import {
   BrowserRouter as Router,
   Routes,
@@ -15,6 +16,7 @@ function App() {
 
   return (
       <Router>
+          <NavBar/>
           <Routes>
               <Route path="/" element={<Landingpage />}/>
               <Route path="/Register" element={<Register />}/>
