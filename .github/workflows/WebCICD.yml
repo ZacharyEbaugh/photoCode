@@ -6,8 +6,8 @@ name: Web CICD
 on:
   push:
     branches: [ "main" ]
-    paths: 
-    - 'Web/**'
+    #paths: 
+    #- 'Web/**'
   pull_request:
     branches: [ "main" ]
 
