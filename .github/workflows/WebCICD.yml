@@ -6,8 +6,8 @@ name: Web CICD
 on:
   push:
     branches: [ "main" ]
-    paths: 
-    - 'Web/**'
+    #paths: 
+    #- 'Web/**'
   pull_request:
     branches: [ "main" ]
 
@@ -34,8 +34,12 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm i
-    - run: npm run build --if-present
+    - run: npm install gh-pages
+#    - run: npm run build --if-present
+    - run: git config --global user.email "zlebaughwps@gmail.com"
+    - run: git config --global user.name "ZacharyEbaugh"
+    - run: git remote set-url origin https://github.com/ZacharyEbaugh/photoCode.git
+    - run: npm run deploy
 #     - run: git config --global credential.helper wincred
-#     - run: git config --global user.email "zlebaughwps@gmail.com"
-#     - run: git config --global user.name "ZacharyEbaugh"
+
 #     - run: npm run deploy --if-present
