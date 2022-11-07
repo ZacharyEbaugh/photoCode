@@ -38,6 +38,7 @@ jobs:
 #    - run: npm run build --if-present
     - run: git config --global user.email "zlebaughwps@gmail.com"
     - run: git config --global user.name "ZacharyEbaugh"
+    - run: git remote set-url origin https://github.com/ZacharyEbaugh/photoCode.git
     - run: npm run deploy
 #     - run: git config --global credential.helper wincred
 
