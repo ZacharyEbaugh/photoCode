@@ -24,7 +24,7 @@ function Contact() {
     }, []);
   
     return (
-      <div className="container">  
+      <div className="containerContact">  
         <header className='header'>
             <h1 className='headerTextPhotocode'>PhotoCode</h1>
             <div className='headerRight'>
