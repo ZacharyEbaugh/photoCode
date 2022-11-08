@@ -40,7 +40,7 @@ function Home() {
     }, []);
   
     return (
-      <div className="container">  
+      <div className="containerHome">  
         <header className='header'>
             <h1 className='headerTextPhotocode'>PhotoCode</h1>
             <div className='headerRight'>
