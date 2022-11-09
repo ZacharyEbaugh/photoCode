@@ -246,6 +246,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingBottom: 30,
         paddingTop: 20,
+        width: '100%',
     },
     newFileImage: {
         height: 75,

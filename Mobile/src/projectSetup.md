@@ -53,7 +53,7 @@ Table of Contents:
     npm install react-native-svg
 
 ## [React-Native-Shadows](https://github.com/SrBrahma/react-native-shadow-2#readme)
-    npm install react-native-svg
+    npm install react-native-shadow-2
  
 
 ## [React-Native-Navigation](https://reactnavigation.org/docs/getting-started)
@@ -68,7 +68,7 @@ Table of Contents:
             <key>NSCameraUsageDescription</key>
             <string>$(PRODUCT_NAME) would like to use your camera</string>
             <key>NSMicrophoneUsageDescription</key>
-            string>$(PRODUCT_NAME) would like to your microphone (for videos)</string>
+            <string>$(PRODUCT_NAME) would like to your microphone (for videos)</string>
             <key>NSPhotoLibraryUsageDescription</key>
             <string>$(PRODUCT_NAME) would like access to your photo gallery</string>
 
