@@ -80,7 +80,7 @@ export default function Landing_page() {
                     </h3>
                 </div>
                 <div className="HeroImg">
-                    <img className="AppImage" src={HeroImage} alt="AppHeroImage"></img>
+                    <img className="AppImage" role="hero_image" src={HeroImage} alt="AppHeroImage"></img>
                 </div>
             </div>
         </div>
@@ -91,7 +91,7 @@ export default function Landing_page() {
                 <button className="ContactUsButton" onClick={() => scrollToContact.current.scrollIntoView({block: 'start', behavior: 'smooth'})}>Contact Us</button>            
             </div>
             <div className="MobileShowcase">
-                <img src={Showcase} className="ShowcaseImage" alt="MobileShowcase" ref={scrollToFeatures}/>
+                <img className="ShowcaseImage" role="showcase" src={Showcase} alt="MobileShowcase" ref={scrollToFeatures}/>
             </div>
         </div>
         <div className="InfoContactSection" >
