@@ -15,7 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import Header from './Header';
 import SideBar from './SideBar';
-import { GoToProject } from './ProjectBlock';
+import { GoToProject } from './GoToProject';
 import GoToCamera from './GoToCamera';
 import CameraOptions from './CameraOptions';
 

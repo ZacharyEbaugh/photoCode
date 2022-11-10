@@ -13,7 +13,7 @@ import SaveDoc from './SaveDoc';
 
 import HomeScreen from './HomeScreen';
 import Settings from './Settings';
-import ProjectFolder from './ProjectFolder';
+import ProjectPage from './ProjectPage';
 import CameraView from './CameraView';
 
 const Stack = createNativeStackNavigator();
@@ -59,8 +59,8 @@ class App extends React.Component {
                         options={{ title: 'Contact Us' }}
                     />
                     <Stack.Screen
-                        name="ProjectFolder"
-                        component={ProjectFolder}
+                        name="ProjectPage"
+                        component={ProjectPage}
                     />
                     <Stack.Screen
                         name="CameraView"
