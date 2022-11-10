@@ -1,7 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet } from 'react-native';
+import { 
+    View, 
+    Pressable, 
+    Text, 
+    Image, 
+    Dimensions, 
+    StyleSheet } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 
 const windowWidth = Dimensions.get('window').width;
@@ -14,7 +20,7 @@ export function GoToProject({ imageSource, projectName, languageOne, languageTwo
     return (
         <Pressable
             onPress={() => {
-                navigation.navigate('ProjectFolder', { projectName });
+                navigation.navigate('ProjectPage', { projectName });
             }}
         >
             <View style={styles.projectBlock}>

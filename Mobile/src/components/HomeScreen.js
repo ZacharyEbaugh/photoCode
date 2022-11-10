@@ -15,7 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import Header from './Header';
 import SideBar from './SideBar';
-import { GoToProject } from './ProjectBlock';
+import { GoToProject } from './GoToProject';
 import GoToCamera from './GoToCamera';
 import CameraOptions from './CameraOptions';
 
@@ -246,6 +246,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingBottom: 30,
         paddingTop: 20,
+        width: '100%',
     },
     newFileImage: {
         height: 75,
