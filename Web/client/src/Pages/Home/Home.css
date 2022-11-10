@@ -33,7 +33,7 @@ button, a {
     cursor: pointer;
 }
 
-.container {
+.containerHome {
     display: flex;
     flex-direction: column;
     background-image: linear-gradient(#0066FF, #FFFFFF);
