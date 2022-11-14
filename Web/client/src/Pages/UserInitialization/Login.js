@@ -30,7 +30,7 @@ function Login() {
     Axios.get("http://localhost:3001/getUsers").then((response) => {
       setListOfUsers(response.data);
     });
-    navigate("/");
+    navigate("/Home");
   }
   // }, []);
 
