@@ -13,6 +13,8 @@ import GitHubIcon from "../../Assets/icon_github_.png";
 import PortfolioIcon from "../../Assets/icon_terminal_.png";
 import ProfileToContact from "../../Assets/ProfileToContact.png";
 
+import Axios from "axios";
+
 export default function Landing_page() {
 
   const [name, setName] = useState("");
@@ -32,6 +34,28 @@ export default function Landing_page() {
   const Register = () => {
     navigate("/Register");
   }   
+
+  // Axios call sendemail to user on button click
+    const sendEmail = () => {
+        Axios.post("http://localhost:3001/sendEmail", {
+            name: name,
+            email: email,
+            company: company,
+            message: message,
+        }).then((response) => {
+            if (response.data.message) {
+                alert(response.data.message);
+            } else {
+                alert("Email sent successfully!");
+            } 
+        });
+        // Clear input fields after email is sent
+        setName("");
+        setEmail("");
+        setCompany("");
+        setMessage("");
+    };
+
 
   return (
     <div className="LandingPageContainer">
@@ -168,6 +192,7 @@ export default function Landing_page() {
                                 <input
                                     type="text"
                                     className="NameInput"
+                                    value={name}
                                     onChange={(event) => {
                                         setName(event.target.value);
                                     }}
@@ -178,6 +203,7 @@ export default function Landing_page() {
                                 <input
                                     type="email"
                                     className="EmailInput"
+                                    value={email}
                                     onChange={(event) => {
                                         setEmail(event.target.value);
                                     }}
@@ -188,6 +214,7 @@ export default function Landing_page() {
                                 <input
                                     type="text"
                                     className="CompanyInput"
+                                    value={company}
                                     onChange={(event) => {
                                         setCompany(event.target.value);
                                     }}
@@ -197,13 +224,15 @@ export default function Landing_page() {
                         <div className="UserMessage">
                             <h1>Message</h1>
                             <textarea
+                                className="MessageInput"
+                                value={message}
                                 onChange={(event) => {
                                     setMessage(event.target.value);
                                 }}
                                 rows={5}
                                 cols={5}
                             />
-                            <button >Submit</button>
+                            <button onClick={sendEmail}>Submit</button>
                         </div>
                     </div>
                 </div>
