@@ -1,0 +1,53 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/JetBrainsMono-Bold-Italic.ttf",
+      "sha1": "08085b022e9532c8ff9a73412ad9c5b64b5a4bc7"
+    },
+    {
+      "path": "src/assets/fonts/JetBrainsMono-Bold.ttf",
+      "sha1": "e4a40100c03620c97845f1b64521593dfac5624a"
+    },
+    {
+      "path": "src/assets/fonts/JetBrainsMono-ExtraBold-Italic.ttf",
+      "sha1": "92924f84625a6716e9dc8d505e4ed94f01bdee2b"
+    },
+    {
+      "path": "src/assets/fonts/JetBrainsMono-ExtraBold.ttf",
+      "sha1": "5bda541918ab4e29538ad54dfc6809eaf000e188"
+    },
+    {
+      "path": "src/assets/fonts/JetBrainsMono-Italic.ttf",
+      "sha1": "fc3732c37bbc01fc90929c9a04be966e9d56c0af"
+    },
+    {
+      "path": "src/assets/fonts/JetBrainsMono-Light.ttf",
+      "sha1": "999f74e2e817d402960cc2179b697b0b79c5fa90"
+    },
+    {
+      "path": "src/assets/fonts/JetBrainsMono-LightItalic.ttf",
+      "sha1": "5f5de00a031c6751971edcfa68feffa22114867a"
+    },
+    {
+      "path": "src/assets/fonts/JetBrainsMono-Medium-Italic.ttf",
+      "sha1": "823b7f870f00883ba997203e64cfcf20240d7471"
+    },
+    {
+      "path": "src/assets/fonts/JetBrainsMono-Medium.ttf",
+      "sha1": "b46831c7c07c6cbbdc3a73e5636423d4de54d7d1"
+    },
+    {
+      "path": "src/assets/fonts/JetBrainsMono-Regular.ttf",
+      "sha1": "107329e2c9a229038ccec64a7ef57448b1943df8"
+    },
+    {
+      "path": "src/assets/fonts/JetBrainsMono-Thin.ttf",
+      "sha1": "cb9d793b1507032777b1f6ec608f8708e45776e1"
+    },
+    {
+      "path": "src/assets/fonts/JetBrainsMono-ThinItalic.ttf",
+      "sha1": "dab5caa02d291d855317884bae8b58ba5b6829e3"
+    }
+  ]
+}
