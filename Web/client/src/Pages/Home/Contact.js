@@ -3,6 +3,7 @@ import {
     useState, 
     useEffect
 } from "react";
+import { useNavigate } from 'react-router-dom';
 import Axios from "axios";
 
 import account_picture from '../../images/account.png';
@@ -23,13 +24,16 @@ function Contact() {
       });
     }, []);
   
+    const navigate = useNavigate();
+
     return (
       <div className="containerContact">  
         <header className='header'>
             <h1 className='headerTextPhotocode'>PhotoCode</h1>
             <div className='headerRight'>
-                <h1 className='headerTextNav'>Contact</h1>
-                <h1 className='headerTextNav'>Account</h1>
+                <button className='headerTextNav' onClick={() => {navigate("/Home")}}>Home</button> 
+                <button className='headerTextNav' onClick={() => {navigate("/Contact")}}>Contact</button>   
+                <button className='headerTextNav'>Account</button>   
                 <button className='profileButton'><img className='headerPicture' src={account_picture} /></button>    
             </div>
         </header>
