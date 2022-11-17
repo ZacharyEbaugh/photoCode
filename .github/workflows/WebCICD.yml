@@ -10,6 +10,7 @@ on:
     - 'Web/**'
   pull_request:
     branches: [ "main" ]
+    types: [opened]
 
 
 defaults:
