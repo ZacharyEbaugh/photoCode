@@ -37,7 +37,7 @@ function Login() {
         navigate("/Home");
       }
     });
-  };
+  }
 
   return (
     <div className="Register">

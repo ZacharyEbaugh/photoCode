@@ -66,10 +66,17 @@ button, a {
 }
 
 .headerTextNav {
-    font-family: 'Mono-Regular';
-    font-size: 2.5rem;
-    margin: 0 1.2rem;
-    color: white
+    font-size: 2.5vw;
+    color: white;
+    background: none;
+    border: none;
+    font-family: "Mono-Regular";
+    cursor: pointer;
+    margin-right: 1vw;
+}
+
+.headerTextNav:hover {
+    color: black;
 }
 
 .profileButton {
