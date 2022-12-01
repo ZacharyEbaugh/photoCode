@@ -16,6 +16,9 @@ import Settings from './Settings';
 import ProjectPage from './ProjectPage';
 import CameraView from './CameraView';
 
+import SourceControl from './SourceControl';
+import { Commit } from './Commit';
+
 const Stack = createNativeStackNavigator();
 
 import { Text, View } from 'react-native';
@@ -75,6 +78,16 @@ class App extends React.Component {
                     <Stack.Screen
                         name="ProjectPage"
                         component={ProjectPage}
+                    />
+                    <Stack.Screen
+                        name="SourceControl"
+                        component={SourceControl}
+                        options={{ title: 'SourceControl' }}
+                    />
+                    <Stack.Screen
+                        name="Commit"
+                        component={Commit}
+                        options={{ title: 'Commit' }}
                     />
                     <Stack.Screen
                         name="CameraView"

@@ -9,6 +9,7 @@ const windowHeight = Dimensions.get('window').height;
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { height } from '@mui/system';
+import { BackButton } from './BackButton';
 
 var PROJECT_FILES= [
     {
@@ -50,13 +51,12 @@ var PROJECT_FILES= [
     },
   ];
 
-function GoBackButton({ screenName }) {
+function GoBackButton() {
   const navigation = useNavigation();
-
   return (
     <Pressable
       // title={`Go to ${screenName}`}
-      onPress={() => navigation.navigate(screenName)}
+      onPress={() => navigation.goBack()}
     >
         <Text style={styles.backText}>
             {'< Back'}
@@ -64,6 +64,28 @@ function GoBackButton({ screenName }) {
     </Pressable>
 
   );
+}
+
+
+// Create a function to navigate to the source control page when the button is pressed
+function GoToSourceControl({screenName}) {
+    const navigation = useNavigation();
+    return (
+        <Pressable 
+            style={styles.actionButton}
+            onPress={() => navigation.navigate(screenName)}
+        >
+            <Text style={styles.actionButtonText}>
+                Version Control
+            </Text>
+        </Pressable>
+    );
+}
+
+// Function to navigate to SourceControl page
+function GoToVersionControl({screenName}) {
+    const navigation = useNavigation();
+    navigation.navigate(screenName)
 }
 
 function GetProjectName() {
@@ -91,9 +113,7 @@ class ProjectPage extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <View style={styles.backButton}>
-                        <GoBackButton screenName='HomeScreen' />
-                    </View>
+                    <BackButton/>
                     <View>
                         <GetProjectName />
                     </View>
@@ -158,14 +178,7 @@ class ProjectPage extends React.Component {
                     </View>
 
                     <View style={styles.buttonWrapper}>
-                        <Pressable 
-                            style={styles.actionButton}
-                            onPress={() => {}} >
-                            <Text style={styles.actionButtonText}>
-                                Version Control
-                            </Text>
-                        </Pressable>
-
+                        <GoToSourceControl screenName='SourceControl' />
                         <Pressable 
                             style={styles.actionButton}
                             onPress={() => {}} >

@@ -19,8 +19,6 @@ import { GoToProject } from './GoToProject';
 import GoToCamera from './GoToCamera';
 import CameraOptions from './CameraOptions';
 
-
-
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
