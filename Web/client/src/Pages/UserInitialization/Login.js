@@ -25,14 +25,19 @@ function Login() {
       navigate("/Register");
   }
 
-  // useEffect(() => {
-  const GetUsers = () => {
-    Axios.get("http://localhost:3001/getUsers").then((response) => {
-      setListOfUsers(response.data);
+  // Navigate to home screen if username is found in database
+  const Login = () => {
+    Axios.post("http://localhost:3001/valUser", {
+      name: name,
+      password: password,
+    }).then((response) => {
+      if (response.data.message) {
+        alert(response.data.message);
+      } else {
+        navigate("/Home");
+      }
     });
-    navigate("/Home");
   }
-  // }, []);
 
   return (
     <div className="Register">
@@ -79,7 +84,7 @@ function Login() {
             />
           </div>
 
-          <button onClick={GetUsers} className="registerButton"> Login </button>
+          <button onClick={Login} className="registerButton"> Login </button>
         </div>
       </div>
       {/* <div className="usersDisplay">
