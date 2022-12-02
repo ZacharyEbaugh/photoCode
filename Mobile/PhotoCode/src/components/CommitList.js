@@ -12,7 +12,6 @@ import {
     StyleSheet } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 
-
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -54,16 +53,8 @@ export function CommitList({ UserName, UserImage, CommitTitle, CommitMessage, Co
         outputRange: ['0deg', '90deg'],
     });
 
-
-
-
     return (
         <View>
-        {/* <Pressable
-            onPress={() => {
-                navigation.navigate('Commit', { UserName, UserImage, CommitTitle, CommitMessage, CommitDate });
-            }}
-        > */}
             <View style={styles.commitItem}>
                 <Pressable style={styles.commitInfo} onPress={() => toggleListItem()}>
                     <Image style={styles.commitImage} source={UserImage} />
@@ -75,38 +66,30 @@ export function CommitList({ UserName, UserImage, CommitTitle, CommitMessage, Co
                             {CommitDate}
                         </Text>
                         <Animated.Image style={[styles.infoArrow, {transform: [{rotate: arrowTransform}]}]} source={require('./../assets/images/infoArrow.png')} />
-                        {/* <Image style={styles.infoArrow} source={require('./../assets/images/infoArrow.png')} /> */}
                     </View>
                 <View/>
-    
             </Pressable>
             {ShowMessage && (
                 <Text style={styles.commitMessage}>
                     {CommitMessage}
                 </Text>
             )}
-  
             </View>
         </View>
-       
     );
 }
 
 const styles = StyleSheet.create({
     commitItem: {
         alignSelf: 'center',
-        // backgroundColor: 'black',
         flexDirection: 'column',
         borderBottomColor: 'black',
         borderBottomWidth: 1,
         width: windowWidth,
         overflow: 'hidden',
-
-        // height: windowHeight * 0.2,
     },
     commitInfo: {
         alignSelf: 'flex-end',
-        // backgroundColor: 'red',
         width: windowWidth * 0.98,
         height: windowHeight * 0.1,
         flexDirection: 'row',
@@ -114,7 +97,6 @@ const styles = StyleSheet.create({
     },
     commitImage: {
         alignSelf: 'center',
-        // backgroundColor: 'blue',
         width: windowWidth * 0.15,
         height: windowWidth * 0.15,
         borderRadius: 100,
@@ -124,7 +106,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         textAlign: 'center',
         fontFamily: 'JetBrainsMono-Medium',
-        // backgroundColor: 'green',
         color: 'black',
         width: windowWidth * 0.45,
         alignSelf: 'center',
@@ -134,8 +115,6 @@ const styles = StyleSheet.create({
     },
     commitDateInfo: {
         alignSelf: 'center',
-        // backgroundColor: 'yellow',
-        // width: windowWidth * 0.3,
         height: windowHeight * 0.1,
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -143,29 +122,24 @@ const styles = StyleSheet.create({
     commitDate: {
         alignSelf: 'flex-start',
         textAlign: 'center',
-        // backgroundColor: 'yellow',
         color: 'black',
         fontFamily: 'JetBrainsMono-Medium',
         fontSize: 15,
+        marginTop: 10,
     },
-
     infoArrow: {
         alignSelf: 'center',
         resizeMode: 'contain',
         flex: 1,
-        // backgroundColor: 'yellow',
-        width: windowWidth * 0.1,
+        width: windowWidth * 0.05,
         height: windowWidth * 0.1,
     },
     commitMessage: {
         alignSelf: 'center',
-        // backgroundColor: 'red',
         width: windowWidth * 0.95,
         marginBottom: 10,
-        // height: windowHeight * 0.1,
         fontFamily: 'JetBrainsMono-Medium',
         fontSize: 15,
         color: 'black',
     },
-  
 });

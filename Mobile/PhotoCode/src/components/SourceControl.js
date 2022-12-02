@@ -74,17 +74,14 @@ const styles = StyleSheet.create({
     main: {
         backgroundColor: '#FFFFFF',
         flex: 5,
-        // justifyContent: 'space-between',
     },
     title: {
         fontSize: 35,
-        // marginTop: -100,
         textAlign: 'center',
         width: windowWidth,
         color: '#FFFFFF',
         fontFamily: 'JetBrainsMono-Medium',
     },
-
 });
 
 export default SourceControl;
