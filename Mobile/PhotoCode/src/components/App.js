@@ -22,19 +22,7 @@ import { Commit } from './Commit';
 const Stack = createNativeStackNavigator();
 
 import { Text, View } from 'react-native';
-
-// const App = () => {
-//   return (
-//     <View
-//       style={{
-//         flex: 1,
-//         justifyContent: "center",
-//         alignItems: "center"
-//       }}>
-//       <Text>Hello, world!</Text>
-//     </View>
-//   )
-// }
+import ProjectSettings from './ProjectSettings';
 
 class App extends React.Component {
     render () {
@@ -78,6 +66,10 @@ class App extends React.Component {
                     <Stack.Screen
                         name="ProjectPage"
                         component={ProjectPage}
+                    />
+                    <Stack.Screen
+                        name="ProjectSettings"
+                        component={ProjectSettings}
                     />
                     <Stack.Screen
                         name="SourceControl"

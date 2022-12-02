@@ -55,7 +55,6 @@ function GoBackButton() {
   const navigation = useNavigation();
   return (
     <Pressable
-      // title={`Go to ${screenName}`}
       onPress={() => navigation.goBack()}
     >
         <Text style={styles.backText}>
@@ -66,14 +65,12 @@ function GoBackButton() {
   );
 }
 
-
-// Create a function to navigate to the source control page when the button is pressed
-function GoToSourceControl({screenName}) {
+function GoToSourceControl() {
     const navigation = useNavigation();
     return (
         <Pressable 
             style={styles.actionButton}
-            onPress={() => navigation.navigate(screenName)}
+            onPress={() => navigation.navigate('SourceControl')}
         >
             <Text style={styles.actionButtonText}>
                 Version Control
@@ -82,10 +79,19 @@ function GoToSourceControl({screenName}) {
     );
 }
 
-// Function to navigate to SourceControl page
-function GoToVersionControl({screenName}) {
+function GoToProjectSettings() {
+    const route = useRoute();
+    const { projectName } = route.params;
     const navigation = useNavigation();
-    navigation.navigate(screenName)
+    return (
+        <Pressable 
+            style={styles.actionButton}
+            onPress={() => navigation.navigate('ProjectSettings', {projectName: projectName})}>
+            <Text style={styles.actionButtonText}>
+                Project Settings
+            </Text>
+        </Pressable>
+    );
 }
 
 function GetProjectName() {
@@ -98,8 +104,6 @@ function GetProjectName() {
         </Text>
     );
 }
-
-
 
 class ProjectPage extends React.Component {
 
@@ -133,6 +137,7 @@ class ProjectPage extends React.Component {
                                 style={styles.search}
                                 placeholderTextColor={'black'}
                                 placeholder='Search Files'
+                                placeholderTextColor='darkgrey' 
                             />
                         </View>
                     </View>
@@ -178,14 +183,8 @@ class ProjectPage extends React.Component {
                     </View>
 
                     <View style={styles.buttonWrapper}>
-                        <GoToSourceControl screenName='SourceControl' />
-                        <Pressable 
-                            style={styles.actionButton}
-                            onPress={() => {}} >
-                            <Text style={styles.actionButtonText}>
-                                Project Settings
-                            </Text>
-                        </Pressable>
+                        <GoToSourceControl/>
+                        <GoToProjectSettings/>
                     </View>
                 </View>
             </View>
@@ -238,6 +237,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 15,
         height: 75,
         width: 75,
+        resizeMode: 'contain',
     },
     textBlock: {
         flex: 1,
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
         height: windowHeight * 0.05,
         fontSize: 25,
         textAlign: 'left',
-        paddingLeft: 20,
+        paddingLeft: 10,
         fontFamily: 'JetBrainsMono-Light',
         color: 'black',
 
@@ -322,23 +322,24 @@ const styles = StyleSheet.create({
     buttonWrapper: {
         display: 'flex',
         alignItems: 'center',
+        marginBottom: 20,
     },
     actionButton: {
         backgroundColor: '#0066FF',
         borderColor: 'black',
         borderWidth: 2,
         borderRadius: 20,
-        height: windowHeight * 0.06,
+        height: windowHeight * 0.08,
         width: windowWidth * 0.8,
         display: 'flex',
         justifyContent: 'center',
-        marginBottom: 24,
+        marginBottom: 15,
     },  
     actionButtonText: {
         textAlign: 'center',
         fontFamily: 'JetBrainsMono-Medium',
         color: 'white',
-        fontSize: windowHeight * 0.03,
+        fontSize: windowHeight * 0.035,
     },
     folder: {
         display: 'flex',
@@ -348,7 +349,8 @@ const styles = StyleSheet.create({
     },
     folderIcon: {
         width: 25,
-        height: 20,
+        height: 25,
+        resizeMode: 'contain',
     },
     file: {
         display: 'flex',
