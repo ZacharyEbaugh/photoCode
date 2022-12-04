@@ -11,12 +11,17 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.1.3",
+    "cjs": "^0.0.11",
+    "formik": "^2.2.9",
     "gh-pages": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.6.0",
     "react-router-dom": "^6.4.2",
     "react-scripts": "^5.0.1",
+    "react-simple-widgets": "^6.7.0",
+    "sass": "^1.56.1",
+    "sass-loader": "^13.2.0",
     "styled-components": "^5.3.6",
     "web-vitals": "^2.1.4"
   },
@@ -40,5 +45,4 @@
       "last 1 safari version"
     ]
   }
-
 }

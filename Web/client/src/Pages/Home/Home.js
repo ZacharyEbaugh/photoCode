@@ -9,6 +9,7 @@ import Axios from "axios";
 import account_picture from '../../images/account.png';
 import folder_icon from '../../images/Folder_Icon.png';
 import search_icon from '../../images/Search_Icon.png';
+import { PhotoCodeHeader } from '../PhotoCodeHeader';
 
 function Home() {
     const [listOfUsers, setListOfUsers] = useState([]);
@@ -39,23 +40,10 @@ function Home() {
         setListOfUsers(response.data);
       });
     }, []);
-    const navigate = useNavigate();
-    // const Contact = () => {
-    // navigate("/Contact");
-    // }   
   
     return (
       <div className="containerHome">  
-        <header className='header'>
-            <h1 className='headerTextPhotocode'>PhotoCode</h1>
-            <div className='headerRight'>
-                <button className='headerTextNav' onClick={() => {navigate("/Home")}}>Home</button> 
-                <button className='headerTextNav' onClick={() => {navigate("/Contact")}}>Contact</button>    
-                <button className='headerTextNav'>Account</button>   
-                <button className='profileButton'><img className='headerPicture' src={account_picture} /></button>    
-            </div>
-        </header>
-
+        <PhotoCodeHeader/>
         <section className='main'>
             <div className='sidebar'>
                 <div className='projectsWrapper'>

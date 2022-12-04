@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@auth0/auth0-react": "^1.12.0",
     "@fontsource/roboto": "^4.5.8",
     "@material-ui/icons": "^4.11.3",
     "@mui/material": "^5.10.9",
@@ -9,6 +10,10 @@
     "monaco-editor": "^0.34.1",
     "react-icons": "^4.4.0",
     "react-router-dom": "^6.4.2",
+    "resolve-url-loader": "^5.0.0",
     "styled-components": "^5.3.6"
+  },
+  "devDependencies": {
+    "sass": "^1.56.1"
   }
 }

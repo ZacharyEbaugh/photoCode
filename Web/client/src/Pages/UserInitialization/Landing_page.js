@@ -28,7 +28,7 @@ export default function Landing_page() {
   const navigate = useNavigate();
 
   const Login = () => {
-    navigate("Login");
+    navigate("/LoginTest");
   }
 
   const Register = () => {

@@ -12,6 +12,7 @@ import brandon_picture from '../../images/brandonProfilePic.png';
 import linkedin_icon from '../../images/linkedin_icon_black.png';
 import github_icon from '../../images/github_icon_black.png';
 import terminal_icon from '../../images/terminal_icon_black.png';
+import { PhotoCodeHeader } from '../PhotoCodeHeader';
 
 function Contact() {
     const [listOfUsers, setListOfUsers] = useState([]);
@@ -28,15 +29,7 @@ function Contact() {
 
     return (
       <div className="containerContact">  
-        <header className='header'>
-            <h1 className='headerTextPhotocode'>PhotoCode</h1>
-            <div className='headerRight'>
-                <button className='headerTextNav' onClick={() => {navigate("/Home")}}>Home</button> 
-                <button className='headerTextNav' onClick={() => {navigate("/Contact")}}>Contact</button>   
-                <button className='headerTextNav'>Account</button>   
-                <button className='profileButton'><img className='headerPicture' src={account_picture} /></button>    
-            </div>
-        </header>
+        <PhotoCodeHeader/>
 
         <section className='main'>
             <div className='profileCardWrapper'>

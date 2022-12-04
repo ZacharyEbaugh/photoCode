@@ -1,0 +1,82 @@
+/* || Fonts */
+/* #region */
+@font-face {
+    font-family: "Mono-Regular";
+    /*Can be any text*/
+    src: local("JetBrainsMono-Regular"),
+        url(".././fonts/JetBrainsMono-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Mono-Medium";
+    /*Can be any text*/
+    src: local("JetBrainsMono-Medium"),
+        url(".././fonts/JetBrainsMono-Medium.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Mono-Bold";
+    /*Can be any text*/
+    src: local("JetBrainsMono-Bold"),
+        url(".././fonts/JetBrainsMono-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Mono-ExtraBold";
+    /*Can be any text*/
+    src: local("JetBrainsMono-ExtraBold"),
+        url(".././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
+}
+
+/* #endregion */
+
+/* || Header Styles */
+/* #region */
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin: 1.5rem 2rem 0 5rem;
+}
+
+.headerRight {
+    display: flex;
+    height: min-content;
+    align-items: center;
+}
+
+.headerTextPhotocode {
+    font-family: 'Mono-Regular';
+    font-size: 10.6rem;
+    margin: 0;
+    color: white;
+    cursor: default;
+}
+
+.headerTextNav {
+    font-size: 2.5vw;
+    color: white;
+    background: none;
+    border: none;
+    font-family: "Mono-Regular";
+    cursor: pointer;
+    margin-right: 1vw;
+}
+
+.headerTextNav:hover {
+    color: black;
+}
+
+.profileButton {
+    display: flex;
+    background: none;
+    border: white 0.125rem solid;
+    border-radius: 1.3rem;
+    margin: 0 0 0 1.2rem;
+}
+
+.headerPicture {
+    height: 7.25rem;
+    width: 7.25rem;
+}
+
+/* #endregion */
