@@ -1,33 +1,90 @@
 import "./Register.css";
-import {useState, useEffect} from "react";
+import {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import {FaRegEnvelope, FaUser, FaLock, FaLinkedinIn} from "react-icons/fa";
 import {ImFacebook} from "react-icons/im";
 import {FcGoogle} from "react-icons/fc";
 
+import axios from "axios";
+
+import { useAuth0 } from "@auth0/auth0-react";
+
 function Register() {
   const navigate = useNavigate();
-  const Login = () => {
-      navigate("/Login");
-  }
-
-  const Home = () => {
-      navigate("/");
-  }
+  const { loginWithRedirect, isAuthenticated, loginWithPopup } = useAuth0();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
 
-  const createUser = () => {
-    Axios.post("http://localhost:3001/createUser", {
-      email,
-      username,
-      password,
-    })
-    navigate("/");
+  const [error, setError] = useState("");
+
+  const handleEmailChange = event => {
+    setEmail(event.target.value);
+    console.log(`Email: ${email}`);
   };
+
+  const handleUsernameChange = event => {
+    setUsername(event.target.value);
+    console.log(`Username: ${username}`);
+  };
+
+  const handlePasswordChange = event => {
+      setPassword(event.target.value);
+      console.log(`Password: ${password}`);
+  };
+
+  const registerButton = async event => {
+
+    event.preventDefault();
+    // Validate the email and password
+    if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/))
+    {
+      setError("Please enter a valid email address");
+      return;
+    } 
+    else if (!password) 
+    {
+      setError("Please enter a valid password");
+      return;
+    }
+    
+    try {
+      registerButton({
+              email,
+              username,
+              password
+          });
+
+    }
+    catch (error) {
+      setError('Invalid email or password.');
+      return;
+    }
+
+  };
+
+
+  const register = async event => {
+    // make an axios call to the server to register the user
+    // try {
+      console.log("RegisterTest.js: handleSubmit() called");
+
+      axios.post("http://localhost:3001/register", {
+          email: email,
+          username: username,
+          password: password
+      })
+      .then((res) => {
+        navigate("/Home");
+      })
+      .catch ((error) => {
+        setError(error.response.data['message'].match(/:(.*)/)[1]);
+        return;
+      })
+  };
+
   return (
     <div className="Register">
       <div className="Registration">
@@ -52,9 +109,7 @@ function Register() {
               type="text"
               className="emailInput"
               placeholder="Email"
-              onChange={(event) => {
-                setEmail(event.target.value);
-              }}
+              onChange={handleEmailChange}
             />
           </div>
           <div className="input">
@@ -63,9 +118,7 @@ function Register() {
               type="text"
               className="usernameInput"
               placeholder="Username"
-              onChange={(event) => {
-                setUsername(event.target.value);
-              }}
+              onChange={handleUsernameChange}
             />
           </div>
           <div className="input">
@@ -74,18 +127,17 @@ function Register() {
               type="password"
               className="passwordInput"
               placeholder="Password"
-              onChange={(event) => {
-                setPassword(event.target.value);
-              }}
+              onChange={handlePasswordChange}
             />
           </div>
-          <button className="registerButton" onClick={createUser}> Register </button>
+          <button className="registerButton" onClick={registerButton}> Register </button>
+          <p className="error">{error}</p>
         </div>
       </div>
       <div className="WelcomeInfo">
         <text className="WelcomeTitle">Welcome to PhotoCode</text>
         <text className="WelcomeText">Scan any writing using Google's VisionAI, edit as a text file, store and transfer to or from the cloud </text>
-        <button className="gotoLogin" onClick={Login}> Login </button>
+          <button className="gotoLogin" onClick={() => loginWithRedirect({redirectUri: 'http://localhost:3000/Home',})}> Login </button>
       </div>
     </div>
   );

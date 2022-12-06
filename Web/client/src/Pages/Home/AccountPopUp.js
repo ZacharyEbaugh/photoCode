@@ -4,8 +4,11 @@ import { useNavigate } from "react-router-dom";
 import account_picture from "../../images/account.png";
 import zacProfilePic from "../../images/zacProfilePic.jpg";
 
+import { useAuth0 } from '@auth0/auth0-react';
+
 export default function AccountPopUp() {
     const navigate = useNavigate();
+    const { logout } = useAuth0();
     return (
         <div className="AccountPopUp">
             <PopupMenu className="popup">
@@ -18,7 +21,7 @@ export default function AccountPopUp() {
                         <h2>Zachary Ebaugh</h2>
                     </div>
                     <button className='actionButton' onClick={() => {navigate("/Account")}}>Account</button>
-                    <button className='actionButton'onClick={() => {navigate("/")}}>Logout</button>
+                    <button className='actionButton'onClick={() => logout({redirectUri: 'http://localhost:3000',})}>Logout</button>
                 </div>
             </PopupMenu>
         </div>

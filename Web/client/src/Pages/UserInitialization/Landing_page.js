@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import "./Landing_page.css";
 import { useNavigate } from "react-router-dom";
 
@@ -15,6 +15,8 @@ import ProfileToContact from "../../Assets/ProfileToContact.png";
 
 import Axios from "axios";
 
+import { useAuth0 } from "@auth0/auth0-react";
+
 export default function Landing_page() {
 
   const [name, setName] = useState("");
@@ -26,14 +28,15 @@ export default function Landing_page() {
   const scrollToAbout = useRef();
   const scrollToContact = useRef();
   const navigate = useNavigate();
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
 
   const Login = () => {
-    navigate("/LoginTest");
-  }
+    navigate("/Login");
+  };
 
   const Register = () => {
     navigate("/Register");
-  }   
+  };
 
   // Axios call sendemail to user on button click
     const sendEmail = () => {
@@ -76,7 +79,7 @@ export default function Landing_page() {
                     </a>
                 </div>
                 <div className="UserInitialization">
-                    <button onClick={Login} className="LoginButton">Login</button>
+                    <button onClick={() => loginWithRedirect({redirectUri: 'http://localhost:3000/Home',})} className="LoginButton">Login</button>
                     <button onClick={Register} className="RegisterButton">Register</button>
                 </div>
             </div>

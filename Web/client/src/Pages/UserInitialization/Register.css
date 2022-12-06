@@ -243,6 +243,12 @@
     /* font-weight: bold; */
     cursor: pointer;
   }
+
+  .error {
+    font-size: 2.5vw;
+    font-family: 'Mono-Regular';
+    color: red;
+  }
   
   .WelcomeInfo {
     height: 100%;
