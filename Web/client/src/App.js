@@ -9,6 +9,9 @@ import Account from "./Pages/Home/Account";
 import Contact from "./Pages/Home/Contact";
 import FileEdit from "./Pages/FileEdit";
 import ErrorPage from "./Pages/ErrorPage";
+
+import CreateProject from "./Pages/CreateProject";
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -27,6 +30,7 @@ function App() {
               <Route path="/Home" element={<Home />}/>
               <Route path="/Account" element={<Account />}/>
               <Route path="/Contact" element={<Contact />}/>
+              <Route path="/CreateProject" element={<CreateProject />}/>
               <Route path="/FileEdit" element={<FileEdit />}/>
               <Route path="/*" element={<ErrorPage />}/>
           </Routes>

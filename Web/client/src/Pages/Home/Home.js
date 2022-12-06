@@ -12,6 +12,8 @@ import search_icon from '../../images/Search_Icon.png';
 import { PhotoCodeHeader } from '../PhotoCodeHeader';
 
 function Home() {
+    const navigate = useNavigate();
+
     const [listOfUsers, setListOfUsers] = useState([]);
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
@@ -54,7 +56,7 @@ function Home() {
                                 <img className='searchIcon' src={search_icon} />
                                 <input className='searchProjectInput' placeholder='Search Projects'></input>
                             </div>
-                            <button className='createProjectButton'>
+                            <button className='createProjectButton' onClick={() => navigate('/CreateProject')}>
                                 <img className='createProjectIcon' src={folder_icon} />
                                 Create Project
                             </button>
