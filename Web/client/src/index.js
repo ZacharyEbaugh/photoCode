@@ -3,7 +3,6 @@ import React from 'react';
 import './index.css';
 import ReactDOM from "react-dom/client";
 import { Auth0Provider } from "@auth0/auth0-react";
-import history from "./history";
 import App from "./App";
 
 // Assign environment variables to constants
