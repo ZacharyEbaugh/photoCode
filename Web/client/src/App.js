@@ -7,8 +7,12 @@ import LoginTest from "./Pages/UserInitialization/LoginTest";
 import Home from "./Pages/Home/Home";
 import Account from "./Pages/Home/Account";
 import Contact from "./Pages/Home/Contact";
+
+import ProjectPage from "./Pages/ProjectPage";
 import FileEdit from "./Pages/FileEdit";
 import ErrorPage from "./Pages/ErrorPage";
+
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -27,6 +31,7 @@ function App() {
               <Route path="/Home" element={<Home />}/>
               <Route path="/Account" element={<Account />}/>
               <Route path="/Contact" element={<Contact />}/>
+              <Route path="/ProjectPage" element={<ProjectPage />}/>
               <Route path="/FileEdit" element={<FileEdit />}/>
               <Route path="/*" element={<ErrorPage />}/>
           </Routes>
