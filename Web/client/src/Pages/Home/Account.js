@@ -10,7 +10,6 @@ import zacProfilePic from '../../images/zacProfilePic.jpg';
 import { PhotoCodeHeader } from '../PhotoCodeHeader';
 
 function Account() {
-
     const navigate = useNavigate();
     const userName = "Zachary Ebaugh";
     const userEmail = "zlebaughwps@gmail.com";

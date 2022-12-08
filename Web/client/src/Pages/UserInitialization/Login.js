@@ -4,7 +4,8 @@ import {
     useState, 
     useEffect
 } from "react";
-import Axios from "axios";
+
+import { useAuth0 } from "@auth0/auth0-react";
 
 import {
     FaRegEnvelope, 
@@ -17,27 +18,65 @@ import {FcGoogle} from "react-icons/fc";
 
 function Login() {
   const [listOfUsers, setListOfUsers] = useState([]);
-  const [name, setName] = useState("");
+
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [error, setError] = useState("");
+
+  const handleEmailChange = event => {
+    setEmail(event.target.value);
+    console.log(`Email: ${email}`);
+  };
+
+  const handlePasswordChange = event => {
+      setPassword(event.target.value);
+      console.log(`Password: ${password}`);
+  };
+
 
   const navigate = useNavigate();
   const Register = () => {
       navigate("/Register");
   }
 
-  // Navigate to home screen if username is found in database
-  const Login = () => {
-    Axios.post("http://localhost:3001/valUser", {
-      name: name,
-      password: password,
-    }).then((response) => {
-      if (response.data.message) {
-        alert(response.data.message);
-      } else {
-        navigate("/Home");
-      }
-    });
+  const Home = () => {
+    navigate("/Home");
   }
+
+  const { loginWithRedirect, login, isAuthenticated} = useAuth0();
+  const Login = async event => {
+
+    event.preventDefault();
+
+    // Validate the email and password
+    if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/))
+    {
+      setError("Please enter a valid email address");
+      return;
+    } 
+    else if (!password) 
+    {
+      setError("Please enter a valid password");
+      return;
+    }
+    
+    try {
+      await loginWithRedirect({
+              email,
+              password
+          });
+
+    }
+    catch (error) {
+      setError('Invalid email or password.');
+      return;
+    }
+
+    // Check if auth0 authentication is successful
+    // if (auth0Response.status === 200) {
+
+  };
 
   return (
     <div className="Register">
@@ -66,9 +105,7 @@ function Login() {
               type="text"
               className="emailInput"
               placeholder="Email or Username"
-              onChange={(event) => {
-                setName(event.target.value);
-              }}
+              onChange={handleEmailChange}
             />
           </div>
 
@@ -78,13 +115,12 @@ function Login() {
               type="password"
               className="passwordInput"
               placeholder="Password"
-              onChange={(event) => {
-                setPassword(event.target.value);
-              }}
+              onChange={handlePasswordChange}
             />
           </div>
 
           <button onClick={Login} className="registerButton"> Login </button>
+          <p className="error">{error}</p>
         </div>
       </div>
       {/* <div className="usersDisplay">

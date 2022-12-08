@@ -21,11 +21,18 @@
     src: local("JetBrainsMono-ExtraBold"),
       url(".././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
   }
-  
-  .container {
-    height: 50vw;
+
+  .containerFileEdit {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     width: 100%;
     background: linear-gradient(180deg, #0066FF 0%, #FFFFFF 100%);
+  }
+  
+  .containerProject {
+    height: 80%;
+    width: 100%;
     display: flex;
     flex-direction: row;
   }
@@ -99,6 +106,27 @@
     padding: 0.3vw;
   }
 
+  .dirPath {
+    /* background-color: black; */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* padding: 3vw; */
+  }
+
+  .dirPathButton {
+    /* width: 100%; */
+    display: flex;
+    align-items: center;
+    /* margin-left: 1rem; */
+  }
+
+  .dirPath h1 {
+    font-family: "Mono-Regular";
+    font-size: 1vw;
+  }
+
   .folderDisplay {
     width: 100%;
   }
@@ -107,6 +135,7 @@
     display: flex;
     align-items: center;
     border-bottom: 1px solid #D8D8D8;
+    cursor: pointer;
   }
 
   .folders h1 {
@@ -114,9 +143,19 @@
     margin-left: 5%;
   }
 
+  .folders:hover {
+    background-color: #e6e6e6;
+  }
+
   .folderIcon {
     height: 3vw;
     width: 3vw;
+    margin-left: 10%;
+  }
+
+  .languageIcon {
+    height: 2vw;
+    width: 2vw;
     margin-left: 10%;
   }
 

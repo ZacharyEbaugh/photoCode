@@ -1,85 +1,89 @@
-const express = require("express");
-const app = express();
-const mongoose = require("mongoose");
-const UserModel = require("./models/Users");
-
+const express = require('express');
+const { expressjwt: expressJwt } = require('express-jwt');
+var jwks = require('jwks-rsa');
 const cors = require("cors");
-const nodemailer = require("nodemailer");
+var request = require("request");
 
+const app = express();
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect(
-    "mongodb+srv://PhotoCode_Team:ROs5aNZ1Yd54yUTt@pccluster.urvaffs.mongodb.net/PhotoCode_db?retryWrites=true&w=majority"
-  );
+// Set up the Auth0 Management API credentials
+const API_URL = 'https://photocode.us.auth0.com/api/v2/';
+const API_CLIENT_ID = 'Hk5ax5o8U2rqvwffMvGnHUoeajC7Tk2W';
+const API_CLIENT_SECRET = '7KhMjd-z0h_2lA0qs3QavFpClh-y0uUX1bvepeXBpHpaISxPYK21AsCwh_I2AsgH';
 
-app.get("/getUsers", (req, res) => {
-  UserModel.find({}, (err, result) => {
-    if (err) {
-      res.json(err);
-    } else {
-      res.json(result);
-    }
-  });
+// Define middleware that validates incoming bearer tokens
+// using JWKS from photocode.us.auth0.com
+const checkJwt = expressJwt({
+  // Dynamically provide a signing key
+  // based on the kid in the header and
+  // the singing keys provided by the JWKS endpoint.
+  secret: jwks.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: `https://photocode.us.auth0.com/.well-known/jwks.json`
+  }),
+
+  // Validate the audience and the issuer.
+  audience: 'https://photocode.us.auth0.com/api/v2/',
+  issuer: `https://photocode.us.auth0.com/`,
+  algorithms: ['RS256']
 });
 
-// express function to check if username and password are in database
-app.post("/valUser", (req, res) => {
-  const name = req.body.name;
-  const password = req.body.password;
-  // Find name and password in database else return error
-  UserModel
-    .findOne
-    ({ name: name })
-    .then((user) => {
-      if (user) {
-        if (user.password === password) {
-          res.json(user);
-        } else {
-          res.json({ message: "Wrong username/password combination!" });
-        }
+function getJwtToken() {
+  const options = {
+    method: 'GET',
+    url: 'https://photocode.us.auth0.com/oauth/token',
+    headers: { 'content-type': 'application/json' },
+    body: {
+      grant_type: 'client_credentials',
+      client_id: API_CLIENT_ID,
+      client_secret: API_CLIENT_SECRET,
+      audience: 'https://photocode.us.auth0.com/api/v2/'
+    },
+    json: true
+  };
+
+  return new Promise((resolve, reject) => {
+    request(options, (error, response, body) => {
+      if (error) {
+        reject(error);
       } else {
-        res.json({ message: "User doesn't exist" });
+        resolve(body.access_token);
       }
     });
-});
-
-// Expresss function to send email to user
-app.post("/sendEmail", (req, res) => {
-  const name = req.body.name;
-  const email = req.body.email;
-  const company = req.body.company;
-  const message = req.body.message;
-  // Send gmail to email address given
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: "photocodedev@gmail.com",
-      pass: "rpqthhqaiveovgxn",
-    },
   });
-  const mailOptions = {
-    from: "photocodedev@gmail.com",
-    to: email,
-    subject: "Password Reset",
-    text: "Hello " + name + " from " + company + ",\n\n" + "Your message was: " + message + "\n\n" + "Regards,\n" + "PhotoCode Team",
-  };
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-    }
+}
+
+const { ManagementClient } = require('auth0');
+
+const management = new ManagementClient({
+  domain: 'photocode.us.auth0.com',
+  clientId: 'Hk5ax5o8U2rqvwffMvGnHUoeajC7Tk2W',
+  clientSecret: '7KhMjd-z0h_2lA0qs3QavFpClh-y0uUX1bvepeXBpHpaISxPYK21AsCwh_I2AsgH',
+});
+
+// Create a route handler for a POST request to the `/register` endpoint
+app.post('/register', async (req, res) => {
+  // Get the user's email and password from the request body
+  const { email, password } = req.body;
+
+  await management.createUser({
+    connection: 'Username-Password-Authentication',
+    email: email,
+    password: password
+  }).then(user => {
+    console.log(user)
+    res.send(user);
+  }).catch(err => {
+    console.log(err);
+    res.status(400).json(err)
   });
+  // // Send back a success message
 });
 
-app.post("/createUser", async (req, res) => {
-  const user = req.body;
-  const newUser = new UserModel(user);
-  await newUser.save();
-  res.json(user);
-});
+// Start the app
+app.listen(3001, () => console.log('API listening on 3001'));
 
-app.listen(3001, () => {
-  console.log("SERVER RUNS PERFECTLY!");
-});
