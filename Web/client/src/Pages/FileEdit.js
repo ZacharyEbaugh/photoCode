@@ -44,7 +44,6 @@ function File_Edit() {
               className="titleName"
               placeholder={"Update " + fileTitle}
               />
-
               <textarea 
                 className="description"
                 placeholder="Changes made..."  
