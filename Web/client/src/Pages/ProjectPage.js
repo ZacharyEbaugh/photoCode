@@ -61,6 +61,56 @@ function File_Edit() {
                 })}
             </div>
           </div>
+          <div className="directory">
+          <div className="dirBlock">
+            <h1>{directoryTitle}</h1>
+            <div className="create_search_file">
+              <button className="createFile">            
+                <FaFileCode className="fileIcon"/> 
+              </button>
+              <input
+                type="text"
+                className="searchFile"
+                placeholder="Search Files"
+              />
+            </div>
+            <div className="dirPath">
+              {currentPath.map((folderName, index) => (
+                <span className="dirPathButton" key={folderName}>
+                  <a onClick={() => handleBreadcrumbClick(index)}>
+                    {/* This is the directory path and the way to go back a dir */}
+                    <h1>
+                      {(folderName == "root") ? directoryTitle : folderName}
+                      {index < currentPath.length - 1 ? '/' : ''}
+                    </h1>
+                  </a>
+                </span>
+              ))}
+            </div>
+            <div className="folderDisplay">
+              {Object.entries(currentFolder).map(([key, value]) =>
+                value.type === 'folder' ? (
+                  <a onClick={() => handleFolderClick(key)}>
+
+                    <div className="folders" key={key}>
+                      <FaRegFolderOpen className="folderIcon"/> 
+                      <h1>
+                        {value.name}
+                      </h1>
+                    </div>
+                  </a>
+                ) : (
+                  <div className='folders' key={key}>
+                    <img src={value.languageImage} alt="language" className="languageIcon"/>
+                    <h1>
+                      {value.name}
+                    </h1>
+                  </div>
+                )
+              )}
+            </div>
+          </div>
+        </div>
           <div className="settings-commits">
             <div className="settingsButton" onClick={() => navigate('./ProjectSettings')}>Project Settings</div>
             <ProjectCommits/>
