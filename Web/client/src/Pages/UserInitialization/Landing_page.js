@@ -30,23 +30,13 @@ export default function Landing_page() {
   const navigate = useNavigate();
   const { loginWithRedirect, getAccessTokenSilently, isAuthenticated } = useAuth0();
 
-   const handleLogin = async () => {
-    console.log("LOGGING IN");
-
-    await loginWithRedirect({redirectUri: "http://localhost:3000/Home",})
-    // loginWithRedirect()
-    .then(response => {
-        // getAccessTokenSilently().then(accessToken => {(console.log(access))})
-        if (isAuthenticated)
-            console.log(response);
-        else
-            console.log("NOT");
-    });
-  };
-
   const Register = () => {
     navigate("/Register");
   };
+
+  const Login = () => {
+    navigate("/Login");
+    };
 
   // Axios call sendemail to user on button click
     const sendEmail = () => {
@@ -89,7 +79,7 @@ export default function Landing_page() {
                     </a>
                 </div>
                 <div className="UserInitialization">
-                    <button onClick={() => handleLogin()} className="LoginButton">Login</button>
+                    <button onClick={Login} className="LoginButton">Login</button>
                     <button onClick={Register} className="RegisterButton">Register</button>
                 </div>
             </div>

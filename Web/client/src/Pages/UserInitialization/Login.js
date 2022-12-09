@@ -7,6 +7,8 @@ import {
 
 import { useAuth0 } from "@auth0/auth0-react";
 
+import axios from "axios";
+
 import {
     FaRegEnvelope, 
     FaLock, 
@@ -16,13 +18,12 @@ import {
 import {ImFacebook} from "react-icons/im";
 import {FcGoogle} from "react-icons/fc";
 
-function Login() {
-  const [listOfUsers, setListOfUsers] = useState([]);
-
+function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [error, setError] = useState("");
+
+  const { loginWithRedirect, isAuthenticated } = useAuth0();
 
   const handleEmailChange = event => {
     setEmail(event.target.value);
@@ -32,6 +33,7 @@ function Login() {
   const handlePasswordChange = event => {
       setPassword(event.target.value);
       console.log(`Password: ${password}`);
+      console.log(props.auth);
   };
 
 
@@ -40,15 +42,9 @@ function Login() {
       navigate("/Register");
   }
 
-  const Home = () => {
-    navigate("/Home");
-  }
-
-  const { loginWithRedirect, login, isAuthenticated} = useAuth0();
-  const Login = async event => {
+  const ValidateLogin = async event => {
 
     event.preventDefault();
-
     // Validate the email and password
     if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/))
     {
@@ -62,21 +58,90 @@ function Login() {
     }
     
     try {
-      await loginWithRedirect({
-              email,
-              password
-          });
-
+      console.log("Calling login");
+      props.updateAuth({
+        isLoading: true,
+        isAuthenticated: false,
+        accessToken: null
+      });
+      console.log("set auth");
+      axios.post("http://localhost:3001/login", {
+        email: email,
+        password: password
+        })
+        .then((res) => {
+          if (res.data.error)
+          {
+            if (res.data.error.includes(':'))
+            {
+              setError(res.data.error.match(/\:(.*)/)[1]);
+              console.log(res.data.error.match(/\:(.*)/));
+            }
+            else
+            {
+              setError(res.data.error);
+              console.log(res.data.error);
+            }
+            return;
+          }
+          else
+          {
+            setError("");
+            const token = res.data;
+            // localStorage.setItem('access_token', token);
+            props.updateAuth({
+              isLoading: false,
+              isAuthenticated: true,
+              accessToken: token
+            })
+            console.log(props.auth);
+            navigate("/Home?" + token);
+          }
+        })
+      .catch((err) => {
+        console.log("TESTERROR" + err);
+      });
     }
     catch (error) {
       setError('Invalid email or password.');
       return;
     }
-
-    // Check if auth0 authentication is successful
-    // if (auth0Response.status === 200) {
-
   };
+
+  const ValidateGoogleLogin = async event => {
+    event.preventDefault();
+
+    try {
+      console.log("Calling login");
+      await loginWithRedirect
+      ({
+        connection: 'google-oauth2',
+        redirectUri: 'http://localhost:3000/Home',
+        prompt: 'login'
+      })
+      .then((res => {
+        console.log(res);
+        props.updateAuth ({
+          isLoading: false,
+          isAuthenticated: true,
+          accessToken: localStorage.getItem('auth0.is.authenticated')
+        });
+        console.log("AUTH" + localStorage.getItem('auth0.is.authenticated'));
+        setIsAuthenticated(true);
+        navigate("/Home");
+      }))
+      .catch((err) => {
+        console.log(err);
+        console.log("AUTH" + props.auth);
+        navigate("/Home");
+      });
+    }
+    catch (error) {
+      setError('Invalid email or password.');
+      return;
+    }
+  };
+
 
   return (
     <div className="Register">
@@ -86,7 +151,8 @@ function Login() {
           <h2>Login using</h2>
         </div>
 
-        <div className="RegisterOptions">
+        <div className="RegisterOptions" onClick={ValidateGoogleLogin}
+        >
           <FcGoogle className="googleIcon"/>
           <FaLinkedinIn className="LinkedInIcon"/>
           <ImFacebook className="FacebookIcon"/>
@@ -119,7 +185,7 @@ function Login() {
             />
           </div>
 
-          <button onClick={Login} className="registerButton"> Login </button>
+          <button onClick={ValidateLogin} className="registerButton"> Login </button>
           <p className="error">{error}</p>
         </div>
       </div>

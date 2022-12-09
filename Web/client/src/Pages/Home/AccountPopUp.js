@@ -10,7 +10,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 export default function AccountPopUp() {
 
   const [userInfo, setUserInfo] = useState(null);
-  const { User, isAuthenticated, getAccessTokenSilently, logout } = useAuth0();
+  const { logout } = useAuth0();
 
 //   React.useEffect(() => {
 //     const getUserInfo = async () => {
@@ -42,16 +42,23 @@ export default function AccountPopUp() {
 
     const navigate = useNavigate();
 
+    // Grab user info from local storage
+    const user = {
+        name: localStorage.getItem('username'),
+        email: localStorage.getItem('email'),
+        picture: localStorage.getItem('picture')
+    }
+
     return (
         <div className="AccountPopUp">
             <PopupMenu className="popup">
-                <button className='profileButton'><img className='headerPicture' src={zacProfilePic} /></button>    
-
+                {/* <button className='profileButton'><img className='headerPicture' src={zacProfilePic} /></button>     */}
+                <button className='profileButton'><img className='headerPicture' src={user.picture} /></button>
 
                 <div className="card">
                     <div className="card-header">
                         <h1>Signed in as</h1>
-                        {(isAuthenticated) ? <h2>{user.name}</h2> : <></>}
+                        <h2>{user.name}</h2>
                     </div>
                     <button className='actionButton' onClick={() => {navigate("/Account")}}>Account</button>
                     <button className='actionButton'onClick={() => logout({redirectUri: 'http://localhost:3000',})}>Logout</button>
