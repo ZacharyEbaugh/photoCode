@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 // Set up the Auth0 Management API credentials
-const API_URL = 'https://photocode.us.auth0.com/api/v2/';
+const API_URL = 'https://photocode.us.auth0.com';
 const API_CLIENT_ID = 'Hk5ax5o8U2rqvwffMvGnHUoeajC7Tk2W';
 const API_CLIENT_SECRET = '7KhMjd-z0h_2lA0qs3QavFpClh-y0uUX1bvepeXBpHpaISxPYK21AsCwh_I2AsgH';
 
@@ -65,24 +65,63 @@ const management = new ManagementClient({
   clientSecret: '7KhMjd-z0h_2lA0qs3QavFpClh-y0uUX1bvepeXBpHpaISxPYK21AsCwh_I2AsgH',
 });
 
-// Create a route handler for a POST request to the `/register` endpoint
-app.post('/register', async (req, res) => {
-  // Get the user's email and password from the request body
-  const { email, password } = req.body;
+// // Create a route handler for a POST request to the `/register` endpoint
+// app.post('/register', async (req, res) => {
+//   // Get the user's email and password from the request body
+//   const { email, password } = req.body;
 
-  await management.createUser({
-    connection: 'Username-Password-Authentication',
-    email: email,
-    password: password
-  }).then(user => {
-    console.log(user)
-    res.send(user);
-  }).catch(err => {
-    console.log(err);
-    res.status(400).json(err)
-  });
-  // // Send back a success message
-});
+//   await management.createUser({
+//     connection: 'Username-Password-Authentication',
+//     email: email,
+//     password: password
+//   }).then(user => {
+//     console.log(user)
+//     res.send(user);
+//   }).catch(err => {
+//     console.log(err);
+//     res.status(400).json(err)
+//   });
+//   // // Send back a success message
+// });
+
+
+
+
+
+
+// app.post('/register', async (req, res) => {
+//   // Get an access token for the Management API.
+//   const tokenResponse = await axios.post(`https://${API_URL}/oauth/token`, {
+//     client_id: API_CLIENT_ID,
+//     client_secret: API_CLIENT_SECRET,
+//     audience: `https://${API_URL}/api/v2/`,
+//   });
+
+//   const accessToken = tokenResponse.data.access_token;
+//   console.log(accessToken);
+//   // Register a new user using the Management API.
+//   const userResponse = await axios.post(
+//     `https://${API_URL}/api/v2/users`,
+//     {
+//       // Replace these values with the user's details.
+//       email: email,
+//       password: password,
+//       connection: 'Username-Password-Authentication',
+//     },
+//     {
+//       headers: {
+//         Authorization: `Bearer ${accessToken}`,
+//       },
+//     }
+//   );
+
+//   // Return the newly-created user.
+//   res.json(userResponse.data);
+// });
+
+
+
+
 
 // Start the app
 app.listen(3001, () => console.log('API listening on 3001'));

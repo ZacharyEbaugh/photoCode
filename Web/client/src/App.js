@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Landingpage from "./Pages/UserInitialization/Landing_page";
 import Register from "./Pages/UserInitialization/Register";
 import Login from "./Pages/UserInitialization/Login";
@@ -15,20 +15,73 @@ import {
   Route,
 } from "react-router-dom";
 
+import { useAuth0 } from "@auth0/auth0-react";
+
 function App() {
+  const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0;
+  const [auth, setAuth] = useState({
+    isLoading: true,
+    isAuthenticated: false,
+    accessToken: null
+  });
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      getAccessTokenSilently().then(accessToken => {
+        setAuth({
+          isLoading: false,
+          isAuthenticated: true, accessToken
+        });
+      });
+    } else {
+      setAuth({
+        isLoading: false,
+        isAuthenticated: false,
+        accessToken: null
+      })
+    }
+  }, [isAuthenticated, getAccessTokenSilently]);
+
+
+  // if (auth.isLoading) {
+  //   return (<div>Loading</div>);
+  // }
+  // else if (auth.isAuthenticated) {
+  //   return (<div>Home</div>);
+  // }
+  // else {
+  //   return (
+  //     <Router>
+  //           <Routes>
+  //              <Route path="/" element={<Landingpage />}/>
+  //              <Route path="/Home" element={<Home />}/>
+  //           </Routes>
+  //       </Router>
+  //     );
+  // }
 
   return (
       <Router>
-          <Routes>
-              <Route path="/" element={<Landingpage />}/>
-              <Route path="/Register" element={<Register />}/>
-              <Route path="/Login" element={<Login />}/>
-              <Route path="/Home" element={<Home />}/>
-              <Route path="/Account" element={<Account />}/>
-              <Route path="/Contact" element={<Contact />}/>
-              <Route path="/FileEdit" element={<FileEdit />}/>
-              <Route path="/*" element={<ErrorPage />}/>
-          </Routes>
+      
+            {!isAuthenticated ? 
+              <Routes>
+                <Route path="/" element={<Landingpage />}/>
+                <Route path="/Register" element={<Register />}/>
+                <Route path="/Login" element={<Login />}/>
+                <Route path="/Home" element={<Home />}/>
+
+              </Routes>
+              :
+              <Routes>
+                <Route path="/Account" element={<Account />}/>
+                <Route path="/Contact" element={<Contact />}/>
+                <Route path="/FileEdit" element={<FileEdit />}/>
+              </Routes>
+            }
+
+      
+              {/* <Route path="/*" element={<ErrorPage />}/> */}
+       
       </Router>
   );
 }
