@@ -100,7 +100,7 @@ function Register() {
 
 
    async function registerButton(event) {
-    event.preventDefault();
+    // event.preventDefault();
 
     // Get the email and password values from the form.
     // const email = form.elements.email.value;
