@@ -7,12 +7,13 @@ import {ImFacebook} from "react-icons/im";
 import {FcGoogle} from "react-icons/fc";
 
 import axios from "axios";
+import { register } from "./../../register";
 
 import { useAuth0 } from "@auth0/auth0-react";
 
 function Register() {
   const navigate = useNavigate();
-  const { loginWithRedirect, isAuthenticated, loginWithPopup } = useAuth0();
+  const { loginWithRedirect, isAuthenticated } = useAuth0();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,55 +36,87 @@ function Register() {
       console.log(`Password: ${password}`);
   };
 
-  const registerButton = async event => {
+  // const registerButton = async event => {
 
-    event.preventDefault();
-    // Validate the email and password
-    if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/))
-    {
-      setError("Please enter a valid email address");
-      return;
-    } 
-    else if (!password) 
-    {
-      setError("Please enter a valid password");
-      return;
-    }
+  //   event.preventDefault();
+  //   // Validate the email and password
+  //   if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/))
+  //   {
+  //     setError("Please enter a valid email address");
+  //     return;
+  //   } 
+  //   else if (!password) 
+  //   {
+  //     setError("Please enter a valid password");
+  //     return;
+  //   }
     
-    try {
-      registerButton({
-              email,
-              username,
-              password
-          });
+  //   try {
+  //     console.log("Calling register")
+  //     register({
+  //             email,
+  //             username,
+  //             password
+  //           });
+  //     console.log("After register")
+  //   }
+  //   catch (error) {
+  //     setError('Invalid email or password.');
+  //     return;
+  //   }
 
-    }
-    catch (error) {
-      setError('Invalid email or password.');
-      return;
-    }
-
-  };
+  // };
 
 
-  const register = async event => {
-    // make an axios call to the server to register the user
-    // try {
-      console.log("RegisterTest.js: handleSubmit() called");
+  // const register = async event => {
+  //   // make an axios call to the server to register the user
+  //   // try {
+  //     console.log("RegisterTest.js: handleSubmit() called");
 
-      axios.post("http://localhost:3001/register", {
-          email: email,
-          username: username,
-          password: password
-      })
-      .then((res) => {
-        navigate("/Home");
-      })
-      .catch ((error) => {
-        setError(error.response.data['message'].match(/:(.*)/)[1]);
-        return;
-      })
-  };
+  //     axios.post("http://localhost:3001/register", {
+  //         email: email,
+  //         username: username,
+  //         password: password
+  //     })
+  //     .then((res) => {
+  //       navigate("/Home");
+  //     })
+  //     // .catch ((error) => {
+  //     //   if (error.response.data['message'].includes(':'))
+  //     //   {
+  //     //     setError(error.response.data['message'].match(/:(.*)/)[1]);
+  //     //   }
+  //     //   else
+  //     //   {
+  //     //     setError(error.response.data['message'])
+  //     //   }
+  //     //   console.log(error.response.data['message'])
+  //     //   return;
+  //     // })
+  // };
+
+
+
+
+
+   async function registerButton(event) {
+    event.preventDefault();
+
+    // Get the email and password values from the form.
+    // const email = form.elements.email.value;
+    // const password = form.elements.password.value;
+
+    // Register the user.
+    const user = await register(email, password);
+
+    // Show a success message.
+    alert(`Successfully registered user with email ${user.email}`);
+  }
+
+
+
+
+
 
   return (
     <div className="Register">

@@ -28,10 +28,20 @@ export default function Landing_page() {
   const scrollToAbout = useRef();
   const scrollToContact = useRef();
   const navigate = useNavigate();
-  const { isAuthenticated, loginWithRedirect } = useAuth0();
+  const { loginWithRedirect, getAccessTokenSilently, isAuthenticated } = useAuth0();
 
-  const Login = () => {
-    navigate("/Login");
+   const handleLogin = async () => {
+    console.log("LOGGING IN");
+
+    await loginWithRedirect({redirectUri: "http://localhost:3000/Home",})
+    // loginWithRedirect()
+    .then(response => {
+        // getAccessTokenSilently().then(accessToken => {(console.log(access))})
+        if (isAuthenticated)
+            console.log(response);
+        else
+            console.log("NOT");
+    });
   };
 
   const Register = () => {
@@ -79,7 +89,7 @@ export default function Landing_page() {
                     </a>
                 </div>
                 <div className="UserInitialization">
-                    <button onClick={() => loginWithRedirect({redirectUri: 'http://localhost:3000/Home',})} className="LoginButton">Login</button>
+                    <button onClick={() => handleLogin()} className="LoginButton">Login</button>
                     <button onClick={Register} className="RegisterButton">Register</button>
                 </div>
             </div>

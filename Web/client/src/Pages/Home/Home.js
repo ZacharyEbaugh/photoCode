@@ -6,6 +6,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 
+import { useAuth0 } from '@auth0/auth0-react';
+
 import account_picture from '../../images/account.png';
 import folder_icon from '../../images/Folder_Icon.png';
 import search_icon from '../../images/Search_Icon.png';
@@ -16,6 +18,31 @@ function Home() {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
 
+     const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0;
+  const [auth, setAuth] = useState({
+    isLoading: true,
+    isAuthenticated: false,
+    accessToken: null
+  });
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      getAccessTokenSilently().then(accessToken => {
+        setAuth({
+          isLoading: false,
+          isAuthenticated: true, accessToken
+        });
+      });
+    } else {
+      setAuth({
+        isLoading: false,
+        isAuthenticated: false,
+        accessToken: null
+      })
+      console.log("NOT AUTHENT");
+    }
+  }, [isAuthenticated, getAccessTokenSilently]);
+    
     const listOfProjects = [
         {
             name: "Portfolio Webpage",
@@ -34,12 +61,6 @@ function Home() {
             lang_3: "JavaScript",
         }
     ]
-  
-    useEffect(() => {
-      Axios.get("http://localhost:3001/getUsers").then((response) => {
-        setListOfUsers(response.data);
-      });
-    }, []);
   
     return (
       <div className="containerHome">  
