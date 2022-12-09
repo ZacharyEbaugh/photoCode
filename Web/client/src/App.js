@@ -15,32 +15,36 @@ import {
   Route,
 } from "react-router-dom";
 
-import { useAuth0 } from "@auth0/auth0-react";
+import { useAuth0, setIsAuthenticated } from "@auth0/auth0-react";
 
 function App() {
-  const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0;
+  // const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0;
   const [auth, setAuth] = useState({
     isLoading: true,
     isAuthenticated: false,
     accessToken: null
   });
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      getAccessTokenSilently().then(accessToken => {
-        setAuth({
-          isLoading: false,
-          isAuthenticated: true, accessToken
-        });
-      });
-    } else {
-      setAuth({
-        isLoading: false,
-        isAuthenticated: false,
-        accessToken: null
-      })
-    }
-  }, [isAuthenticated, getAccessTokenSilently]);
+  const updateAuth = (newAuth) => {
+    setAuth(newAuth);
+  };
+
+  // useEffect(() => {
+  //   if (auth.isAuthenticated) {
+  //     getAccessTokenSilently().then(accessToken => {
+  //       setAuth({
+  //         isLoading: false,
+  //         isAuthenticated: true, accessToken
+  //       });
+  //     });
+  //   } else {
+  //     setAuth({
+  //       isLoading: false,
+  //       isAuthenticated: false,
+  //       accessToken: null
+  //     })
+  //   }
+  // }, [isAuthenticated, getAccessTokenSilently]);
 
 
   // if (auth.isLoading) {
@@ -63,12 +67,12 @@ function App() {
   return (
       <Router>
       
-            {!isAuthenticated ? 
+            {!auth.isAuthenticated ? 
               <Routes>
                 <Route path="/" element={<Landingpage />}/>
                 <Route path="/Register" element={<Register />}/>
-                <Route path="/Login" element={<Login />}/>
-                <Route path="/Home" element={<Home />}/>
+                <Route path="/Login" element={<Login auth={auth} updateAuth={updateAuth}/>}/>
+                <Route path="/Home" element={<Home auth={auth}/>}/>
 
               </Routes>
               :

@@ -2,7 +2,7 @@ import React from 'react';
 // import ReactDOM from 'react-dom/client';
 import './index.css';
 import ReactDOM from "react-dom/client";
-import { Auth0Provider } from "@auth0/auth0-react";
+import { Auth0Provider, LocalStorageCache } from "@auth0/auth0-react";
 import App from "./App";
 
 // Assign environment variables to constants
@@ -25,6 +25,7 @@ root.render(
         onRedirectCallback={onRedirectCallback}
         clientSecret={secret}
         allowedOrigins={["http://localhost:3000"]}
+        storage={LocalStorageCache}
     >
         <App />
     </Auth0Provider>,
