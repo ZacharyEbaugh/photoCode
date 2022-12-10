@@ -5,7 +5,7 @@ import {
 } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 
-import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth0, LocalStorageCache } from '@auth0/auth0-react';
 
 import account_picture from '../../images/account.png';
 import folder_icon from '../../images/Folder_Icon.png';
@@ -21,16 +21,26 @@ function Home(props) {
 
     const navigate = useNavigate();
 
-    const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
-    // const [auth, setAuth] = useState({
-    //     isLoading: true,
-    //     isAuthenticated: false,
-    //     accessToken: null
-    // });
+    const { User, isLoading, isAuthenticated, getAccessTokenSilently, handleRedirectCallback } = useAuth0();
+    
+
+    useEffect(() => {
+        const handleCallback = async () => {
+            await handleRedirectCallback();
+            navigate.push('/');
+        };
+
+        handleCallback();
+
+        console.log("AUTHENTICATION: " + isAuthenticated);
+        console.log("USER " + User);
+    
+    }, [navigate, handleRedirectCallback]);
+
+
 
   useEffect(() =>  {
-    
-    // Retrieve an array of all keys in local storage
+    // // Retrieve an array of all keys in local storage
     const keys = Object.keys(localStorage);
 
     // Iterate over the array of keys and retrieve each item from local storage
@@ -41,8 +51,7 @@ function Home(props) {
     // Print the item to the console
     console.log(`${key}: ${item}`);
     });
-    console.log("AUTHENTICATION: " + isAuthenticated);
-    
+
     // const token = localStorage.getItem('access_token');
     // console.log(props.auth.accessToken);
     // console.log(localStorage.getItem('auth0.is.authenticated'));

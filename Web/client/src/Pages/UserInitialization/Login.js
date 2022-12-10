@@ -7,6 +7,8 @@ import {
 
 import { useAuth0 } from "@auth0/auth0-react";
 
+import { WebAuth } from "auth0-js";
+
 import axios from "axios";
 
 import {
@@ -23,7 +25,7 @@ function Login(props) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const { loginWithRedirect, isAuthenticated } = useAuth0();
+  const { login, loginWithRedirect, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
   const handleEmailChange = event => {
     setEmail(event.target.value);
@@ -65,44 +67,63 @@ function Login(props) {
         accessToken: null
       });
       console.log("set auth");
-      axios.post("http://localhost:3001/login", {
-        email: email,
-        password: password
-        })
-        .then((res) => {
-          if (res.data.error)
-          {
-            if (res.data.error.includes(':'))
-            {
-              setError(res.data.error.match(/\:(.*)/)[1]);
-              console.log(res.data.error.match(/\:(.*)/));
-            }
-            else
-            {
-              setError(res.data.error);
-              console.log(res.data.error);
-            }
-            return;
-          }
-          else
-          {
-            setError("");
-            const token = res.data;
-            // localStorage.setItem('access_token', token);
-            props.updateAuth({
-              isLoading: false,
-              isAuthenticated: true,
-              accessToken: token
-            })
-            console.log(props.auth);
-            navigate("/Home?" + token);
-          }
-        })
-      .catch((err) => {
-        console.log("TESTERROR" + err);
+      // axios.post("http://localhost:3001/login", {
+      //   email: email,
+      //   password: password
+      //   })
+      //   .then(async (res) => {
+      //     if (res.data.error)
+      //     {
+      //       if (res.data.error.includes(':'))
+      //       {
+      //         setError(res.data.error.match(/\:(.*)/)[1]);
+      //         console.log(res.data.error.match(/\:(.*)/));
+      //       }
+      //       else
+      //       {
+      //         setError(res.data.error);
+      //         console.log(res.data.error);
+      //       }
+      //       return;
+      //     }
+      //     else
+      //     {
+      //       setError("");
+      //       const token = JSON.stringify(res.data);
+      //       console.log(token);
+      //       // localStorage.setItem('access_token', token);
+      //       props.updateAuth({
+      //         isLoading: false,
+      //         isAuthenticated: true,
+      //         accessToken: token
+      //       })
+
+      //       console.log(props.auth);
+            
+
+      //       console.log("IsAuth " + isAuthenticated);
+      //       navigate("/Home");
+      //     }
+      //   })
+      // .catch((err) => {
+      //   console.log("TESTERROR" + err);
+      // });
+
+      var webAuth = new WebAuth({
+        domain: 'photocode.us.auth0.com',
+        clientID: 'R15Hb8sCd5OiULwScyqwCBtTwQKbgYMs'
       });
+      
+      const token = webAuth.login({
+        realm: 'Username-Password-Authentication',
+        username: 'zlebaughwps@gmail.com',
+        password: '123',
+        responseType: 'code',
+        redirectUri: 'http://localhost:3000/Home'
+      })
     }
     catch (error) {
+      console.log(error);
       setError('Invalid email or password.');
       return;
     }

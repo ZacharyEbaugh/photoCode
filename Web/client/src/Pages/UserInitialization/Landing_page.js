@@ -28,7 +28,6 @@ export default function Landing_page() {
   const scrollToAbout = useRef();
   const scrollToContact = useRef();
   const navigate = useNavigate();
-  const { loginWithRedirect, getAccessTokenSilently, isAuthenticated } = useAuth0();
 
   const Register = () => {
     navigate("/Register");
@@ -58,6 +57,25 @@ export default function Landing_page() {
         setCompany("");
         setMessage("");
     };
+
+    const { User, isAuthenticated } = useAuth0();
+     useEffect(() =>  {
+    
+        // Retrieve an array of all keys in local storage
+        const keys = Object.keys(localStorage);
+
+        // Iterate over the array of keys and retrieve each item from local storage
+        keys.forEach((key) => {
+        // Retrieve the item from local storage
+        const item = localStorage.getItem(key);
+
+        // Print the item to the console
+        console.log(`${key}: ${item}`);
+        });
+        console.log("AUTHENTICATION: " + isAuthenticated);
+        console.log("USER " + User);
+
+    });
 
 
   return (
