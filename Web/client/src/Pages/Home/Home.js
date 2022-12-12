@@ -28,12 +28,13 @@ function Home(props) {
         const handleCallback = async () => {
             await handleRedirectCallback();
             navigate.push('/');
+            console.log("AUTHENTICATION: " + isAuthenticated);
+            console.log("USER " + User);
         };
 
         handleCallback();
 
-        console.log("AUTHENTICATION: " + isAuthenticated);
-        console.log("USER " + User);
+
     
     }, [navigate, handleRedirectCallback]);
 
