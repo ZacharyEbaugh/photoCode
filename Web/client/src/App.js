@@ -18,7 +18,7 @@ import {
 import { useAuth0, setIsAuthenticated } from "@auth0/auth0-react";
 
 function App() {
-  // const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0;
+  const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0;
   const [auth, setAuth] = useState({
     isLoading: true,
     isAuthenticated: false,
@@ -67,7 +67,7 @@ function App() {
   return (
       <Router>
       
-            {!auth.isAuthenticated ? 
+            {!isAuthenticated ? 
               <Routes>
                 <Route path="/" element={<Landingpage />}/>
                 <Route path="/Register" element={<Register />}/>
