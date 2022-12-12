@@ -304,6 +304,8 @@ const styles = StyleSheet.create({
     apply: {
         backgroundColor: '#FFFFFF',
         paddingVertical: 20,
+        justifyContent: 'center',
+        width: windowWidth,
     },
     applyButton: {
         alignSelf: 'center',
