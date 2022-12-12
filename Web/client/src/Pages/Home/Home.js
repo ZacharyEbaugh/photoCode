@@ -21,37 +21,74 @@ function Home(props) {
 
     const navigate = useNavigate();
 
-    const { User, isLoading, isAuthenticated, getAccessTokenSilently, handleRedirectCallback } = useAuth0();
+    // const { User, isLoading, isAuthenticated, getAccessTokenSilently, handleRedirectCallback } = useAuth0();
     
-
     useEffect(() => {
-        const handleCallback = async () => {
-            await handleRedirectCallback();
-            navigate.push('/');
-            console.log("AUTHENTICATION: " + isAuthenticated);
-            console.log("USER " + User);
-        };
+        console.log("NAV to HOME");
 
-        handleCallback();
+        // Query parameter to get the code from the redirect
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        console.log(code);
+
+        // axios.post('https://photocode.us.auth0.com/oauth/token', {
+        //     "grant_type": "authorization_code",
+        //     "code": code,
+        //     "client_id": "R15Hb8sCd5OiULwScyqwCBtTwQKbgYMs",
+        //     "client_secret": "Y2aFtzhPni6-WT65su48BYzfyItcozp_ft1qeuap9KzaF2ED24AbWkEVNh9LWmXK",
+        //     "redirect_uri": "http://localhost:3000/Home"    
+        //     },
+        //     {
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         }
+        //     }
+        // )
+        // .then(response => {
+        //     console.log(response);
+        // })
+        // .catch(error => {
+        //     console.log(error);
+        // }
+    // );
+    }
+    , []);
 
 
-    
-    }, [navigate, handleRedirectCallback]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //       try {
+    //         const accessToken = await getAccessTokenSilently({
+    //             audience: 'https://photocode.us.auth0.com/api/v2/',
+    //             scope: 'openid profile email',
+    //         });
+      
+    //         // Use the access token to authenticate the user with the server
+    //         // and access protected resources
+    //       } catch (error) {
+    //         // Handle error
+    //         console.log("FAILURE: " + error);
+    //       }
+    //     };
+      
+    //     fetchData();
+    //     console.log("AUTHENTICATION " + isAuthenticated);
+    //   }, [getAccessTokenSilently, isAuthenticated]);
 
 
 
-  useEffect(() =>  {
-    // // Retrieve an array of all keys in local storage
-    const keys = Object.keys(localStorage);
+//   useEffect(() =>  {
+//         // // Retrieve an array of all keys in local storage
+//         const keys = Object.keys(localStorage);
 
-    // Iterate over the array of keys and retrieve each item from local storage
-    keys.forEach((key) => {
-    // Retrieve the item from local storage
-    const item = localStorage.getItem(key);
+//         // Iterate over the array of keys and retrieve each item from local storage
+//         keys.forEach((key) => {
+//         // Retrieve the item from local storage
+//         const item = localStorage.getItem(key);
 
-    // Print the item to the console
-    console.log(`${key}: ${item}`);
-    });
+//         // Print the item to the console
+//         console.log(`${key}: ${item}`);
+//     });
 
     // const token = localStorage.getItem('access_token');
     // console.log(props.auth.accessToken);
@@ -75,7 +112,7 @@ function Home(props) {
     //     console.log(error);
     //     navigate('/Login');
     // });
-  });
+//   });
     
     const listOfProjects = [
         {
@@ -99,7 +136,7 @@ function Home(props) {
     return (
       <div className="containerHome">  
         <PhotoCodeHeader/>
-        <section className='main'>
+        {/*<section className='main'>
             <div className='sidebar'>
                 <div className='projectsWrapper'>
                     <header className='projectsHeader'>
@@ -151,7 +188,7 @@ function Home(props) {
                 <h1 className='readMeTitle'>Read Me</h1>
             </div>
         </section>
-        
+         */}
       </div>
     );
   }

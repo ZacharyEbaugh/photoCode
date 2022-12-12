@@ -1,9 +1,10 @@
+// Setup the server and routes for the application
 const express = require('express');
-const { expressjwt: expressJwt } = require('express-jwt');
-var jwks = require('jwks-rsa');
 const cors = require("cors");
-var request = require("request");
-
+require('dotenv').config();
+const axios = require('axios');
+const nodemailer = require('nodemailer');
+const crypt = require('bcrypt');
 const app = express();
 app.use(express.json());
 
@@ -15,16 +16,99 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "*");
   next();
+});
+
+
+// Configure authentication middleware for the application 
+const { auth, requiresAuth } = require('express-openid-connect');
+
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  baseURL: 'http://localhost:3000',
+  clientID: 'R15Hb8sCd5OiULwScyqwCBtTwQKbgYMs',
+  issuerBaseURL: process.env.REACT_APP_AUTH0_DOMAIN,
+  secret: process.env.REACT_APP_AUTH0_CLIENT_SECRET,
+};
+
+// The `auth` router attaches /login, /logout
+// and /callback routes to the baseURL
+app.use(auth(config));
+
+// req.oidc.isAuthenticated is provided from the auth router
+app.get('/', (req, res) => {
+  res.send(
+    req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out'
+  )
+});
+
+// The /profile route will show the user profile as JSON
+app.get('/profile', requiresAuth(), (req, res) => {
+  res.send(JSON.stringify(req.oidc.user, null, 2));
+});
+
+// Connect to MongoDB Cluster
+const MongoClient = require('mongodb').MongoClient;
+const mongodbPS = process.env.MONGO_PASSWORD;
+const client = new MongoClient(
+  'mongodb+srv://PhotoCodeAuth0:' +
+    mongodbPS +
+    '@pccluster.urvaffs.mongodb.net/?retryWrites=true&w=majority'
+);
+client.connect(err => {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      console.log("Connected to MongoDB");
+    }
+  }
+);
+
+// Establish the database and collection
+const database = client.db("PhotoCode_db");
+const users = database.collection("users");
+
+function create(req, callback) {
+  const email = req.body.email;
+  const username = req.body.username;
+  const password = req.body.password;
+  const user = { email: email, username: username, password: password };
+
+  users.findOne({ email: user.email }, function (err, withSameMail) {
+    if (err || withSameMail) {
+      return callback(err || new Error('the user already exists'));
+    }
+    crypt.hash(user.password, 10, function (err, hash) {
+      if (err) {
+        return callback(err);
+      }
+      user.password = hash;
+      user.email_verified = false;
+      user.connection = 'Username-Password-Authentication';
+      user.tenant = 'PhotoCode';
+      user.client_id = process.env.REACT_APP_AUTH0_CLIENT_ID;
+      users.insert(user, function (err, inserted) {
+        // client.close();
+
+      if (err) return callback(err);
+        callback(null);
+      });
+    });
   });
+}
 
-// Set up the Auth0 Management API credentials
-const API_URL = 'https://photocode.us.auth0.com';
-const API_CLIENT_ID = 'Hk5ax5o8U2rqvwffMvGnHUoeajC7Tk2W';
-const API_CLIENT_SECRET = '7KhMjd-z0h_2lA0qs3QavFpClh-y0uUX1bvepeXBpHpaISxPYK21AsCwh_I2AsgH';
-
-// require axios
-const axios = require('axios');
-const nodemailer = require('nodemailer');
+// Route handler for creating a new user
+app.post('/register', function (req, res) {
+  create(req, function (err) {
+    if (err) {
+      console.log(err);
+      res.status(500).send({ error: err.message });
+    } else {
+      res.send({ message: 'User created' });
+      }
+    });
+  });
 
 // Route handler for creating a new user
 app.post('/sendEmail', function (req, res) {
@@ -41,7 +125,7 @@ app.post('/sendEmail', function (req, res) {
     service: 'gmail',
     auth: {
       user: 'photocodedev@gmail.com',
-      pass: 'eensdylazmfqdmes'
+      pass: process.env.EMAIL_PASSWORD
     }
   });
   // send the email
@@ -79,67 +163,8 @@ app.post('/sendEmail', function (req, res) {
   });
 });
 
-app.post('/register', async (req, res) => {
-  // Set email and password from request body
-  const { email, username, password } = req.body;
-  const accessToken = await axios.post('https://photocode.us.auth0.com/oauth/token',{
-      "client_id":"R15Hb8sCd5OiULwScyqwCBtTwQKbgYMs",
-      "client_secret":"Y2aFtzhPni6-WT65su48BYzfyItcozp_ft1qeuap9KzaF2ED24AbWkEVNh9LWmXK",
-      "audience":"https://photocode.us.auth0.com/api/v2/",
-      "grant_type":"client_credentials"
-    },
-    {
-      headers: {
-        "content-type": "application/json"
-      }
-    },
-    )
-    .then(response => {
-      // console.log(response.data['access_token']);
-      return response.data['access_token'];
-    })
-    .catch(error => {
-      console.log(error);
-    });
 
-  // Register a new user using the Management API.
-  const userResponse = await axios.post(
-    // `https://${domain}/api/v2/users`,
-    'https://photocode.us.auth0.com/api/v2/users',
-    {
-      "email": email,
-      "username": username,
-      "password": password,
-      "connection": "Username-Password-Authentication"
-    },
-    {
-      headers: {
-        // authorization: `Bearer ${accessToken}`,
-        "Authorization": "Bearer " + accessToken,
-      },
-    }
-  ).then(response => {
-    // check the status code of the response
-    if (response.status >= 200 && response.status < 300) {
-      // handle successful response
-      res.send("New Account Created");
-    } else {
-      // handle error
-      console.log("Success with error" + response.data.message);
-      const errorMessage = {
-        error: response.data.message
-      };
-      return res.send(errorMessage);
-    }
-  })
-  .catch(error => {
-       // handle error
-      const errorMessage = {
-        error: error.response.data.message
-      };
-      return res.send(errorMessage);
-  });
-});
+
 
 // Start the app
 app.listen(3001, () => console.log('API listening on 3001'));

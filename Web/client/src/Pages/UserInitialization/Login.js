@@ -43,41 +43,56 @@ function Login(props) {
           <h1>Login to Your Account</h1>
         </div>
         <div className="LoginButtons">
-          <div onClick={() => loginWithRedirect({
-            connection: 'google-oauth2',
-            redirectUri: 'http://localhost:3000/Home',
-            prompt: 'login'
-          })} className="Login" id="Google"> 
+          <div onClick={() => 
+            window.location.href=
+            'https://accounts.google.com/o/oauth2/v2/auth?'
+            + 'response_type=code&'
+            + 'client_id=' + process.env.REACT_APP_GOOGLE_AUTH0_CLIENT_ID + '&'
+            + 'redirect_uri=' + 'http://localhost:3000/Home' + '&'
+            + 'scope=' + 'https://www.googleapis.com/auth/userinfo.profile'
+          } className="Login" id="Google"> 
             <FcGoogle className="GoogleIcon"/>
             <h1>
               Sign in with Google
             </h1>
           </div>
-         <div onClick={() => loginWithRedirect({
-            connection: 'github',
-            redirectUri: 'http://localhost:3000/Home',
-            prompt: 'login'
-          })} className="Login" id="GitHub"> 
+         <div onClick={() => 
+          window.location.href=
+          'https://github.com/login/oauth/authorize?'
+          + 'prompt=' + 'login' + '&'
+          + 'response_type=' + 'code' + '&'
+          + 'redirect_uri=' + 'http://localhost:3000/Home' + '&'
+          + 'scope=' + 'user:email' + '&'
+          + 'client_id=' + process.env.REACT_APP_AUTH0_GITHUB_CLIENT_ID
+         } className="Login" id="GitHub"> 
             <FaGithub className="GitHubIcon"/>
             <h1>
               Sign in with GitHub
             </h1>
           </div>
-          <div onClick={() => loginWithRedirect({
-            connection: 'linkedin',
-            redirectUri: 'http://localhost:3000/Home',
-            prompt: 'login'
-          })} className="Login" id="LinkedIn"> 
+          <div onClick={() => 
+            window.location.href=
+            'https://linkedin.com/oauth/v2/authorization?'
+            + 'prompt=' + 'login' + '&'
+            + 'response_type=' + 'code' + '&'
+            + 'redirect_uri=' + 'http://localhost:3000/Home' + '&'
+            + 'scope=' + 'r_liteprofile%20r_emailaddress' + '&'
+            + 'client_id=' + process.env.REACT_APP_AUTH0_LINKEDIN_CLIENT_ID
+          } 
+          className="Login" id="LinkedIn"> 
             <TfiLinkedin className="LinkedInIcon"/>
             <h1>
               Sign in with LinkedIn
             </h1>
           </div>
-          <div onClick={() => loginWithRedirect({
-            connection: 'Username-Password-Authentication',
-            redirectUri: 'http://localhost:3000/Home',
-            prompt: 'login'
-          })} className="Login" id="email"> 
+          <div onClick={() => 
+            window.location.href=
+            'https://' + process.env.REACT_APP_AUTH0_DOMAIN 
+            + '/authorize?response_type=code&'
+            + 'client_id=' + process.env.REACT_APP_AUTH0_CLIENT_ID 
+            + '&redirect_uri=http://localhost:3000/Home'
+          } 
+          className="Login" id="email"> 
             <FaRegEnvelope className="emailIcon"/>
             <h1>
               Sign in with Email
@@ -85,27 +100,11 @@ function Login(props) {
           </div>
       </div>
       </div>
-      {/* <div className="usersDisplay">
-        {listOfUsers.map((user) => {
-          return (
-            <div>
-              <h1>Name: {user.name}</h1>
-              <h1>Username: {user.username}</h1>
-              <h1>Password: {user.password}</h1>
-            </div>
-          );
-        })}
-      </div> */}
-      
       <div className="WelcomeInfo">
         <text className="WelcomeTitle">Welcome back</text>
         <text className="WelcomeText">Scan any writing using Google's VisionAI, edit as a text file, store and transfer to or from the cloud </text>
         <button onClick={Register} className="gotoRegister"> Register </button>
-
       </div>
-
-
-      
     </div>
   );
 }

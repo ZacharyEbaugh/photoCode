@@ -37,7 +37,6 @@ function Register() {
   };
 
   const ValidateRegister = async event => {
-
     event.preventDefault();
     // Validate the email and password
     if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/))
@@ -79,16 +78,15 @@ function Register() {
           }
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err.response.data.error);
+          setError(err.response.data.error);
         });
     }
     catch (error) {
       setError('Invalid email or password.');
       return;
     }
-
   };
-
   return (
     <div className="Register">
       <div className="Registration">
