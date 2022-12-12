@@ -8,7 +8,8 @@ import {
     Image, 
     Dimensions, 
     StyleSheet, 
-    Easing } from 'react-native';
+    Easing, 
+    ScrollView} from 'react-native';
 
 import { Shadow } from 'react-native-shadow-2';
 import { useNavigation } from '@react-navigation/native';
@@ -18,8 +19,6 @@ import SideBar from './SideBar';
 import { GoToProject } from './GoToProject';
 import GoToCamera from './GoToCamera';
 import CameraOptions from './CameraOptions';
-
-
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -136,8 +135,7 @@ class HomeScreen extends React.Component {
                     <Header
                         onPress={this.openSidebar}
                     />
-
-                    <View style={styles.main}>
+                    <ScrollView style={styles.main}>
                         {PROJECT_INFO.map((project, i) => (
                             <GoToProject
                                 key={i}
@@ -149,8 +147,7 @@ class HomeScreen extends React.Component {
                                 date={project.date}
                             />
                         ))}
-                    </View>
-
+                    </ScrollView>
                     <Shadow viewStyle={{alignSelf: 'stretch'}}>
                         <View style={styles.actionView}>
                             <GoToCamera onPress={this.openCameraOptions}/>
@@ -189,7 +186,7 @@ const styles = StyleSheet.create({
     },
     main: {
         backgroundColor: '#FFFFFF',
-        flex: 5,
+        // flex: 5,
     },
     target: {
         fontSize: 40,
