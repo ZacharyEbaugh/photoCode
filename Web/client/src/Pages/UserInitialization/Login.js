@@ -7,8 +7,6 @@ import {
 
 import { useAuth0 } from "@auth0/auth0-react";
 
-import { WebAuth } from "auth0-js";
-
 import axios from "axios";
 
 import { FcGoogle } from "react-icons/fc";
