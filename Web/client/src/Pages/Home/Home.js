@@ -21,98 +21,57 @@ function Home(props) {
 
     const navigate = useNavigate();
 
-    // const { User, isLoading, isAuthenticated, getAccessTokenSilently, handleRedirectCallback } = useAuth0();
+    const { User, isLoading, isAuthenticated, getAccessTokenSilently, handleRedirectCallback } = useAuth0();
     
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    console.log("CODE:\n" + code);
+
+
     useEffect(() => {
         console.log("NAV to HOME");
 
         // Query parameter to get the code from the redirect
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
-        console.log(code);
-
-        // axios.post('https://photocode.us.auth0.com/oauth/token', {
-        //     "grant_type": "authorization_code",
-        //     "code": code,
-        //     "client_id": "R15Hb8sCd5OiULwScyqwCBtTwQKbgYMs",
-        //     "client_secret": "Y2aFtzhPni6-WT65su48BYzfyItcozp_ft1qeuap9KzaF2ED24AbWkEVNh9LWmXK",
-        //     "redirect_uri": "http://localhost:3000/Home"    
-        //     },
-        //     {
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         }
-        //     }
-        // )
-        // .then(response => {
-        //     console.log(response);
-        // })
-        // .catch(error => {
-        //     console.log(error);
-        // }
-    // );
-    }
-    , []);
+        axios.post('https://photocode.us.auth0.com/oauth/token', {
+            "grant_type": "authorization_code",
+            "code": code,
+            "client_id": "R15Hb8sCd5OiULwScyqwCBtTwQKbgYMs",
+            "client_secret": "Y2aFtzhPni6-WT65su48BYzfyItcozp_ft1qeuap9KzaF2ED24AbWkEVNh9LWmXK",
+            "redirect_uri": "http://localhost:3000/Home"    
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            )
+            .then(response => {
+                localStorage.setItem("access_token", response.data.access_token);
+                localStorage.setItem("id_token", response.data.id_token);
+                navigate("/Home");
+            })
+            .catch(error => {
+                console.log("error");
+            }
+        );
 
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //       try {
-    //         const accessToken = await getAccessTokenSilently({
-    //             audience: 'https://photocode.us.auth0.com/api/v2/',
-    //             scope: 'openid profile email',
-    //         });
-      
-    //         // Use the access token to authenticate the user with the server
-    //         // and access protected resources
-    //       } catch (error) {
-    //         // Handle error
-    //         console.log("FAILURE: " + error);
-    //       }
-    //     };
-      
-    //     fetchData();
-    //     console.log("AUTHENTICATION " + isAuthenticated);
-    //   }, [getAccessTokenSilently, isAuthenticated]);
+    }, [code]);
 
 
+  useEffect(() =>  {
+        // // Retrieve an array of all keys in local storage
+        const keys = Object.keys(localStorage);
 
-//   useEffect(() =>  {
-//         // // Retrieve an array of all keys in local storage
-//         const keys = Object.keys(localStorage);
+        // Iterate over the array of keys and retrieve each item from local storage
+        keys.forEach((key) => {
+        // Retrieve the item from local storage
+        const item = localStorage.getItem(key);
 
-//         // Iterate over the array of keys and retrieve each item from local storage
-//         keys.forEach((key) => {
-//         // Retrieve the item from local storage
-//         const item = localStorage.getItem(key);
-
-//         // Print the item to the console
-//         console.log(`${key}: ${item}`);
-//     });
-
-    // const token = localStorage.getItem('access_token');
-    // console.log(props.auth.accessToken);
-    // console.log(localStorage.getItem('auth0.is.authenticated'));
-    // const token = props.auth.accessToken;
-    // const fetchToken = async () => {
-    //     const token = await getAccessTokenSilently();
-    //     console.log(token);
-
-    // }
-
-    // fetchToken();
-    // Call userInfo API to get user info
-    // axios.post('http://localhost:3001/userInfo', {
-    //     accessToken: token
-    // }).then((response) => {
-    //     localStorage.setItem('username', response.data.name);
-    //     localStorage.setItem('email', response.data.email);
-    //     localStorage.setItem('picture', response.data.picture);
-    // }).catch((error) => {
-    //     console.log(error);
-    //     navigate('/Login');
-    // });
-//   });
+        // Print the item to the console
+        console.log(`${key}: ${item}`);
+    });
+  });
     
     const listOfProjects = [
         {

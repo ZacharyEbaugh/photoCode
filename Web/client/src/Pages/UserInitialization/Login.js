@@ -45,11 +45,12 @@ function Login(props) {
         <div className="LoginButtons">
           <div onClick={() => 
             window.location.href=
-            'https://accounts.google.com/o/oauth2/v2/auth?'
-            + 'response_type=code&'
-            + 'client_id=' + process.env.REACT_APP_GOOGLE_AUTH0_CLIENT_ID + '&'
+            'https://photocode.us.auth0.com/authorize?'
+            + 'response_type=token' + '&'
+            + 'client_id=' + process.env.REACT_APP_AUTH0_CLIENT_ID + '&'
             + 'redirect_uri=' + 'http://localhost:3000/Home' + '&'
-            + 'scope=' + 'https://www.googleapis.com/auth/userinfo.profile'
+            + 'scope=openid%20profile%20email' + '&'
+            + 'connection=' + 'google-oauth2'
           } className="Login" id="Google"> 
             <FcGoogle className="GoogleIcon"/>
             <h1>
@@ -58,12 +59,12 @@ function Login(props) {
           </div>
          <div onClick={() => 
           window.location.href=
-          'https://github.com/login/oauth/authorize?'
-          + 'prompt=' + 'login' + '&'
-          + 'response_type=' + 'code' + '&'
+          'https://photocode.us.auth0.com/authorize?'
+          + 'response_type=code' + '&'
+          + 'client_id=' + process.env.REACT_APP_AUTH0_CLIENT_ID + '&'
           + 'redirect_uri=' + 'http://localhost:3000/Home' + '&'
-          + 'scope=' + 'user:email' + '&'
-          + 'client_id=' + process.env.REACT_APP_AUTH0_GITHUB_CLIENT_ID
+          + 'scope=openid%20profile%20email' + '&'
+          + 'connection=' + 'github'
          } className="Login" id="GitHub"> 
             <FaGithub className="GitHubIcon"/>
             <h1>
@@ -72,12 +73,12 @@ function Login(props) {
           </div>
           <div onClick={() => 
             window.location.href=
-            'https://linkedin.com/oauth/v2/authorization?'
-            + 'prompt=' + 'login' + '&'
-            + 'response_type=' + 'code' + '&'
-            + 'redirect_uri=' + 'http://localhost:3000/Home' + '&'
-            + 'scope=' + 'r_liteprofile%20r_emailaddress' + '&'
-            + 'client_id=' + process.env.REACT_APP_AUTH0_LINKEDIN_CLIENT_ID
+            'https://photocode.us.auth0.com/authorize?'
+          + 'response_type=code' + '&'
+          + 'client_id=' + process.env.REACT_APP_AUTH0_CLIENT_ID + '&'
+          + 'redirect_uri=' + 'http://localhost:3000/Home' + '&'
+          + 'scope=openid%20profile%20email' + '&'
+          + 'connection=' + 'linkedin'
           } 
           className="Login" id="LinkedIn"> 
             <TfiLinkedin className="LinkedInIcon"/>
@@ -89,8 +90,10 @@ function Login(props) {
             window.location.href=
             'https://' + process.env.REACT_APP_AUTH0_DOMAIN 
             + '/authorize?response_type=code&'
-            + 'client_id=' + process.env.REACT_APP_AUTH0_CLIENT_ID 
-            + '&redirect_uri=http://localhost:3000/Home'
+            + 'client_id=' + process.env.REACT_APP_AUTH0_CLIENT_ID + '&'
+            + 'redirect_uri=http://localhost:3000/Home' + '&'
+            + 'connection=' + 'Username-Password-Authentication' + '&'
+            + 'scope=openid%20profile%20email'
           } 
           className="Login" id="email"> 
             <FaRegEnvelope className="emailIcon"/>
