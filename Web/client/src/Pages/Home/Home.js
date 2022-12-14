@@ -19,8 +19,6 @@ function Home() {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
 
-    const navigate = useNavigate();
-
     const { User, isLoading, isAuthenticated, getAccessTokenSilently, handleRedirectCallback } = useAuth0();
     
 

@@ -71,7 +71,6 @@ function App() {
               <Route path="/" element={<Landingpage />}/>
               <Route path="/Register" element={<Register />}/>
               <Route path="/Login" element={<Login />}/>
-              <Route path="/LoginTest" element={<LoginTest />}/>
               <Route path="/Home" element={<Home />}/>
               <Route path="/Account" element={<Account />}/>
               <Route path="/Contact" element={<Contact />}/>
