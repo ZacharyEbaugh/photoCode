@@ -8,6 +8,7 @@ import Account from "./Pages/Home/Account";
 import Contact from "./Pages/Home/Contact";
 import FileEdit from "./Pages/FileEdit";
 import ErrorPage from "./Pages/ErrorPage";
+import CreateProject from "./Pages/CreateProject";
 
 import {
   BrowserRouter as Router,
@@ -66,26 +67,18 @@ function App() {
 
   return (
       <Router>
-      
-            {!isAuthenticated ? 
-              <Routes>
-                <Route path="/" element={<Landingpage />}/>
-                <Route path="/Register" element={<Register />}/>
-                <Route path="/Login" element={<Login auth={auth} updateAuth={updateAuth}/>}/>
-                <Route path="/Home" element={<Home auth={auth}/>}/>
-
-              </Routes>
-              :
-              <Routes>
-                <Route path="/Account" element={<Account />}/>
-                <Route path="/Contact" element={<Contact />}/>
-                <Route path="/FileEdit" element={<FileEdit />}/>
-              </Routes>
-            }
-
-      
-              {/* <Route path="/*" element={<ErrorPage />}/> */}
-       
+          <Routes>
+              <Route path="/" element={<Landingpage />}/>
+              <Route path="/Register" element={<Register />}/>
+              <Route path="/Login" element={<Login />}/>
+              <Route path="/LoginTest" element={<LoginTest />}/>
+              <Route path="/Home" element={<Home />}/>
+              <Route path="/Account" element={<Account />}/>
+              <Route path="/Contact" element={<Contact />}/>
+              <Route path="/CreateProject" element={<CreateProject />}/>
+              <Route path="/FileEdit" element={<FileEdit />}/>
+              <Route path="/*" element={<ErrorPage />}/>
+          </Routes>
       </Router>
   );
 }

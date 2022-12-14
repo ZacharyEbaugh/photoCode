@@ -12,9 +12,9 @@ import folder_icon from '../../images/Folder_Icon.png';
 import search_icon from '../../images/Search_Icon.png';
 import { PhotoCodeHeader } from '../PhotoCodeHeader';
 
-import axios from 'axios';
+function Home() {
+    const navigate = useNavigate();
 
-function Home(props) {
     const [listOfUsers, setListOfUsers] = useState([]);
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
@@ -109,7 +109,7 @@ function Home(props) {
                                 <img className='searchIcon' src={search_icon} />
                                 <input className='searchProjectInput' placeholder='Search Projects'></input>
                             </div>
-                            <button className='createProjectButton'>
+                            <button className='createProjectButton' onClick={() => navigate('/CreateProject')}>
                                 <img className='createProjectIcon' src={folder_icon} />
                                 Create Project
                             </button>
