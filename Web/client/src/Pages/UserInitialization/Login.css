@@ -21,6 +21,12 @@
     src: local("JetBrainsMono-ExtraBold"),
       url("../.././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
   }
+
+  @font-face {
+    font-family: "Roboto";
+    src: local("Roboto"),
+      url("../.././fonts/Roboto-Regular.ttf") format("truetype");
+  }
   
   .Register {
     width: 100%;
@@ -57,157 +63,90 @@
     display: flex;
     justify-content: space-between;
   }
-  
-  .googleIcon {
-    width: 3vw;
-    height: 3vw;
-    padding: 0.5vw;
-    background-image: linear-gradient(#e8f7ff, #33b59090);
-    border-radius: 20px;
-    margin-right: 2vw;
-    cursor: pointer;
-  }
-  
-  .LinkedInIcon {
-    width: 3vw;
-    height: 3vw;
-    padding: 0.5vw;
-    background-image: linear-gradient(#e8f7ff, #0077b58e);
-    border-radius: 20px;
-    cursor: pointer;
-  }
-  
-  .FacebookIcon {
-    width: 3vw;
-    height: 3vw;
-    padding: 0.5vw;
-    background-image: linear-gradient(#e8f7ff, #ff5e0085);
-    border-radius: 20px;
-    margin-left: 2vw;
-    cursor: pointer;
-  }
-  
-  .RegisterOptions h1 {
-    width: 3vw;
-    height: 3vw;
-    font-size: 3rem;
-    margin-left: 1vw;
-    margin-right: 1vw;
-    background-color: #0066FF;
-    border-radius: 20vw;
-  }
-  
-  .orSeparator {
+
+  .LoginButtons {
     width: 100%;
-    height: 5%;
-    display: flex;
-    /* background-color: grey; */
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .orSeparator h1 {
-    font-size: 3rem;
-    font-weight: 1;
-    font-family: "Mono-Regular";
-    color: #c4c4c4;
-    margin-bottom: 1.5vw;
-  }
-  
-  .line {
-    width: 32%;
-    height: 5%;
-    border-radius: 200px;
-    margin-left: 1vw;
-    margin-right: 1vw;
-    background-color: #c4c4c4;
-  }
-  
-  .RegisterFields {
+    height: 30%;
+    /* background-color: black; */
     display: flex;
     flex-direction: column;
-    width: 70%;
-    /* height: 50%; */
-    /* background-color: grey; */
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+
   }
-  
-  .input {
-    width: 95%;
-    height: 4vw;
-    display: flex;
-    background-color: #e6e6e6;
+
+  .PhotoCodeLogin {
+    height: 20%;
+    width: 27%;
+    border-radius: 10px;
     border: none;
-    border-radius: 15px;
-    margin-bottom: 2vw;
-    justify-content: center;
-    
-  }
-  
-  .EmailIcon {
-    width: 3.5vw;
-    height: 3.5vw;
-    margin-top: 0.3vw;
-    left: 13vw;
-    position: absolute;
-  }
-  
-  .UserIcon {
-    width: 3.5vw;
-    height: 3.3vw;
-    margin-top: 0.3vw;
-    left: 13vw;
-    position: absolute;
-  }
-  
-  .PasswordIcon {
-    width: 3.5vw;
-    height: 3.3vw;
-    margin-top: 0.3vw;
-    left: 13vw;
-    position: absolute;
-  }
-  
-  .emailInput {
-    width: 100%;
-    height: 3.9vw;
-    background-color: #e6e6e6;
-    border: none;
-    border-radius: 15px;
-    font-size: 3rem;
-    font-family: "Mono-Regular";
-    padding-left: 7vw;
-  }
-  
-  .emailInput::placeholder {
-    font-size: 3rem;
-    font-family: "Mono-Regular";
-    color: black;
-  }
-  
-  .passwordInput {
-    width: 110%;
-    height: 3.9vw;
-    background-color: #e6e6e6;
-    border: none;
-    border-radius: 15px;
-    font-size: 3rem;
-    font-family: "Mono-Regular";
-    padding-left: 7vw;
-    
-  }
-  
-  .registerButton {
-    padding-left: 2vw;
-    padding-right: 2vw;
-    border-radius: 100px;
-    border: none;
-    background-color: #0066FF;
-    font-size: 4rem;
+    background-color: #575757;
+    font-size: 2rem;
     font-family: "Mono-Regular";
     color: white;
     cursor: pointer;
+  }
+
+  .LoginButtons div{
+    height: 20%;
+    width: 27%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.084),
+      0px 2px 3px rgba(0, 0, 0, 0.168);
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .LoginButtons h1 {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 2rem;
+    color: rgba(0, 0, 0, 0.54);
+  }
+
+  .GoogleIcon {
+    width: 25%;
+    height: 70%;
+  }
+    
+  #GitHub {
+    background-color: black;
+  }
+
+  #GitHub h1 {
+    color: white;
+  }
+
+  .GitHubIcon {
+    width: 25%;
+    height: 70%;
+    color: white;
+  }
+
+  #LinkedIn {
+    background-color: #0066FF;
+  }
+
+  #LinkedIn h1 {
+    color: white;
+  }
+
+  .LinkedInIcon {
+    width: 25%;
+    height: 65%;
+    color: white;
+    background: none;
+  }
+
+  .emailIcon {
+    width: 25%;
+    height: 65%;
+    color: rgba(0, 0, 0, 0.54);
+    background: none;
   }
   
   .WelcomeInfo {

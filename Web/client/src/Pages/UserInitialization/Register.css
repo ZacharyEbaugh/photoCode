@@ -54,39 +54,71 @@
   }
   
   .RegisterOptions {
+    width: 80%;
+    height: 10%;
+    /* background-color: black; */
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
-  }
-  
-  .googleIcon {
-    width: 3vw;
-    height: 3vw;
-    padding: 0.5vw;
-    background-image: linear-gradient(#e8f7ff, #33b59090);
-    border-radius: 20px;
-    margin-right: 2vw;
+    align-items: center;
+  }  
+
+  .RegisterOptions div {
+    height: 60%;
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.084),
+      0px 2px 3px rgba(0, 0, 0, 0.168);
+    border-radius: 10px;
     cursor: pointer;
   }
-  
+
+  .RegisterOptions h1 {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 2rem;
+    color: rgba(0, 0, 0, 0.54);
+  }
+
+  .GoogleIcon {
+    width: 25%;
+    height: 70%;
+  }
+
+  #GitHub {
+    background-color: black;
+  }
+
+  #GitHub h1 {
+    color: white;
+  }
+
+  .GitHubIcon {
+    width: 25%;
+    height: 70%;
+    color: white;
+  }
+
+  #LinkedIn {
+    background-color: #0066FF;
+  }
+
+  #LinkedIn h1 {
+    color: white;
+  }
+
   .LinkedInIcon {
-    width: 3vw;
-    height: 3vw;
-    padding: 0.5vw;
-    background-image: linear-gradient(#e8f7ff, #0077b58e);
-    border-radius: 20px;
-    cursor: pointer;
+    width: 25%;
+    height: 65%;
+    color: white;
+    background: none;
   }
-  
-  .FacebookIcon {
-    width: 3vw;
-    height: 3vw;
-    padding: 0.5vw;
-    background-image: linear-gradient(#e8f7ff, #ff5e0085);
-    border-radius: 20px;
-    margin-left: 2vw;
-    cursor: pointer;
-  }
-  
+
+/* 
   .RegisterOptions h1 {
     width: 3vw;
     height: 3vw;
@@ -95,7 +127,7 @@
     margin-right: 1vw;
     background-color: #0066FF;
     border-radius: 20vw;
-  }
+  } */
   
   .orSeparator {
     width: 100%;
@@ -242,6 +274,12 @@
     color: white;
     /* font-weight: bold; */
     cursor: pointer;
+  }
+
+  .error {
+    font-size: 2.5vw;
+    font-family: 'Mono-Regular';
+    color: red;
   }
   
   .WelcomeInfo {
