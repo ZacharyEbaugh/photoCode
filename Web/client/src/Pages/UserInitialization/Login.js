@@ -4,39 +4,36 @@ import {
     useState, 
     useEffect
 } from "react";
-import Axios from "axios";
 
-import {
-    FaRegEnvelope, 
-    FaLock, 
-    FaLinkedinIn,
-} from "react-icons/fa";
+import { useAuth0 } from "@auth0/auth0-react";
 
-import {ImFacebook} from "react-icons/im";
-import {FcGoogle} from "react-icons/fc";
+import axios from "axios";
 
-function Login() {
-  const [listOfUsers, setListOfUsers] = useState([]);
-  const [name, setName] = useState("");
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub, FaRegEnvelope } from "react-icons/fa";
+import { TfiLinkedin } from "react-icons/tfi";
+
+function Login(props) {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const { login, loginWithRedirect, isAuthenticated, getAccessTokenSilently } = useAuth0();
+
+  const handleEmailChange = event => {
+    setEmail(event.target.value);
+    console.log(`Email: ${email}`);
+  };
+
+  const handlePasswordChange = event => {
+      setPassword(event.target.value);
+      console.log(`Password: ${password}`);
+      console.log(props.auth);
+  };
 
   const navigate = useNavigate();
   const Register = () => {
       navigate("/Register");
-  }
-
-  // Navigate to home screen if username is found in database
-  const Login = () => {
-    Axios.post("http://localhost:3001/valUser", {
-      name: name,
-      password: password,
-    }).then((response) => {
-      if (response.data.message) {
-        alert(response.data.message);
-      } else {
-        navigate("/Home");
-      }
-    });
   }
 
   return (
@@ -44,48 +41,49 @@ function Login() {
       <div className="Registration">
         <div className="RegisterTitle">
           <h1>Login to Your Account</h1>
-          <h2>Login using</h2>
         </div>
-
-        <div className="RegisterOptions">
-          <FcGoogle className="googleIcon"/>
-          <FaLinkedinIn className="LinkedInIcon"/>
-          <ImFacebook className="FacebookIcon"/>
-        </div>
-
-        <div className="orSeparator">
-          <div className="line"></div>
-          <h1>or</h1>
-          <div className="line"></div>
-        </div>
-
-        <div className="RegisterFields">
-          <div className="input">
-            <FaRegEnvelope className="EmailIcon"/>
-            <input
-              type="text"
-              className="emailInput"
-              placeholder="Email or Username"
-              onChange={(event) => {
-                setName(event.target.value);
-              }}
-            />
+        <div className="LoginButtons">
+          <div onClick={() => loginWithRedirect({
+            connection: 'google-oauth2',
+            redirectUri: 'http://localhost:3000/Home',
+            prompt: 'login'
+          })} className="Login" id="Google"> 
+            <FcGoogle className="GoogleIcon"/>
+            <h1>
+              Sign in with Google
+            </h1>
           </div>
-
-          <div className="input">
-            <FaLock className="PasswordIcon"/>
-            <input
-              type="password"
-              className="passwordInput"
-              placeholder="Password"
-              onChange={(event) => {
-                setPassword(event.target.value);
-              }}
-            />
+         <div onClick={() => loginWithRedirect({
+            connection: 'github',
+            redirectUri: 'http://localhost:3000/Home',
+            prompt: 'login'
+          })} className="Login" id="GitHub"> 
+            <FaGithub className="GitHubIcon"/>
+            <h1>
+              Sign in with GitHub
+            </h1>
           </div>
-
-          <button onClick={Login} className="registerButton"> Login </button>
-        </div>
+          <div onClick={() => loginWithRedirect({
+            connection: 'linkedin',
+            redirectUri: 'http://localhost:3000/Home',
+            prompt: 'login'
+          })} className="Login" id="LinkedIn"> 
+            <TfiLinkedin className="LinkedInIcon"/>
+            <h1>
+              Sign in with LinkedIn
+            </h1>
+          </div>
+          <div onClick={() => loginWithRedirect({
+            connection: 'Username-Password-Authentication',
+            redirectUri: 'http://localhost:3000/Home',
+            prompt: 'login'
+          })} className="Login" id="email"> 
+            <FaRegEnvelope className="emailIcon"/>
+            <h1>
+              Sign in with Email
+            </h1> 
+          </div>
+      </div>
       </div>
       {/* <div className="usersDisplay">
         {listOfUsers.map((user) => {

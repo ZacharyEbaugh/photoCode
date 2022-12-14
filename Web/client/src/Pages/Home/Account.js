@@ -9,11 +9,14 @@ import Axios from "axios";
 import zacProfilePic from '../../images/zacProfilePic.jpg';
 import { PhotoCodeHeader } from '../PhotoCodeHeader';
 
-function Account() {
+import { useAuth0 } from '@auth0/auth0-react';
 
+function Account() {
     const navigate = useNavigate();
-    const userName = "Zachary Ebaugh";
-    const userEmail = "zlebaughwps@gmail.com";
+
+    const { user } = useAuth0();
+
+
     return (
       <div className="containerHome">  
         <PhotoCodeHeader/>
@@ -24,9 +27,9 @@ function Account() {
                 <hr></hr>
                 <div className='accountInfoText'>
                     <div className='userInformation'>
-                        <img className='userPicture' src={zacProfilePic} />
-                        <h2 className='userName'>User Name: {userName}</h2>
-                        <h2 className='userEmail'>User Email: {userEmail}</h2>
+                        {/* <img className='userPicture' src={user.profile} /> */}
+                        <h2 className='userName'>User Name: {user.name}</h2>
+                        <h2 className='userEmail'>User Email: {user.email}</h2>
                     </div>
                     <div className='userActions'>
                         <button className='userAction'>Change Email</button>

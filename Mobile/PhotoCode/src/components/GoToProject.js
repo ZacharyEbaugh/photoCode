@@ -68,17 +68,20 @@ export function GoToProject({ imageSource, projectName, languageOne, languageTwo
 const styles = StyleSheet.create({
     projectBlock: {
         alignSelf: 'center',
-        width: windowWidth * 0.8,
-        marginVertical: 10,
+        // marginVertical: windowHeight * 0.02,
+        marginTop: windowHeight * 0.02,
     },
     projectContent: {
         flexDirection: 'row',
+        width: windowWidth * 0.8,
+        borderRadius: 10,
     },
     projectImage: {
         marginVertical: 10,
         marginHorizontal: 15,
         height: 75,
         width: 75,
+        resizeMode: 'contain',
     },
     textBlock: {
         flex: 1,
