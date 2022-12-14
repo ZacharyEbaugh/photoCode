@@ -16,10 +16,6 @@ function ProjectPage() {
     const navigate = useNavigate();
 
     var directoryTitle = "PhotoCode App";
-    var fileTitle = "index.html";
-    const dummyFolders = ["Fonts", "Images"];
-    const dummyFiles = ["index.css", "index.html", "ReadMe.md"];
-
 
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPath, setCurrentPath] = useState(['root']);
@@ -88,11 +84,9 @@ function ProjectPage() {
     }
   });
 
-
   const handleFolderClick = (folderName) => {
     setCurrentPath([...currentPath, folderName]);
     setSearchQuery('');
-    console.log("TEST" + searchQuery);
   };
 
   useEffect(() => {
@@ -112,11 +106,7 @@ function ProjectPage() {
   const search = (query) => {
     // Set the searchQuery state variable to the query argument
     setSearchQuery(query);
-    console.log(currentFolder);
-    console.log(searchResults);
   }
-
-
 
   // Flatten the directory structure into a single array of items
   const allItems = Object.keys(currentFolder).reduce((acc, key) => acc.concat(currentFolder[key]), []);
@@ -189,7 +179,7 @@ function ProjectPage() {
             </div>
           </div>
           <div className="settings-commits">
-            <div className="settingsButton" onClick={() => navigate('./ProjectSettings')}>Project Settings</div>
+            <div className="settingsButton" onClick={() => navigate('/ProjectSettings')}>Project Settings</div>
             <ProjectCommits/>
           </div>
         </div>
