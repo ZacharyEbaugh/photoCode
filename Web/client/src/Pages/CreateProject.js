@@ -1,5 +1,5 @@
 import './CreateProject.css';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { PhotoCodeHeader } from './PhotoCodeHeader';
 import { TextAreaField } from 'react-simple-widgets';
 
@@ -11,19 +11,36 @@ const CreateProject = () => {
   const [files, setFiles] = useState([]);
   const [folders, setFolders] = useState([]);
 
+  const fileInput = useRef(null);
+
+  const handleClick = () => {
+    fileInput.current.click();
+  };
+
+  const handleChange = event => {
+    event.preventDefault();
+
+    if (event.target.files.length === 0) {
+      return;
+    }
+    console.log(event.target.files[0]);
+    setFiles([...files, event.target.files[0]]);
+  };
+
   const onDrop = (event) => {
     event.preventDefault();
     // Get the files from the event
-    const droppedItems = event.dataTransfer.items;
+    console.log(event.dataTransfer.files);
+    const droppedItems = event.dataTransfer.files;
 
     // Loop through the items and add them to the appropriate state
     for (let i = 0; i < droppedItems.length; i += 1) {
       const item = droppedItems[i];
-
+      console.log(item);
       if (item.kind === 'file') {
         // Handle file
         setFiles([...files, item.getAsFile()]);
-        handleFileUpload(item.getAsFile());
+        // handleFileUpload(item.getAsFile());
       } else if (item.kind === 'folder') {
         // Handle folder
         setFolders([...folders, item.webkitGetAsEntry()]);
@@ -32,28 +49,11 @@ const CreateProject = () => {
     }
   };
 
-const handleFileDrop = (event) => {
-    event.preventDefault();
-
-    // get the files that were dropped
-    const files = event.dataTransfer.files;
-
-    // upload the files
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-
-      // do something with the file here, like upload it to a server
-      // for the sake of this example, we'll just add it to the uploadedFiles array
-
-    }
-  };
-
-    const handleDeleteFile = (index) => {
+  const handleDeleteFile = (index) => {
     // remove the file at the given index from the uploadedFiles array
-        const updatedFiles = files.filter((file, i) => i !== index);
+    const updatedFiles = files.filter((file, i) => i !== index);
     setFiles(updatedFiles);
   };
-
 
   const onDragOver = (event) => {
     // Prevent default behavior (Prevent file from being opened)
@@ -100,11 +100,10 @@ const handleFileDrop = (event) => {
 //   await upload;
 // };
 
-
   return (
     <div className='CreateProjectContainer'>
         <PhotoCodeHeader/>
-        <h1>New Project</h1>
+        <h2>Create a new project</h2>
         <div className='CreateProject'>
             <div className='CreateProjectForm'>
                 <input
@@ -114,59 +113,60 @@ const handleFileDrop = (event) => {
                     value={projectName}
                     onChange={handleProjectNameChange}
                 />
-                {/* <input
-                    type="text"
-                    className="inputField"
-                    placeholder='Description of project'
-                    multi
-                    value={projectDescription}
-                    onChange={handleProjectDescriptionChange}
-                /> */}
                  <textarea
                     className="inputFieldDescription"
-                    // style={{
-                    //     resize: 'none',
-                    // }}
                     placeholder='Description of project'
                     rows={4}
                     cols={50}
                 />
-                <button type="button" className="CreateProjectButton">
+                <button type="button" onClick={() => console.log(files)} className="CreateProjectButton">
                     Create Project
                 </button>
             </div>
             <div className='CreateProjectFileUploader'>
-                <div
-                    className="dropzone"
-                    onDrop={onDrop}
-                    onDragOver={onDragOver}
-                >
-                    Drag and drop files here
-                </div>
-                {/* <ul>
-                    {files.map((file) => (
-                    <li key={file.name}>
-                        {file.name} ({file.type})
-                        <progress value={0} max={1} />
-                        <button type="button">
-                        Upload
-                        </button>
-                    </li>
-                    ))}
-                </ul> */}
-                {files.length > 0 && (
-                <div className='listUploadedFiles'>
+              <div
+                  className="dropzone"
+                  onDrop={onDrop}
+                  onDragOver={onDragOver}
+                  onClick={handleClick}
+              >
+                Drag and drop folders/files or click here to select files.
+                <input
+                  type="file"
+                  ref={fileInput}
+                  style={{ display: "none" }}
+                  onChange={handleChange}
+                /> 
+              </div>
+              {(files.length > 0 || folders.length > 0) && (
+              <div className='listUploadedFiles'>
+                {folders.map((folder, i) => (
+                  <div className="uploadedFile" key={i}>
+                    <h1>
+                      {folder.name}
+                    </h1>
+                    <h1>
+                      {folder.type.split('/')[1]}
+                    </h1>
+                    <button onClick={() => handleDeleteFile(i)}>
+                        <img src={deleteFile} alt="delete"/>
+                    </button>
+                  </div>
+                ))}
                 {files.map((file, i) => (
-                    <div className="uploadedFile" key={i}>
-                        <h1>
-                            {file.name}     {file.type}
-                        </h1>
-                        <button onClick={() => handleDeleteFile(i)}>
-                            <img src={deleteFile} alt="delete"/>
-                        </button>
-                    </div>
-                    ))}
-                    </div>
+                  <div className="uploadedFile" key={i}>
+                    <h1>
+                      {file.name}
+                    </h1>
+                    <h1>
+                      {file.type.split('/')[1]}
+                    </h1>
+                    <button onClick={() => handleDeleteFile(i)}>
+                        <img src={deleteFile} alt="delete"/>
+                    </button>
+                  </div>
+                ))}
+                </div>
                 )}
                 </div>
             </div>
