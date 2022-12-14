@@ -3,78 +3,20 @@ import {
     useState, 
     useEffect
 } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
 
-import { useAuth0, LocalStorageCache } from '@auth0/auth0-react';
+import { useNavigate } from "react-router-dom";
+
+import axios from "axios";
+import jwt from 'jwt-decode';
 
 import account_picture from '../../images/account.png';
 import folder_icon from '../../images/Folder_Icon.png';
 import search_icon from '../../images/Search_Icon.png';
 import { PhotoCodeHeader } from '../PhotoCodeHeader';
 
-function Home() {
+function Home(props) {
     const navigate = useNavigate();
 
-    const [listOfUsers, setListOfUsers] = useState([]);
-    const [name, setName] = useState("");
-    const [password, setPassword] = useState("");
-
-    const { User, isLoading, isAuthenticated, getAccessTokenSilently, handleRedirectCallback } = useAuth0();
-    
-
-    useEffect(() => {
-        const handleCallback = async () => {
-            await handleRedirectCallback();
-            navigate.push('/');
-            console.log("AUTHENTICATION: " + isAuthenticated);
-            console.log("USER " + User);
-        };
-
-        handleCallback();
-
-
-    
-    }, [navigate, handleRedirectCallback]);
-
-
-
-  useEffect(() =>  {
-    // // Retrieve an array of all keys in local storage
-    const keys = Object.keys(localStorage);
-
-    // Iterate over the array of keys and retrieve each item from local storage
-    keys.forEach((key) => {
-    // Retrieve the item from local storage
-    const item = localStorage.getItem(key);
-
-    // Print the item to the console
-    console.log(`${key}: ${item}`);
-    });
-
-    // const token = localStorage.getItem('access_token');
-    // console.log(props.auth.accessToken);
-    // console.log(localStorage.getItem('auth0.is.authenticated'));
-    // const token = props.auth.accessToken;
-    // const fetchToken = async () => {
-    //     const token = await getAccessTokenSilently();
-    //     console.log(token);
-
-    // }
-
-    // fetchToken();
-    // Call userInfo API to get user info
-    // axios.post('http://localhost:3001/userInfo', {
-    //     accessToken: token
-    // }).then((response) => {
-    //     localStorage.setItem('username', response.data.name);
-    //     localStorage.setItem('email', response.data.email);
-    //     localStorage.setItem('picture', response.data.picture);
-    // }).catch((error) => {
-    //     console.log(error);
-    //     navigate('/Login');
-    // });
-  });
-    
     const listOfProjects = [
         {
             name: "Portfolio Webpage",
@@ -149,7 +91,6 @@ function Home() {
                 <h1 className='readMeTitle'>Read Me</h1>
             </div>
         </section>
-        
       </div>
     );
   }

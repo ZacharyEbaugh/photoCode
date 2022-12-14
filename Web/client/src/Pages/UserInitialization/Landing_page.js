@@ -15,8 +15,6 @@ import ProfileToContact from "../../Assets/ProfileToContact.png";
 
 import Axios from "axios";
 
-import { useAuth0 } from "@auth0/auth0-react";
-
 export default function Landing_page() {
 
   const [name, setName] = useState("");
@@ -58,26 +56,6 @@ export default function Landing_page() {
         setMessage("");
     };
 
-    const { User, isAuthenticated } = useAuth0();
-     useEffect(() =>  {
-    
-        // Retrieve an array of all keys in local storage
-        const keys = Object.keys(localStorage);
-
-        // Iterate over the array of keys and retrieve each item from local storage
-        keys.forEach((key) => {
-        // Retrieve the item from local storage
-        const item = localStorage.getItem(key);
-
-        // Print the item to the console
-        console.log(`${key}: ${item}`);
-        });
-        console.log("AUTHENTICATION: " + isAuthenticated);
-        console.log("USER " + User);
-
-    });
-
-
   return (
     <div className="LandingPageContainer">
         <div className="SplashSection">
@@ -97,7 +75,7 @@ export default function Landing_page() {
                     </a>
                 </div>
                 <div className="UserInitialization">
-                    <button onClick={Login} className="LoginButton">Login</button>
+                    <button onClick={Login}className="LoginButton">Login</button>
                     <button onClick={Register} className="RegisterButton">Register</button>
                 </div>
             </div>

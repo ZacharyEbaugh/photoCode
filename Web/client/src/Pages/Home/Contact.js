@@ -18,12 +18,6 @@ function Contact() {
     const [listOfUsers, setListOfUsers] = useState([]);
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
-
-    useEffect(() => {
-      Axios.get("http://localhost:3001/getUsers").then((response) => {
-        setListOfUsers(response.data);
-      });
-    }, []);
   
     const navigate = useNavigate();
 
