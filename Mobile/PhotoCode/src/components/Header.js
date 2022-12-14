@@ -21,7 +21,7 @@ class Header extends React.Component {
                     onPress={this.props.onPress}
                     style={styles.hamburgerMenu}
                 >
-                    <Image style={styles.searchImage} source={require('../assets/images/MenuButton.png')} />
+                    <Image style={styles.hamburgerMenuButton} source={require('../assets/images/MenuButton.png')} />
                 </Pressable>
 
                 <Text style={styles.title}>
@@ -47,7 +47,7 @@ class Header extends React.Component {
 const styles = StyleSheet.create({
     header: {
         backgroundColor: '#0066FF',
-        flex: 2,
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'space-around',
     },
@@ -78,13 +78,21 @@ const styles = StyleSheet.create({
         height: 40,
         fontSize: 25,
         textAlign: 'left',
-        paddingLeft: 20,
+        paddingLeft: 10,
         fontFamily: 'JetBrainsMono-Regular',
+    },
+    hamburgerMenuButton: {
+        width: 50,
+        height: 50,
+        marginLeft: 10,
+        resizeMode: 'contain',
     },
     searchImage: {
         width: 30,
+        // backgroundColor: 'black',
         height: 30,
         marginLeft: 10,
+        resizeMode: 'contain',
     },
 });
 

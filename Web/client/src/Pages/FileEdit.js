@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{ useState } from 'react'
 import "./FileEdit.css";
 
 import Editor from "@monaco-editor/react";
@@ -22,7 +22,6 @@ function File_Edit() {
       <PhotoCodeHeader/>
       <div className="Edit_Commit">
         <div className='File'>
-          
           <div className="editor">
             <h1 className="fileTitle">
               Editing {fileTitle}
@@ -54,6 +53,7 @@ function File_Edit() {
           </div>
       </div>
     </div>
+  </div>
   )
 }
 

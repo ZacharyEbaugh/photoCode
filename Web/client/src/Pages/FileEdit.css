@@ -21,11 +21,18 @@
     src: local("JetBrainsMono-ExtraBold"),
       url(".././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
   }
-  
-  .container {
-    height: 50vw;
+
+  .containerFileEdit {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     width: 100%;
     background: linear-gradient(180deg, #0066FF 0%, #FFFFFF 100%);
+  }
+  
+  .containerProject {
+    height: 80%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import "./Landing_page.css";
 import { useNavigate } from "react-router-dom";
 
@@ -15,6 +15,8 @@ import ProfileToContact from "../../Assets/ProfileToContact.png";
 
 import Axios from "axios";
 
+import { useAuth0 } from "@auth0/auth0-react";
+
 export default function Landing_page() {
 
   const [name, setName] = useState("");
@@ -27,13 +29,13 @@ export default function Landing_page() {
   const scrollToContact = useRef();
   const navigate = useNavigate();
 
-  const Login = () => {
-    navigate("/LoginTest");
-  }
-
   const Register = () => {
     navigate("/Register");
-  }   
+  };
+
+  const Login = () => {
+    navigate("/Login");
+    };
 
   // Axios call sendemail to user on button click
     const sendEmail = () => {
@@ -55,6 +57,25 @@ export default function Landing_page() {
         setCompany("");
         setMessage("");
     };
+
+    const { User, isAuthenticated } = useAuth0();
+     useEffect(() =>  {
+    
+        // Retrieve an array of all keys in local storage
+        const keys = Object.keys(localStorage);
+
+        // Iterate over the array of keys and retrieve each item from local storage
+        keys.forEach((key) => {
+        // Retrieve the item from local storage
+        const item = localStorage.getItem(key);
+
+        // Print the item to the console
+        console.log(`${key}: ${item}`);
+        });
+        console.log("AUTHENTICATION: " + isAuthenticated);
+        console.log("USER " + User);
+
+    });
 
 
   return (
