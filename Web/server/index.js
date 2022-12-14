@@ -21,6 +21,7 @@ app.use((req, res, next) => {
 
 // Configure authentication middleware for the application 
 const { auth, requiresAuth } = require('express-openid-connect');
+const { isObjectIdOrHexString } = require("mongoose");
 
 const config = {
   authRequired: false,
@@ -68,14 +69,20 @@ client.connect(err => {
 // Establish the database and collection
 const database = client.db("PhotoCode_db");
 const users = database.collection("users");
-
+const ObjectId = require('mongodb').ObjectId;
 function create(req, callback) {
   const email = req.body.email;
   const username = req.body.username;
   const password = req.body.password;
-  const user = { email: email, username: username, password: password };
+  const connection = req.body.connection;
+  const user = {
+    email: email,
+    password: password,
+    username: username,
+    connection: connection,
+  };
 
-  users.findOne({ email: user.email }, function (err, withSameMail) {
+  users.findOne({ email: user.email, connection: user.connection }, function (err, withSameMail) {
     if (err || withSameMail) {
       return callback(err || new Error('the user already exists'));
     }
@@ -85,11 +92,9 @@ function create(req, callback) {
       }
       user.password = hash;
       user.email_verified = false;
-      user.connection = 'Username-Password-Authentication';
-      user.tenant = 'PhotoCode';
+      user.tenant = 'photocode';
       user.client_id = process.env.REACT_APP_AUTH0_CLIENT_ID;
       users.insert(user, function (err, inserted) {
-        // client.close();
 
       if (err) return callback(err);
         callback(null);

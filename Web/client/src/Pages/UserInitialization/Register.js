@@ -2,7 +2,7 @@ import "./Register.css";
 import {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
-import {FaRegEnvelope, FaUser, FaLock} from "react-icons/fa";
+import {FaRegEnvelope, FaUser, FaLock, FaBorderNone} from "react-icons/fa";
 import {FcGoogle} from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { TfiLinkedin } from "react-icons/tfi";
@@ -54,7 +54,8 @@ function Register() {
       axios.post("http://localhost:3001/register", {
         email: email,
         username: username,
-        password: password
+        password: password,
+        connection: 'Username-Password-Authentication'
         })
         .then((res) => {
           if (res.data.error)
@@ -90,47 +91,64 @@ function Register() {
   return (
     <div className="Register">
       <div className="Registration">
-        <div className="RegisterTitle">
-          <h1>Register For an Account</h1>
-          <h2>Register using</h2>
-        </div>
+      
         <div className="RegisterOptions">
-          <div onClick={() => loginWithRedirect({
-            connection: 'google-oauth2',
-            redirectUri: 'http://localhost:3000/Home',
-            prompt: 'login'
-          })} className="Login" id="Google"> 
+          <div onClick={() => 
+            {localStorage.setItem('connection', 'google')
+            window.location.href=
+            'https://photocode.us.auth0.com/authorize?'
+            + 'response_type=code' + '&'
+            + 'client_id=' + process.env.REACT_APP_AUTH0_CLIENT_ID + '&'
+            + 'redirect_uri=' + 'http://localhost:3000/Home' + '&'
+            + 'scope=openid%20profile%20email' + '&'
+            + 'connection=' + 'google-oauth2'
+          }} className="Login" id="Google"> 
             <FcGoogle className="GoogleIcon"/>
             <h1>
-              Sign up with Google
+              Sign in with Google
             </h1>
           </div>
-         <div onClick={() => loginWithRedirect({
-            connection: 'github',
-            redirectUri: 'http://localhost:3000/Home',
-            prompt: 'login'
-          })} className="Login" id="GitHub"> 
+         <div onClick={() => 
+          {localStorage.setItem('connection', 'github')
+          window.location.href=
+          'https://photocode.us.auth0.com/authorize?'
+          + 'response_type=code' + '&'
+          + 'client_id=' + process.env.REACT_APP_AUTH0_CLIENT_ID + '&'
+          + 'redirect_uri=' + 'http://localhost:3000/Home' + '&'
+          + 'scope=openid%20profile%20email' + '&'
+          + 'connection=' + 'github'
+          }} className="Login" id="GitHub"> 
             <FaGithub className="GitHubIcon"/>
             <h1>
-              Sign up with GitHub
+              Sign in with GitHub
             </h1>
           </div>
-          <div onClick={() => loginWithRedirect({
-            connection: 'linkedin',
-            redirectUri: 'http://localhost:3000/Home',
-            prompt: 'login'
-          })} className="Login" id="LinkedIn"> 
+          <div onClick={() => 
+            {localStorage.setItem('connection', 'linkedin')
+            window.location.href=
+            'https://photocode.us.auth0.com/authorize?'
+          + 'response_type=code' + '&'
+          + 'client_id=' + process.env.REACT_APP_AUTH0_CLIENT_ID + '&'
+          + 'redirect_uri=' + 'http://localhost:3000/Home' + '&'
+          + 'scope=openid%20profile%20email' + '&'
+          + 'connection=' + 'linkedin'
+          }} className="Login" id="LinkedIn"> 
             <TfiLinkedin className="LinkedInIcon"/>
             <h1>
-              Sign up with LinkedIn
+              Sign in with LinkedIn
             </h1>
           </div>
+          
           </div>
-        <div className="orSeparator">
+          <div className="orSeparator">
           <div className="line"></div>
           <h1>or</h1>
           <div className="line"></div>
         </div>
+        <div className="RegisterTitle">
+          <h1>Register For an Account</h1>
+        </div>
+       
         <div className="RegisterFields">
           <div className="input">
             <FaRegEnvelope className="EmailIcon"/>
@@ -162,6 +180,8 @@ function Register() {
           <button className="registerButton" onClick={ValidateRegister}> Register </button>
           <p className="error">{error}</p>
         </div>
+        
+      
       </div>
       <div className="WelcomeInfo">
         <text className="WelcomeTitle">Welcome to PhotoCode</text>

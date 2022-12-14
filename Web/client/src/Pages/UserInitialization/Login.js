@@ -44,20 +44,22 @@ function Login(props) {
         </div>
         <div className="LoginButtons">
           <div onClick={() => 
+            {localStorage.setItem('connection', 'google')
             window.location.href=
             'https://photocode.us.auth0.com/authorize?'
-            + 'response_type=token' + '&'
+            + 'response_type=code' + '&'
             + 'client_id=' + process.env.REACT_APP_AUTH0_CLIENT_ID + '&'
             + 'redirect_uri=' + 'http://localhost:3000/Home' + '&'
             + 'scope=openid%20profile%20email' + '&'
             + 'connection=' + 'google-oauth2'
-          } className="Login" id="Google"> 
+          }} className="Login" id="Google"> 
             <FcGoogle className="GoogleIcon"/>
             <h1>
               Sign in with Google
             </h1>
           </div>
          <div onClick={() => 
+         {localStorage.setItem('connection', 'github')
           window.location.href=
           'https://photocode.us.auth0.com/authorize?'
           + 'response_type=code' + '&'
@@ -65,13 +67,14 @@ function Login(props) {
           + 'redirect_uri=' + 'http://localhost:3000/Home' + '&'
           + 'scope=openid%20profile%20email' + '&'
           + 'connection=' + 'github'
-         } className="Login" id="GitHub"> 
+         }} className="Login" id="GitHub"> 
             <FaGithub className="GitHubIcon"/>
             <h1>
               Sign in with GitHub
             </h1>
           </div>
           <div onClick={() => 
+            {localStorage.setItem('connection', 'linkedin')
             window.location.href=
             'https://photocode.us.auth0.com/authorize?'
           + 'response_type=code' + '&'
@@ -79,7 +82,7 @@ function Login(props) {
           + 'redirect_uri=' + 'http://localhost:3000/Home' + '&'
           + 'scope=openid%20profile%20email' + '&'
           + 'connection=' + 'linkedin'
-          } 
+          }} 
           className="Login" id="LinkedIn"> 
             <TfiLinkedin className="LinkedInIcon"/>
             <h1>
@@ -87,14 +90,16 @@ function Login(props) {
             </h1>
           </div>
           <div onClick={() => 
+            {localStorage.setItem('connection', 'Username-Password-Authentication')
             window.location.href=
             'https://' + process.env.REACT_APP_AUTH0_DOMAIN 
             + '/authorize?response_type=code&'
             + 'client_id=' + process.env.REACT_APP_AUTH0_CLIENT_ID + '&'
             + 'redirect_uri=http://localhost:3000/Home' + '&'
             + 'connection=' + 'Username-Password-Authentication' + '&'
-            + 'scope=openid%20profile%20email'
-          } 
+            + 'scope=openid%20profile%20email' + '&'
+            + 'audience=' + 'https://photocode.us.auth0.com/api/v2/'
+          }} 
           className="Login" id="email"> 
             <FaRegEnvelope className="emailIcon"/>
             <h1>

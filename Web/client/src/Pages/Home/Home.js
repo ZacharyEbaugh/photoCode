@@ -3,76 +3,21 @@ import {
     useState, 
     useEffect
 } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
 
-import { useAuth0, LocalStorageCache } from '@auth0/auth0-react';
+import { useNavigate } from "react-router-dom";
+
+import axios from "axios";
+import jwt from 'jwt-decode';
 
 import account_picture from '../../images/account.png';
 import folder_icon from '../../images/Folder_Icon.png';
 import search_icon from '../../images/Search_Icon.png';
 import { PhotoCodeHeader } from '../PhotoCodeHeader';
 
-import axios from 'axios';
 
 function Home(props) {
-    const [listOfUsers, setListOfUsers] = useState([]);
-    const [name, setName] = useState("");
-    const [password, setPassword] = useState("");
-
     const navigate = useNavigate();
 
-    const { User, isLoading, isAuthenticated, getAccessTokenSilently, handleRedirectCallback } = useAuth0();
-    
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-    console.log("CODE:\n" + code);
-
-
-    useEffect(() => {
-        console.log("NAV to HOME");
-
-        // Query parameter to get the code from the redirect
-        axios.post('https://photocode.us.auth0.com/oauth/token', {
-            "grant_type": "authorization_code",
-            "code": code,
-            "client_id": "R15Hb8sCd5OiULwScyqwCBtTwQKbgYMs",
-            "client_secret": "Y2aFtzhPni6-WT65su48BYzfyItcozp_ft1qeuap9KzaF2ED24AbWkEVNh9LWmXK",
-            "redirect_uri": "http://localhost:3000/Home"    
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-            )
-            .then(response => {
-                localStorage.setItem("access_token", response.data.access_token);
-                localStorage.setItem("id_token", response.data.id_token);
-                navigate("/Home");
-            })
-            .catch(error => {
-                console.log("error");
-            }
-        );
-
-
-    }, [code]);
-
-
-  useEffect(() =>  {
-        // // Retrieve an array of all keys in local storage
-        const keys = Object.keys(localStorage);
-
-        // Iterate over the array of keys and retrieve each item from local storage
-        keys.forEach((key) => {
-        // Retrieve the item from local storage
-        const item = localStorage.getItem(key);
-
-        // Print the item to the console
-        console.log(`${key}: ${item}`);
-    });
-  });
-    
     const listOfProjects = [
         {
             name: "Portfolio Webpage",
@@ -95,7 +40,7 @@ function Home(props) {
     return (
       <div className="containerHome">  
         <PhotoCodeHeader/>
-        {/*<section className='main'>
+        <section className='main'>
             <div className='sidebar'>
                 <div className='projectsWrapper'>
                     <header className='projectsHeader'>
@@ -147,7 +92,6 @@ function Home(props) {
                 <h1 className='readMeTitle'>Read Me</h1>
             </div>
         </section>
-         */}
       </div>
     );
   }
