@@ -1,0 +1,226 @@
+@font-face {
+    font-family: "Mono-Regular";
+    src: local("JetBrainsMono-Regular"),
+        url(".././fonts/JetBrainsMono-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Mono-Medium";
+    src: local("JetBrainsMono-Medium"),
+        url(".././fonts/JetBrainsMono-Medium.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Mono-Bold";
+    src: local("JetBrainsMono-Bold"),
+        url(".././fonts/JetBrainsMono-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Mono-ExtraBold";
+    src: local("JetBrainsMono-ExtraBold"),
+        url(".././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
+}
+
+.ProjectPageContainer {
+    height: 50vw;
+    width: 100%;
+    background: linear-gradient(180deg, #0066FF 0%, #FFFFFF 100%);
+    display: flex;
+    flex-direction: column;
+}
+
+.directory-commits {
+    /* background-color: black; */
+    /* width: 100%; */
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-top: 2%;
+
+}
+
+.dirBlock {
+    width: 60%;
+    /* height: 80%; */
+    background: #FFFFFF;
+    box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
+    border-radius: 11px;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+.dirBlock h1 {
+    font-family: "Mono-Regular";
+    font-size: 2.5vw;
+}
+
+.create_search_file {
+    width: 100%;
+    height: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.createFile {
+    border: 3px solid #D8D8D8;
+    border-radius: 10px;
+    background: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.3vw;
+    margin-right: 0.5vw;
+}
+
+.newFileButtonIcon {
+    width: 2vw;
+    height: 2vw;
+}
+
+.newFolderButtonIcon {
+    width: 2vw;
+    height: 2vw;
+}
+
+.searchFile {
+    width: 60%;
+    height: 2vw;
+    font-family: "Mono-Regular";
+    font-size: 1.5vw;
+    display: flex;
+    background-color: #e6e6e6;
+    border: none;
+    border-radius: 7.76322px;
+    justify-content: center;
+    padding: 0.45vw;
+}
+
+.dirPath {
+    width: 100%;
+    height: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* padding: 2%; */
+}
+
+
+
+.dirPathButton {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.dirPathButton a {
+    width: 100%;
+    height: 10%;
+}
+
+.dirPathButton:hover {
+    background-color: #e6e6e6;
+    height: 10%;
+    border-radius: 0px 0px 11px 11px;
+}
+
+.dirPathButton h1 {
+    font-family: "Mono-Regular";
+    font-size: 1.5vw;
+    margin-left: 1%;
+    width: 30%;
+}
+
+.folderDisplay {
+    width: 100%;
+    margin-top: 2%;
+}
+
+.folders {
+    display: flex;
+    align-items: center;
+    /* border-bottom: 1px solid #D8D8D8; */
+    cursor: pointer;
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    align-self: center;
+    justify-self: center;
+    margin: 0;
+    background-color: #D8D8D8;
+}
+
+.folders h1 {
+    font-size: 1.5vw;
+    margin-left: 1%;
+}
+
+.goToFolder {
+    width: 100%;
+    border: none;
+    background: none;
+}
+
+.goToFolder:hover {
+    background-color: #e6e6e685;
+    height: 10%;
+    border-radius: 11px;
+}
+
+.goToFile {
+    width: 100%;
+    border: none;
+    background: none;
+}
+
+.goToFile:hover {
+    background-color: #e6e6e685;
+    height: 10%;
+    border-radius: 11px;
+}
+
+.folderIcon {
+    height: 2vw;
+    width: 2vw;
+    margin-left: 2%;
+}
+
+.languageIcon {
+    height: 2vw;
+    width: 2vw;
+    margin-left: 2%;
+}
+
+.settings-commits {
+    /* background-color: black; */
+    width: 30%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.settingsButton {
+    width: 100%;
+    height: 10%;
+    border-radius: 11px;
+    /* border: 2px solid black; */
+    background: #FFFFFF;
+    box-shadow: inset 01px 0px 5px 3px rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Mono-Regular';
+    font-size: 1.5vw;
+    cursor: pointer;
+    margin-bottom: 2%;
+}

@@ -6,8 +6,11 @@ import Login from "./Pages/UserInitialization/Login";
 import Home from "./Pages/Home/Home";
 import Account from "./Pages/Home/Account";
 import Contact from "./Pages/Home/Contact";
+import ProjectPage from "./Pages/ProjectPage";
 import FileEdit from "./Pages/FileEdit";
+import ProjectSettings from "./Pages/ProjectSettings";
 import ErrorPage from "./Pages/ErrorPage";
+import CreateProject from "./Pages/CreateProject";
 
 import {
   BrowserRouter as Router,
@@ -139,9 +142,12 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Landingpage />}/>
-          <Route path="/Home" element={<Home auth={auth} updateAuth={updateAuth} user={user} updateUser={updateUser}/>}/>
+          <Route path="/Home" element={<Home />}/>
           <Route path="/Account" element={<Account />}/>
           <Route path="/Contact" element={<Contact />}/>
+          <Route path="/ProjectSettings" element={<ProjectSettings />}/>
+          <Route path="/ProjectPage" element={<ProjectPage />}/>
+          <Route path="/CreateProject" element={<CreateProject />}/>
           <Route path="/FileEdit" element={<FileEdit />}/>
         </Routes>
       </Router>
