@@ -15,6 +15,13 @@ app.use((req, res, next) => {
   next();
 });
 
+const https = require('https');
+const fs = require('fs');
+
+const credentials = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem')
+};
 
 // Configure authentication middleware for the application 
 const { auth, requiresAuth } = require('express-openid-connect');
@@ -169,5 +176,9 @@ app.post('/sendEmail', function (req, res) {
 
 
 // Start the app
-app.listen(3001, () => console.log('API listening on 3001'));
+// app.listen(3001, () => console.log('API listening on 3001'));
+// var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
 
+// httpServer.listen(8080);
+httpsServer.listen(8443, () => console.log('API listening on 8443'));
