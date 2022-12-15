@@ -12,11 +12,22 @@ import { PhotoCodeHeader } from './PhotoCodeHeader';
 import { ProjectCommits } from './ProjectCommits';
 import { useNavigate } from "react-router-dom";
 
+import { MdClear } from "react-icons/md";
+
 function ProjectPage() {
     const navigate = useNavigate();
 
     var directoryTitle = "PhotoCode App";
 
+    // State variables for handling creating a new file
+    const [createFile, setCreateFile] = useState(false);
+    const [newFileName, setNewFileName] = useState('');
+
+    // State variables for handling creating a new folder
+    const [createFolder, setCreateFolder] = useState(false);
+    const [newFolderName, setNewFolderName] = useState('');
+
+    // State variables for handling directory and view state
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPath, setCurrentPath] = useState(['root']);
     const [directory, setDirectory] = useState({
@@ -27,8 +38,6 @@ function ProjectPage() {
         folder1: {
           type: 'folder',
           name: 'folder1',
-          language: 'html',
-          languageImage: 'https://img.icons8.com/color/48/000000/html-5.png',
           contents: {
             file1: {
               type: 'file',
@@ -71,7 +80,13 @@ function ProjectPage() {
               name: 'index.html',
               language: 'PHP',
               languageImage: 'https://img.icons8.com/color/48/000000/php.png',
-            }
+            },
+            file: {
+              type: 'file',
+              name: 'tests',
+              language: '',
+              languageImage: 'https://img.icons8.com/color/48/000000/php.png',
+            },
           }
         },
         fileOuter: {
@@ -86,7 +101,9 @@ function ProjectPage() {
 
   const handleFolderClick = (folderName) => {
     setCurrentPath([...currentPath, folderName]);
+    console.log(currentPath);
     setSearchQuery('');
+    setCreateFile(false);
   };
 
   useEffect(() => {
@@ -105,17 +122,174 @@ function ProjectPage() {
 
   const search = (query) => {
     // Set the searchQuery state variable to the query argument
+    setCreateFile(false);
+    setCreateFolder(false);
     setSearchQuery(query);
+  }
+
+  const handleClear = () => {
+    setSearchQuery('');
   }
 
   // Flatten the directory structure into a single array of items
   const allItems = Object.keys(currentFolder).reduce((acc, key) => acc.concat(currentFolder[key]), []);
 
-  // const allItems = flatten(directory);
-
   // Use the filter method to search for items matching the search query
   const searchResults = allItems.filter(item => item.name && item.name.includes(searchQuery));
   
+  const addNewFolder = () => {
+    setCreateFile(false);
+    setCreateFolder(true);
+  }
+
+  const addNewFile = () => {
+    setCreateFolder(false);
+    setCreateFile(true);
+  }
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      if (newFolderName == '')
+        addFile();
+      else
+        addFolder();
+    }
+  }
+
+  const addFolder = () => {
+    // Handle generating unique file object name
+    const newFolder = newFolderName;
+
+    // Create new file object
+    const variable = {
+      [newFolder]: {
+        type: 'folder',
+        name: newFolderName,
+        contents: {}
+      }
+    }
+
+    // Navigate to current path in directory
+    let current = directory;
+    currentPath.forEach(path => {
+      if (path === 'root')
+        current = current[path];
+      else
+        current = current.contents[path];
+    });
+    current.contents = {
+      ...current.contents,
+      [newFolder]: variable[newFolder]
+    }
+    setDirectory(directory);
+    setCreateFolder(false);
+    setNewFolderName('');
+    console.log(directory);
+  }
+
+  const addFile = () => {
+    // Handle language extention and image
+    var extention = newFileName.split('.').pop();
+    var language = '';
+    var languageImage = '';
+    switch (extention) {
+      case 'html':
+        language = 'html';
+        languageImage = 'https://img.icons8.com/color/48/000000/html-5.png';
+        break;
+      case 'css':
+        language = 'css';
+        languageImage = 'https://img.icons8.com/color/48/000000/css3.png';
+        break;
+      case 'js':
+        language = 'JavaScript';
+        languageImage = 'https://img.icons8.com/color/48/000000/javascript.png';
+        break;
+      case 'py':
+        language = 'Python';
+        languageImage = 'https://img.icons8.com/color/48/000000/python.png';
+        break;
+      case 'php':
+        language = 'PHP';
+        languageImage = 'https://img.icons8.com/color/48/000000/php.png';
+        break;
+      case 'java':
+        language = 'Java';
+        languageImage = 'https://img.icons8.com/color/48/000000/java-coffee-cup-logo.png';
+        break;
+      case 'c':
+        language = 'C';
+        languageImage = 'https://img.icons8.com/color/48/000000/c-programming.png';
+        break;
+      case 'cpp':
+        language = 'C++';
+        languageImage = 'https://img.icons8.com/color/48/000000/c-plus-plus-logo.png';
+        break;
+      case 'cs':
+        language = 'C#';
+        languageImage = 'https://img.icons8.com/color/48/000000/c-sharp-logo.png';
+        break;
+      case 'go':
+        language = 'Go';
+        languageImage = 'https://img.icons8.com/color/48/000000/golang.png';
+        break;
+      case 'swift':
+        language = 'Swift';
+        languageImage = 'https://img.icons8.com/color/48/000000/swift.png';
+        break;
+      case 'kt':
+        language = 'Kotlin';
+        languageImage = 'https://img.icons8.com/color/48/000000/kotlin.png';
+        break;
+      case 'rb':
+        language = 'Ruby';
+        languageImage = 'https://img.icons8.com/color/48/000000/ruby-programming-language.png';
+        break;
+      case 'sql':
+        language = 'SQL';
+        languageImage = 'https://img.icons8.com/color/48/000000/sql.png';
+        break;
+      case 'json':
+        language = 'JSON';
+        languageImage = 'https://img.icons8.com/color/48/000000/json.png';
+        break;
+      case 'xml':
+        language = 'XML';
+        languageImage = 'https://img.icons8.com/color/48/000000/xml-file.png';
+        break;
+      default:
+        language = 'text';
+        languageImage = fileIcon;
+    }
+
+    // Handle generating unique file object name
+    const newFile = newFileName;
+
+    // Create new file object
+    const variable = {
+      [newFile]: {
+        type: 'file',
+        name: newFileName,
+        language: language,
+        languageImage: languageImage
+      }
+    }
+  
+    let current = directory;
+    currentPath.forEach(path => {
+      if (path === 'root')
+        current = current[path];
+      else
+        current = current.contents[path];
+    });
+    current.contents = {
+      ...current.contents,
+      [newFile]: variable[newFile]
+    }
+    setDirectory(directory);
+    setCreateFile(false);
+    setNewFileName('');
+  }
 
   return (
     <div className="ProjectPageContainer">
@@ -124,20 +298,26 @@ function ProjectPage() {
           <div className="dirBlock">
             <h1>{directoryTitle}</h1>
             <div className="create_search_file">
-              <button className="createFile">            
+              <button className="createFile" onClick={() => addNewFolder()}>            
                 <img src={newFolder} alt="new folder" className="newFolderButtonIcon"/> 
               </button>
-              <button className="createFile">            
+              <button className="createFile" onClick={() => addNewFile()}>            
                 <img src={newFile} alt="new file" className="newFileButtonIcon"/>
               </button>
-
-              <input
-                type="text"
-                id="search-input"
-                className="searchFile"
-                placeholder="Search Files"
-                onChange={event => search(event.target.value)}
-              />
+              <div className="searchBar">
+                <input
+                  type="text"
+                  id="search-input"
+                  className="searchFile"
+                  placeholder="Search Files"
+                  onChange={event => search(event.target.value)}
+                />
+                {(searchQuery != '') && <button className="clearSearch" onClick={handleClear}>
+                  <MdClear 
+                    className="clearIcon"
+                  />
+                </button>}
+              </div>
             </div>
              <div className="dirPath">
               {currentPath.map((folderName, index) => (
@@ -158,7 +338,7 @@ function ProjectPage() {
                   <button className='goToFolder' onClick={() => handleFolderClick(value.name)}>
                     <div className="line"></div>
                     <div className="folders" key={key}>
-                    <img src={blueFolder} alt="blue folder" className="folderIcon"/>
+                      <img src={blueFolder} alt="blue folder" className="folderIcon"/>
                       <h1>
                         {value.name}
                       </h1>
@@ -176,6 +356,32 @@ function ProjectPage() {
                   </button>
                 )
               )}
+              {(createFile) && <button className="newFileInput">
+                <div className="line"></div>
+                <div className="newFile">
+                  <img src={fileIcon} alt="language" className="folderIcon"/>
+                  <input 
+                    type="text" 
+                    className="fileNameInput" 
+                    placeholder="New File Name"
+                    onChange={(event) => {setNewFileName(event.target.value)}}
+                    onKeyDown={(event) => {handleKeyDown(event)}}
+                  />
+                </div>
+              </button>}
+              {(createFolder) && <button className="newFileInput">
+                <div className="line"></div>
+                <div className="newFile">
+                  <img src={fileIcon} alt="language" className="folderIcon"/>
+                  <input 
+                    type="text" 
+                    className="fileNameInput" 
+                    placeholder="New Folder Name"
+                    onChange={(event) => {setNewFolderName(event.target.value)}}
+                    onKeyDown={(event) => {handleKeyDown(event)}}
+                  />
+                </div>
+              </button>}
             </div>
           </div>
           <div className="settings-commits">
