@@ -27,12 +27,12 @@ export default function Landing_page() {
   const scrollToContact = useRef();
   const navigate = useNavigate();
 
-  const Register = () => {
-    navigate("/Register");
-  };
+    const Register = () => {
+        navigate("/Register");
+    };
 
-  const Login = () => {
-    navigate("/Login");
+    const Login = () => {
+        navigate("/Login");
     };
 
   // Axios call sendemail to user on button click
