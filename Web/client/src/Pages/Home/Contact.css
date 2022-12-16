@@ -184,7 +184,7 @@ button, a {
 }
 
 .contactForm button {
-    font-size: 2vw;
+    font-size: 3rem;
     color: black;
     width: 40%;
     background: none;
@@ -193,6 +193,7 @@ button, a {
     font-family: "Mono-Regular";
     cursor: pointer;
     align-self: center;
+    margin-bottom: 5%;
   }
 
   .contactForm button:hover {
@@ -208,7 +209,7 @@ button, a {
 /* #region */
 @media screen and (max-width: 1775px) {
     .main {
-        flex-direction: column;
+        flex-direction: column-reverse;
         justify-content: center;
         align-items: center;
     }

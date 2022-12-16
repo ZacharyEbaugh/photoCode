@@ -177,6 +177,7 @@
     align-items: center;
     /* border-bottom: 1px solid #D8D8D8; */
     cursor: pointer;
+    position: relative;
 }
 
 .line {
@@ -191,6 +192,20 @@
 .folders h1 {
     font-size: 1.5vw;
     margin-left: 1%;
+}
+
+.deleteButton {
+    width: 2vw;
+    height: 2vw;
+    cursor: pointer;
+    position: absolute;
+    right: 5%;
+    top: 30%;
+    color: white;
+}
+
+.deleteButton:hover {
+    color: red;
 }
 
 .newFileInput {
@@ -225,6 +240,7 @@
     width: 100%;
     border: none;
     background: none;
+    position: relative;
 }
 
 .goToFolder:hover {
@@ -237,6 +253,7 @@
     width: 100%;
     border: none;
     background: none;
+    position: relative;
 }
 
 .goToFile:hover {
@@ -268,7 +285,7 @@
 
 .settingsButton {
     width: 100%;
-    height: 10%;
+    /* height: 10%; */
     border-radius: 11px;
     /* border: 2px solid black; */
     background: #FFFFFF;
@@ -280,4 +297,6 @@
     font-size: 1.5vw;
     cursor: pointer;
     margin-bottom: 2%;
+    padding-top: 5%;
+    padding-bottom: 5%;
 }

@@ -54,8 +54,8 @@ button, a {
 .projectsWrapper {
     background-color: white;
     box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
-    width: 40rem;
-    height: 42rem;
+    width: 80rem;
+    /* height: 42rem; */
     border-radius: 1rem;
     display: flex;
     flex-direction: column;
@@ -66,20 +66,26 @@ button, a {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 1%;
+    margin-top: 1%;
 }
 
 .projectsTitle {
     font-family: 'Mono-Regular';
-    font-size: 3rem;
+    font-size: 4rem;
     margin: 0 2.5rem 0 1.9rem;
 }
 
 .projectsButtonWrapper {
     margin: 1rem 1.7rem 0.75rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
 }
 
 .inputWrapper {
-    margin: 0 0 0.75rem 0;
+    /* margin: 0 0 0.75rem 0; */
     display: flex;
     align-items: center;
     background-color: #D9D9D9;
@@ -87,8 +93,8 @@ button, a {
 }
 
 .searchIcon {
-    width: 1.275rem;
-    height: 1.275rem;
+    width: 2.6rem;
+    height: 2.6rem;
     margin: 0.5rem 0.75rem 0.5rem 0.5rem;
 }
 
@@ -97,40 +103,45 @@ button, a {
     background: none;
     color: black;
     font-family: 'Mono-Regular';
-    font-size: 1.1rem;
-    width: 10.5rem;
+    font-size: 2.5rem;
+    width: 25rem;
 }
 
 .searchProjectInput::placeholder {
     color: black;
     opacity: 1;
     font-family: 'Mono-Regular';
-    font-size: 1.1rem;
+    font-size: 2.5rem;
+}
+
+.searchProjectInput:focus {
+    outline: none;
 }
 
 .createProjectButton {
-    margin: 0;
-    padding: 0 1.4rem 0 0;
+    /* height: 3.5rem; */
+    padding: 0.2rem 1rem 0.2rem 0.2rem;
     border: none;
     display: flex;
     align-items: center;
     background-color: #6DE959;
     border-radius: 0.33rem;
     font-family: 'Mono-Regular';
-    font-size: 1.1rem;
+    font-size: 2.5rem;
 }
 
 .createProjectIcon {
-    width: 1.4rem;
-    height: 1.13rem;
+    width: 2.6rem;
+    height: 2rem;
     margin: 0.5rem 0.75rem 0.5rem 0.5rem;
 }
 
 .project {
+    position: relative;
     display: flex;
     /* width: 85%; */
     background-color: white;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     padding: 0 1rem 0 1.17rem;
     align-items: center;
     margin: 0 1.7rem 1.1rem 1.9rem;
@@ -140,28 +151,36 @@ button, a {
 }
 
 .projectImage {
-    width: 7rem;
-    height: 7rem;
+    width: 10rem;
+    height: 10rem;
+    margin: 2rem;
 }
 
 .projectTitlesWrapper {
-    text-align: center;
+    /* text-align: center; */
 }
 
 .projectTitle {
     font-family: 'Mono-Regular';
+    font-size: 3rem;
+    margin: 2rem 1rem;
+}
+
+.projectDateDesc {
+    font-family: 'Mono-Regular';
     font-size: 1.33rem;
-    margin: 0.5rem 0;
+    margin: 0rem 0rem 0 1rem;
 }
 
 .projectDate {
     font-family: 'Mono-Regular';
     font-size: 1.33rem;
-    margin: 0 0 1.8rem 0;
+    margin: 0rem 0rem 2rem 1rem;
 }
 
 .commonLangWrapper {
-   
+    position: absolute;
+    right: 2rem;
 }
 
 .commonLang {
@@ -173,15 +192,16 @@ button, a {
 
 .lang {
     font-family: 'Mono-Regular';
-    font-size: 0.75rem;
-    margin: 0 0.75rem 0 0;
+    font-size: 1.33rem;
+    margin: 1rem 1rem 0 0;
 }
 
 .lang1Circle, .lang2Circle, .lang3Circle {
     display: inline-block;
-    height: 1rem;
-    width: 1rem;
+    height: 1.5rem;
+    width: 1.5rem;
     border-radius: 100%;
+    margin: 1rem 0rem 0 0;
 }
 
 .lang1Circle {

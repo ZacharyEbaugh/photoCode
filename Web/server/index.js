@@ -19,34 +19,34 @@ app.use((req, res, next) => {
 });
 
 
-// Configure authentication middleware for the application 
-const { auth, requiresAuth } = require('express-openid-connect');
-const { isObjectIdOrHexString } = require("mongoose");
+// // Configure authentication middleware for the application 
+// const { auth, requiresAuth } = require('express-openid-connect');
+// // const { isObjectIdOrHexString } = require("mongoose");
 
-const config = {
-  authRequired: false,
-  auth0Logout: true,
-  baseURL: 'http://localhost:3000',
-  clientID: 'R15Hb8sCd5OiULwScyqwCBtTwQKbgYMs',
-  issuerBaseURL: process.env.REACT_APP_AUTH0_DOMAIN,
-  secret: process.env.REACT_APP_AUTH0_CLIENT_SECRET,
-};
+// // const config = {
+// //   authRequired: false,
+// //   auth0Logout: true,
+// //   baseURL: 'http://localhost:3000',
+// //   clientID: 'R15Hb8sCd5OiULwScyqwCBtTwQKbgYMs',
+// //   issuerBaseURL: process.env.REACT_APP_AUTH0_DOMAIN,
+// //   secret: process.env.REACT_APP_AUTH0_CLIENT_SECRET,
+// // };
 
-// The `auth` router attaches /login, /logout
-// and /callback routes to the baseURL
-app.use(auth(config));
+// // // The `auth` router attaches /login, /logout
+// // // and /callback routes to the baseURL
+// // app.use(auth(config));
 
-// req.oidc.isAuthenticated is provided from the auth router
-app.get('/', (req, res) => {
-  res.send(
-    req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out'
-  )
-});
+// // // req.oidc.isAuthenticated is provided from the auth router
+// // app.get('/', (req, res) => {
+// //   res.send(
+// //     req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out'
+// //   )
+// // });
 
-// The /profile route will show the user profile as JSON
-app.get('/profile', requiresAuth(), (req, res) => {
-  res.send(JSON.stringify(req.oidc.user, null, 2));
-});
+// // // The /profile route will show the user profile as JSON
+// // app.get('/profile', requiresAuth(), (req, res) => {
+// //   res.send(JSON.stringify(req.oidc.user, null, 2));
+// // });
 
 // Connect to MongoDB Cluster
 const MongoClient = require('mongodb').MongoClient;

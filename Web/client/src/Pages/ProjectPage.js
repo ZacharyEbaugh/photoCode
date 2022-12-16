@@ -13,11 +13,15 @@ import { ProjectCommits } from './ProjectCommits';
 import { useNavigate } from "react-router-dom";
 
 import { MdClear } from "react-icons/md";
+import { RiDeleteBin7Line, RiDeleteBin7Fill } from "react-icons/ri";
+
 
 function ProjectPage() {
     const navigate = useNavigate();
-
     var directoryTitle = "PhotoCode App";
+
+    const [deleteFileName, setDeleteFileName] = useState('');
+    const [deleteFolderName, setDeleteFolderName] = useState('');
 
     // State variables for handling creating a new file
     const [createFile, setCreateFile] = useState(false);
@@ -89,7 +93,7 @@ function ProjectPage() {
             },
           }
         },
-        fileOuter: {
+        'fileOuter.py': {
           type: 'file',
           name: 'fileOuter.py',
           language: 'Python',
@@ -153,6 +157,10 @@ function ProjectPage() {
         addFile();
       else
         addFolder();
+    }
+    else if (event.key === 'Escape') {
+      setCreateFile(false);
+      setCreateFolder(false);
     }
   }
 
@@ -275,6 +283,7 @@ function ProjectPage() {
       }
     }
   
+    // Navigate to current path in directory
     let current = directory;
     currentPath.forEach(path => {
       if (path === 'root')
@@ -282,14 +291,54 @@ function ProjectPage() {
       else
         current = current.contents[path];
     });
+
+    // Add new file object to directory
     current.contents = {
       ...current.contents,
       [newFile]: variable[newFile]
     }
+
+    // Update directory state
     setDirectory(directory);
     setCreateFile(false);
     setNewFileName('');
   }
+
+
+  useEffect(() => {
+    const deleteFile = (deleteFileName) => {
+      let current = directory;
+      currentPath.forEach(path => {
+        if (path === 'root')
+          current = current[path];
+        else
+          current = current.contents[path];
+      });
+      delete current.contents[deleteFileName];
+      setDirectory(directory);
+      setDeleteFileName('');
+    }
+    deleteFile(deleteFileName);
+  }, [deleteFileName]);
+
+  useEffect(() => {
+    const deleteFolder = (deleteFolderName) => {
+      console.log(deleteFolderName);
+      let current = directory;
+      console.log(currentPath);
+      currentPath.forEach(path => {
+        if (path === 'root')
+          current = current[path];
+        else
+          current = current.contents[path];
+      });
+      delete current.contents[deleteFolderName];
+      setDirectory(directory);
+      setDeleteFolderName('');
+    }
+    deleteFolder(deleteFolderName);
+    console.log(directory);
+  }, [deleteFolderName]);
 
   return (
     <div className="ProjectPageContainer">
@@ -335,14 +384,19 @@ function ProjectPage() {
             <div className="folderDisplay">
               {Object.entries((searchQuery === '') ? currentFolder : searchResults).map(([key, value]) =>
                 value.type === 'folder' ? (
-                  <button className='goToFolder' onClick={() => handleFolderClick(value.name)}>
+                  <button className='goToFolder'>
                     <div className="line"></div>
-                    <div className="folders" key={key}>
+                    <div className="folders" key={key}  onClick={() => handleFolderClick(value.name)}>
                       <img src={blueFolder} alt="blue folder" className="folderIcon"/>
                       <h1>
                         {value.name}
                       </h1>
+                      
                     </div>
+                    <RiDeleteBin7Fill
+                      className="deleteButton"
+                      onClick={() => setDeleteFolderName(value.name)}
+                    />
                   </button>
                 ) : (
                   <button className='goToFile'>
@@ -353,6 +407,10 @@ function ProjectPage() {
                         {value.name}
                       </h1>
                     </div>
+                    <RiDeleteBin7Fill
+                        className="deleteButton"
+                        onClick={() => setDeleteFileName(value.name)}
+                      />
                   </button>
                 )
               )}
