@@ -103,10 +103,23 @@ function App() {
               password: Math.random().toString(36),
               connection: localStorage.getItem('connection'),
             })
-          }
-        )
+            .then(response => {
+              // Get user id from mongoDB
+              axios.post("http://localhost:3001/getUser", {
+                email: localStorage.getItem('email'),
+                connection: localStorage.getItem('connection'),
+              })
+              .then(response => {
+                console.log(response.data._id);
+                localStorage.setItem("id", response.data._id);
+              })
+              .catch(error => {
+                console.log(error);
+              })
+            })
+          })
+        }
       }
-    }
   }, [window.location]);
 
   // This effect is responsible for directing users that are authenticated to the home page

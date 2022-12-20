@@ -1,11 +1,15 @@
 import './CreateProject.css';
 import React, { useState, useRef } from 'react';
+import axios from 'axios';
 import { PhotoCodeHeader } from './PhotoCodeHeader';
 import { TextAreaField } from 'react-simple-widgets';
 
 import deleteFile from './../images/deleteFile.png';
+import { useNavigate } from 'react-router-dom';
 
 const CreateProject = () => {
+  const navigate = useNavigate();
+
   const [projectName, setProjectName] = useState('');
   const [projectDescription, setProjectDescription] = useState('');
   const [files, setFiles] = useState([]);
@@ -100,6 +104,57 @@ const CreateProject = () => {
 //   await upload;
 // };
 
+  // handle create project button
+  const handleCreateProject = () => {
+    console.log('Create project button clicked');
+    // Call /createProject endpoint to create project
+    axios.post('http://localhost:3001/createProject', {
+      name: projectName,
+      description: projectDescription,
+      user: localStorage.getItem('id'),
+      // files: files,
+      // folders: folders,
+    })
+    .then((response) => {
+      const project_id = response.data.project_id;
+      console.log(project_id);
+      // Create Folder that will act as the root folder for the project
+      axios.post('http://localhost:3001/createFolder', {
+        name: projectName,
+        parent_id: project_id,
+      })
+      .then((response) => {
+        console.log(response.data.folder);
+        // Upload files to the root folder
+        const folder_id = response.data.folder;
+        const formData = new FormData();
+
+        console.log(files[0]);
+        formData.append('file', files[0]);
+        formData.append('folder_id', folder_id);
+
+        for (const pair of formData.entries()) {
+          console.log(`${pair[0]}, ${pair[1]}`);
+        }
+        axios.post(`http://localhost:3001/uploadFile`, formData)
+        .then((response) => {
+          console.log(response);
+          // navigate('/Home');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      // navigate('/Home');
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  };
+
   return (
     <div className='CreateProjectContainer'>
         <PhotoCodeHeader/>
@@ -116,10 +171,11 @@ const CreateProject = () => {
                  <textarea
                     className="inputFieldDescription"
                     placeholder='Description of project'
+                    onChange={handleProjectDescriptionChange}
                     rows={4}
                     cols={50}
                 />
-                <button type="button" onClick={() => console.log(files)} className="CreateProjectButton">
+                <button type="button" onClick={() => handleCreateProject()} className="CreateProjectButton">
                     Create Project
                 </button>
             </div>
