@@ -111,7 +111,7 @@ function App() {
               })
               .then(response => {
                 console.log(response.data._id);
-                localStorage.setItem("id", response.data._id);
+                localStorage.setItem("user_id", response.data._id);
               })
               .catch(error => {
                 console.log(error);

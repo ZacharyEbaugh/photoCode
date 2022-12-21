@@ -227,11 +227,11 @@ app.post('/createProject', function (req, res) {
 
 // Function to get all projects from the projects collection
 function getAllProjects(req, callback) {
-  const user = req.body.user;
-  const project = {
-    user: user
+  const user_id = req.query.user_id;
+  const user = {
+    user: user_id
   };
-  projects.find (project).toArray(function (err, projects) {
+  projects.find(user).toArray(function (err, projects) {
     if (err || !projects) {
       return callback(err || new Error('the project does not exist'));
     }
@@ -242,7 +242,7 @@ function getAllProjects(req, callback) {
 }
 
 // Route handler for getting all projects
-app.post('/getAllProjects', function (req, res) {
+app.get('/getAllProjects', function (req, res) {
   getAllProjects(req, function (err, projects) {
     if (err) {
       res.send({ message: 'Projects not found' });
@@ -253,30 +253,86 @@ app.post('/getAllProjects', function (req, res) {
   });
 });
 
-// Function to get a project from the projects collection
-function getProject(req, callback) {
-  const id = req.body.id;
-  const project = {
-    _id: ObjectId(id)
+// // Function to get a project from the projects collection
+// function getProject(req, callback) {
+//   const project_id = req.query.project_id;
+//   const project = {
+//     _id: ObjectId(project_id)
+//   };
+//   projects.findOne(project, function (err, project) {
+//     if (err || !project) {
+//       return callback(err || new Error('the project does not exist'));
+//     }
+//     else {
+//       return callback(null, project);
+//     }
+//   });
+// }
+
+// // Route handler for getting a project
+// app.get('/getProject', function (req, res) {
+//   getProject(req, function (err, project) {
+//     if (err) {
+//       res.send({ message: 'Project not found' });
+//     }
+//     else {
+//       res.send(project);
+//     }
+//   });
+// });
+
+// Function to get all folders that belong to a project from the folders collection
+function getFolders(req, callback) {
+  const project_id = req.query.project_id;
+  const folder = {
+    parent_folder: project_id
   };
-  projects.findOne (project, function (err, project) {
-    if (err || !project) {
-      return callback(err || new Error('the project does not exist'));
+  folders.find(folder).toArray(function (err, folders) {
+    if (err || !folders) {
+      return callback(err || new Error('the folder does not exist'));
     }
     else {
-      return callback(null, project);
+      return callback(null, folders);
     }
   });
 }
 
-// Route handler for getting a project
-app.post('/getProject', function (req, res) {
-  getProject(req, function (err, project) {
+// Route handler for getting all folders that belong to a project
+app.get('/getFolders', function (req, res) {
+  getFolders(req, function (err, folders) {
     if (err) {
-      res.send({ message: 'Project not found' });
+      res.send({ message: 'Folders not found' });
     }
     else {
-      res.send(project);
+      res.send(folders);
+    }
+  });
+});
+
+// Function to get all files that belong to a project from the files collection
+function getFiles(req, callback) {
+  const project_id = req.query.project_id;
+  const file = {
+    project_id: project_id
+  };
+  files.find(file).toArray(function (err, files) {
+    if (err || !files) {
+      return callback(err || new Error('the file does not exist'));
+    }
+    else {
+      return callback(null, files);
+    }
+  });
+}
+
+// Route handler for getting all files that belong to a project
+app.get('/getFiles', function (req, res) {
+  getFiles(req, function (err, files) {
+    if (err) {
+      res.send({ message: 'Files not found' });
+    }
+    else {
+      res.send(files);
     }
   });
 });
@@ -340,7 +396,7 @@ async function createFolder(req, callback) {
       { $setOnInsert: folderSearch },
       { upsert: true, returnOriginal: true }
     );
-    return callback(null, Promise.resolve(folderFound));
+    return callback(null, folderFound);
   } catch (error) {
     return callback(error);
   }
@@ -353,6 +409,7 @@ app.post('/createFolder', function (req, res) {
       res.status(500).send({ error: err.message });
     }
     else {
+      console.log(folder);
       res.send({ message: 'Folder created', folder: folder});
     }
   });
@@ -360,7 +417,7 @@ app.post('/createFolder', function (req, res) {
 
 
 /* 
-||------------------End Project creation/information------------------||
+||------------------End file/folder creation/uploading------------------||
 */
 
 /* 

@@ -87,8 +87,8 @@ const CreateProject = () => {
         // console.log(response);
         // const folder_id = response.data.folder.lastErrorObject.upserted;
       
-        const folder_id = response.data.folder.insertedId;
-        // console.log(folder_id);
+        const folder_id = response.data.folder.lastErrorObject.upserted;
+        console.log(folder_id);
 
         // Create form data object to send files and metadata to the server
         const formData = new FormData();
@@ -114,13 +114,13 @@ const CreateProject = () => {
               })
               .then((response) => {
                 console.log(response);
-                if (response.data.folder._id === null) {
+                if (response.data.folder.value._id === null) {
                   // localStorage.setItem('parent_id', response.data.folder.lastErrorObject.upserted);
-                  localStorage.setItem('parent_id', response.data.folder.insertedId);
+                  localStorage.setItem('parent_id', response.data.folder.lastErrorObject.upserted);
                 }
                 else {
                   // localStorage.setItem('parent_id', response.data.folder.value._id);
-                  localStorage.setItem('parent_id', response.data.folder._id);
+                  localStorage.setItem('parent_id', response.data.folder.value._id);
                 }
               });
             }
@@ -143,7 +143,6 @@ const CreateProject = () => {
               'Content-Type': 'multipart/form-data',
             },
           });
-          navigate('/Home');
         } catch (error) {
           console.log(error);
         }
@@ -151,6 +150,7 @@ const CreateProject = () => {
       .catch((error) => {
         console.log(error);
       });
+      navigate('/Home');
     })
     .catch((error) => {
       console.log(error);

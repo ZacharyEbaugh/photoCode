@@ -17,24 +17,44 @@ import { PhotoCodeHeader } from '../PhotoCodeHeader';
 function Home(props) {
     const navigate = useNavigate();
 
-    const listOfProjects = [
-        {
-            name: "Portfolio Webpage",
-            date: "5/27/2022",
-            img_link: require("../../images/proj_1.png"),
-            lang_1: "HTML",
-            lang_2: "CSS",
-            lang_3: "JavaScript",
-        },
-        {
-            name: "Stupid Webpage",
-            date: "5/27/2022",
-            img_link: require("../../images/proj_1.png"),
-            lang_1: "HTML",
-            lang_2: "CSS",
-            lang_3: "JavaScript",
-        }
-    ]
+    const [projects, setProjects] = useState([]);
+
+    // const listOfProjects = [
+    //     {
+    //         name: "Portfolio Webpage",
+    //         date: "5/27/2022",
+    //         img_link: require("../../images/proj_1.png"),
+    //         lang_1: "HTML",
+    //         lang_2: "CSS",
+    //         lang_3: "JavaScript",
+    //     },
+    //     {
+    //         name: "Stupid Webpage",
+    //         date: "5/27/2022",
+    //         img_link: require("../../images/proj_1.png"),
+    //         lang_1: "HTML",
+    //         lang_2: "CSS",
+    //         lang_3: "JavaScript",
+    //     }
+    // ]
+
+    // Get all projects for user from database
+    useEffect(() => {
+        const user_id = localStorage.getItem('user_id');
+        console.log(user_id);
+        axios.get(`http://localhost:3001/getAllProjects?user_id=${user_id}`)
+            .then(res => {
+                // res.data.forEach(project => {
+                //     listOfProjects.push(project);
+                // });
+                setProjects(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        console.log(projects);
+    }, []);
+
   
     return (
       <div className="containerHome">  
@@ -55,9 +75,10 @@ function Home(props) {
                             </button>
                         </div>
                     </header>
-                    {listOfProjects.map((project) => {
+                    {projects.map((project) => {
+                        console.log(project);
                         return (
-                            <section className='project' key={project.name}>
+                            <section className='project' key={project._id}>
                                 <img className='projectImage' src={project.img_link} />
                                 <div className='projectTitlesWrapper'>
                                     <h1 className='projectTitle'>{project.name}</h1>
