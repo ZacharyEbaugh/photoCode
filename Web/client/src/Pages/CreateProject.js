@@ -67,7 +67,7 @@ const CreateProject = () => {
   };
 
   // handle create project button
-  const handleCreateProject = async() => {
+  const handleCreateProject = () => {
     console.log('Create project button clicked');
     // Call /createProject endpoint to create project in the database and get the project id
     axios.post('http://localhost:3001/createProject', {
@@ -82,19 +82,19 @@ const CreateProject = () => {
         name: projectName,
         parent_id: project_id,
       })
-      .then((response) => {
+      .then(async (response) => {
         // Upload files to the root folder
-        const folder_id = response.data.folder.lastErrorObject.upserted;
+        // console.log(response);
+        // const folder_id = response.data.folder.lastErrorObject.upserted;
       
+        const folder_id = response.data.folder.insertedId;
+        // console.log(folder_id);
+
         // Create form data object to send files and metadata to the server
         const formData = new FormData();
 
-        // Append the parent folder id to the form data
-        formData.append('folder_id', folder_id);
-
-        // Append the files to the form data and handle subFolder creation
-        files.forEach(async (file) => {
-          formData.append('files', file.file);
+        // Loop over all files and create a promise for each file
+        const filePromises = files.map(async (file) => {
           // If the file is in a subdirectory, create a folder with the name of the directory and the parent id of the parent folder
           // Traverse down the directory tree and create folders for each subdirectory
           // Append adjusted parent_id to each file in the form data
@@ -103,71 +103,54 @@ const CreateProject = () => {
             // For each entry in the array, every entry before it is the parent folder
             const folderPath = file.fullPath.split('/').slice(1, -1);
             // Initial parent_id should be the root folder id
-            // const parent_id = folder_id;
-            // setParent_id(folder_id);
             localStorage.setItem('parent_id', folder_id);
 
             for (let i = 0; i < folderPath.length; i++) {
-              console.log(i + "\t" + localStorage.getItem('parent_id'));
               // Check if the folder already exists in the database and if not
-              // create it with the parent id of the previous folder 
-              // and append the folder id to the form data
-              // axios.post('http://localhost:3001/createFolder', {
-              //   name: folderPath[i],
-              //   parent_id: localStorage.getItem('parent_id'),
-              // })
-              // .then((response) => {
-              //   if (response.data.folder.value === null) {
-              //     localStorage.setItem('parent_id', response.data.folder.lastErrorObject.upserted);
-              //     if (folderPath.length > 1) {
-              //       console.log("Should be parent_id for next loop:\t\t" + localStorage.getItem('parent_id'));
-              //     }
-              //   }
-              //   else {
-              //     localStorage.setItem('parent_id', response.data.folder.value._id);
-              //     if (folderPath.length > 1) {
-              //       console.log("Should be parent_id for next loop:\t\t" + localStorage.getItem('parent_id'));
-              //     }
-              //   }
-
+              // create it with the parent id of the previous folder within this loop
               const response = await axios.post('http://localhost:3001/createFolder', {
                 name: folderPath[i],
                 parent_id: localStorage.getItem('parent_id'),
+              })
+              .then((response) => {
+                console.log(response);
+                if (response.data.folder._id === null) {
+                  // localStorage.setItem('parent_id', response.data.folder.lastErrorObject.upserted);
+                  localStorage.setItem('parent_id', response.data.folder.insertedId);
+                }
+                else {
+                  // localStorage.setItem('parent_id', response.data.folder.value._id);
+                  localStorage.setItem('parent_id', response.data.folder._id);
+                }
               });
-              if (response.data.folder.value === null) {
-                localStorage.setItem('parent_id', response.data.folder.lastErrorObject.upserted);
-                if (folderPath.length > 1) {
-                  console.log("Should be parent_id for next loop:\t\t" + localStorage.getItem('parent_id'));
-                }
-              }
-              else {
-                localStorage.setItem('parent_id', response.data.folder.value._id);
-                if (folderPath.length > 1) {
-                  console.log("Should be parent_id for next loop:\t\t" + localStorage.getItem('parent_id'));
-                }
-              }
-                
-                // formData.append('folder_id', folder_id);
-       
-
             }
+            // Append the parent id to the file which will be appended to the form data
+            file.file.parent_id = localStorage.getItem('parent_id');
           }
+          return file.file;
         });
 
-        // // Upload the files to the server using the /uploadFile endpoint with the folder id as the parent folder id 
-        // axios.post('http://localhost:3001/uploadFile', formData)
-        // .then((response) => {
-        //   console.log(response);
-        //   // navigate('/Home');
-        // })
-        // .catch((error) => {
-        //   console.log(error);
-        // });
+        // Resolve all promises and append the files to the form data
+        const resolvedFiles = await Promise.all(filePromises);
+        resolvedFiles.forEach((file) => {
+          formData.append('files', file, file.name + ":::::" + file.parent_id);
+        });
+        
+        try {
+          // Upload the files to the server using the /uploadFile endpoint with the folder id as the parent folder id 
+          const response = await axios.post('http://localhost:3001/uploadFile', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+          navigate('/Home');
+        } catch (error) {
+          console.log(error);
+        }
       })
       .catch((error) => {
         console.log(error);
       });
-      // navigate('/Home');
     })
     .catch((error) => {
       console.log(error);

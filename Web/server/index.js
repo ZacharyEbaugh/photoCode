@@ -301,15 +301,16 @@ const dbURI = 'mongodb+srv://PhotoCodeAuth0:' +
 const fileStorage = new GridFsStorage({
   url: dbURI,
   file: (req, file) => {
-    console.log("TESTER" + req);
+    // Extract the file information from the originalname string
+    const fileInfo = file.originalname.split(':::::');
+    const filename = fileInfo[0];
+    const parent_id = fileInfo[1];
     return new Promise((resolve, reject) => {
-      const filename = file.originalname;
-      const folder_id = req.body.folder_id;
       const fileInfo = {
         filename: filename,
         bucketName: "folders",
         metadata: {
-          parent_folder: folder_id,
+          parent_folder: parent_id,
         }
       };
       resolve(fileInfo);
@@ -321,37 +322,8 @@ const upload = multer( {storage: fileStorage} );
 
 // Route handler for uploading a file
 app.post('/uploadFile', upload.array('files'), (req, res, next) => {
-  // console.log(req);
   res.status(200).send({ message: 'File uploaded' });
 });
-
-// // Function to check if a folder exists in the folders collection
-// function folderExists(req, callback) {
-//   const id = req.body.id;
-//   const folder = {
-//     _id: ObjectId(id)
-//   };
-//   folders.findOne (folder, function (err, folder) {
-//     if (err || !folder) {
-//       return callback(err || new Error('the folder does not exist'));
-//     }
-//     else {
-//       return callback(null, folder);
-//     }
-//   });
-// }
-
-// // Route handler for checking if a folder exists
-// app.post('/folderExists', function (req, res) {
-//   folderExists(req, function (err, folder) {
-//     if (err) {
-//       res.send({ message: 'Folder not found' });
-//     }
-//     else {
-//       res.send(folder);
-//     }
-//   });
-// });
 
 // Function to check if a folder exists, if it does return the folder document
 // If it does not exist, create a folder in the folders collection and return the folder document
@@ -368,8 +340,7 @@ async function createFolder(req, callback) {
       { $setOnInsert: folderSearch },
       { upsert: true, returnOriginal: true }
     );
-    console.log("Folder found: " + folderFound.name);
-    return callback(null, folderFound);
+    return callback(null, Promise.resolve(folderFound));
   } catch (error) {
     return callback(error);
   }
@@ -379,11 +350,9 @@ async function createFolder(req, callback) {
 app.post('/createFolder', function (req, res) {
   createFolder(req, function (err, folder) {
     if (err) {
-      console.log(err);
       res.status(500).send({ error: err.message });
     }
     else {
-      console.log(folder.value)
       res.send({ message: 'Folder created', folder: folder});
     }
   });
