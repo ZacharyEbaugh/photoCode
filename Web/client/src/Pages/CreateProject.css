@@ -123,6 +123,43 @@
     /* background-color: black; */
 }
 
+file-attachment {
+    width: 80%;
+    height: 20vh;
+    background-color: #e6e6e662;
+    border: 1px solid #000000;
+    border-radius: 15px;
+    margin: 1rem;
+    cursor: pointer;
+    position: relative;
+}
+
+file-attachment[hover] {
+    background-color: #e6e6e65b;
+}
+
+file-attachment input {
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    /* background-color: black; */
+}
+
+.file-attachment-text {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 3rem;
+    font-family: "Mono-Regular";
+    color: black;
+    position: absolute;
+    left: 0%;
+}
+
 .dropzone {
     width: 80%;
     height: 20vh;
@@ -149,7 +186,6 @@
     border-radius: 5px;
     padding: 1rem;
     margin: 1rem;
-    cursor: pointer;
     margin-bottom: 10%;
 }
 
@@ -175,22 +211,22 @@
 }
 
 .uploadedFile button {
-    /* background-color: white; */
     border: none;
     background: none;
-    border-radius: 10px;
-    /* font-size: 1.5vw; */
+    width: 2rem;
+    border-radius: 100%;
     font-family: "Mono-Regular";
     color: white;
     position:absolute;
-    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: black; */
     right: 0;
-    /* margin-right: 1rem; */
 }
 
 /* edit component with alt "delete" */
 .uploadedFile button img {
     width: 2.5rem;
-    /* height: 1.5rem; */
-    /* margin-right: 1rem; */
+    
 }

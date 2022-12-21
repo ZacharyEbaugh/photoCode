@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@auth0/auth0-react": "^1.12.0",
+    "@github/file-attachment-element": "^3.1.0",
     "@monaco-editor/react": "^4.4.6",
     "@mui/material": "^5.10.9",
     "@mui/styled-engine-sc": "^5.10.6",
