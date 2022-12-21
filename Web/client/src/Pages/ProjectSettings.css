@@ -133,6 +133,8 @@
     font-size: 1.5vw;
     width: 30%;
     height: 100%;
+    /* padding-top: 2%; */
+    /* padding-bottom: 2%; */
     background: #FFFFFF;
     border: none;
     box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);    border-radius: 11px;

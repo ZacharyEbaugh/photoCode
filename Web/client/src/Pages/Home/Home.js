@@ -71,7 +71,7 @@ function Home(props) {
                             </div>
                             <button className='createProjectButton' onClick={() => navigate('/CreateProject')}>
                                 <img className='createProjectIcon' src={folder_icon} />
-                                Create Project
+                                New
                             </button>
                         </div>
                     </header>
@@ -82,8 +82,8 @@ function Home(props) {
                                 <img className='projectImage' src={project.img_link} />
                                 <div className='projectTitlesWrapper'>
                                     <h1 className='projectTitle'>{project.name}</h1>
-                                    <h1 className='projectTitle'>Last Modified:</h1>
-                                    <h1 className='projectDate'>{project.date}</h1>
+                                    {/* <h1 className='projectDateDesc'>Last Modified:</h1> */}
+                                    <h1 className='projectDate'>Last modified: {project.date}</h1>
                                 </div>
                                 <div className='commonLangWrapper'>
                                     <div className='commonLang'>

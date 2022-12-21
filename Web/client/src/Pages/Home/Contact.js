@@ -16,10 +16,29 @@ import { PhotoCodeHeader } from '../PhotoCodeHeader';
 
 function Contact() {
     const [listOfUsers, setListOfUsers] = useState([]);
-    const [name, setName] = useState("");
-    const [password, setPassword] = useState("");
+    const [company, setCompany] = useState("");
+    const [message, setMessage] = useState("");
   
     const navigate = useNavigate();
+
+    // Axios call sendemail to user on button click
+    const sendEmail = () => {
+        Axios.post("http://localhost:3001/sendEmail", {
+            name: localStorage.getItem("name"),
+            email: localStorage.getItem("email"),
+            company: company,
+            message: message,
+        }).then((response) => {
+            if (response.data.message) {
+                alert(response.data.message);
+            } else {
+                alert("Email sent successfully!");
+            } 
+        });
+        // Clear input fields after email is sent
+        setCompany("");
+        setMessage("");
+    };
 
     return (
       <div className="containerContact">  
@@ -34,16 +53,21 @@ function Contact() {
                         <div className='socialLinksWrapper'>
                             <div className='socialNameWrapper'>
                                 <img className='socialIcon' src={linkedin_icon} />
-                                <h2 className='socialName'>LinkedIn</h2>
+                                <a href="https://www.linkedin.com/in/zachary-ebaugh-1a3271224/" target="_blank" rel="noreferrer">
+                                    LinkedIn
+                                </a>
                             </div>
                             <div className='socialNameWrapper'>
                                 <img className='socialIcon' src={github_icon} />
-                                <h2 className='socialName'>GitHub</h2>
+                                <a href="https://github.com/ZacharyEbaugh" target="_blank" rel="noreferrer">
+                                    GitHub
+                                </a>
                             </div>
                             <div className='socialNameWrapper'>
                                 <img className='socialIcon' src={terminal_icon} />
-                                <h2 className='socialName'>Portfolio</h2>
-                            </div>
+                                <a href="https://zacharyebaugh.com" target="_blank" rel="noreferrer">
+                                    Portfolio
+                                </a>                            </div>
                         </div>
                     </div>
                 </div>
@@ -54,15 +78,20 @@ function Contact() {
                         <div className='socialLinksWrapper'>
                             <div className='socialNameWrapper'>
                                 <img className='socialIcon' src={linkedin_icon} />
-                                <h2 className='socialName'>LinkedIn</h2>
+                                <a href="https://www.linkedin.com/in/brandon-spangler-0680291a0/" target="_blank" rel="noreferrer">
+                                    LinkedIn
+                                </a>
                             </div>
                             <div className='socialNameWrapper'>
                                 <img className='socialIcon' src={github_icon} />
-                                <h2 className='socialName'>GitHub</h2>
-                            </div>
+                                <a href="https://github.com/brandonspangler2" target="_blank" rel="noreferrer">
+                                    GitHub
+                                </a>                            </div>
                             <div className='socialNameWrapper'>
                                 <img className='socialIcon' src={terminal_icon} />
-                                <h2 className='socialName'>Portfolio</h2>
+                                <a href="https://brandonspangler.com" target="_blank" rel="noreferrer">
+                                    Portfolio
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -72,12 +101,27 @@ function Contact() {
                 <h1 className='contactTitle'>Send us your thoughts</h1>
                 <div className='companyInputWrapper'>
                     <h2 className='inputTitle'>Company/Organization</h2>
-                    <input className='companyInput' />
+                    <input 
+                        className='companyInput'
+                        value={company}
+                        onChange={(event) => {
+                            setCompany(event.target.value);
+                        }} 
+                    />
                 </div>
                 <div className='contactMessageWrapper'>
                     <h2 className='inputTitle'>Message</h2>
-                    <textarea className='messageInput'></textarea>
+                    <textarea 
+                        className='messageInput'
+                        value={message}
+                        onChange={(event) => {
+                            setMessage(event.target.value);
+                        }}
+                        rows={5}
+                        cols={5}
+                    />
                 </div>
+                <button onClick={sendEmail}>Submit</button>
             </div>
         </section>
       </div>

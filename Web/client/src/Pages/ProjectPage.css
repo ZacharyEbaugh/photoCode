@@ -88,7 +88,7 @@
     height: 2vw;
 }
 
-.searchFile {
+.searchBar {
     width: 60%;
     height: 2vw;
     font-family: "Mono-Regular";
@@ -97,8 +97,37 @@
     background-color: #e6e6e6;
     border: none;
     border-radius: 7.76322px;
+    /* justify-content: center; */
+    padding: 0.45vw;
+}
+
+.searchFile {
+    width: 100%;
+    /* height: 2vw; */
+    font-family: "Mono-Regular";
+    font-size: 1.8vw;
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    border-radius: 7.76322px;
     justify-content: center;
     padding: 0.45vw;
+}
+
+.searchFile:focus {
+    outline: none;
+}
+
+.clearSearch {
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+.clearIcon {
+    width: 100%;
+    height: 100%;
 }
 
 .dirPath {
@@ -148,6 +177,7 @@
     align-items: center;
     /* border-bottom: 1px solid #D8D8D8; */
     cursor: pointer;
+    position: relative;
 }
 
 .line {
@@ -164,10 +194,53 @@
     margin-left: 1%;
 }
 
+.deleteButton {
+    width: 2vw;
+    height: 2vw;
+    cursor: pointer;
+    position: absolute;
+    right: 5%;
+    top: 30%;
+    color: white;
+}
+
+.deleteButton:hover {
+    color: red;
+}
+
+.newFileInput {
+    width: 100%;
+    border: none;
+    background: none;
+}
+
+.newFile {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+.fileNameInput {
+    font-size: 1.5vw;
+    font-weight: bold;
+    margin-left: 1%;
+    width: 90%;
+    border: none;
+    font-family: 'Mono-Regular';
+    background: none;
+}
+
+.fileNameInput:focus {
+    outline: none;
+}
+
 .goToFolder {
     width: 100%;
     border: none;
     background: none;
+    position: relative;
 }
 
 .goToFolder:hover {
@@ -180,6 +253,7 @@
     width: 100%;
     border: none;
     background: none;
+    position: relative;
 }
 
 .goToFile:hover {
@@ -211,7 +285,7 @@
 
 .settingsButton {
     width: 100%;
-    height: 10%;
+    /* height: 10%; */
     border-radius: 11px;
     /* border: 2px solid black; */
     background: #FFFFFF;
@@ -223,4 +297,6 @@
     font-size: 1.5vw;
     cursor: pointer;
     margin-bottom: 2%;
+    padding-top: 5%;
+    padding-bottom: 5%;
 }

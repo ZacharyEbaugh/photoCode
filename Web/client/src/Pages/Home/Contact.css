@@ -43,7 +43,7 @@ button, a {
 .main {
     display: flex;
     width: 100%;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 /* || Profile Box */
@@ -54,7 +54,7 @@ button, a {
 }
 
 .profileCard {
-    width: 31rem;
+    width: 37rem;
     height: 25rem;
     background-color: white;
     box-shadow: inset 0px 0px 8px 4px rgba(0, 0, 0, 0.1);
@@ -79,6 +79,7 @@ button, a {
 .contactInfoWrapper {
     display: flex;
     align-items: center;
+    justify-content: center;
     margin: 0 0 1rem 0;
 }
 
@@ -89,8 +90,18 @@ button, a {
     margin: 0 2.33rem 0 1.4rem;
 }
 
-.socialLinksWrapper {
+.socialNameWrapper a {
+    font-size: 3rem;
+    font-family: "Mono-Regular";
+    text-decoration: none;
+    color: black;
+    align-self: center;
+    padding-left: 1vw;
+}
 
+.socialNameWrapper a:hover {
+    color: #0066FF;
+    z-index: 2;
 }
 
 .socialNameWrapper {
@@ -100,8 +111,8 @@ button, a {
 }
 
 .socialIcon {
-    height: 2.5rem;
-    width: 2.5rem;
+    height: 3.5rem;
+    width: 3.5rem;
 }
 
 .socialName {
@@ -116,13 +127,16 @@ button, a {
 /* || Contact Form Styles */
 /* #region */
 .contactForm {
-    width: 46.5rem;
-    height: 50rem;
+    width: 75rem;
     background-color: white;
     border-radius: 1.33rem;
     box-shadow: inset 0px 0px 8px 4px rgba(0, 0, 0, 0.1);
-    padding: 0 4.5rem 0 3rem;
+    padding: 0 3.5rem 0 3rem;
     margin: 6.2rem 2rem 0 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
 }
 
 .contactTitle {
@@ -166,15 +180,36 @@ button, a {
     padding: 1rem 0 0 0.5rem;
     font-family: 'Mono-Regular';
     font-size: 1.75rem;
-    /* resize: ; */
+    resize: none;
 }
+
+.contactForm button {
+    font-size: 3rem;
+    color: black;
+    width: 40%;
+    background: none;
+    border-radius: 10px;
+    border: 2px solid black;
+    font-family: "Mono-Regular";
+    cursor: pointer;
+    align-self: center;
+    margin-bottom: 5%;
+  }
+
+  .contactForm button:hover {
+    font-size: 2vw;
+    background-color: black;
+    color: white;
+    border: 2px solid white;
+  }
+
 /* #endregion */
 
 /* || Media Styles */
 /* #region */
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 1775px) {
     .main {
-        flex-direction: column;
+        flex-direction: column-reverse;
         justify-content: center;
         align-items: center;
     }
