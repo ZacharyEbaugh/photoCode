@@ -59,7 +59,7 @@ function Home(props) {
     return (
       <div className="containerHome">  
         <PhotoCodeHeader/>
-        <section className='main'>
+        <div className='main'>
             <div className='sidebar'>
                 <div className='projectsWrapper'>
                     <header className='projectsHeader'>
@@ -76,14 +76,13 @@ function Home(props) {
                         </div>
                     </header>
                     {projects.map((project) => {
-                        console.log(project);
                         return (
-                            <section className='project' key={project._id}>
-                                <img className='projectImage' src={project.img_link} />
+                            <section className='project' key={project._id} onClick={() => console.log(project._id)}>
+                                <img className='projectImage' src={require("../../images/proj_1.png")} />
                                 <div className='projectTitlesWrapper'>
                                     <h1 className='projectTitle'>{project.name}</h1>
                                     {/* <h1 className='projectDateDesc'>Last Modified:</h1> */}
-                                    <h1 className='projectDate'>Last modified: {project.date}</h1>
+                                    <h1 className='projectDesc'>{project.description}</h1>
                                 </div>
                                 <div className='commonLangWrapper'>
                                     <div className='commonLang'>
@@ -103,15 +102,16 @@ function Home(props) {
                         );
                     })}
                 </div>
-
+            </div>
+            <div className='projectInformationWrapper'>
+                <div className='readMeWrapper'>
+                    <h1 className='readMeTitle'>Read Me</h1>
+                </div>
                 <div className='releaseNotesWrapper'>
                     <h1 className='releaseNotesTitle'>Release Notes</h1>
                 </div>
             </div>
-            <div className='readMeWrapper'>
-                <h1 className='readMeTitle'>Read Me</h1>
-            </div>
-        </section>
+        </div>
       </div>
     );
   }
