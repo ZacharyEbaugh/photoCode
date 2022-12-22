@@ -1,7 +1,6 @@
 import "./ProjectPage.css";
 import React,{ useState, useEffect } from 'react'
-
-import Editor from "@monaco-editor/react";
+import axios from "axios";
 
 import blueFolder from "./../images/blueFolder.png";
 import fileIcon from "./../images/file.png";
@@ -11,30 +10,33 @@ import newFolder from "./../images/newFolder.png";
 import { PhotoCodeHeader } from './PhotoCodeHeader';
 import { ProjectCommits } from './ProjectCommits';
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import { MdClear } from "react-icons/md";
 import { RiDeleteBin7Line, RiDeleteBin7Fill } from "react-icons/ri";
 
 
 function ProjectPage() {
-    const navigate = useNavigate();
-    var directoryTitle = "PhotoCode App";
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const [deleteFileName, setDeleteFileName] = useState('');
-    const [deleteFolderName, setDeleteFolderName] = useState('');
+  var directoryTitle = "";
 
-    // State variables for handling creating a new file
-    const [createFile, setCreateFile] = useState(false);
-    const [newFileName, setNewFileName] = useState('');
+  const [deleteFileName, setDeleteFileName] = useState('');
+  const [deleteFolderName, setDeleteFolderName] = useState('');
 
-    // State variables for handling creating a new folder
-    const [createFolder, setCreateFolder] = useState(false);
-    const [newFolderName, setNewFolderName] = useState('');
+  // State variables for handling creating a new file
+  const [createFile, setCreateFile] = useState(false);
+  const [newFileName, setNewFileName] = useState('');
 
-    // State variables for handling directory and view state
-    const [searchQuery, setSearchQuery] = useState('');
-    const [currentPath, setCurrentPath] = useState(['root']);
-    const [directory, setDirectory] = useState({
+  // State variables for handling creating a new folder
+  const [createFolder, setCreateFolder] = useState(false);
+  const [newFolderName, setNewFolderName] = useState('');
+
+  // State variables for handling directory and view state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPath, setCurrentPath] = useState(['root']);
+  const [directory, setDirectory] = useState({
     root: {
       type: 'folder',
       name: 'directoryTitle',
@@ -103,9 +105,48 @@ function ProjectPage() {
     }
   });
 
-  const handleFolderClick = (folderName) => {
-    setCurrentPath([...currentPath, folderName]);
-    console.log(currentPath);
+  const [folders, setFolders] = useState([]);
+  const [files, setFiles] = useState([]);
+
+  // Get all folders and files from the database for this project
+  useEffect(() => {
+    // Grab project_id from the header and use it to get all folders and files for this project
+    const query = new URLSearchParams(location.search);
+    const project_id = query.get('project_id');
+    console.log("ID: " + project_id);
+    axios.get(`http://localhost:3001/getFolders?project_id=${project_id}`)
+      .then(res => {
+        console.log(res.data[0]._id);
+        const root_folder_id = res.data[0]._id;
+        axios.get(`http://localhost:3001/getFolders?project_id=${root_folder_id}`)
+        .then(res => {
+          console.log(res.data);
+          setFolders(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      })
+      .catch(err => {
+          console.log(err);
+      });
+  }, []);
+
+
+
+  const handleFolderClick = async(folder_name, folder_id) => {
+    // setCurrentPath([...currentPath, folderName]);
+
+    // Get the folder_id from the folderName
+    // Grab the folders and files within the folder that was clicked and change the states to display them
+    const update_folders = await axios.get(`http://localhost:3001/getFolders?project_id=${folder_id}`);
+
+    const files = await axios.get(`http://localhost:3001/getFiles?project_id=${folder_id}`);
+    setFolders(update_folders.data);
+    setFiles(files.data);
+    setCurrentPath([...currentPath, folder_name]);
+
+    // console.log(currentPath);
     setSearchQuery('');
     setCreateFile(false);
   };
@@ -116,229 +157,233 @@ function ProjectPage() {
   }, [searchQuery]);
 
   const handleBreadcrumbClick = breadcrumbIndex => {
-    setCurrentPath(currentPath.slice(0, breadcrumbIndex + 1));
+    // console.log(currentPath);
+    console.log(breadcrumbIndex);
+    // setCurrentPath(currentPath.slice(0, breadcrumbIndex + 1));
+
+
+
   };
 
-  const currentFolder = currentPath.reduce(
-    (directory, folderName) => directory[folderName].contents,
-    directory
-  );
+  // const currentFolder = currentPath.reduce(
+  //   (directory, folderName) => directory[folderName].contents,
+  //   directory
+  // );
 
-  const search = (query) => {
-    // Set the searchQuery state variable to the query argument
-    setCreateFile(false);
-    setCreateFolder(false);
-    setSearchQuery(query);
-  }
+  // const search = (query) => {
+  //   // Set the searchQuery state variable to the query argument
+  //   setCreateFile(false);
+  //   setCreateFolder(false);
+  //   setSearchQuery(query);
+  // }
 
-  const handleClear = () => {
-    setSearchQuery('');
-  }
+  // const handleClear = () => {
+  //   setSearchQuery('');
+  // }
 
-  // Flatten the directory structure into a single array of items
-  const allItems = Object.keys(currentFolder).reduce((acc, key) => acc.concat(currentFolder[key]), []);
+  // // Flatten the directory structure into a single array of items
+  // const allItems = Object.keys(currentFolder).reduce((acc, key) => acc.concat(currentFolder[key]), []);
 
-  // Use the filter method to search for items matching the search query
-  const searchResults = allItems.filter(item => item.name && item.name.includes(searchQuery));
+  // // Use the filter method to search for items matching the search query
+  // const searchResults = allItems.filter(item => item.name && item.name.includes(searchQuery));
   
-  const addNewFolder = () => {
-    setCreateFile(false);
-    setCreateFolder(true);
-  }
+  // const addNewFolder = () => {
+  //   setCreateFile(false);
+  //   setCreateFolder(true);
+  // }
 
-  const addNewFile = () => {
-    setCreateFolder(false);
-    setCreateFile(true);
-  }
+  // const addNewFile = () => {
+  //   setCreateFolder(false);
+  //   setCreateFile(true);
+  // }
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      if (newFolderName == '')
-        addFile();
-      else
-        addFolder();
-    }
-    else if (event.key === 'Escape') {
-      setCreateFile(false);
-      setCreateFolder(false);
-    }
-  }
+  // const handleKeyDown = (event) => {
+  //   if (event.key === 'Enter') {
+  //     if (newFolderName == '')
+  //       addFile();
+  //     else
+  //       addFolder();
+  //   }
+  //   else if (event.key === 'Escape') {
+  //     setCreateFile(false);
+  //     setCreateFolder(false);
+  //   }
+  // }
 
-  const addFolder = () => {
-    // Handle generating unique file object name
-    const newFolder = newFolderName;
+  // const addFolder = () => {
+  //   // Handle generating unique file object name
+  //   const newFolder = newFolderName;
 
-    // Create new file object
-    const variable = {
-      [newFolder]: {
-        type: 'folder',
-        name: newFolderName,
-        contents: {}
-      }
-    }
+  //   // Create new file object
+  //   const variable = {
+  //     [newFolder]: {
+  //       type: 'folder',
+  //       name: newFolderName,
+  //       contents: {}
+  //     }
+  //   }
 
-    // Navigate to current path in directory
-    let current = directory;
-    currentPath.forEach(path => {
-      if (path === 'root')
-        current = current[path];
-      else
-        current = current.contents[path];
-    });
-    current.contents = {
-      ...current.contents,
-      [newFolder]: variable[newFolder]
-    }
-    setDirectory(directory);
-    setCreateFolder(false);
-    setNewFolderName('');
-    console.log(directory);
-  }
+  //   // Navigate to current path in directory
+  //   let current = directory;
+  //   currentPath.forEach(path => {
+  //     if (path === 'root')
+  //       current = current[path];
+  //     else
+  //       current = current.contents[path];
+  //   });
+  //   current.contents = {
+  //     ...current.contents,
+  //     [newFolder]: variable[newFolder]
+  //   }
+  //   setDirectory(directory);
+  //   setCreateFolder(false);
+  //   setNewFolderName('');
+  //   // console.log(directory);
+  // }
 
-  const addFile = () => {
-    // Handle language extention and image
-    var extention = newFileName.split('.').pop();
-    var language = '';
-    var languageImage = '';
-    switch (extention) {
-      case 'html':
-        language = 'html';
-        languageImage = 'https://img.icons8.com/color/48/000000/html-5.png';
-        break;
-      case 'css':
-        language = 'css';
-        languageImage = 'https://img.icons8.com/color/48/000000/css3.png';
-        break;
-      case 'js':
-        language = 'JavaScript';
-        languageImage = 'https://img.icons8.com/color/48/000000/javascript.png';
-        break;
-      case 'py':
-        language = 'Python';
-        languageImage = 'https://img.icons8.com/color/48/000000/python.png';
-        break;
-      case 'php':
-        language = 'PHP';
-        languageImage = 'https://img.icons8.com/color/48/000000/php.png';
-        break;
-      case 'java':
-        language = 'Java';
-        languageImage = 'https://img.icons8.com/color/48/000000/java-coffee-cup-logo.png';
-        break;
-      case 'c':
-        language = 'C';
-        languageImage = 'https://img.icons8.com/color/48/000000/c-programming.png';
-        break;
-      case 'cpp':
-        language = 'C++';
-        languageImage = 'https://img.icons8.com/color/48/000000/c-plus-plus-logo.png';
-        break;
-      case 'cs':
-        language = 'C#';
-        languageImage = 'https://img.icons8.com/color/48/000000/c-sharp-logo.png';
-        break;
-      case 'go':
-        language = 'Go';
-        languageImage = 'https://img.icons8.com/color/48/000000/golang.png';
-        break;
-      case 'swift':
-        language = 'Swift';
-        languageImage = 'https://img.icons8.com/color/48/000000/swift.png';
-        break;
-      case 'kt':
-        language = 'Kotlin';
-        languageImage = 'https://img.icons8.com/color/48/000000/kotlin.png';
-        break;
-      case 'rb':
-        language = 'Ruby';
-        languageImage = 'https://img.icons8.com/color/48/000000/ruby-programming-language.png';
-        break;
-      case 'sql':
-        language = 'SQL';
-        languageImage = 'https://img.icons8.com/color/48/000000/sql.png';
-        break;
-      case 'json':
-        language = 'JSON';
-        languageImage = 'https://img.icons8.com/color/48/000000/json.png';
-        break;
-      case 'xml':
-        language = 'XML';
-        languageImage = 'https://img.icons8.com/color/48/000000/xml-file.png';
-        break;
-      default:
-        language = 'text';
-        languageImage = fileIcon;
-    }
+  // const addFile = () => {
+  //   // Handle language extention and image
+  //   var extention = newFileName.split('.').pop();
+  //   var language = '';
+  //   var languageImage = '';
+  //   switch (extention) {
+  //     case 'html':
+  //       language = 'html';
+  //       languageImage = 'https://img.icons8.com/color/48/000000/html-5.png';
+  //       break;
+  //     case 'css':
+  //       language = 'css';
+  //       languageImage = 'https://img.icons8.com/color/48/000000/css3.png';
+  //       break;
+  //     case 'js':
+  //       language = 'JavaScript';
+  //       languageImage = 'https://img.icons8.com/color/48/000000/javascript.png';
+  //       break;
+  //     case 'py':
+  //       language = 'Python';
+  //       languageImage = 'https://img.icons8.com/color/48/000000/python.png';
+  //       break;
+  //     case 'php':
+  //       language = 'PHP';
+  //       languageImage = 'https://img.icons8.com/color/48/000000/php.png';
+  //       break;
+  //     case 'java':
+  //       language = 'Java';
+  //       languageImage = 'https://img.icons8.com/color/48/000000/java-coffee-cup-logo.png';
+  //       break;
+  //     case 'c':
+  //       language = 'C';
+  //       languageImage = 'https://img.icons8.com/color/48/000000/c-programming.png';
+  //       break;
+  //     case 'cpp':
+  //       language = 'C++';
+  //       languageImage = 'https://img.icons8.com/color/48/000000/c-plus-plus-logo.png';
+  //       break;
+  //     case 'cs':
+  //       language = 'C#';
+  //       languageImage = 'https://img.icons8.com/color/48/000000/c-sharp-logo.png';
+  //       break;
+  //     case 'go':
+  //       language = 'Go';
+  //       languageImage = 'https://img.icons8.com/color/48/000000/golang.png';
+  //       break;
+  //     case 'swift':
+  //       language = 'Swift';
+  //       languageImage = 'https://img.icons8.com/color/48/000000/swift.png';
+  //       break;
+  //     case 'kt':
+  //       language = 'Kotlin';
+  //       languageImage = 'https://img.icons8.com/color/48/000000/kotlin.png';
+  //       break;
+  //     case 'rb':
+  //       language = 'Ruby';
+  //       languageImage = 'https://img.icons8.com/color/48/000000/ruby-programming-language.png';
+  //       break;
+  //     case 'sql':
+  //       language = 'SQL';
+  //       languageImage = 'https://img.icons8.com/color/48/000000/sql.png';
+  //       break;
+  //     case 'json':
+  //       language = 'JSON';
+  //       languageImage = 'https://img.icons8.com/color/48/000000/json.png';
+  //       break;
+  //     case 'xml':
+  //       language = 'XML';
+  //       languageImage = 'https://img.icons8.com/color/48/000000/xml-file.png';
+  //       break;
+  //     default:
+  //       language = 'text';
+  //       languageImage = fileIcon;
+  //   }
 
-    // Handle generating unique file object name
-    const newFile = newFileName;
+  //   // Handle generating unique file object name
+  //   const newFile = newFileName;
 
-    // Create new file object
-    const variable = {
-      [newFile]: {
-        type: 'file',
-        name: newFileName,
-        language: language,
-        languageImage: languageImage
-      }
-    }
+  //   // Create new file object
+  //   const variable = {
+  //     [newFile]: {
+  //       type: 'file',
+  //       name: newFileName,
+  //       language: language,
+  //       languageImage: languageImage
+  //     }
+  //   }
   
-    // Navigate to current path in directory
-    let current = directory;
-    currentPath.forEach(path => {
-      if (path === 'root')
-        current = current[path];
-      else
-        current = current.contents[path];
-    });
+  //   // Navigate to current path in directory
+  //   let current = directory;
+  //   currentPath.forEach(path => {
+  //     if (path === 'root')
+  //       current = current[path];
+  //     else
+  //       current = current.contents[path];
+  //   });
 
-    // Add new file object to directory
-    current.contents = {
-      ...current.contents,
-      [newFile]: variable[newFile]
-    }
+  //   // Add new file object to directory
+  //   current.contents = {
+  //     ...current.contents,
+  //     [newFile]: variable[newFile]
+  //   }
 
-    // Update directory state
-    setDirectory(directory);
-    setCreateFile(false);
-    setNewFileName('');
-  }
+  //   // Update directory state
+  //   setDirectory(directory);
+  //   setCreateFile(false);
+  //   setNewFileName('');
+  // }
 
+  // useEffect(() => {
+  //   const deleteFile = (deleteFileName) => {
+  //     let current = directory;
+  //     currentPath.forEach(path => {
+  //       if (path === 'root')
+  //         current = current[path];
+  //       else
+  //         current = current.contents[path];
+  //     });
+  //     delete current.contents[deleteFileName];
+  //     setDirectory(directory);
+  //     setDeleteFileName('');
+  //   }
+  //   deleteFile(deleteFileName);
+  // }, [deleteFileName]);
 
-  useEffect(() => {
-    const deleteFile = (deleteFileName) => {
-      let current = directory;
-      currentPath.forEach(path => {
-        if (path === 'root')
-          current = current[path];
-        else
-          current = current.contents[path];
-      });
-      delete current.contents[deleteFileName];
-      setDirectory(directory);
-      setDeleteFileName('');
-    }
-    deleteFile(deleteFileName);
-  }, [deleteFileName]);
-
-  useEffect(() => {
-    const deleteFolder = (deleteFolderName) => {
-      console.log(deleteFolderName);
-      let current = directory;
-      console.log(currentPath);
-      currentPath.forEach(path => {
-        if (path === 'root')
-          current = current[path];
-        else
-          current = current.contents[path];
-      });
-      delete current.contents[deleteFolderName];
-      setDirectory(directory);
-      setDeleteFolderName('');
-    }
-    deleteFolder(deleteFolderName);
-    console.log(directory);
-  }, [deleteFolderName]);
+  // useEffect(() => {
+  //   const deleteFolder = (deleteFolderName) => {
+  //     // console.log(deleteFolderName);
+  //     let current = directory;
+  //     // console.log(currentPath);
+  //     currentPath.forEach(path => {
+  //       if (path === 'root')
+  //         current = current[path];
+  //       else
+  //         current = current.contents[path];
+  //     });
+  //     delete current.contents[deleteFolderName];
+  //     setDirectory(directory);
+  //     setDeleteFolderName('');
+  //   }
+  //   deleteFolder(deleteFolderName);
+  //   // console.log(directory);
+  // }, [deleteFolderName]);
 
   return (
     <div className="ProjectPageContainer">
@@ -382,7 +427,42 @@ function ProjectPage() {
               : <></>))}
             </div>
             <div className="folderDisplay">
-              {Object.entries((searchQuery === '') ? currentFolder : searchResults).map(([key, value]) =>
+
+                {Object.entries((searchQuery === '') ? folders : searchResults).map(([key, folder]) => (
+                  <button className='goToFolder'>
+                    <div className="line"></div>
+                    <div className="folders" key={key}  onClick={() => handleFolderClick(folder.name, folder._id)}>
+                      <img src={blueFolder} alt="blue folder" className="folderIcon"/>
+                      <h1>
+                        {folder.name}
+                      </h1>
+                      
+                    </div>
+                    <RiDeleteBin7Fill
+                      className="deleteButton"
+                      onClick={() => setDeleteFolderName(folder.name)}
+                    />
+                  </button>
+                ))}
+                {Object.entries((searchQuery === '') ? files : searchResults).map(([key, file]) => (
+                  <button className='goToFolder'>
+                    <div className="line"></div>
+                    <div className="folders" key={key}  onClick={() => console.log(file._id)}>
+                      <img src={fileIcon} alt="blue folder" className="folderIcon"/>
+                      <h1>
+                        {file.filename}
+                      </h1>
+                      
+                    </div>
+                    <RiDeleteBin7Fill
+                      className="deleteButton"
+                      onClick={() => setDeleteFolderName(file.name)}
+                    />
+                  </button>
+                ))}
+
+
+              {/* {Object.entries((searchQuery === '') ? currentFolder : searchResults).map(([key, value]) =>
                 value.type === 'folder' ? (
                   <button className='goToFolder'>
                     <div className="line"></div>
@@ -413,7 +493,7 @@ function ProjectPage() {
                       />
                   </button>
                 )
-              )}
+              )} */}
               {(createFile) && <button className="newFileInput">
                 <div className="line"></div>
                 <div className="newFile">

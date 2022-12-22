@@ -90,10 +90,45 @@ button, a {
 
 .inputWrapper {
     /* margin: 0 0 0.75rem 0; */
+    width: 100%;
+    margin: 1rem;
+    padding: 0.2rem 1rem 0.2rem 0.2rem;
     display: flex;
     align-items: center;
     background-color: #D9D9D9;
     border-radius: 0.33rem;
+    position: relative;
+}
+
+.searchProjects {
+    font-family: "Mono-Regular";
+    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    border-radius: 7.76322px;
+    justify-content: center;
+}
+
+.clearProjectSearch {
+    cursor: pointer;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    background: none;
+    border: none;
+}
+
+.clearProjectSearchIcon {
+    height: 100%;
+    width: 50%;
+    right: 0;
+}
+
+
+.searchProjects:focus {
+    outline: none;
 }
 
 .searchIcon {

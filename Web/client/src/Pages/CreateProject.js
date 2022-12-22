@@ -113,8 +113,7 @@ const CreateProject = () => {
                 parent_id: localStorage.getItem('parent_id'),
               })
               .then((response) => {
-                console.log(response);
-                if (response.data.folder.value._id === null) {
+                if (response.data.folder.value === null) {
                   // localStorage.setItem('parent_id', response.data.folder.lastErrorObject.upserted);
                   localStorage.setItem('parent_id', response.data.folder.lastErrorObject.upserted);
                 }
@@ -134,6 +133,7 @@ const CreateProject = () => {
         const resolvedFiles = await Promise.all(filePromises);
         resolvedFiles.forEach((file) => {
           formData.append('files', file, file.name + ":::::" + file.parent_id);
+          console.log(file);
         });
         
         try {

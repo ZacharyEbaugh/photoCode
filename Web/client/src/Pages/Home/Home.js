@@ -7,36 +7,34 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
-import jwt from 'jwt-decode';
 
 import account_picture from '../../images/account.png';
 import folder_icon from '../../images/Folder_Icon.png';
+import { MdClear } from "react-icons/md";
 import search_icon from '../../images/Search_Icon.png';
 import { PhotoCodeHeader } from '../PhotoCodeHeader';
+
 
 function Home(props) {
     const navigate = useNavigate();
 
     const [projects, setProjects] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
 
-    // const listOfProjects = [
-    //     {
-    //         name: "Portfolio Webpage",
-    //         date: "5/27/2022",
-    //         img_link: require("../../images/proj_1.png"),
-    //         lang_1: "HTML",
-    //         lang_2: "CSS",
-    //         lang_3: "JavaScript",
-    //     },
-    //     {
-    //         name: "Stupid Webpage",
-    //         date: "5/27/2022",
-    //         img_link: require("../../images/proj_1.png"),
-    //         lang_1: "HTML",
-    //         lang_2: "CSS",
-    //         lang_3: "JavaScript",
-    //     }
-    // ]
+    const search = (query) => {
+        // Set the searchQuery state variable to the query argument
+        setSearchQuery(query);
+        console.log(searchQuery);
+    }
+
+    const handleClear = () => {
+        setSearchQuery('');
+    }
+
+    useEffect(() => {
+        // Update the input field whenever the searchQuery state variable changes
+        document.getElementById('search-input').value = searchQuery;
+      }, [searchQuery]);
 
     // Get all projects for user from database
     useEffect(() => {
@@ -44,9 +42,6 @@ function Home(props) {
         console.log(user_id);
         axios.get(`http://localhost:3001/getAllProjects?user_id=${user_id}`)
             .then(res => {
-                // res.data.forEach(project => {
-                //     listOfProjects.push(project);
-                // });
                 setProjects(res.data);
             })
             .catch(err => {
@@ -55,6 +50,8 @@ function Home(props) {
         console.log(projects);
     }, []);
 
+    // Filter projects based on search query and return the filtered projects list
+    const searchResults = projects.filter((item) => item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase()));
   
     return (
       <div className="containerHome">  
@@ -65,19 +62,33 @@ function Home(props) {
                     <header className='projectsHeader'>
                         <h1 className='projectsTitle'>Projects</h1>
                         <div className='projectsButtonWrapper'>
-                            <div className='inputWrapper'>
+                            <div className="inputWrapper">
+                                <input
+                                    type="text"
+                                    id="search-input"
+                                    className="searchProjects"
+                                    placeholder="Search Projects"
+                                    onChange={event => search(event.target.value)}
+                                />
+                                {(searchQuery != '') && <button className="clearProjectSearch" onClick={handleClear}>
+                                    <MdClear 
+                                        className="clearProjectSearchIcon"
+                                    />
+                                </button>}
+                            </div>
+                            {/* <div className='inputWrapper'>
                                 <img className='searchIcon' src={search_icon} />
                                 <input className='searchProjectInput' placeholder='Search Projects'></input>
-                            </div>
+                            </div> */}
                             <button className='createProjectButton' onClick={() => navigate('/CreateProject')}>
                                 <img className='createProjectIcon' src={folder_icon} />
                                 New
                             </button>
                         </div>
                     </header>
-                    {projects.map((project) => {
+                    {Object.entries((searchQuery === '') ? projects : searchResults).map(([key, project]) => {
                         return (
-                            <section className='project' key={project._id} onClick={() => console.log(project._id)}>
+                            <section className='project' key={project._id} onClick={() => console.log(navigate('/ProjectPage?project_id=' + project._id))}>
                                 <img className='projectImage' src={require("../../images/proj_1.png")} />
                                 <div className='projectTitlesWrapper'>
                                     <h1 className='projectTitle'>{project.name}</h1>

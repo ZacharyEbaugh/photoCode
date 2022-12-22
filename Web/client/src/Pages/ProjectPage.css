@@ -38,7 +38,6 @@
     justify-content: space-around;
     align-items: flex-start;
     margin-top: 2%;
-
 }
 
 .dirBlock {
@@ -51,6 +50,8 @@
     flex-direction: column;
     /* justify-content: center; */
     align-items: center;
+    margin-bottom: 20rem;
+
 }
 
 .dirBlock h1 {

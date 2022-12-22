@@ -100,7 +100,7 @@ const projects = database.collection("projects");
 const folders = database.collection("folders");
 
 // Files collection
-const files = database.collection("files");
+const files = database.collection("folders.files");
 
 const ObjectId = require('mongodb').ObjectId;
 
@@ -313,7 +313,7 @@ app.get('/getFolders', function (req, res) {
 function getFiles(req, callback) {
   const project_id = req.query.project_id;
   const file = {
-    project_id: project_id
+    "metadata.parent_folder": project_id
   };
   files.find(file).toArray(function (err, files) {
     if (err || !files) {
