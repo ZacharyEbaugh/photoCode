@@ -37,6 +37,7 @@ export default function AccountPopUp() {
                         {
                             localStorage.removeItem('access_token');
                             localStorage.removeItem('id_token');
+                            localStorage.removeItem('user_id');
                             logout({redirectUri: 'http://localhost:3000',})
                         }}>Logout</button>
                     </div>

@@ -73,7 +73,7 @@ const CreateProject = () => {
     axios.post('http://localhost:3001/createProject', {
       name: projectName,
       description: projectDescription,
-      user: localStorage.getItem('id'),
+      user: localStorage.getItem('user_id'),
     })
     .then((response) => {
       const project_id = response.data.project_id;

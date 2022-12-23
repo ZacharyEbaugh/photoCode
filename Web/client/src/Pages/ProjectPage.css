@@ -195,6 +195,20 @@
     margin-left: 1%;
 }
 
+.downloadButton {
+    width: 2vw;
+    height: 2vw;
+    cursor: pointer;
+    position: absolute;
+    right: 10%;
+    top: 30%;
+    color: white;
+}
+
+.downloadButton:hover {
+    color: green;
+}
+
 .deleteButton {
     width: 2vw;
     height: 2vw;

@@ -253,34 +253,6 @@ app.get('/getAllProjects', function (req, res) {
   });
 });
 
-// // Function to get a project from the projects collection
-// function getProject(req, callback) {
-//   const project_id = req.query.project_id;
-//   const project = {
-//     _id: ObjectId(project_id)
-//   };
-//   projects.findOne(project, function (err, project) {
-//     if (err || !project) {
-//       return callback(err || new Error('the project does not exist'));
-//     }
-//     else {
-//       return callback(null, project);
-//     }
-//   });
-// }
-
-// // Route handler for getting a project
-// app.get('/getProject', function (req, res) {
-//   getProject(req, function (err, project) {
-//     if (err) {
-//       res.send({ message: 'Project not found' });
-//     }
-//     else {
-//       res.send(project);
-//     }
-//   });
-// });
-
 // Function to get all folders that belong to a project from the folders collection
 function getFolders(req, callback) {
   const project_id = req.query.project_id;
@@ -349,10 +321,14 @@ app.get('/getFiles', function (req, res) {
 */
 
 const fs = require('fs');
+const { set } = require("mongoose");
+const { TIMEOUT } = require("dns");
 
 const dbURI = 'mongodb+srv://PhotoCodeAuth0:' +
     mongodbPS +
     '@pccluster.urvaffs.mongodb.net/PhotoCode_db?retryWrites=true&w=majority'
+
+const bucket = new GridFSBucket(database, { bucketName: 'folders' });
 
 const fileStorage = new GridFsStorage({
   url: dbURI,
@@ -411,6 +387,36 @@ app.post('/createFolder', function (req, res) {
     else {
       console.log(folder);
       res.send({ message: 'Folder created', folder: folder});
+    }
+  });
+});
+
+// Function to get a single file from the files collection by id and return the file
+async function getFile(req, callback) {
+  const file_id = req.query.file_id;
+  const chunks = [];
+
+  const file = await bucket.find({ _id: ObjectId(file_id) }).next();
+  const encoding = file.contentType;
+
+  bucket.openDownloadStream(ObjectId(file_id)).on('data', (chunk) => {
+    chunks.push(chunk);
+  }).on('error', (error) => {
+    return callback(error);
+  }).on('end', async() => {
+    const fileContents = Buffer.concat(chunks);
+    return callback(null, fileContents, encoding);
+  });
+}
+
+// Route handler for getting a single file
+app.get('/getFile', function (req, res) {
+  getFile(req, function (err, fileContents, encoding) {
+    if (err) {
+      res.status(500).send({ error: err.message });
+    }
+    else {
+      res.send({ fileContents: fileContents, encoding: encoding });
     }
   });
 });
