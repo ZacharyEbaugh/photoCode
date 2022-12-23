@@ -352,8 +352,6 @@ app.get('/getFiles', function (req, res) {
 ||----------------------------------------|| 
 */
 
-const fs = require('fs');
-
 const dbURI = 'mongodb+srv://PhotoCodeAuth0:' +
     mongodbPS +
     '@pccluster.urvaffs.mongodb.net/PhotoCode_db?retryWrites=true&w=majority'
