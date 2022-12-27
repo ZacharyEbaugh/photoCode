@@ -25,8 +25,8 @@ function ProjectPage() {
 
   const [projectName, setProjectName] = useState('');
 
-  const [deleteFileName, setDeleteFileName] = useState('');
-  const [deleteFolderName, setDeleteFolderName] = useState('');
+  const [deleteFile, setDeleteFile] = useState({});
+  const [deleteFolder, setDeleteFolder] = useState({});
 
   // State variables for handling creating a new file
   const [createFile, setCreateFile] = useState(false);
@@ -193,9 +193,36 @@ function ProjectPage() {
     // Remove the link element from the document
     document.body.removeChild(a);
     
-    
-    
     // fileDownload(response.data, file.name);
+  }
+
+  const handleFileDelete = async(file) => {
+    console.log(file);
+    const response = await axios.post('http://localhost:3001/deleteFile', {
+      "file_id": file._id
+    });
+
+    if (response)
+      setFiles(files.filter(f => f._id !== file._id));
+    else
+    {
+      console.log("FAILED to delete file");
+    }
+  }
+
+  const handleFolderDelete = async(folder) => {
+    console.log(folder);
+
+    const response = await axios.post('http://localhost:3001/deleteFolder', {
+      "folder_id": folder._id
+    });
+
+    if (response)
+      setFolders(folders.filter(f => f._id !== folder._id));
+    else
+    {
+      console.log("FAILED to delete folder");
+    }
   }
 
   // const currentFolder = currentPath.reduce(
@@ -477,14 +504,14 @@ function ProjectPage() {
                     />
                     <RiDeleteBin7Fill
                       className="deleteButton"
-                      onClick={() => setDeleteFolderName(folder.name)}
+                      onClick={() => handleFolderDelete(folder)}
                     />
                   </button>
                 ))}
                 {Object.entries((searchQuery === '') ? files : searchResults).map(([key, file]) => (
                   <button className='goToFolder'>
                     <div className="line"></div>
-                    <div className="folders" key={key}  onClick={() => console.log(file._id)}>
+                    <div className="folders" key={file._id}  onClick={() => navigate('/FileEdit?file_id=' + file._id + '&file_name=' + file.filename)}>
                       <img src={fileIcon} alt="blue folder" className="folderIcon"/>
                       <h1>
                         {file.filename}
@@ -497,7 +524,7 @@ function ProjectPage() {
                     />
                     <RiDeleteBin7Fill
                       className="deleteButton"
-                      onClick={() => setDeleteFolderName(file.name)}
+                      onClick={() => handleFileDelete(file)}
                     />
                   </button>
                 ))}

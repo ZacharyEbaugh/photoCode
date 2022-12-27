@@ -314,6 +314,39 @@ app.get('/getFiles', function (req, res) {
 ||------------------End Project creation/information------------------||
 */
 
+
+
+/* 
+||----------------------------------------||
+||Project deletion                        ||
+||----------------------------------------|| 
+*/
+
+// Delete project object from projects collection
+async function deleteProject(req, callback) {
+  const response = await projects.deleteOne({ _id: ObjectId(req.body.project_id) });
+  console.log(response);
+  return callback(null, "Test");
+}
+
+// Router for deleteFile function
+app.post('/deleteProject', function (req, res) {
+  deleteProject(req, function (err, response) {
+    if (err) {
+      res.status(500).send({ error: err.message });
+    }
+    else {
+      res.send(response);
+    }
+  });
+});
+
+/* 
+||------------------End Project deletion------------------||
+*/
+
+
+
 /* 
 ||----------------------------------------||
 ||Folder/File uploading                   ||
@@ -337,6 +370,7 @@ const fileStorage = new GridFsStorage({
     const fileInfo = file.originalname.split(':::::');
     const filename = fileInfo[0];
     const parent_id = fileInfo[1];
+    console.log(fileInfo);
     return new Promise((resolve, reject) => {
       const fileInfo = {
         filename: filename,
@@ -424,6 +458,85 @@ app.get('/getFile', function (req, res) {
 
 /* 
 ||------------------End file/folder creation/uploading------------------||
+*/
+
+/* 
+||----------------------------------------||
+||File/Folder Deletion                    ||
+||----------------------------------------|| 
+*/
+
+// Function that deletes file from MongoDB based on file_id
+async function deleteFile(req, callback) {
+  const response = await files.deleteOne({ _id: ObjectId(req.body.file_id)});
+  return callback(null, response);
+}
+
+// Router for deleteFile function
+app.post('/deleteFile', function (req, res) {
+  deleteFile(req, function (err, response) {
+    if (err) {
+      res.status(500).send({ error: err.message });
+    }
+    else {
+      res.send({ message: response });
+    }
+  });
+});
+
+// Function that delets folders from MongoDB based on folder_id
+async function deleteFolder(req, callback) {
+  // Start by finding and deleting all folders which this folder is a parent of
+  // For each folder, push the folder_id onto a stack
+  // After all folders are added to stack, and deleted, we can start deleting files
+  // For deleting files, call deleteAll based on the current id popped from the stack
+  // Continue until the stack is empty
+  const findSubFolders = folders.find({ parent_folder: req.body.folder_id});
+  findSubFolders.toArray(function(err, documents) {
+    // Iterate over the documents in the array
+    documents.forEach(function(document) {
+      files.deleteMany({ "metadata.parent_folder": document._id});
+    });
+  });
+
+  const deleteSubFolders = await folders.deleteMany({ parent_folder: req.body.folder_id}, function (err, deleteSub) {
+    if (err)
+    {
+      return callback(err, null);
+    }
+  });
+
+  const deleteTopFiles = await files.deleteMany({ "metadata.parent_folder": req.body.folder_id }, function (err, deleteSub) {
+    if (err)
+    {
+      return callback(err, null);
+    }
+  });
+
+  const deleteTopFolder = await folders.deleteMany({ _id: ObjectId(req.body.folder_id)}, function (err, deleteSub) {
+    if (err)
+    {
+      return callback(err, null);
+    }
+  });
+
+  return callback(null, "Success");
+}
+
+// Router for deleteFile function
+app.post('/deleteFolder', function (req, res) {
+  deleteFolder(req, function (err, response) {
+    if (err) {
+      res.status(500).send({ error: err.message });
+    }
+    else {
+      res.send(response);
+    }
+  });
+});
+
+/* 
+||------------------End file/folder deletion------------------||
 */
 
 /* 
