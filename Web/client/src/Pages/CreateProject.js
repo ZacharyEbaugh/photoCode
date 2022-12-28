@@ -8,7 +8,7 @@ import deleteFile from './../images/deleteFile.png';
 import { useNavigate } from 'react-router-dom';
 import { setNestedObjectValues } from "formik";
 
-const CreateProject = () => {
+const CreateProject = (props) => {
   const navigate = useNavigate();
 
   const [projectName, setProjectName] = useState('');
@@ -68,7 +68,12 @@ const CreateProject = () => {
 
   // handle create project button
   const handleCreateProject = () => {
-    console.log('Create project button clicked');
+    props.updateAuth({
+      isLoading: true,
+      isAuthenticated: localStorage.getItem('access_token') != null ? true : false,
+      accessToken: localStorage.getItem('access_token') != null ? localStorage.getItem('access_token') : null,
+      idToken: localStorage.getItem('id_token') != null ? localStorage.getItem('id_token') : null,
+    });
     // Call /createProject endpoint to create project in the database and get the project id
     axios.post('http://localhost:3001/createProject', {
       name: projectName,
@@ -149,6 +154,12 @@ const CreateProject = () => {
       })
       .catch((error) => {
         console.log(error);
+      });
+      props.updateAuth({
+        isLoading: false,
+        isAuthenticated: localStorage.getItem('access_token') != null ? true : false,
+        accessToken: localStorage.getItem('access_token') != null ? localStorage.getItem('access_token') : null,
+        idToken: localStorage.getItem('id_token') != null ? localStorage.getItem('id_token') : null,
       });
       navigate('/Home');
     })

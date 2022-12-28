@@ -5,7 +5,7 @@ import { PhotoCodeHeader } from './PhotoCodeHeader';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-function ProjectSettings() {
+function ProjectSettings(props) {
 
     const members = {
         member1: {
@@ -23,7 +23,12 @@ function ProjectSettings() {
     }
 
     const handleProjectDelete = async() => {
-        console.log("TEST");
+        props.updateAuth({
+            isLoading: true,
+            isAuthenticated: localStorage.getItem('access_token') != null ? true : false,
+            accessToken: localStorage.getItem('access_token') != null ? localStorage.getItem('access_token') : null,
+            idToken: localStorage.getItem('id_token') != null ? localStorage.getItem('id_token') : null,
+        });
         // Delete folders/files from projects contents
         const project_id = localStorage.getItem('project_id');
 
@@ -37,8 +42,15 @@ function ProjectSettings() {
             })
         );
 
-        if (response)
+        if (response) {
+            await props.updateAuth({
+                isLoading: false,
+                isAuthenticated: localStorage.getItem('access_token') != null ? true : false,
+                accessToken: localStorage.getItem('access_token') != null ? localStorage.getItem('access_token') : null,
+                idToken: localStorage.getItem('id_token') != null ? localStorage.getItem('id_token') : null,
+            });
             navigate('/Home');
+        }
         else
         {
             console.log("FAILED to delete folder");

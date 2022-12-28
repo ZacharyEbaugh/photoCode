@@ -1,5 +1,5 @@
 import './Home.css';
-import {
+import React, {
     useState, 
     useEffect
 } from "react";
@@ -13,9 +13,26 @@ import folder_icon from '../../images/Folder_Icon.png';
 import { MdClear } from "react-icons/md";
 import search_icon from '../../images/Search_Icon.png';
 import { PhotoCodeHeader } from '../PhotoCodeHeader';
+import ErrorPage from '../ErrorPage';
 
 
 function Home(props) {
+
+    // UI Mounted Loader
+    const [isLoading, setIsLoading] = React.useState(false);
+
+    // const handleLoading = () => {
+    //     setIsLoading(false);
+    // }
+
+    // useEffect(()=>{
+    //     window.addEventListener("load",handleLoading);
+    //     return () => window.removeEventListener("load",handleLoading);
+    //     handleLoading();
+    // },[])
+
+
+
     const navigate = useNavigate();
 
     const [projects, setProjects] = useState([]);
@@ -30,30 +47,11 @@ function Home(props) {
     const handleClear = () => {
         setSearchQuery('');
     }
-    useEffect(() => {
-        // Update the input field whenever the searchQuery state variable changes
-        document.getElementById('search-input').value = searchQuery;
-      }, [searchQuery]);
 
-    // Get all projects for user from database
     // useEffect(() => {
-    //     const user_id = localStorage.getItem('user_id');
-    //     console.log("In use effect to populate projects");
-
-    //     const getProjects = async() => {
-    //         await axios.get(`http://localhost:3001/getAllProjects?user_id=${user_id}`)
-    //         .then(res => {
-    //             console.log(res.data);
-    //             setProjects(res.data);
-    //         })
-    //         .catch(err => {
-    //             console.log(err);
-    //         });
-    //     }
-    //     getProjects();
-    //     console.log(projects);
-    // }, []);
-
+    //     // Update the input field whenever the searchQuery state variable changes
+    //     document.getElementById('search-input').value = searchQuery;
+    //   }, [searchQuery]);
 
     useEffect(() => {
         // Create a Promise to get the user ID from local storage
@@ -85,7 +83,7 @@ function Home(props) {
     // Filter projects based on search query and return the filtered projects list
     const searchResults = projects.filter((item) => item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase()));
   
-    return (
+    return !isLoading ? (
       <div className="containerHome">  
         <PhotoCodeHeader/>
         <div className='main'>
@@ -156,6 +154,8 @@ function Home(props) {
             </div>
         </div>
       </div>
+    ) : (
+        <ErrorPage/>
     );
   }
   

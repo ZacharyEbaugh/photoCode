@@ -178,12 +178,12 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Landingpage />}/>
-          <Route path="/Home" element={<Home />}/>
+          <Route path="/Home" element={<Home auth={auth} updateAuth={updateAuth}/>}/>
           <Route path="/Account" element={<Account />}/>
           <Route path="/Contact" element={<Contact />}/>
-          <Route path="/ProjectSettings" element={<ProjectSettings />}/>
+          <Route path="/ProjectSettings" element={<ProjectSettings auth={auth} updateAuth={updateAuth}/>}/>
           <Route path="/ProjectPage" element={<ProjectPage />}/>
-          <Route path="/CreateProject" element={<CreateProject />}/>
+          <Route path="/CreateProject" element={<CreateProject auth={auth} updateAuth={updateAuth}/>}/>
           <Route path="/FileEdit" element={<FileEdit />}/>
         </Routes>
       </Router>

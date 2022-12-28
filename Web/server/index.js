@@ -475,7 +475,8 @@ app.get('/getFile', function (req, res) {
 
 // Function that deletes file from MongoDB based on file_id
 async function deleteFile(req, callback) {
-  const response = await files.deleteOne({ _id: ObjectId(req.body.file_id)});
+  const response = await files.deleteOne({ _id: ObjectId(req.body.file_id)})
+  .then(await chunks.deleteOne({ files_id: ObjectId(req.body.file_id)}));
   return callback(null, response);
 }
 
@@ -542,13 +543,11 @@ async function deleteFilesFolder(folder_id) {
      chunks.deleteMany({ files_id: file._id });
      files.deleteOne({ _id: file._id });
    })
-   console.log(folder_id);
    const deleteFolder = folders.deleteOne({ "_id": ObjectId(folder_id) }, function (err, deleteSub) {
      if (err)
      {
        return callback(err, null);
      }
-     console.log(deleteSub);
    });
 }
 
