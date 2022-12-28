@@ -102,6 +102,9 @@ const folders = database.collection("folders");
 // Files collection
 const files = database.collection("folders.files");
 
+// Chunks collection
+const chunks = database.collection("folders.chunks");
+
 const ObjectId = require('mongodb').ObjectId;
 
 
@@ -226,19 +229,23 @@ app.post('/createProject', function (req, res) {
 });
 
 // Function to get all projects from the projects collection
-function getAllProjects(req, callback) {
+async function getAllProjects(req, callback) {
   const user_id = req.query.user_id;
+  console.log("USER ID: " + user_id);
   const user = {
     user: user_id
   };
-  projects.find(user).toArray(function (err, projects) {
-    if (err || !projects) {
-      return callback(err || new Error('the project does not exist'));
-    }
-    else {
-      return callback(null, projects);
-    }
-  });
+
+  const allProjects = await projects.find(user).toArray();
+
+  console.log(allProjects);
+
+  if (!allProjects) {
+    return callback(err || new Error('the project does not exist'));
+  }
+  else {
+    return callback(null, allProjects);
+  }
 }
 
 // Route handler for getting all projects
@@ -491,36 +498,58 @@ async function deleteFolder(req, callback) {
   // After all folders are added to stack, and deleted, we can start deleting files
   // For deleting files, call deleteAll based on the current id popped from the stack
   // Continue until the stack is empty
-  const findSubFolders = folders.find({ parent_folder: req.body.folder_id});
-  findSubFolders.toArray(function(err, documents) {
-    // Iterate over the documents in the array
-    documents.forEach(function(document) {
-      files.deleteMany({ "metadata.parent_folder": document._id});
-    });
+  const subFolders = [];
+  var findSubFolders = folders.find({ parent_folder: req.body.folder_id});
+
+  findSubFolders = await findSubFolders.toArray();
+
+  findSubFolders.forEach(folder => {
+    subFolders.push(folder);
   });
 
-  const deleteSubFolders = await folders.deleteMany({ parent_folder: req.body.folder_id}, function (err, deleteSub) {
-    if (err)
-    {
-      return callback(err, null);
-    }
-  });
+  // Delete top level files and folders
+  await deleteFilesFolder(req.body.folder_id);
 
-  const deleteTopFiles = await files.deleteMany({ "metadata.parent_folder": req.body.folder_id }, function (err, deleteSub) {
-    if (err)
-    {
-      return callback(err, null);
-    }
-  });
 
-  const deleteTopFolder = await folders.deleteMany({ _id: ObjectId(req.body.folder_id)}, function (err, deleteSub) {
-    if (err)
+  while (subFolders.length != 0)
+  {
+    const curFolder = subFolders.pop();
+
+    console.log(curFolder._id.valueOf());
+
+    findSubFolders = folders.find({ parent_folder: curFolder._id.valueOf()});
+
+    findSubFolders = await findSubFolders.toArray();
+
+    if (findSubFolders.length > 0)
     {
-      return callback(err, null);
+      findSubFolders.forEach(folder => {
+        subFolders.push(folder);
+      })
     }
-  });
+
+    await deleteFilesFolder(curFolder._id.valueOf());
+  }
 
   return callback(null, "Success");
+}
+
+async function deleteFilesFolder(folder_id) {
+   // Find all files that have to be deleted for this folder
+   var filesToDelete = files.find({"metadata.parent_folder": folder_id }).toArray();
+   (await filesToDelete).forEach(file => {
+     // Delete files chunks
+     chunks.deleteMany({ files_id: file._id });
+     files.deleteOne({ _id: file._id });
+   })
+   console.log(folder_id);
+   const deleteFolder = folders.deleteOne({ "_id": ObjectId(folder_id) }, function (err, deleteSub) {
+     if (err)
+     {
+       return callback(err, null);
+     }
+     console.log(deleteSub);
+   });
 }
 
 // Router for deleteFile function

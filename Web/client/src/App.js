@@ -23,7 +23,7 @@ import jwt from 'jwt-decode';
 
 function App() {
   const [auth, setAuth] = useState({
-    isLoading: true,
+    isLoading: false,
     isAuthenticated: localStorage.getItem('access_token') != null ? true : false,
     accessToken: localStorage.getItem('access_token') != null ? localStorage.getItem('access_token') : null,
     idToken: localStorage.getItem('id_token') != null ? localStorage.getItem('id_token') : null,
@@ -49,6 +49,12 @@ function App() {
   // This effect only runs when users are initially directed to the home page and there is no access token stored yet
   useEffect(() => {
     if (window.location.pathname === "/Home" && !localStorage.getItem("access_token")) {
+      updateAuth({
+        isLoading: true,
+        isAuthenticated: false,
+        accessToken: '',
+        idToken: ''
+      });
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.has('code')) {
         const code = urlParams.get('code');
@@ -75,7 +81,7 @@ function App() {
 
             // Update auth state
             updateAuth({
-                isLoading: false,
+                isLoading: true,
                 isAuthenticated: true,
                 accessToken: localStorage.getItem("access_token"),
                 idToken: localStorage.getItem("id_token")
@@ -110,8 +116,14 @@ function App() {
                 connection: localStorage.getItem('connection'),
               })
               .then(response => {
-                console.log(response.data._id);
+                console.log("USER_ID" + response.data._id);
                 localStorage.setItem("user_id", response.data._id);
+                updateAuth({
+                  isLoading: false,
+                  isAuthenticated: true,
+                  accessToken: localStorage.getItem("access_token"),
+                  idToken: localStorage.getItem("id_token")
+                });
               })
               .catch(error => {
                 console.log(error);
@@ -127,7 +139,7 @@ function App() {
   // we will remove local storage tokens
   // This effect will run when users hit the splash page and there is a valid access token stored
   useEffect(() => {
-    if (window.location.pathname === "/" && localStorage.getItem("access_token")) {
+    if (window.location.pathname === "/" && localStorage.getItem("access_token") && localStorage.getItem('user_id')) {
       updateAuth({
         isLoading: false,
         isAuthenticated: true,
@@ -139,12 +151,23 @@ function App() {
   }, [window.location]);
 
   if (!auth.isAuthenticated) {
+
     return (
       <Router>
         <Routes>
           <Route path="/" element={<Landingpage />}/>
           <Route path="/Register" element={<Register />}/>
           <Route path="/Login" element={<Login auth={auth} updateAuth={updateAuth}/>}/>
+        </Routes>
+      </Router>
+    )
+  }
+
+  else if (auth.isLoading === true) {
+    return (
+      <Router>
+        <Routes>
+          <Route path="*" element={<ErrorPage />}/>
         </Routes>
       </Router>
     )

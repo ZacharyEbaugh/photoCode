@@ -3,6 +3,7 @@ import React from 'react';
 import { PhotoCodeHeader } from './PhotoCodeHeader';
 
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function ProjectSettings() {
 
@@ -19,6 +20,29 @@ function ProjectSettings() {
             name: 'John Doe',
             profilePicture: 'https://avatars.githubusercontent.com/u/59611677?v=4'
         },
+    }
+
+    const handleProjectDelete = async() => {
+        console.log("TEST");
+        // Delete folders/files from projects contents
+        const project_id = localStorage.getItem('project_id');
+
+        const response = await axios.post('http://localhost:3001/deleteFolder', {
+            "folder_id": project_id
+        })
+        .then(
+            // Delete project object from projects collection
+            axios.post('http://localhost:3001/deleteProject', {
+                project_id: project_id
+            })
+        );
+
+        if (response)
+            navigate('/Home');
+        else
+        {
+            console.log("FAILED to delete folder");
+        }
     }
 
     const navigate = useNavigate();
@@ -64,6 +88,7 @@ function ProjectSettings() {
                             })}
                         </div>
                     </div>
+                    <button className='DeleteProjectButton' onClick={() => handleProjectDelete()}>Delete Project</button>
                 </div>
             </div>
         </div>

@@ -30,25 +30,57 @@ function Home(props) {
     const handleClear = () => {
         setSearchQuery('');
     }
-
     useEffect(() => {
         // Update the input field whenever the searchQuery state variable changes
         document.getElementById('search-input').value = searchQuery;
       }, [searchQuery]);
 
     // Get all projects for user from database
+    // useEffect(() => {
+    //     const user_id = localStorage.getItem('user_id');
+    //     console.log("In use effect to populate projects");
+
+    //     const getProjects = async() => {
+    //         await axios.get(`http://localhost:3001/getAllProjects?user_id=${user_id}`)
+    //         .then(res => {
+    //             console.log(res.data);
+    //             setProjects(res.data);
+    //         })
+    //         .catch(err => {
+    //             console.log(err);
+    //         });
+    //     }
+    //     getProjects();
+    //     console.log(projects);
+    // }, []);
+
+
     useEffect(() => {
-        const user_id = localStorage.getItem('user_id');
-        console.log(user_id);
-        axios.get(`http://localhost:3001/getAllProjects?user_id=${user_id}`)
+        // Create a Promise to get the user ID from local storage
+        const getUserId = new Promise((resolve, reject) => {
+          const user_id = localStorage.getItem('user_id');
+          if (user_id) {
+            resolve(user_id);
+          } else {
+            reject(new Error('No user ID found in local storage'));
+          }
+        });
+    
+        // Wait for the Promise to resolve before making the API call
+        getUserId.then(user_id => {
+          // Fetch the projects from the database
+          axios.get(`http://localhost:3001/getAllProjects?user_id=${user_id}`)
             .then(res => {
-                setProjects(res.data);
+              // Update the state with the fetched projects
+              setProjects(res.data);
             })
             .catch(err => {
-                console.log(err);
+              console.log(err);
             });
-        console.log(projects);
-    }, []);
+        }).catch(err => {
+          console.error(err);
+        });
+      }, [localStorage.getItem('user_id')]);
 
     // Filter projects based on search query and return the filtered projects list
     const searchResults = projects.filter((item) => item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase()));

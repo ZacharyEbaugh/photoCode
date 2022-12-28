@@ -116,6 +116,7 @@ function ProjectPage() {
     // Grab project_id from the header and use it to get all folders and files for this project
     const query = new URLSearchParams(location.search);
     const project_id = query.get('project_id');
+    localStorage.setItem('project_id', project_id);
     console.log("ID: " + project_id);
     axios.get(`http://localhost:3001/getFolders?project_id=${project_id}`)
       .then(res => {
@@ -211,10 +212,9 @@ function ProjectPage() {
   }
 
   const handleFolderDelete = async(folder) => {
-    console.log(folder);
-
     const response = await axios.post('http://localhost:3001/deleteFolder', {
-      "folder_id": folder._id
+    "folder": folder,  
+    "folder_id": folder._id
     });
 
     if (response)
