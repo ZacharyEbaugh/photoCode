@@ -40,36 +40,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
-// // Configure authentication middleware for the application 
-// const { auth, requiresAuth } = require('express-openid-connect');
-// // const { isObjectIdOrHexString } = require("mongoose");
-
-// // const config = {
-// //   authRequired: false,
-// //   auth0Logout: true,
-// //   baseURL: 'http://localhost:3000',
-// //   clientID: 'R15Hb8sCd5OiULwScyqwCBtTwQKbgYMs',
-// //   issuerBaseURL: process.env.REACT_APP_AUTH0_DOMAIN,
-// //   secret: process.env.REACT_APP_AUTH0_CLIENT_SECRET,
-// // };
-
-// // // The `auth` router attaches /login, /logout
-// // // and /callback routes to the baseURL
-// // app.use(auth(config));
-
-// // // req.oidc.isAuthenticated is provided from the auth router
-// // app.get('/', (req, res) => {
-// //   res.send(
-// //     req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out'
-// //   )
-// // });
-
-// // // The /profile route will show the user profile as JSON
-// // app.get('/profile', requiresAuth(), (req, res) => {
-// //   res.send(JSON.stringify(req.oidc.user, null, 2));
-// // });
-
 // Connect to MongoDB Cluster
 const mongodbPS = process.env.MONGO_PASSWORD;
 const client = new MongoClient(
@@ -106,8 +76,6 @@ const files = database.collection("folders.files");
 const chunks = database.collection("folders.chunks");
 
 const ObjectId = require('mongodb').ObjectId;
-
-
 
 /* 
 ||----------------------------------------||
@@ -187,6 +155,36 @@ app.post('/getUser', function (req, res) {
   });
 });
 
+// Function to search for a user in the users collection
+function searchUsers(req, callback) {
+  const username = req.query.username;
+  const user = {
+    username: username
+  };
+  users.find(user, function (err, users) {
+    if (err || !users) {
+      return callback(err || new Error('the user does not exist'));
+    }
+    else {
+      return callback(null, users);
+    }
+  });
+}
+
+// Route handler for searching for a user
+app.get('/searchUsers', function (req, res) {
+  searchUsers(req, function (err, users) {
+    if (err) {
+      res.send({ message: 'User not found' });
+    }
+    else {
+      res.send(users);
+    }
+  });
+});
+
+
+
 
 /* 
 ||------------------End User creation/information------------------||
@@ -231,10 +229,9 @@ app.post('/createProject', function (req, res) {
 // Function to get all projects from the projects collection
 async function getAllProjects(req, callback) {
   const user_id = req.query.user_id;
-  console.log("USER ID: " + user_id);
-  const user = {
-    user: user_id
-  };
+  // Check for all projects that have a user matching the user_id or if the user_id is found in the collaborators array
+  const user = { $or: [{ user: user_id }, { collaborators: user_id }] };
+
 
   const allProjects = await projects.find(user).toArray();
 
@@ -256,6 +253,34 @@ app.get('/getAllProjects', function (req, res) {
     }
     else {
       res.send(projects);
+    }
+  });
+});
+
+// Function to get a project from the projects collection
+function getProject(req, callback) {
+  const project_id = req.query.project_id;
+  const project = {
+    _id: ObjectId(project_id)
+  };
+  projects.findOne(project, function (err, project) {
+    if (err || !project) {
+      return callback(err || new Error('the project does not exist'));
+    }
+    else {
+      return callback(null, project);
+    }
+  });
+}
+
+// Route handler for getting a project
+app.get('/getProject', function (req, res) {
+  getProject(req, function (err, project) {
+    if (err) {
+      res.send({ message: 'Project not found' });
+    }
+    else {
+      res.send(project);
     }
   });
 });
@@ -319,6 +344,183 @@ app.get('/getFiles', function (req, res) {
 
 /* 
 ||------------------End Project creation/information------------------||
+*/
+
+
+/* 
+||----------------------------------------||
+||Project updates/collaboration           ||
+||----------------------------------------|| 
+*/
+
+// Function to update a project in the projects collection
+function updateProject(req, callback) {
+  const project_id = req.body.project_id;
+  const name = req.body.name;
+  const description = req.body.description;
+  const project = {
+    _id: ObjectId(project_id)
+  };
+  const newProject = {
+    $set: {
+      name: name,
+      description: description
+    }
+  };
+  projects.updateOne(project, newProject, function (err, updated) {
+    if (err) return callback(err);
+    callback(null, updated);
+  });
+}
+
+// Route handler for updating a project
+app.post('/updateProject', function (req, res) {
+  updateProject(req, function (err, updated) {
+    if (err) {
+      res.status(500).send({ error: err.message });
+    }
+    else {
+      res.send({ message: 'Project updated' });
+    }
+  });
+});
+
+// Function to add a collaborator to a project in the projects collection
+function addCollaborator(req, callback) {
+  const project_id = req.query.project_id;
+  const collaborator = req.query.user_id;
+  const project = {
+    _id: ObjectId(project_id)
+  };
+  const newProject = {
+    $push: {
+      collaborators: collaborator
+    }
+  };
+  // Check if the project already has the collaborator
+  projects.findOne(project, function (err, project) {
+    if (err || !project) {
+      return callback(err || new Error('the project does not exist'));
+    }
+    else {
+      if (project.collaborators.includes(collaborator)) {
+        return callback(null, project);
+      }
+      else {
+        projects.updateOne(project, newProject, function (err, updated) {
+          if (err) return callback(err);
+          callback(null, updated);
+        });
+      }
+    }
+  });
+}
+
+// Route handler for adding a collaborator to a project
+app.get('/acceptInvite', function (req, res) {
+  addCollaborator(req, function (err, updated) {
+    if (err) {
+      res.status(500).send({ error: err.message });
+    }
+    else {
+      res.redirect('http://localhost:3000/');
+    }
+  });
+});
+
+// Function to find all collaborators of a project in the projects collection
+function getCollaborators(req, callback) {
+  const project_id = req.query.project_id;
+  const project = {
+    _id: ObjectId(project_id)
+  };
+  projects.findOne(project, function (err, project) {
+    if (err || !project) {
+      return callback(err || new Error('the project does not exist'));
+    }
+    else {
+      return callback(null, project.collaborators);
+    }
+  });
+}
+
+// Route handler for finding all collaborators of a project
+app.get('/getCollaborators', function (req, res) {
+  getCollaborators(req, function (err, collaborators) {
+    if (err) {
+      res.status(500).send({ error: err.message });
+    }
+    else {
+      // Call function to get collaborator information from the users collection
+      getCollaboratorInfo(collaborators, function (err, collaboratorsInfo) {
+        if (err) {
+          res.status(500).send({ error: err.message });
+        }
+        else {
+          res.send(collaboratorsInfo);
+        }
+      });
+    }
+  });
+});
+
+async function getCollaboratorInfo(collaborators, callback) {
+  console.log(collaborators);
+  var collaboratorsInfo = [];
+  for (let i = 0; i < collaborators.length; i++) {
+    const collaborator = {
+      _id: ObjectId(collaborators[i])
+    };
+    try {
+      const user = await users.findOne(collaborator);
+      if (!user) {
+        console.log("the user does not exist");
+      } else {
+        console.log("found");
+        collaboratorsInfo.push(user);
+      }
+    } catch (err) {
+      console.log(err);
+      return callback(err);
+    }
+  }
+  return callback(null, collaboratorsInfo);
+}
+
+// Function to remove a collaborator from a project in the projects collection
+function removeCollaborator(req, callback) {
+  const project_id = req.query.project_id;
+  const collaborator = req.query.user_id;
+  const project = {
+    _id: ObjectId(project_id)
+  };
+  const newProject = {
+    $pull: {
+      collaborators: collaborator
+    }
+  };
+  projects.updateOne(project, newProject, function (err, updated) {
+    if (err) return callback(err);
+    callback(null, updated);
+  });
+}
+
+// Route handler for removing a collaborator from a project
+app.get('/removeCollaborator', function (req, res) {
+  removeCollaborator(req, function (err, updated) {
+    if (err) {
+      res.status(500).send({ error: err.message });
+    }
+    else {
+      res.send({ message: 'Collaborator removed' });
+    }
+  });
+});
+
+
+
+/* 
+||------------------End Project updates------------------||
 */
 
 
@@ -569,6 +771,75 @@ app.post('/deleteFolder', function (req, res) {
 
 /* 
 ||----------------------------------------||
+||Folder/File editing                     ||
+||----------------------------------------|| 
+*/
+
+// Function that edits a files contents based on file_id 
+async function editFile(req, callback) {
+  const file_id = req.body.file_id;
+  const file_contents = req.body.file_contents;
+  console.log(file_contents);
+
+  bucket.find({ _id: ObjectId(file_id) }).next(
+    function (err, file) {
+      if (err) {
+        return callback(err, null);
+      }
+      else {
+        console.log(file);
+        deleteFile({ body: { file_id: file_id } }, function (err, response) {
+          if (err) {
+            return callback(err, null);
+          }
+          else {
+            const uploadStream = bucket.openUploadStreamWithId(file._id, file.filename, {
+              // contentType: encoding,
+              contentType: file.contentType,
+              metadata: {
+                parent_folder: file.metadata.parent_folder
+              }
+            });
+          
+            // uploadStream.write(fileContents);
+            // uploadStream.end();
+    
+            // Update the file
+            uploadStream.end(Buffer.from(file_contents, 'utf8'), (err) => {
+              if (err) {
+                console.error(err);
+                return;
+              }
+              console.log('File updated');
+            });
+          }
+        });
+          
+        return callback(null, "Success");
+      }
+    }
+  );
+}
+
+// Router for editFile function
+app.post('/updateFile', function (req, res) {
+  editFile(req, function (err, response) {
+    if (err) {
+      res.status(500).send({ error: err.message });
+    }
+    else {
+      res.send(response);
+    }
+  });
+});
+
+
+/* 
+||------------------End file/folder editing------------------||
+*/
+
+/* 
+||----------------------------------------||
 ||Email handler                           ||
 ||----------------------------------------|| 
 */
@@ -626,7 +897,44 @@ app.post('/sendEmail', function (req, res) {
   });
 });
 
+// Send an email to the user asking if they would like to accept the invite, if they do, add them to an attribute of a project object in the database
+app.post('/sendProjectInvite', function (req, res) {
+  // get the email, company, and message from the request body
+  const email = req.body.email;
+  const project_id = req.body.project_id;
+  const project_name = req.body.project_name;
+  const user_id = req.body.user_id;
 
+  // create the subject line for the email
+  const subject = `You have been invited to join ${project_name} on PhotoCode!`;
+
+  // create a transport using the default SMTP transport
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'photocodedev@gmail.com',
+      pass: process.env.EMAIL_PASSWORD
+    }
+  });
+  // Create the message
+  const message = `You have been invited to join ${project_name} on PhotoCode! Click the link below to accept the invite and join the project! \n\n http://localhost:3001/acceptInvite?project_id=${project_id}&user_id=${user_id}`;
+
+  // send the email
+  transporter.sendMail({
+    from: 'photocodedev@gmail.com',
+    to: email,
+    subject: subject,
+    text: message,
+  }, function(err) {
+    // handle any errors that occurred while sending the email
+    if (err) {
+      console.log(err);
+      res.status(500).send({ error: err.message });
+    } else {
+      res.send({ message: 'Email sent successfully' });
+    }
+  });
+});
 
 
 // Start the app

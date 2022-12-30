@@ -1,25 +1,25 @@
 @font-face {
     font-family: "Mono-Regular";
     src: local("JetBrainsMono-Regular"),
-        url(".././fonts/JetBrainsMono-Regular.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-Regular.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Mono-Medium";
     src: local("JetBrainsMono-Medium"),
-        url(".././fonts/JetBrainsMono-Medium.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-Medium.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Mono-Bold";
     src: local("JetBrainsMono-Bold"),
-        url(".././fonts/JetBrainsMono-Bold.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-Bold.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Mono-ExtraBold";
     src: local("JetBrainsMono-ExtraBold"),
-        url(".././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
 }
 
 .commitsBox {

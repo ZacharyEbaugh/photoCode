@@ -5,19 +5,28 @@ import axios from 'axios';
 import CodeMirror from '@uiw/react-codemirror';
 import { langs, loadLanguage } from '@uiw/codemirror-extensions-langs';
 
+import {tags} from "@lezer/highlight"
+import {HighlightStyle} from "@codemirror/language"
+import {syntaxHighlighting} from "@codemirror/language"
+
+
 import { Buffer } from 'buffer';
 
 import {
   FaFileCode,
   FaRegFolderOpen
 } from "react-icons/fa";
-import { PhotoCodeHeader } from './PhotoCodeHeader';
+import { PhotoCodeHeader } from '.././PhotoCodeHeader';
+import { useNavigate } from 'react-router-dom';
 
 function File_Edit() {
-
+  const navigate = useNavigate();
   // State variable to holder file information
   const [fileName, setFileName] = useState('');
   const [fileId, setFileId] = useState('');
+  const [code, setCode] = useState('Hello World!');
+  const langLoad = loadLanguage('java');
+
 
  
   // Axios call to get file information
@@ -42,10 +51,29 @@ function File_Edit() {
     getFileInfo();
 
   }, [fileId])
- 
-    const [code, setCode] = useState('Hello World!');
- 
-    const langLoad = loadLanguage('java');
+
+  // API call to update file information
+  const updateFile = async () => {
+    console.log(code);
+    console.log(fileId);
+    console.log(typeof code);
+    const response = await axios.post(`http://localhost:3001/updateFile`, {
+      file_id: fileId,
+      file_contents: code
+    });
+    if (response.status === 200) {
+      console.log('File updated');
+      navigate(-1);
+    }
+    else {
+      console.log('File not updated');
+    }
+  } 
+
+  const myHighlightStyle = HighlightStyle.define([
+    {tag: tags.keyword, color: "#fc6"},
+    {tag: tags.comment, color: "#f5d", fontStyle: "italic"}
+  ])
 
   return (
     <div className="containerFileEdit">
@@ -53,14 +81,19 @@ function File_Edit() {
       <div className="Edit_Commit">
         <div className='File'>
           <div className="editor">
+            <button className="backButton" onClick={() => navigate(-1)}>
+              {"<- Back to " + fileName.split('.')[0] + ""}
+            </button>
             <h1 className="fileTitle">
               Editing {fileName}
             </h1>
             <CodeMirror 
               className='CodeMirror'
               value={code}
+              minHeight={'20vh'}
               maxHeight={'60vh'}
               theme='light'
+              extensions={[syntaxHighlighting(myHighlightStyle)]}
               mode={'javascript'}
               onChange={(editor, change) => {
                 setCode(editor.valueOf());
@@ -80,9 +113,15 @@ function File_Edit() {
                 className="description"
                 placeholder="Changes made..."  
               />
-              <button className="updateFile">            
-                  Update File
-              </button>
+              <div className='buttons'>
+                <button className="cancelButton" onClick={() => navigate(-1)}>
+                    Cancel
+                </button>
+                <button className="updateFile" onClick={() => updateFile()}>            
+                    Update File
+                </button>
+              </div>
+        
           </div>
       </div>
     </div>

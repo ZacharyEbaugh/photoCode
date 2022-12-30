@@ -4,12 +4,12 @@ import axios from "axios";
 import { Buffer } from 'buffer';
 import fileDownload from 'js-file-download'
 
-import blueFolder from "./../images/blueFolder.png";
-import fileIcon from "./../images/file.png";
-import newFile from "./../images/newFile.png";
-import newFolder from "./../images/newFolder.png";
+import blueFolder from "../.././images/blueFolder.png";
+import fileIcon from "../.././images/file.png";
+import newFile from "../.././images/newFile.png";
+import newFolder from "../.././images/newFolder.png";
 
-import { PhotoCodeHeader } from './PhotoCodeHeader';
+import { PhotoCodeHeader } from '.././PhotoCodeHeader';
 import { ProjectCommits } from './ProjectCommits';
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -25,9 +25,6 @@ function ProjectPage() {
 
   const [projectName, setProjectName] = useState('');
 
-  const [deleteFile, setDeleteFile] = useState({});
-  const [deleteFolder, setDeleteFolder] = useState({});
-
   // State variables for handling creating a new file
   const [createFile, setCreateFile] = useState(false);
   const [newFileName, setNewFileName] = useState('');
@@ -38,76 +35,11 @@ function ProjectPage() {
 
   // State variables for handling directory and view state
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchFoldersResults, setSearchFoldersResults] = useState([]);
+  const [searchFilesResults, setSearchFilesResults] = useState([]);
   const [currentPath, setCurrentPath] = useState([]);
-  const [directory, setDirectory] = useState({
-    root: {
-      type: 'folder',
-      name: 'directoryTitle',
-      contents: {
-        folder1: {
-          type: 'folder',
-          name: 'folder1',
-          contents: {
-            file1: {
-              type: 'file',
-              name: 'file1',
-              language: 'css',
-              languageImage: 'https://img.icons8.com/color/48/000000/css3.png',
-            },
-            file2: {
-              type: 'file',
-              name: 'file2',
-              language: 'JavaScript',
-              languageImage: 'https://img.icons8.com/color/48/000000/javascript.png',
-            }
-          }
-        },
-        folder2: {
-          type: 'folder',
-          name: 'folder2',
-          contents: {
-            folder7: {
-              type: 'folder',
-              name: 'folder7',
-              contents: {
-                folder8: {
-                  type: 'folder',
-                  name: 'folder8',
-                  contents: {
-                  }
-                }
-              }
-            },
-            file3: {
-              type: 'file',
-              name: 'file3',
-              language: 'JavaScript',
-              languageImage: 'https://img.icons8.com/color/48/000000/css3.png',
-            },
-            file4: {
-              type: 'file',
-              name: 'index.html',
-              language: 'PHP',
-              languageImage: 'https://img.icons8.com/color/48/000000/php.png',
-            },
-            file: {
-              type: 'file',
-              name: 'tests',
-              language: '',
-              languageImage: 'https://img.icons8.com/color/48/000000/php.png',
-            },
-          }
-        },
-        'fileOuter.py': {
-          type: 'file',
-          name: 'fileOuter.py',
-          language: 'Python',
-          languageImage: 'https://img.icons8.com/color/48/000000/python.png',
-        },
-      }
-    }
-  });
 
+  const [currentFolder, setCurrentFolder] = useState([]);
   const [folders, setFolders] = useState([]);
   const [files, setFiles] = useState([]);
 
@@ -122,11 +54,12 @@ function ProjectPage() {
       .then(res => {
         const root_folder_id = res.data[0]._id;
         setProjectName(res.data[0].name);
+        setCurrentFolder(res.data[0]);
         res.data[0].name = "root";
         setCurrentPath([...currentPath, res.data[0]]);
         axios.get(`http://localhost:3001/getFolders?project_id=${root_folder_id}`)
         .then(res => {
-          console.log(res.data);
+          console.log(res.data._id);
           setFolders(res.data);
         })
         .catch(err => {
@@ -139,29 +72,62 @@ function ProjectPage() {
   }, []);
 
   const updateDirContents = async(folder) => {
-    // setCurrentPath([...currentPath, folderName]);
-
     // Get the folder_id from the folderName
     // Grab the folders and files within the folder that was clicked and change the states to display them
-    
-    console.log(folder);
-    
     const update_folders = await axios.get(`http://localhost:3001/getFolders?project_id=${folder._id}`);
     const files = await axios.get(`http://localhost:3001/getFiles?project_id=${folder._id}`);
-
     return [update_folders.data, files.data];
   };
 
   const handleFolderClick = async(folder) => {
+    setCurrentFolder(folder);
     const [update_folders, files] = await updateDirContents(folder);
     setFolders(update_folders);
     setFiles(files);
+    // Check if we are traversing folder tree or just updating the current folder
+    if (currentPath.length > 0 && currentPath[currentPath.length - 1]._id === folder._id) {
+      return;
+    }
     setCurrentPath([...currentPath, folder]);
   };
 
+  const search = (query) => {
+    // Set the searchQuery state variable to the query argument
+    setCreateFile(false);
+    setCreateFolder(false);
+    setSearchQuery(query);
+  }
+
+  const handleClear = () => {
+    // Clear the searchQuery state variable and the search-input
+    setCreateFile(false);
+    setCreateFolder(false);
+    setSearchQuery('');
+    const searchInput = document.getElementById('search-input');
+    searchInput.value = '';
+  }
+
+
   useEffect(() => {
-    // Update the input field whenever the searchQuery state variable changes
-    document.getElementById('search-input').value = searchQuery;
+    // Filter the folders based on the searchQuery
+    const foldersResults = folders.filter(folder => {
+      return folder.name.toLowerCase().includes(searchQuery);
+    });
+
+    setSearchFoldersResults(foldersResults);
+
+    // Filter the files based on the searchQuery
+    const filesResults = files.filter(file => {
+      return file.filename.toLowerCase().includes(searchQuery);
+    });
+
+    setSearchFilesResults(filesResults);
+
+    // Event listener so the search-input reflects the current searchQuery
+    // const searchInput = document.getElementById('search-input');
+    // searchInput.value = searchQuery;
+
+
   }, [searchQuery]);
 
   const handleDirPathClick = async(directory, index) => {
@@ -169,19 +135,15 @@ function ProjectPage() {
     setFolders(update_folders);
     setFiles(files);
     setCurrentPath(currentPath.slice(0, index + 1));
-    console.log(currentPath);
-
   };
 
   const handleDownload = async(file) => {
-    console.log(file);
     const response = await axios.get(`http://localhost:3001/getFile?file_id=${file._id}&file_name=${file.filename}`);
-    console.log(response.data.fileContents.data);
-
+    // Convert the hex string to a buffer
     const buffer = Buffer.from(response.data.fileContents.data, 'hex')
-
+    // Convert the buffer to a Blob object
     const blob = new Blob([buffer], {type: 'application/octet-stream'});
-    
+    // Create a link element
     const a = document.createElement('a');
     // Set the href attribute of the link element to the URL for the Blob
     a.href = URL.createObjectURL(blob);
@@ -193,12 +155,9 @@ function ProjectPage() {
     a.click();
     // Remove the link element from the document
     document.body.removeChild(a);
-    
-    // fileDownload(response.data, file.name);
   }
 
   const handleFileDelete = async(file) => {
-    console.log(file);
     const response = await axios.post('http://localhost:3001/deleteFile', {
       "file_id": file._id
     });
@@ -230,76 +189,76 @@ function ProjectPage() {
   //   directory
   // );
 
-  // const search = (query) => {
-  //   // Set the searchQuery state variable to the query argument
-  //   setCreateFile(false);
-  //   setCreateFolder(false);
-  //   setSearchQuery(query);
-  // }
-
-  // const handleClear = () => {
-  //   setSearchQuery('');
-  // }
-
   // // Flatten the directory structure into a single array of items
   // const allItems = Object.keys(currentFolder).reduce((acc, key) => acc.concat(currentFolder[key]), []);
 
   // // Use the filter method to search for items matching the search query
   // const searchResults = allItems.filter(item => item.name && item.name.includes(searchQuery));
   
-  // const addNewFolder = () => {
-  //   setCreateFile(false);
-  //   setCreateFolder(true);
-  // }
+  const addNewFolder = () => {
+    setCreateFile(false);
+    setCreateFolder(true);
+  }
 
-  // const addNewFile = () => {
-  //   setCreateFolder(false);
-  //   setCreateFile(true);
-  // }
+  const addNewFile = () => {
+    setCreateFolder(false);
+    setCreateFile(true);
+  }
 
-  // const handleKeyDown = (event) => {
-  //   if (event.key === 'Enter') {
-  //     if (newFolderName == '')
-  //       addFile();
-  //     else
-  //       addFolder();
-  //   }
-  //   else if (event.key === 'Escape') {
-  //     setCreateFile(false);
-  //     setCreateFolder(false);
-  //   }
-  // }
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      if (newFolderName == '')
+      {
+        addFile();
+      }
+      else
+      {
+        addFolder();
+      }
+    }
+    else if (event.key === 'Escape') {
+      setCreateFile(false);
+      setCreateFolder(false);
+    }
+  }
 
-  // const addFolder = () => {
-  //   // Handle generating unique file object name
-  //   const newFolder = newFolderName;
+  const addFolder = async() => {
+    // Handle generating unique file object name
+    const newFolder = newFolderName;
+    // Axios call to create new folder
+    await axios.post('http://localhost:3001/createFolder', {
+      name: newFolder,
+      parent_id: currentFolder._id
+    })
+    .then(res => {
+      // Update the folders state variable
+      handleFolderClick(currentFolder);
+      setCreateFolder(false);
+    });
+  } 
 
-  //   // Create new file object
-  //   const variable = {
-  //     [newFolder]: {
-  //       type: 'folder',
-  //       name: newFolderName,
-  //       contents: {}
-  //     }
-  //   }
+  const addFile = async() => {
+    // Handle generating unique file object name
+    const fileName = newFileName + ':::::' + currentFolder._id;
+    console.log(fileName)
+    // Create a blank file to upload to gridfs
+    const file = new File([""], fileName, {type: "text/plain"});
+    // Create a form data object to send to the server
+    const formData = new FormData();
+    formData.append('files', file);
 
-  //   // Navigate to current path in directory
-  //   let current = directory;
-  //   currentPath.forEach(path => {
-  //     if (path === 'root')
-  //       current = current[path];
-  //     else
-  //       current = current.contents[path];
-  //   });
-  //   current.contents = {
-  //     ...current.contents,
-  //     [newFolder]: variable[newFolder]
-  //   }
-  //   setDirectory(directory);
-  //   setCreateFolder(false);
-  //   setNewFolderName('');
-  //   // console.log(directory);
-  // }
+    // Axios call to upload file to gridfs
+    await axios.post('http://localhost:3001/uploadFile', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then(res => {
+      // Update the folders state variable
+      handleFolderClick(currentFolder);
+      setCreateFile(false);
+    });
+  }
 
   // const addFile = () => {
   //   // Handle language extention and image
@@ -376,74 +335,7 @@ function ProjectPage() {
   //       languageImage = fileIcon;
   //   }
 
-  //   // Handle generating unique file object name
-  //   const newFile = newFileName;
 
-  //   // Create new file object
-  //   const variable = {
-  //     [newFile]: {
-  //       type: 'file',
-  //       name: newFileName,
-  //       language: language,
-  //       languageImage: languageImage
-  //     }
-  //   }
-  
-  //   // Navigate to current path in directory
-  //   let current = directory;
-  //   currentPath.forEach(path => {
-  //     if (path === 'root')
-  //       current = current[path];
-  //     else
-  //       current = current.contents[path];
-  //   });
-
-  //   // Add new file object to directory
-  //   current.contents = {
-  //     ...current.contents,
-  //     [newFile]: variable[newFile]
-  //   }
-
-  //   // Update directory state
-  //   setDirectory(directory);
-  //   setCreateFile(false);
-  //   setNewFileName('');
-  // }
-
-  // useEffect(() => {
-  //   const deleteFile = (deleteFileName) => {
-  //     let current = directory;
-  //     currentPath.forEach(path => {
-  //       if (path === 'root')
-  //         current = current[path];
-  //       else
-  //         current = current.contents[path];
-  //     });
-  //     delete current.contents[deleteFileName];
-  //     setDirectory(directory);
-  //     setDeleteFileName('');
-  //   }
-  //   deleteFile(deleteFileName);
-  // }, [deleteFileName]);
-
-  // useEffect(() => {
-  //   const deleteFolder = (deleteFolderName) => {
-  //     // console.log(deleteFolderName);
-  //     let current = directory;
-  //     // console.log(currentPath);
-  //     currentPath.forEach(path => {
-  //       if (path === 'root')
-  //         current = current[path];
-  //       else
-  //         current = current.contents[path];
-  //     });
-  //     delete current.contents[deleteFolderName];
-  //     setDirectory(directory);
-  //     setDeleteFolderName('');
-  //   }
-  //   deleteFolder(deleteFolderName);
-  //   // console.log(directory);
-  // }, [deleteFolderName]);
 
   return (
     <div className="ProjectPageContainer">
@@ -478,8 +370,6 @@ function ProjectPage() {
                 (currentPath.length > 0) ? <span className="dirPathButton" key={folder}>
                   <a onClick={() => handleDirPathClick(folder, index)}>
                     <h1>
-                      {/* {(currentPath.length - 1 > 0) ? folder : ''}
-                      {index < currentPath.length - 1 ? '/' : ''} */}
                       {folder.name}/
                     </h1>
                   </a>
@@ -488,7 +378,7 @@ function ProjectPage() {
             </div>
             <div className="folderDisplay">
 
-                {Object.entries((searchQuery === '') ? folders : searchResults).map(([key, folder]) => (
+                {Object.entries((searchQuery === '') ? folders : searchFoldersResults).map(([key, folder]) => (
                   <button className='goToFolder'>
                     <div className="line"></div>
                     <div className="folders" key={key}  onClick={() => handleFolderClick(folder)}>
@@ -508,7 +398,7 @@ function ProjectPage() {
                     />
                   </button>
                 ))}
-                {Object.entries((searchQuery === '') ? files : searchResults).map(([key, file]) => (
+                {Object.entries((searchQuery === '') ? files : searchFilesResults).map(([key, file]) => (
                   <button className='goToFolder'>
                     <div className="line"></div>
                     <div className="folders" key={file._id}  onClick={() => navigate('/FileEdit?file_id=' + file._id + '&file_name=' + file.filename)}>
@@ -528,40 +418,6 @@ function ProjectPage() {
                     />
                   </button>
                 ))}
-
-
-              {/* {Object.entries((searchQuery === '') ? currentFolder : searchResults).map(([key, value]) =>
-                value.type === 'folder' ? (
-                  <button className='goToFolder'>
-                    <div className="line"></div>
-                    <div className="folders" key={key}  onClick={() => handleFolderClick(value.name)}>
-                      <img src={blueFolder} alt="blue folder" className="folderIcon"/>
-                      <h1>
-                        {value.name}
-                      </h1>
-                      
-                    </div>
-                    <RiDeleteBin7Fill
-                      className="deleteButton"
-                      onClick={() => setDeleteFolderName(value.name)}
-                    />
-                  </button>
-                ) : (
-                  <button className='goToFile'>
-                    <div className="line"></div>
-                    <div className='folders' key={key}>
-                      <img src={value.languageImage} alt="language" className="languageIcon"/>
-                      <h1>
-                        {value.name}
-                      </h1>
-                    </div>
-                    <RiDeleteBin7Fill
-                        className="deleteButton"
-                        onClick={() => setDeleteFileName(value.name)}
-                      />
-                  </button>
-                )
-              )} */}
               {(createFile) && <button className="newFileInput">
                 <div className="line"></div>
                 <div className="newFile">
@@ -572,6 +428,7 @@ function ProjectPage() {
                     placeholder="New File Name"
                     onChange={(event) => {setNewFileName(event.target.value)}}
                     onKeyDown={(event) => {handleKeyDown(event)}}
+                    autoFocus
                   />
                 </div>
               </button>}
@@ -585,6 +442,7 @@ function ProjectPage() {
                     placeholder="New Folder Name"
                     onChange={(event) => {setNewFolderName(event.target.value)}}
                     onKeyDown={(event) => {handleKeyDown(event)}}
+                    autoFocus
                   />
                 </div>
               </button>}

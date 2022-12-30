@@ -4,28 +4,28 @@
     font-family: "Mono-Regular";
     /*Can be any text*/
     src: local("JetBrainsMono-Regular"),
-        url(".././fonts/JetBrainsMono-Regular.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-Regular.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Mono-Medium";
     /*Can be any text*/
     src: local("JetBrainsMono-Medium"),
-        url(".././fonts/JetBrainsMono-Medium.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-Medium.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Mono-Bold";
     /*Can be any text*/
     src: local("JetBrainsMono-Bold"),
-        url(".././fonts/JetBrainsMono-Bold.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-Bold.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Mono-ExtraBold";
     /*Can be any text*/
     src: local("JetBrainsMono-ExtraBold"),
-        url(".././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
 }
 
 .ProjectSettingsContainer {
@@ -218,7 +218,8 @@
 
 .Member h2 {
     font-family: "Mono-Regular";
-    font-size: 2.5vw;
+    font-size: 2vw;
+    width: 40%;
     text-align: left;
     color: black;
 }
@@ -231,16 +232,17 @@
 
 .Member button {
     font-family: "Mono-Regular";
-    font-size: 2vw;
+    font-size: 1.5vw;
     background-color: rgb(184, 81, 81);
     box-shadow: inset 0px 0px 5px 3px rgba(59, 19, 19, 0.25);
-    /* width: 20%; */
+    width: 50%;
     border-radius: 11px;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 20%;
     border: none;
+    margin: 5%;
     padding: 2%;
 }
 

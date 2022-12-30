@@ -71,6 +71,7 @@ function Home(props) {
             .then(res => {
               // Update the state with the fetched projects
               setProjects(res.data);
+              console.log(res.data);
             })
             .catch(err => {
               console.log(err);

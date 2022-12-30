@@ -1,10 +1,10 @@
 import './CreateProject.css';
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { PhotoCodeHeader } from './PhotoCodeHeader';
+import { PhotoCodeHeader } from '.././PhotoCodeHeader';
 import '@github/file-attachment-element'
 
-import deleteFile from './../images/deleteFile.png';
+import deleteFile from '../.././images/deleteFile.png';
 import { useNavigate } from 'react-router-dom';
 import { setNestedObjectValues } from "formik";
 

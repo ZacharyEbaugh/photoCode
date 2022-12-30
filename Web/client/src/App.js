@@ -6,11 +6,11 @@ import Login from "./Pages/UserInitialization/Login";
 import Home from "./Pages/Home/Home";
 import Account from "./Pages/Home/Account";
 import Contact from "./Pages/Home/Contact";
-import ProjectPage from "./Pages/ProjectPage";
-import FileEdit from "./Pages/FileEdit";
-import ProjectSettings from "./Pages/ProjectSettings";
+import ProjectPage from "./Pages/Project/ProjectPage";
+import FileEdit from "./Pages/Project/FileEdit";
+import ProjectSettings from "./Pages/Project/ProjectSettings";
 import ErrorPage from "./Pages/ErrorPage";
-import CreateProject from "./Pages/CreateProject";
+import CreateProject from "./Pages/Project/CreateProject";
 
 import {
   BrowserRouter as Router,
