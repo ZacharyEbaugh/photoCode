@@ -11,6 +11,7 @@ import FileEdit from "./Pages/Project/FileEdit";
 import ProjectSettings from "./Pages/Project/ProjectSettings";
 import ErrorPage from "./Pages/ErrorPage";
 import CreateProject from "./Pages/Project/CreateProject";
+import AddCollaborator from "./Pages/Project/AddCollaborator";
 
 import {
   BrowserRouter as Router,
@@ -185,6 +186,7 @@ function App() {
           <Route path="/ProjectPage" element={<ProjectPage />}/>
           <Route path="/CreateProject" element={<CreateProject auth={auth} updateAuth={updateAuth}/>}/>
           <Route path="/FileEdit" element={<FileEdit />}/>
+          <Route path="/AddCollaborator" element={<AddCollaborator />}/>
         </Routes>
       </Router>
     );

@@ -1,3 +1,4 @@
+import './AddCollaborator.css';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -6,6 +7,7 @@ function UserList() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
+    console.log(searchQuery);
     // Make a request to the MongoDB server to search for users
     async function fetchUsers() {
       try {
@@ -14,6 +16,7 @@ function UserList() {
             username: searchQuery
           }
         });
+        console.log(response.data);
         setUsers(response.data);
       } catch (error) {
         console.error(error);
@@ -24,17 +27,28 @@ function UserList() {
   }, [searchQuery]);
 
   return (
-    <div>
+    <div className='AddCollaboratorBox'>
+        <h1>Add Collaborators</h1>
       <input
         type="text"
         value={searchQuery}
+        placeholder="Search for a user"
         onChange={event => setSearchQuery(event.target.value)}
       />
-      <ul>
         {users.map(user => (
-          <li key={user._id}>{user.username}</li>
+            <div className='userFound'>
+                <div className='userInfo'>
+                    <h1>
+                        {user.username}
+                    </h1>
+                    <h2>{user.email}</h2>
+                    <h2>{user.connection}</h2>
+                </div>
+                <button className='addCollaboratorButton' onClick={() => handleAddCollaborator(user._id)}>Add</button>
+
+
+            </div>
         ))}
-      </ul>
     </div>
   );
 }

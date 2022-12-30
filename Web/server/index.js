@@ -161,7 +161,8 @@ function searchUsers(req, callback) {
   const user = {
     username: username
   };
-  users.find(user, function (err, users) {
+  // Query mongodb for all users that mach the username
+  users.find(user).toArray(function (err, users) {
     if (err || !users) {
       return callback(err || new Error('the user does not exist'));
     }
@@ -416,7 +417,7 @@ function addCollaborator(req, callback) {
   });
 }
 
-// Route handler for adding a collaborator to a project
+// Route handler for adding a collaborator to a project from an invite
 app.get('/acceptInvite', function (req, res) {
   addCollaborator(req, function (err, updated) {
     if (err) {
@@ -898,42 +899,51 @@ app.post('/sendEmail', function (req, res) {
 });
 
 // Send an email to the user asking if they would like to accept the invite, if they do, add them to an attribute of a project object in the database
-app.post('/sendProjectInvite', function (req, res) {
+app.post('/sendProjectInvite', async function (req, res) {
   // get the email, company, and message from the request body
   const email = req.body.email;
   const project_id = req.body.project_id;
   const project_name = req.body.project_name;
   const user_id = req.body.user_id;
 
-  // create the subject line for the email
-  const subject = `You have been invited to join ${project_name} on PhotoCode!`;
+  const project = {
+    _id: ObjectId(project_id)
+  };
+  // Check if the project already has the collaborator
+  const checkProject = await projects.findOne(project);
+  if (!checkProject || checkProject.collaborators.includes(user_id)) {
+    res.send({ message: 'User already in project or the project does not exist' });
+  } else {
+    // create the subject line for the email
+    const subject = `You have been invited to join ${project_name} on PhotoCode!`;
 
-  // create a transport using the default SMTP transport
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'photocodedev@gmail.com',
-      pass: process.env.EMAIL_PASSWORD
-    }
-  });
-  // Create the message
-  const message = `You have been invited to join ${project_name} on PhotoCode! Click the link below to accept the invite and join the project! \n\n http://localhost:3001/acceptInvite?project_id=${project_id}&user_id=${user_id}`;
+    // create a transport using the default SMTP transport
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'photocodedev@gmail.com',
+        pass: process.env.EMAIL_PASSWORD
+      }
+    });
+    // Create the message
+    const message = `You have been invited to join ${project_name} on PhotoCode! Click the link below to accept the invite and join the project! \n\n http://localhost:3001/acceptInvite?project_id=${project_id}&user_id=${user_id}`;
 
-  // send the email
-  transporter.sendMail({
-    from: 'photocodedev@gmail.com',
-    to: email,
-    subject: subject,
-    text: message,
-  }, function(err) {
-    // handle any errors that occurred while sending the email
-    if (err) {
-      console.log(err);
-      res.status(500).send({ error: err.message });
-    } else {
-      res.send({ message: 'Email sent successfully' });
-    }
-  });
+    // send the email
+    transporter.sendMail({
+      from: 'photocodedev@gmail.com',
+      to: email,
+      subject: subject,
+      text: message,
+    }, function(err) {
+      // handle any errors that occurred while sending the email
+      if (err) {
+        console.log(err);
+        res.status(500).send({ error: err.message });
+      } else {
+        res.send({ message: 'Email sent successfully' });
+      }
+    });
+  }
 });
 
 
