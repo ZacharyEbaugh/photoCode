@@ -205,7 +205,8 @@ function createProject(req, callback) {
   const project = {
     name: name,
     description: description,
-    user: user
+    user: user,
+    collaborators: [user]
   };
 
   projects.insert(project, function (err, inserted) {
@@ -432,6 +433,7 @@ app.get('/acceptInvite', function (req, res) {
 // Function to find all collaborators of a project in the projects collection
 function getCollaborators(req, callback) {
   const project_id = req.query.project_id;
+  console.log(project_id);
   const project = {
     _id: ObjectId(project_id)
   };
@@ -453,6 +455,11 @@ app.get('/getCollaborators', function (req, res) {
     }
     else {
       // Call function to get collaborator information from the users collection
+      console.log(collaborators);
+      if (collaborators.length == 0) {
+        res.send([]);
+      }
+
       getCollaboratorInfo(collaborators, function (err, collaboratorsInfo) {
         if (err) {
           res.status(500).send({ error: err.message });
