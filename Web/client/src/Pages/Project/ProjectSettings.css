@@ -226,6 +226,14 @@
     color: black;
 }
 
+.Member h3 {
+    font-family: "Mono-Regular";
+    font-size: 2rem;
+    width: 20%;
+    text-align: left;
+    color: black;
+}
+
 .Member img {
     width: 10%;
     border-radius: 50%;
@@ -292,6 +300,17 @@
     color: #FFFFFF;
 }
 
+.addedCollaboratorButton {
+    width: 35%;
+    height: 4rem;
+    border-radius: 11px;
+    border: none;
+    font-family: "Mono-Regular";
+    font-size: 1.5rem;
+    background: #97cf81;
+    color: #FFFFFF;
+}
+
 .userFound {
     width: 100%;
     display: flex;
@@ -331,10 +350,11 @@
     margin-top: 1%;
     font-family: "Mono-Regular";
     font-size: 1.5vw;
-    background: rgb(184, 81, 81);
+    background: rgb(228, 59, 59);
     border: none;
     box-shadow: inset 0px 0px 5px 3px rgba(59, 19, 19, 0.25);
     border-radius: 11px;
+    color: white;
 }
 
 

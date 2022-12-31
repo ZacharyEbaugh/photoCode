@@ -17,9 +17,10 @@ import { useLocation } from "react-router-dom";
 import { MdClear } from "react-icons/md";
 import { HiOutlineDownload } from "react-icons/hi";
 import { RiDeleteBin7Line, RiDeleteBin7Fill } from "react-icons/ri";
+import LoadingPage from "../LoadingPage";
 
 
-function ProjectPage() {
+function ProjectPage(props) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -45,6 +46,7 @@ function ProjectPage() {
 
   // Get all folders and files from the database for this project
   useEffect(() => {
+    console.log("PROJECT PAGE");
     // Grab project_id from the header and use it to get all folders and files for this project
     const query = new URLSearchParams(location.search);
     const project_id = query.get('project_id');
@@ -58,9 +60,12 @@ function ProjectPage() {
         res.data[0].name = "root";
         setCurrentPath([...currentPath, res.data[0]]);
         axios.get(`http://localhost:3001/getFolders?project_id=${root_folder_id}`)
-        .then(res => {
+        .then(async res => {
           console.log(res.data._id);
           setFolders(res.data);
+          // Set Loader false after setFolders is done
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          props.setLoader(false);
         })
         .catch(err => {
           console.log(err);
@@ -335,126 +340,137 @@ function ProjectPage() {
   //       languageImage = fileIcon;
   //   }
 
-
-
-  return (
-    <div className="ProjectPageContainer">
-        <PhotoCodeHeader />
-        <div className="directory-commits">
-          <div className="dirBlock">
-            <h1>{projectName}</h1>
-            <div className="create_search_file">
-              <button className="createFile" onClick={() => addNewFolder()}>            
-                <img src={newFolder} alt="new folder" className="newFolderButtonIcon"/> 
-              </button>
-              <button className="createFile" onClick={() => addNewFile()}>            
-                <img src={newFile} alt="new file" className="newFileButtonIcon"/>
-              </button>
-              <div className="searchBar">
-                <input
-                  type="text"
-                  id="search-input"
-                  className="searchFile"
-                  placeholder="Search Files"
-                  onChange={event => search(event.target.value)}
-                />
-                {(searchQuery != '') && <button className="clearSearch" onClick={handleClear}>
-                  <MdClear 
-                    className="clearIcon"
+  if (props.auth.isLoading) {
+    return (
+      <LoadingPage />
+    )
+  } else {
+    return (
+      <div className="ProjectPageContainer">
+          <PhotoCodeHeader setLoader={props.setLoader}/>
+          <div className="directory-commits">
+            <div className="dirBlock">
+              <h1>{projectName}</h1>
+              <div className="create_search_file">
+                <button className="createFile" onClick={() => addNewFolder()}>            
+                  <img src={newFolder} alt="new folder" className="newFolderButtonIcon"/> 
+                </button>
+                <button className="createFile" onClick={() => addNewFile()}>            
+                  <img src={newFile} alt="new file" className="newFileButtonIcon"/>
+                </button>
+                <div className="searchBar">
+                  <input
+                    type="text"
+                    id="search-input"
+                    className="searchFile"
+                    placeholder="Search Files"
+                    onChange={event => search(event.target.value)}
                   />
+                  {(searchQuery != '') && <button className="clearSearch" onClick={handleClear}>
+                    <MdClear 
+                      className="clearIcon"
+                    />
+                  </button>}
+                </div>
+              </div>
+              <div className="dirPath">
+                {currentPath.map((folder, index) => (
+                  (currentPath.length > 0) ? <span className="dirPathButton" key={folder}>
+                    <a onClick={() => handleDirPathClick(folder, index)}>
+                      <h1>
+                        {folder.name}/
+                      </h1>
+                    </a>
+                  </span>
+                : <></>))}
+              </div>
+              <div className="folderDisplay">
+                  {Object.entries((searchQuery === '') ? folders : searchFoldersResults).map(([key, folder]) => (
+                    <button className='goToFolder'>
+                      <div className="line"></div>
+                      <div className="folders" key={key}  onClick={() => handleFolderClick(folder)}>
+                        <img src={blueFolder} alt="blue folder" className="folderIcon"/>
+                        <h1>
+                          {folder.name}
+                        </h1>
+                      </div>
+                      <HiOutlineDownload
+                        className="downloadButton"
+                        // onClick={() => handleDownload(folder)}
+                      />
+                      <RiDeleteBin7Fill
+                        className="deleteButton"
+                        onClick={() => handleFolderDelete(folder)}
+                      />
+                    </button>
+                  ))}
+                  {Object.entries((searchQuery === '') ? files : searchFilesResults).map(([key, file]) => (
+                    <button className='goToFolder'>
+                      <div className="line"></div>
+                      <div className="folders" key={file._id}  onClick={() => 
+                      {
+                        navigate('/FileEdit?file_id=' + file._id + '&file_name=' + file.filename)
+                        props.setLoader(true);
+                      }
+                      }>
+                        <img src={fileIcon} alt="blue folder" className="folderIcon"/>
+                        <h1>
+                          {file.filename}
+                        </h1>
+                      </div>
+                      <HiOutlineDownload
+                        className="downloadButton"
+                        onClick={() => handleDownload(file)}
+                      />
+                      <RiDeleteBin7Fill
+                        className="deleteButton"
+                        onClick={() => handleFileDelete(file)}
+                      />
+                    </button>
+                  ))}
+                {(createFile) && <button className="newFileInput">
+                  <div className="line"></div>
+                  <div className="newFile">
+                    <img src={fileIcon} alt="language" className="folderIcon"/>
+                    <input 
+                      type="text" 
+                      className="fileNameInput" 
+                      placeholder="New File Name"
+                      onChange={(event) => {setNewFileName(event.target.value)}}
+                      onKeyDown={(event) => {handleKeyDown(event)}}
+                      autoFocus
+                    />
+                  </div>
+                </button>}
+                {(createFolder) && <button className="newFileInput">
+                  <div className="line"></div>
+                  <div className="newFile">
+                    <img src={fileIcon} alt="language" className="folderIcon"/>
+                    <input 
+                      type="text" 
+                      className="fileNameInput" 
+                      placeholder="New Folder Name"
+                      onChange={(event) => {setNewFolderName(event.target.value)}}
+                      onKeyDown={(event) => {handleKeyDown(event)}}
+                      autoFocus
+                    />
+                  </div>
                 </button>}
               </div>
             </div>
-             <div className="dirPath">
-              {currentPath.map((folder, index) => (
-                (currentPath.length > 0) ? <span className="dirPathButton" key={folder}>
-                  <a onClick={() => handleDirPathClick(folder, index)}>
-                    <h1>
-                      {folder.name}/
-                    </h1>
-                  </a>
-                </span>
-              : <></>))}
-            </div>
-            <div className="folderDisplay">
-
-                {Object.entries((searchQuery === '') ? folders : searchFoldersResults).map(([key, folder]) => (
-                  <button className='goToFolder'>
-                    <div className="line"></div>
-                    <div className="folders" key={key}  onClick={() => handleFolderClick(folder)}>
-                      <img src={blueFolder} alt="blue folder" className="folderIcon"/>
-                      <h1>
-                        {folder.name}
-                      </h1>
-                      
-                    </div>
-                    <HiOutlineDownload
-                      className="downloadButton"
-                      // onClick={() => handleDownload(folder)}
-                    />
-                    <RiDeleteBin7Fill
-                      className="deleteButton"
-                      onClick={() => handleFolderDelete(folder)}
-                    />
-                  </button>
-                ))}
-                {Object.entries((searchQuery === '') ? files : searchFilesResults).map(([key, file]) => (
-                  <button className='goToFolder'>
-                    <div className="line"></div>
-                    <div className="folders" key={file._id}  onClick={() => navigate('/FileEdit?file_id=' + file._id + '&file_name=' + file.filename)}>
-                      <img src={fileIcon} alt="blue folder" className="folderIcon"/>
-                      <h1>
-                        {file.filename}
-                      </h1>
-                      
-                    </div>
-                    <HiOutlineDownload
-                      className="downloadButton"
-                      onClick={() => handleDownload(file)}
-                    />
-                    <RiDeleteBin7Fill
-                      className="deleteButton"
-                      onClick={() => handleFileDelete(file)}
-                    />
-                  </button>
-                ))}
-              {(createFile) && <button className="newFileInput">
-                <div className="line"></div>
-                <div className="newFile">
-                  <img src={fileIcon} alt="language" className="folderIcon"/>
-                  <input 
-                    type="text" 
-                    className="fileNameInput" 
-                    placeholder="New File Name"
-                    onChange={(event) => {setNewFileName(event.target.value)}}
-                    onKeyDown={(event) => {handleKeyDown(event)}}
-                    autoFocus
-                  />
-                </div>
-              </button>}
-              {(createFolder) && <button className="newFileInput">
-                <div className="line"></div>
-                <div className="newFile">
-                  <img src={fileIcon} alt="language" className="folderIcon"/>
-                  <input 
-                    type="text" 
-                    className="fileNameInput" 
-                    placeholder="New Folder Name"
-                    onChange={(event) => {setNewFolderName(event.target.value)}}
-                    onKeyDown={(event) => {handleKeyDown(event)}}
-                    autoFocus
-                  />
-                </div>
-              </button>}
+            <div className="settings-commits">
+              <div className="settingsButton" onClick={() => 
+                {
+                  navigate('/ProjectSettings');
+                  props.setLoader(true);
+                }
+              }>Project Settings</div>
+              <ProjectCommits/>
             </div>
           </div>
-          <div className="settings-commits">
-            <div className="settingsButton" onClick={() => navigate('/ProjectSettings')}>Project Settings</div>
-            <ProjectCommits/>
-          </div>
-        </div>
-    </div>
-  )
+      </div>
+    );
+  }
 }
 
 export default ProjectPage;

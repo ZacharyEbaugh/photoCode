@@ -1,7 +1,7 @@
 import './ProjectSettings.css';
 import React, { useEffect, useState } from 'react';
+import LoadingPage from '../LoadingPage';
 import { PhotoCodeHeader } from '.././PhotoCodeHeader';
-import AddCollaborator from './AddCollaborator';
 
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -10,6 +10,7 @@ function ProjectSettings(props) {
     // State variables for project information
     const [projectNamePlaceholder, setProjectNamePlaceholder] = useState('');
     const [projectDescriptionPlaceholder, setProjectDescriptionPlaceholder] = useState('');
+    const [projectOwner, setProjectOwner] = useState('');
     const [projectMembers, setProjectMembers] = useState([]);
 
     // State variables for possible project updates
@@ -42,6 +43,16 @@ function ProjectSettings(props) {
               username: searchQuery
             }
           });
+            // Check if user is already a member of the project
+            for (let i = 0; i < response.data.length; i++) {
+                for (let j = 0; j < projectMembers.length; j++) {
+                    if (response.data[i]._id == projectMembers[j]._id) {
+                        response.data[i].connection = 'Member';
+                        // response.data[i].connection = 'Member';
+                        console.log("Found Repeat");
+                    }
+                }
+            }
           setUsers(response.data);
         } catch (error) {
           console.error(error);
@@ -158,24 +169,22 @@ function ProjectSettings(props) {
     useEffect(() => {
         // Get project information
         const project_id = localStorage.getItem('project_id');
-        const response = axios.get(`http://localhost:3001/getProject?project_id=${project_id}`)
-        .then((response) => {
+        async function getProject() {
+            const response = await axios.get(`http://localhost:3001/getProject?project_id=${project_id}`)
             setProjectNamePlaceholder(response.data.name);
+            setProjectOwner(response.data.user);
             setProjectDescriptionPlaceholder(response.data.description);
-            // setProjectMembers(response.data.members);
             // Get project collaborators information from users collection and add to projectMembers
-            axios.get('http://localhost:3001/getCollaborators', {
+            const response2 = await axios.get('http://localhost:3001/getCollaborators', {
                 params: {
                     project_id: project_id
                 }
             })
-            .then((response) => {
-                setProjectMembers(response.data);
-            }
-            );
+            setProjectMembers(response2.data);
+        }
+        getProject().then(() => {
+            props.setLoader(false);
         });
-
-    
     }, []);
 
     const handleProjectDelete = async() => {
@@ -187,7 +196,6 @@ function ProjectSettings(props) {
         });
         // Delete folders/files from projects contents
         const project_id = localStorage.getItem('project_id');
-
         const response = await axios.post('http://localhost:3001/deleteFolder', {
             "folder_id": project_id
         })
@@ -197,7 +205,6 @@ function ProjectSettings(props) {
                 project_id: project_id
             })
         );
-
         if (response) {
             await props.updateAuth({
                 isLoading: false,
@@ -214,82 +221,92 @@ function ProjectSettings(props) {
     }
 
     const navigate = useNavigate();
-    return (
-        <div className='ProjectSettingsContainer'>
-            <PhotoCodeHeader/>
-            <button className='backButton' onClick={() => navigate(-1)}>{"<-"} Back to project</button>
-            <div className='ProjectSettings'>
-                <div className='ProjectSettingsContentLeft'>
-                    <div className='Project-Name-Desc-Section'>
-                        <h2>Project Name</h2>
-                        <div className='ProjectSettingsInformation'>
-                            <input 
-                                type='text' 
-                                className='ProjectInput' 
-                                placeholder={projectNamePlaceholder}
-                                onChange={(event) => handleProjectNameChange(event.target.value)}/>
-                            <button className='ProjectNameButton' onClick={() => handleProjectNameUpdate()}> Rename</button>
+    if (props.auth.isLoading) {
+        return (
+          <LoadingPage />
+        )
+      } else {
+        return (
+            <div className='ProjectSettingsContainer'>
+                <PhotoCodeHeader setLoader={props.setLoader}/>
+                <button className='backButton' onClick={() => navigate(-1)}>{"<-"} Back to project</button>
+                <div className='ProjectSettings'>
+                    <div className='ProjectSettingsContentLeft'>
+                        <div className='Project-Name-Desc-Section'>
+                            <h2>Project Name</h2>
+                            <div className='ProjectSettingsInformation'>
+                                <input 
+                                    type='text' 
+                                    className='ProjectInput' 
+                                    placeholder={projectNamePlaceholder}
+                                    onChange={(event) => handleProjectNameChange(event.target.value)}/>
+                                <button className='ProjectNameButton' onClick={() => handleProjectNameUpdate()}> Rename</button>
+                            </div>
+                            <h2>Project Description</h2>
+                            <textarea 
+                                className='ProjectDescription' 
+                                placeholder={projectDescriptionPlaceholder}
+                                onChange={(event) => handleProjectDescriptionChange(event.target.value)}
+                            />
+                            <button className='ProjectDescriptionButton' onClick={() => handleProjectDescriptionUpdate()}>Change Description</button>
                         </div>
-                        <h2>Project Description</h2>
-                        <textarea 
-                            className='ProjectDescription' 
-                            placeholder={projectDescriptionPlaceholder}
-                            onChange={(event) => handleProjectDescriptionChange(event.target.value)}
-                        />
-                        <button className='ProjectDescriptionButton' onClick={() => handleProjectDescriptionUpdate()}>Change Description</button>
+                    </div>
+                    <div className='ProjectSettingsContentRight'>
+                        {(addCollab == true) ? 
+                        <div className='AddCollaboratorBox'>
+                            <div className='Title-Exit'>
+                                <h1>Add Collaborators</h1>
+                                <button className='ExitButton' onClick={() => setAddCollab(false)}>X</button>
+                            </div>
+                            <input
+                                type="text"
+                                value={searchQuery}
+                                placeholder="Search for a user"
+                                onChange={event => setSearchQuery(event.target.value)}
+                            />
+                            {users.map(user => (
+                                <div className='userFound'>
+                                    <div key={user} className='userInfo'>
+                                        <h1>
+                                            {user.username}
+                                        </h1>
+                                        <h2>{user.email}</h2>
+                                        <h2>{user.connection}</h2>
+                                    </div>
+                                    {// Check if user is already a collaborator on the project
+                                        (user.connection == 'Member') ? <button className='addedCollaboratorButton' disabled>Added</button> :
+                                    <button className='addCollaboratorButton' onClick={() => handleInviteCollaborator(user)}>Add</button>}
+                                </div>
+                            ))}
+                        </div> : 
+                        <div className='ProjectMemberSection'>
+                            <div className='Title-addMember'>
+                                <h2>Project Members</h2>
+                                <button className='AddMemberButton' onClick={() => setAddCollab(true)}>Add</button>
+                            </div>
+                            <div className='ProjectMembers'>
+                                {Object.keys(projectMembers).map(member => {
+                                    return (
+                                        <div className='MemberObject'>
+                                            <div className='line'></div>
+                                            <div  key={member} className='Member'>
+                                                <img src={'https://avatars.githubusercontent.com/u/59611677?v=4'} alt='Profile Picture' className='ProfilePicture'/>
+                                                <h2>{projectMembers[member].username}</h2>
+                                                {(projectOwner == projectMembers[member]._id) ? <h3>Owner</h3> : (localStorage.getItem('user_id') == projectMembers[member]._id) ? <h3>Member</h3> :
+                                                    <button className='RemoveMemberButton' onClick={() => handleRemoveCollaborator(projectMembers[member])}>Remove</button>
+                                                }
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>}
+                        <button className='DeleteProjectButton' onClick={() => handleProjectDelete()}>Delete Project</button>
                     </div>
                 </div>
-                <div className='ProjectSettingsContentRight'>
-                    {(addCollab == true) ? 
-                    <div className='AddCollaboratorBox'>
-                        <div className='Title-Exit'>
-                            <h1>Add Collaborators</h1>
-                            <button className='ExitButton' onClick={() => setAddCollab(false)}>X</button>
-                        </div>
-                        <input
-                            type="text"
-                            value={searchQuery}
-                            placeholder="Search for a user"
-                            onChange={event => setSearchQuery(event.target.value)}
-                        />
-                        {users.map(user => (
-                            <div key={user} className='userFound'>
-                                <div className='userInfo'>
-                                    <h1>
-                                        {user.username}
-                                    </h1>
-                                    <h2>{user.email}</h2>
-                                    <h2>{user.connection}</h2>
-                                </div>
-                                <button className='addCollaboratorButton' onClick={() => handleInviteCollaborator(user)}>Add</button>
-                            </div>
-                        ))}
-                    </div> : 
-                    <div className='ProjectMemberSection'>
-                        <div className='Title-addMember'>
-                            <h2>Project Members</h2>
-                            <button className='AddMemberButton' onClick={() => setAddCollab(true)}>Add</button>
-                        </div>
-                        <div className='ProjectMembers'>
-                            {Object.keys(projectMembers).map(member => {
-                                return (
-                                    <div key={member} className='MemberObject'>
-                                        <div className='line'></div>
-                                        <div className='Member'>
-                                            <img src={'https://avatars.githubusercontent.com/u/59611677?v=4'} alt='Profile Picture' className='ProfilePicture'/>
-                                            <h2>{projectMembers[member].username}</h2>
-                                            <button className='RemoveMemberButton' onClick={() => handleRemoveCollaborator(projectMembers[member])}>Remove</button>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>}
-                    <button className='DeleteProjectButton' onClick={() => handleProjectDelete()}>Delete Project</button>
-                </div>
             </div>
-        </div>
-    );
+        );
+    }
 }
 
 export default ProjectSettings;

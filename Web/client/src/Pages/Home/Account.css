@@ -30,7 +30,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     height: 80vh;
 }
 
@@ -59,22 +59,18 @@
     display: flex;
     width: 80%;
     height: 100%;
-    margin-left: 10vw;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     justify-content: flex-start;
     background-color: white;
     box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
     border-radius: 1rem;
-    /* margin: 1rem 0 2rem 0; */
 }
 
 .accountInfoText {
     display: flex;
     flex-direction: row;
     width: 100%;
-    margin-left: 10vw;
-    
 }
 
 .userInformation {
@@ -82,14 +78,15 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* width: 50%; */
+    width: 50%;
     height: 100%;
-    /* background-color: white; */
 }
 
 .userInformation h2 {
     font-size: 2rem;
     font-weight: 500;
+    width: 90%;
+    text-align: center;
     font-family: 'Mono-Regular';
 }
 

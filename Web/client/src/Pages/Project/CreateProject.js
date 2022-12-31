@@ -68,19 +68,14 @@ const CreateProject = (props) => {
 
   // handle create project button
   const handleCreateProject = () => {
-    props.updateAuth({
-      isLoading: true,
-      isAuthenticated: localStorage.getItem('access_token') != null ? true : false,
-      accessToken: localStorage.getItem('access_token') != null ? localStorage.getItem('access_token') : null,
-      idToken: localStorage.getItem('id_token') != null ? localStorage.getItem('id_token') : null,
-    });
+    props.setLoader(true);
     // Call /createProject endpoint to create project in the database and get the project id
     axios.post('http://localhost:3001/createProject', {
       name: projectName,
       description: projectDescription,
       user: localStorage.getItem('user_id'),
     })
-    .then((response) => {
+    .then(async(response) => {
       const project_id = response.data.project_id;
       // Create Folder that will act as the root folder for the project with a parent id of the project id
       axios.post('http://localhost:3001/createFolder', {
@@ -89,15 +84,10 @@ const CreateProject = (props) => {
       })
       .then(async (response) => {
         // Upload files to the root folder
-        // console.log(response);
-        // const folder_id = response.data.folder.lastErrorObject.upserted;
-      
         const folder_id = response.data.folder.lastErrorObject.upserted;
         console.log(folder_id);
-
         // Create form data object to send files and metadata to the server
         const formData = new FormData();
-
         // Loop over all files and create a promise for each file
         const filePromises = files.map(async (file) => {
           // If the file is in a subdirectory, create a folder with the name of the directory and the parent id of the parent folder
@@ -109,7 +99,6 @@ const CreateProject = (props) => {
             const folderPath = file.fullPath.split('/').slice(1, -1);
             // Initial parent_id should be the root folder id
             localStorage.setItem('parent_id', folder_id);
-
             for (let i = 0; i < folderPath.length; i++) {
               // Check if the folder already exists in the database and if not
               // create it with the parent id of the previous folder within this loop
@@ -133,14 +122,12 @@ const CreateProject = (props) => {
           }
           return file.file;
         });
-
         // Resolve all promises and append the files to the form data
         const resolvedFiles = await Promise.all(filePromises);
         resolvedFiles.forEach((file) => {
           formData.append('files', file, file.name + ":::::" + file.parent_id);
           console.log(file);
         });
-        
         try {
           // Upload the files to the server using the /uploadFile endpoint with the folder id as the parent folder id 
           const response = await axios.post('http://localhost:3001/uploadFile', formData, {
@@ -155,12 +142,9 @@ const CreateProject = (props) => {
       .catch((error) => {
         console.log(error);
       });
-      props.updateAuth({
-        isLoading: false,
-        isAuthenticated: localStorage.getItem('access_token') != null ? true : false,
-        accessToken: localStorage.getItem('access_token') != null ? localStorage.getItem('access_token') : null,
-        idToken: localStorage.getItem('id_token') != null ? localStorage.getItem('id_token') : null,
-      });
+      // Wait for the project to be created and the files to be uploaded before navigating to the home page
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      props.setLoader(false);
       navigate('/Home');
     })
     .catch((error) => {
@@ -170,7 +154,7 @@ const CreateProject = (props) => {
 
   return (
     <div className='CreateProjectContainer'>
-        <PhotoCodeHeader/>
+        <PhotoCodeHeader setLoader={props.setLoader}/>
         <h2>Create a new project</h2>
         <div className='CreateProject'>
             <div className='CreateProjectForm'>

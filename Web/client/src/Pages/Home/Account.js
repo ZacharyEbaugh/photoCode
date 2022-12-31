@@ -17,7 +17,8 @@ function Account() {
     const user = {
         name: localStorage.getItem('name'),
         email: localStorage.getItem('email'),
-        picture: localStorage.getItem('picture')
+        picture: localStorage.getItem('picture'),
+        connection: localStorage.getItem('connection')
     }
 
 
@@ -33,8 +34,9 @@ function Account() {
                 <div className='accountInfoText'>
                     <div className='userInformation'>
                         <img className='userPicture' src={user.picture} />
-                        <h2 className='userName'>User Name: {user.name}</h2>
+                        <h2 className='userName'>Username: {user.name}</h2>
                         <h2 className='userEmail'>User Email: {user.email}</h2>
+                        <h2 className='userConnection'>Connection Type: {user.connection}</h2>
                     </div>
                     <div className='userActions'>
                         <button className='userAction'>Change Email</button>

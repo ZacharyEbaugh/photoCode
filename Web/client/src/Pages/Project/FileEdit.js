@@ -1,5 +1,6 @@
 import React,{ useState, useRef, useEffect } from 'react'
 import "./FileEdit.css";
+import LoadingPage from '../LoadingPage';
 
 import axios from 'axios';
 import CodeMirror from '@uiw/react-codemirror';
@@ -19,7 +20,7 @@ import {
 import { PhotoCodeHeader } from '.././PhotoCodeHeader';
 import { useNavigate } from 'react-router-dom';
 
-function File_Edit() {
+function File_Edit(props) {
   const navigate = useNavigate();
   // State variable to holder file information
   const [fileName, setFileName] = useState('');
@@ -31,11 +32,7 @@ function File_Edit() {
  
   // Axios call to get file information
   useEffect(() => {
-
     async function getFileInfo() {
-
-      console.log(fileId);
-
       // Set queiries for setting file
       const urlParams = new URLSearchParams(window.location.search);
       const idPromise = setFileId(urlParams.get('file_id'));
@@ -44,19 +41,17 @@ function File_Edit() {
       await Promise.resolve(idPromise, namePromise).then(async() => {
         const response = await axios.get(`http://localhost:3001/getFile?file_id=${urlParams.get('file_id')}`);
         const buffer = Buffer.from(response.data.fileContents.data, 'hex')
-        setCode(buffer.toString());
+        await setCode(buffer.toString());
       });
-
     }
-    getFileInfo();
-
+    getFileInfo().then(() => {
+      props.setLoader(false);
+    });
   }, [fileId])
 
   // API call to update file information
   const updateFile = async () => {
-    console.log(code);
-    console.log(fileId);
-    console.log(typeof code);
+    props.setLoader(true);
     const response = await axios.post(`http://localhost:3001/updateFile`, {
       file_id: fileId,
       file_contents: code
@@ -75,57 +70,71 @@ function File_Edit() {
     {tag: tags.comment, color: "#f5d", fontStyle: "italic"}
   ])
 
-  return (
-    <div className="containerFileEdit">
-      <PhotoCodeHeader/>
-      <div className="Edit_Commit">
-        <div className='File'>
-          <div className="editor">
-            <button className="backButton" onClick={() => navigate(-1)}>
-              {"<- Back to " + fileName.split('.')[0] + ""}
-            </button>
-            <h1 className="fileTitle">
-              Editing {fileName}
-            </h1>
-            <CodeMirror 
-              className='CodeMirror'
-              value={code}
-              minHeight={'20vh'}
-              maxHeight={'60vh'}
-              theme='light'
-              extensions={[syntaxHighlighting(myHighlightStyle)]}
-              mode={'javascript'}
-              onChange={(editor, change) => {
-                setCode(editor.valueOf());
-                console.log(code);
-              }
-            }/>
-          </div>
-      
-          </div>
-          <div className="commit_information">
-              <input
-              type="text"
-              className="titleName"
-              placeholder={"Update " + fileName}
-              />
-              <textarea 
-                className="description"
-                placeholder="Changes made..."  
-              />
-              <div className='buttons'>
-                <button className="cancelButton" onClick={() => navigate(-1)}>
-                    Cancel
-                </button>
-                <button className="updateFile" onClick={() => updateFile()}>            
-                    Update File
-                </button>
-              </div>
-        
-          </div>
+  if (props.auth.isLoading) {
+    return (
+      <LoadingPage />
+    )
+  } else {
+    return (
+      <div className="containerFileEdit">
+        <PhotoCodeHeader setLoader={props.setLoader}/>
+        <div className="Edit_Commit">
+          <div className='File'>
+            <div className="editor">
+              <button className="backButton" onClick={() => 
+                {
+                  props.setLoader(true);
+                  navigate(-1)
+                }
+              }>
+                {"<- Back to " + fileName.split('.')[0] + ""}
+              </button>
+              <h1 className="fileTitle">
+                Editing {fileName}
+              </h1>
+              <CodeMirror 
+                className='CodeMirror'
+                value={code}
+                minHeight={'20vh'}
+                maxHeight={'60vh'}
+                theme='light'
+                extensions={[syntaxHighlighting(myHighlightStyle)]}
+                mode={'javascript'}
+                onChange={(editor, change) => {
+                  setCode(editor.valueOf());
+                }
+              }/>
+            </div>
+            </div>
+            <div className="commit_information">
+                <input
+                type="text"
+                className="titleName"
+                placeholder={"Update " + fileName}
+                />
+                <textarea 
+                  className="description"
+                  placeholder="Changes made..."  
+                />
+                <div className='buttons'>
+                  <button className="cancelButton" onClick={() => 
+                    {
+                      props.setLoader(true);
+                      navigate(-1)
+                    }
+                  }>
+                      Cancel
+                  </button>
+                  <button className="updateFile" onClick={() => updateFile()}>            
+                      Update File
+                  </button>
+                </div>
+          
+            </div>
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 }
 
 export default File_Edit;
