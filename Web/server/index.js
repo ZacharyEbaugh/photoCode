@@ -953,6 +953,82 @@ app.post('/sendProjectInvite', async function (req, res) {
   }
 });
 
+// Send an email to the user after they request to change their password with a link to reset their password if they click the link
+app.post('/sendPasswordReset', async function (req, res) {
+  // get the email, company, and message from the request body
+  const email = req.body.email;
+  
+  // create the subject line for the email
+  const subject = `Password reset request for ${email}`;
+  
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'photocodedev@gmail.com',
+      pass: process.env.EMAIL_PASSWORD
+    }
+  });
+  // Create the message with a link to the reset password page
+  const message = `You have requested to reset your password for ${email}. Click the link below to reset your password. \n\n http://localhost:3000/resetPassword?email=${email}`;
+  
+  // send the email
+  transporter.sendMail({
+    from: 'photocodedev@gmail.com',
+    to: email,
+    subject: subject,
+    text: message,
+  }, function(err) {
+    // handle any errors that occurred while sending the email
+    if (err) {
+      console.log(err);
+      res.status(500).send({ error: err.message });
+    } else {
+      res.send({ message: 'Email sent successfully' });
+    }
+  });
+});
+/* 
+||----------------------------------------||
+||User updates                            ||
+||----------------------------------------|| 
+*/
+const bcrypt = require('bcrypt');
+function changePassword(email, newPassword, callback) {
+  bcrypt.hash(newPassword, 10, function (err, hash) {
+    if (err) {
+      return callback(err);
+    }
+    users.updateOne({ email: email, connection: "Username-Password-Authentication" }, { $set: { password: hash } }, function (err, result) {
+      if (err) return callback(err);
+      callback(null, result);
+    });
+  });
+}
+
+app.post('/resetPassword', async function (req, res) {
+  // get the email, company, and message from the request body
+  const email = req.body.email;
+  const password = req.body.password;
+  const passwordConfirm = req.body.passwordConfirm;
+
+  if (password !== passwordConfirm) {
+    res.send({ message: 'Passwords do not match' });
+  } else {
+    changePassword(email, password, function (err, result) {
+      if (err) {
+        console.log(err);
+        res.status(500).send({ error: err.message });
+      } else {
+        console.log(result);
+        res.status(200).send({ message: 'Password changed successfully' });
+      }
+    });
+  }
+});
+
+/* 
+||------------------User updates------------------||
+*/
 
 // Start the app
 app.listen(3001, () => console.log('API listening on 3001'));

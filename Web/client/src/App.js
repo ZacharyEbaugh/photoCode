@@ -12,6 +12,7 @@ import ProjectSettings from "./Pages/Project/ProjectSettings";
 import ErrorPage from "./Pages/ErrorPage";
 import CreateProject from "./Pages/Project/CreateProject";
 import LoadingPage from "./Pages/LoadingPage";
+import ResetPassword from "./Pages/UserInitialization/ResetPassword";
 
 import {
   BrowserRouter as Router,
@@ -67,7 +68,6 @@ function App() {
         idToken: ''
       });
       setLoader(true);
-      console.log(auth);
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.has('code')) {
         const code = urlParams.get('code');
@@ -91,13 +91,6 @@ function App() {
             // Local storage tokens
             localStorage.setItem("access_token", response.data.access_token);
             localStorage.setItem("id_token", response.data.id_token);
-            // Update auth state
-            updateAuth({
-                isLoading: true,
-                isAuthenticated: true,
-                accessToken: localStorage.getItem("access_token"),
-                idToken: localStorage.getItem("id_token")
-            })
             // Decode JWT
             const decoded = jwt(response.data.id_token);
             // Store email in local storage, GitHub does not provide email
@@ -110,6 +103,7 @@ function App() {
             // Local Storage other user data
             localStorage.setItem("name", decoded.name);
             localStorage.setItem("picture", decoded.picture);
+            console.log(decoded);
             // Attempt to register the user, if they already exist, it will fail
             // If they are logging in with a social, this will ensure all users are stored in the database
             axios.post("http://localhost:3001/register", {
@@ -126,7 +120,13 @@ function App() {
               })
               .then(response => {
                 localStorage.setItem("user_id", response.data._id);
-                setLoader(false);
+                // Update the authentication state and loader state
+                updateAuth({
+                  isLoading: true,
+                  isAuthenticated: true,
+                  accessToken: localStorage.getItem("access_token"),
+                  idToken: localStorage.getItem("id_token")
+                })
               })
               .catch(error => {
                 console.log(error);
@@ -161,6 +161,7 @@ function App() {
           <Route path="/" element={<Landingpage />}/>
           <Route path="/Register" element={<Register />}/>
           <Route path="/Login" element={<Login auth={auth} updateAuth={updateAuth}/>}/>
+          <Route path="resetPassword" element={<ResetPassword auth={auth} updateAuth={updateAuth}/>}/>
         </Routes>
       </Router>
     )
@@ -176,8 +177,9 @@ function App() {
           <Route path="/Contact" element={<Contact  setLoader={setLoader}/>}/>
           <Route path="/ProjectSettings" element={<ProjectSettings auth={auth} updateAuth={updateAuth} setLoader={setLoader}/>}/>
           <Route path="/ProjectPage" element={<ProjectPage auth={auth} setLoader={setLoader}/>}/>
-          <Route path="/CreateProject" element={<CreateProject setLoader={setLoader}/>}/>
+          <Route path="/CreateProject" element={<CreateProject auth={auth} setLoader={setLoader}/>}/>
           <Route path="/FileEdit" element={<FileEdit auth={auth} setLoader={setLoader}/>}/>
+          {/* <Route path="resetPassword" element={<ResetPassword />}/> */}
         </Routes>
       </Router>
     );

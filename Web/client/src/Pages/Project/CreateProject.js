@@ -2,6 +2,7 @@ import './CreateProject.css';
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { PhotoCodeHeader } from '.././PhotoCodeHeader';
+import LoadingPage from '../LoadingPage';
 import '@github/file-attachment-element'
 
 import deleteFile from '../.././images/deleteFile.png';
@@ -143,8 +144,7 @@ const CreateProject = (props) => {
         console.log(error);
       });
       // Wait for the project to be created and the files to be uploaded before navigating to the home page
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      props.setLoader(false);
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
       navigate('/Home');
     })
     .catch((error) => {
@@ -152,6 +152,11 @@ const CreateProject = (props) => {
     });
   };
 
+  if (props.auth.isLoading) {
+    return (
+      <LoadingPage />
+    )
+  } else {
   return (
     <div className='CreateProjectContainer'>
         <PhotoCodeHeader setLoader={props.setLoader}/>
@@ -209,6 +214,7 @@ const CreateProject = (props) => {
         </div>
     </div>
   );
+  }
 };
 
 export default CreateProject;

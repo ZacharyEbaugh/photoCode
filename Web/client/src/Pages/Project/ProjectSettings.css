@@ -36,7 +36,7 @@
     background: linear-gradient(180deg, #0066FF 0%, #FFFFFF 100%);
 }
 
-.ProjectSettingsContainer h2 {
+.Project-Name-Desc-Section h2 {
     font-family: "Mono-Regular";
     font-size: 2.5vw;
     text-align: start;
