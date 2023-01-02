@@ -47,7 +47,7 @@ export function ProjectCommits() {
 
     return (
         <div className="commitsBox">
-            <h1>Commits</h1>
+            <h1>Updates</h1>
             {Object.keys(dummyCommits).map(key => (
                 <div className="commits" key={key} onClick={() => setShowMessage({ ...showMessage, [key]: !showMessage[key]})}>
                     <div className='commitGeneralInfo'>

@@ -185,7 +185,7 @@ function ProjectSettings(props) {
         getProject().then(() => {
             props.setLoader(false);
         });
-    }, []);
+    }, [props.auth.isLoading]);
 
     const handleProjectDelete = async() => {
         props.updateAuth({
@@ -301,7 +301,7 @@ function ProjectSettings(props) {
                                 })}
                             </div>
                         </div>}
-                        <button className='DeleteProjectButton' onClick={() => handleProjectDelete()}>Delete Project</button>
+                        {(localStorage.getItem('user_id') != projectOwner) ? <></> : <button className='DeleteProjectButton' onClick={() => handleProjectDelete()}>Delete Project</button>}
                     </div>
                 </div>
             </div>

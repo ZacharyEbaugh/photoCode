@@ -371,8 +371,14 @@ function updateProject(req, callback) {
   };
   projects.updateOne(project, newProject, function (err, updated) {
     if (err) return callback(err);
-    callback(null, updated);
+    else {
+      folders.updateOne({ parent_folder: project_id }, { $set: { name: name } }, function (err, updated) {
+        if (err) return callback(err);
+        callback(null, updated);
+      });
+    }
   });
+
 }
 
 // Route handler for updating a project
