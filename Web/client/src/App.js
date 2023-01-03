@@ -104,11 +104,13 @@ function App() {
             localStorage.setItem("name", decoded.name);
             localStorage.setItem("picture", decoded.picture);
             console.log(decoded);
+
             // Attempt to register the user, if they already exist, it will fail
             // If they are logging in with a social, this will ensure all users are stored in the database
             axios.post("http://localhost:3001/register", {
               email: localStorage.getItem('email'),
               username: localStorage.getItem('name'),
+              picture: localStorage.getItem('picture'),
               password: Math.random().toString(36),
               connection: localStorage.getItem('connection'),
             })
@@ -120,6 +122,20 @@ function App() {
               })
               .then(response => {
                 localStorage.setItem("user_id", response.data._id);
+                if (localStorage.getItem('picture') != response.data.picture)
+                {
+                  // Axios call to update user picture in database if it is different from the one stored
+                  axios.post("http://localhost:3001/updateUserPicture", {
+                    user_id: localStorage.getItem('user_id'),
+                    picture: localStorage.getItem('picture'),
+                  })
+                  .then(response => {
+                    console.log(response);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
+                }
                 // Update the authentication state and loader state
                 updateAuth({
                   isLoading: true,

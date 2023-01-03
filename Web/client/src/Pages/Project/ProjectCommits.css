@@ -67,6 +67,7 @@
 .commitAuthorImage {
     width: 12%;
     display: flex;
+    padding: 1rem;
     justify-content: center;
     align-items: center;
     border-radius: 100%;

@@ -19,7 +19,6 @@ import { HiOutlineDownload } from "react-icons/hi";
 import { RiDeleteBin7Line, RiDeleteBin7Fill } from "react-icons/ri";
 import LoadingPage from "../LoadingPage";
 
-
 function ProjectPage(props) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -44,9 +43,11 @@ function ProjectPage(props) {
   const [folders, setFolders] = useState([]);
   const [files, setFiles] = useState([]);
 
+  // State variable to hold list of commits
+  const [commits, setCommits] = useState(location.state.commits);
+
   // Get all folders and files from the database for this project
   useEffect(() => {
-    console.log("PROJECT PAGE");
     // Grab project_id from the header and use it to get all folders and files for this project
     const query = new URLSearchParams(location.search);
     const project_id = query.get('project_id');
@@ -54,22 +55,27 @@ function ProjectPage(props) {
     console.log("ID: " + project_id);
     axios.get(`http://localhost:3001/getFolders?project_id=${project_id}`)
       .then(res => {
-        const root_folder_id = res.data[0]._id;
+        const root_folder_id = (res.data[0]._id != undefined) ? res.data[0]._id : null;
         setProjectName(res.data[0].name);
         setCurrentFolder(res.data[0]);
         res.data[0].name = "root";
         setCurrentPath([...currentPath, res.data[0]]);
-        axios.get(`http://localhost:3001/getFolders?project_id=${root_folder_id}`)
-        .then(async res => {
-          console.log(res.data._id);
-          setFolders(res.data);
+        if (root_folder_id != null) {
+          axios.get(`http://localhost:3001/getFolders?project_id=${root_folder_id}`)
+          .then(async res => {
+            setFolders(res.data);
+            // Set Loader false after setFolders is done
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            props.setLoader(false);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        }
+        else {
           // Set Loader false after setFolders is done
-          await new Promise((resolve) => setTimeout(resolve, 1000));
           props.setLoader(false);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+        }
       })
       .catch(err => {
           console.log(err);
@@ -465,7 +471,7 @@ function ProjectPage(props) {
                   props.setLoader(true);
                 }
               }>Project Settings</div>
-              <ProjectCommits/>
+              <ProjectCommits commits={ location.state.commits }/>
             </div>
           </div>
       </div>

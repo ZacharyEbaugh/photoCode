@@ -75,6 +75,7 @@ const CreateProject = (props) => {
       name: projectName,
       description: projectDescription,
       user: localStorage.getItem('user_id'),
+      picture: localStorage.getItem('picture'),
     })
     .then(async(response) => {
       const project_id = response.data.project_id;

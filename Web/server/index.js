@@ -88,10 +88,12 @@ function create(req, callback) {
   const email = req.body.email;
   const username = req.body.username;
   const password = req.body.password;
+  const picture = (req.body.picture != null) ? req.body.picture : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
   const connection = req.body.connection;
   const user = {
     email: email,
     password: password,
+    picture: picture,
     username: username,
     connection: connection,
   };
@@ -104,6 +106,7 @@ function create(req, callback) {
       if (err) {
         return callback(err);
       }
+
       user.password = hash;
       user.email_verified = false;
       user.tenant = 'photocode';
@@ -146,6 +149,56 @@ function getUser(req, callback) {
 // Route handler for getting a user
 app.post('/getUser', function (req, res) {
   getUser(req, function (err, user) {
+    if (err) {
+      res.send({ message: 'User not found' });
+    }
+    else {
+      res.send(user);
+    }
+  });
+});
+
+// Get user user picture using user_id
+function getUserPicture(req, callback) {
+  const user_id = req.body.user_id;
+  const user = {
+    _id: ObjectId(user_id)
+  };
+  users.findOne (user, function (err, user) {
+    if (err || !user) {
+      return callback(err || new Error('the user does not exist'));
+    }
+    else {
+      return callback(null, user);
+    }
+  });
+}
+
+// Update user picture using user_id and picture url 
+function updateUserPicture(req, callback) {
+  const user_id = req.body.user_id;
+  const picture = req.body.picture;
+  const user = {
+    _id: ObjectId(user_id)
+  };
+  const newValues = {
+    $set: {
+      picture: picture
+    }
+  };
+  users.updateOne(user, newValues, function (err, user) {
+    if (err || !user) {
+      return callback(err || new Error('the user does not exist'));
+    }
+    else {
+      return callback(null, user);
+    }
+  });
+}
+
+// Route handler for updating a user picture
+app.post('/updateUserPicture', function (req, res) {
+  updateUserPicture(req, function (err, user) {
     if (err) {
       res.send({ message: 'User not found' });
     }
@@ -206,7 +259,8 @@ function createProject(req, callback) {
     name: name,
     description: description,
     user: user,
-    collaborators: [user]
+    collaborators: [user],
+    commits: []
   };
 
   projects.insert(project, function (err, inserted) {
@@ -223,7 +277,24 @@ app.post('/createProject', function (req, res) {
       res.status(500).send({ error: err.message });
     } 
     else {
-      res.send({ message: 'Project created', project_id: inserted.insertedIds[0] });
+      const initialCommit = {
+        body: {
+          project_id: inserted.insertedIds[0],
+          user_id: req.body.user,
+          picture: req.body.picture,
+          title: 'Initial commit',
+          message: 'Creation of ' + req.body.name,
+        }
+      };
+      createCommit(initialCommit, function (err, inserted) {
+        if (err) {
+          console.log(err);
+          res.status(500).send({ error: err.message });
+        }
+        else {
+          res.send({ message: 'Project created', project_id: initialCommit.body.project_id });
+        }
+      });
     }
   });
 });
@@ -993,11 +1064,13 @@ app.post('/sendPasswordReset', async function (req, res) {
     }
   });
 });
+
 /* 
 ||----------------------------------------||
 ||User updates                            ||
 ||----------------------------------------|| 
 */
+
 const bcrypt = require('bcrypt');
 function changePassword(email, newPassword, callback) {
   bcrypt.hash(newPassword, 10, function (err, hash) {
@@ -1034,6 +1107,84 @@ app.post('/resetPassword', async function (req, res) {
 
 /* 
 ||------------------User updates------------------||
+*/
+
+/* 
+||----------------------------------------||
+|| Commits                                ||
+||----------------------------------------|| 
+*/
+
+// Get all commits for a project
+app.post('/getAllCommits', async function (req, res) {
+  const project_id = req.body.project_id;
+  const project = {
+    _id: ObjectId(project_id)
+  };
+  const commits = await projects.findOne(project);
+  if (!commits) {
+    res.send({ message: 'Project does not exist' });
+  } else {
+    res.send(commits.commits);
+  }
+});
+
+// Create a commit for a project
+async function createCommit(req, callback) {
+// app.post('/createCommit', async function (req, res) {
+  const project_id = req.body.project_id;
+  const user_id = req.body.user_id;
+  const picture = req.body.picture;
+  const title = req.body.title;
+  const message = req.body.message;
+  const project = {
+    _id: ObjectId(project_id)
+  };
+  const checkProject = await projects.findOne(project);
+  if (!checkProject) {
+    res.send({ message: 'Project does not exist' });
+  } else {
+    const commit_id = ObjectId();
+    const commitObj = {
+      _id: commit_id,
+      user_id: user_id,
+      picture: picture,
+      title: title,
+      message: message,
+      date: new Date()
+    };
+    const update = {
+      $push: {
+        commits: commitObj
+      }
+    };
+    const result = await projects.updateOne(project, update);
+    if (result.modifiedCount === 1) {
+      console.log(result);
+      // res.send({ message: 'Commit created successfully', commit_id: commit_id });
+      callback(null, { message: 'Commit created successfully', commit_id: commit_id });
+    } else {
+      // res.send({ message: 'Commit creation failed' });
+      callback({ message: "Commit Creation Failed" }, null);
+    }
+  }
+};
+
+// Route handler for createCommit
+app.post('/createCommit', async function (req, res) {
+  createCommit(req, function (err, result) {
+    if (err) {
+      console.log(err);
+      res.status(500).send({ error: err.message });
+    } else {
+      console.log(result);
+      res.status(200).send({ message: 'Commit created successfully' });
+    }
+  });
+});
+
+/* 
+||------------------Commits------------------||
 */
 
 // Start the app

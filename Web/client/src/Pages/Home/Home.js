@@ -114,10 +114,8 @@ function Home(props) {
                                 return (
                                     <section className='project' key={project._id} onClick={() => {
                                         props.setLoader(true);
-                                        navigate('/ProjectPage?project_id=' + project._id);
-                                        }
-                                        
-                                        }>
+                                        navigate('/ProjectPage?project_id=' + project._id, { state: { commits: project.commits } });
+                                        }}>
                                         <img className='projectImage' src={require("../../images/proj_1.png")} />
                                         <div className='projectTitlesWrapper'>
                                             <h1 className='projectTitle'>{project.name}</h1>
