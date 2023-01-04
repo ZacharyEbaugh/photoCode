@@ -98,6 +98,8 @@
       0px 2px 3px rgba(0, 0, 0, 0.168);
     border-radius: 10px;
     cursor: pointer;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 
   .LoginButtons h1 {

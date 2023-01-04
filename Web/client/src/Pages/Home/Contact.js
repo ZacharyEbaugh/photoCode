@@ -14,7 +14,7 @@ import github_icon from '../../images/github_icon_black.png';
 import terminal_icon from '../../images/terminal_icon_black.png';
 import { PhotoCodeHeader } from '../PhotoCodeHeader';
 
-function Contact() {
+function Contact(props) {
     const [listOfUsers, setListOfUsers] = useState([]);
     const [company, setCompany] = useState("");
     const [message, setMessage] = useState("");
@@ -42,7 +42,7 @@ function Contact() {
 
     return (
       <div className="containerContact">  
-        <PhotoCodeHeader/>
+        <PhotoCodeHeader  setLoader={props.setLoader}/>
 
         <section className='main'>
             <div className='profileCardWrapper'>

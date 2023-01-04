@@ -30,9 +30,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
-    /* width: 50vw; */
-    /* height: 60vh; */
+    justify-content: center;
+    height: 80vh;
 }
 
 .accountInfo hr {
@@ -59,22 +58,19 @@
 .accountInfo {
     display: flex;
     width: 80%;
-    margin-left: 10vw;
+    height: 100%;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     justify-content: flex-start;
     background-color: white;
     box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
     border-radius: 1rem;
-    /* margin: 1rem 0 2rem 0; */
 }
 
 .accountInfoText {
     display: flex;
     flex-direction: row;
     width: 100%;
-    margin-left: 10vw;
-    
 }
 
 .userInformation {
@@ -82,14 +78,15 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* width: 50%; */
+    width: 50%;
     height: 100%;
-    /* background-color: white; */
 }
 
 .userInformation h2 {
     font-size: 2rem;
     font-weight: 500;
+    width: 90%;
+    text-align: center;
     font-family: 'Mono-Regular';
 }
 
@@ -121,6 +118,34 @@
     margin-top: 1rem;
 }
 
+.userActionNotAllowed {
+    width: 50%;
+    height: 50px;
+    border-radius: 10px;
+    border: 1.5px solid black;
+    background-color: #0065FF;
+    color: white;
+    font-size: 1.75rem;
+    font-weight: 500;
+    font-family: 'Mono-Regular';
+    margin-top: 1rem;
+    opacity: 0.5;
+}
+
+#tooltip {
+    width: 10rem;
+    position: relative; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 1rem;
+    padding: 10px;
+    background-color: white;
+    box-shadow: 0 1px 1px 2px #0000001e;
+    border-radius: 10px;
+}
+
 .dangerAction{
     width: 50%;
     height: 50px;
@@ -132,4 +157,80 @@
     font-weight: 500;
     font-family: 'Mono-Regular';
     margin-top: 1rem;
+}
+
+.responseText {
+    font-size: 1.5rem;
+    font-weight: 500;
+    font-family: 'Mono-Regular';
+    margin-top: 1rem;
+    color: green
+}
+
+.changeActivatePopup {
+    width: 100%;
+    height: 100%;
+}
+
+.changePopup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 40rem;
+    /* height: 15rem; */
+    padding: 2rem;
+    border-radius: 1rem;
+    background-color: white;
+    box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
+}
+
+.changeTitle {
+    font-size: 2rem;
+    font-weight: 500;
+    font-family: 'Mono-Regular';
+    margin-top: 1rem;
+    color: black;
+}
+
+.changeTextInput {
+    width: 80%;
+    height: 3rem;
+    border-radius: 10px;
+    border: 1.5px solid black;
+    background-color: white;
+    color: black;
+    font-size: 1.75rem;
+    font-weight: 500;
+    font-family: 'Mono-Regular';
+    margin-top: 1rem;
+    padding-left: 1rem;
+}
+
+.confirmChange {
+    width: 50%;
+    height: 50px;
+    border-radius: 10px;
+    border: 1.5px solid black;
+    background-color: green;
+    color: white;
+    font-size: 1.75rem;
+    font-weight: 500;
+    font-family: 'Mono-Regular';
+    margin-top: 1rem;
+}
+
+.closePopup {
+    cursor: pointer;
+    position: absolute;
+    display: block;
+    /* padding: 2px 5px; */
+    line-height: 20px;
+    right: -10px;
+    top: -10px;
+    font-size: 24px;
+    background: #ffffff;
+    border-radius: 18px;
+    border: 1px solid #cfcece;
+    outline: none;
 }

@@ -1,25 +1,25 @@
 @font-face {
     font-family: "Mono-Regular";
     src: local("JetBrainsMono-Regular"),
-        url(".././fonts/JetBrainsMono-Regular.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-Regular.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Mono-Medium";
     src: local("JetBrainsMono-Medium"),
-        url(".././fonts/JetBrainsMono-Medium.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-Medium.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Mono-Bold";
     src: local("JetBrainsMono-Bold"),
-        url(".././fonts/JetBrainsMono-Bold.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-Bold.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Mono-ExtraBold";
     src: local("JetBrainsMono-ExtraBold"),
-        url(".././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
 }
 
 .commitsBox {
@@ -34,6 +34,8 @@
     align-items: center;
 }
 
+
+
 .commitsBox h1 {
     font-family: "Mono-Regular";
     font-size: 2.5vw;
@@ -45,9 +47,6 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    /* border-bottom: 1px solid #E5E5E5; */
-    padding-bottom: 1%;
-    padding-top: 2%;
     transition: height 0.2s ease-out;
     cursor: pointer;
 }
@@ -61,12 +60,26 @@
 }
 
 .commitGeneralInfo:hover {
+    background-color: #E5E5E5; 
+}
+
+.commitGeneralInfoLast {
+    width: 99%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+
+.commitGeneralInfoLast:hover {
     background-color: #E5E5E5;
+    border-radius: 0px 0px 11px 11px;
 }
 
 .commitAuthorImage {
     width: 12%;
     display: flex;
+    /* padding: 1rem; */
     justify-content: center;
     align-items: center;
     border-radius: 100%;
