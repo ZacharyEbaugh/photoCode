@@ -12,7 +12,7 @@ export function ProjectCommits() {
     useEffect(() => {
         console.log(localStorage.getItem('project_id'));
         // Make axios call to get commits for project using project_id
-        axios.post('http://localhost:3001/getAllCommits', {
+        axios.post('https://photocode.app/getAllCommits', {
             project_id: localStorage.getItem('project_id')
         }).then((response) => {
             setCommits(response.data.reverse());
