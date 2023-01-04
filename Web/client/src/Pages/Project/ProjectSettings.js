@@ -19,6 +19,7 @@ function ProjectSettings(props) {
 
     // State variable to active and deactivate add collaborator
     const [addCollab, setAddCollab] = useState(false);
+    const [responseMessage, setResponseMessage] = useState('');
 
     // State variable to handle search query
     const [searchQuery, setSearchQuery] = useState('');
@@ -114,32 +115,23 @@ function ProjectSettings(props) {
 
     // Function to handle adding a collaborator to a project
     const handleInviteCollaborator = async(user) => {
-        props.updateAuth({
-            isLoading: true,
-            isAuthenticated: localStorage.getItem('access_token') != null ? true : false,
-            accessToken: localStorage.getItem('access_token') != null ? localStorage.getItem('access_token') : null,
-            idToken: localStorage.getItem('id_token') != null ? localStorage.getItem('id_token') : null,
-        });
+        props.setLoader(true);
         // Update project information
         const project_id = localStorage.getItem('project_id');
-        const response = await axios.post(`http://localhost:3001/sendProjectInvite`, {
+        await axios.post(`http://localhost:3001/sendProjectInvite`, {
             email: user.email,
             project_id: project_id,
             project_name: projectNamePlaceholder,
             user_id: user._id,
-        });
-        if (response)
-        {
-            props.updateAuth({
-                isLoading: false,
-                isAuthenticated: localStorage.getItem('access_token') != null ? true : false,
-                accessToken: localStorage.getItem('access_token') != null ? localStorage.getItem('access_token') : null,
-                idToken: localStorage.getItem('id_token') != null ? localStorage.getItem('id_token') : null,
-            });
-        }
-        else {
+        })
+        .then(() => {
+            setAddCollab(false)
+            setResponseMessage("Successfully invited user!");
+            props.setLoader(false);
+        })
+        .catch((error) => {
             console.log("Error sending invite");
-        }
+        });
     }
 
     // Function to handle removing a collaborator from a project
@@ -263,6 +255,7 @@ function ProjectSettings(props) {
                                 value={searchQuery}
                                 placeholder="Search for a user"
                                 onChange={event => setSearchQuery(event.target.value)}
+                                autoFocus
                             />
                             {users.map(user => (
                                 <div className='userFound'>
@@ -300,6 +293,7 @@ function ProjectSettings(props) {
                                     );
                                 })}
                             </div>
+                            {(responseMessage != '') ? <h3>{responseMessage}</h3> : <></>}
                         </div>}
                         {(localStorage.getItem('user_id') != projectOwner) ? <></> : <button className='DeleteProjectButton' onClick={() => handleProjectDelete()}>Delete Project</button>}
                     </div>

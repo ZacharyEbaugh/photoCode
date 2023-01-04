@@ -158,3 +158,79 @@
     font-family: 'Mono-Regular';
     margin-top: 1rem;
 }
+
+.responseText {
+    font-size: 1.5rem;
+    font-weight: 500;
+    font-family: 'Mono-Regular';
+    margin-top: 1rem;
+    color: green
+}
+
+.changeActivatePopup {
+    width: 100%;
+    height: 100%;
+}
+
+.changePopup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 40rem;
+    /* height: 15rem; */
+    padding: 2rem;
+    border-radius: 1rem;
+    background-color: white;
+    box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
+}
+
+.changeTitle {
+    font-size: 2rem;
+    font-weight: 500;
+    font-family: 'Mono-Regular';
+    margin-top: 1rem;
+    color: black;
+}
+
+.changeTextInput {
+    width: 80%;
+    height: 3rem;
+    border-radius: 10px;
+    border: 1.5px solid black;
+    background-color: white;
+    color: black;
+    font-size: 1.75rem;
+    font-weight: 500;
+    font-family: 'Mono-Regular';
+    margin-top: 1rem;
+    padding-left: 1rem;
+}
+
+.confirmChange {
+    width: 50%;
+    height: 50px;
+    border-radius: 10px;
+    border: 1.5px solid black;
+    background-color: green;
+    color: white;
+    font-size: 1.75rem;
+    font-weight: 500;
+    font-family: 'Mono-Regular';
+    margin-top: 1rem;
+}
+
+.closePopup {
+    cursor: pointer;
+    position: absolute;
+    display: block;
+    /* padding: 2px 5px; */
+    line-height: 20px;
+    right: -10px;
+    top: -10px;
+    font-size: 24px;
+    background: #ffffff;
+    border-radius: 18px;
+    border: 1px solid #cfcece;
+    outline: none;
+}

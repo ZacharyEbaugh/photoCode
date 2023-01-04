@@ -189,13 +189,13 @@ function App() {
           <Route path="*" element={<LoadingPage />}/>
           <Route element={<PhotoCodeHeader auth={auth} updateAuth={updateAuth} setLoader={setLoader}/>}/>
           <Route path="/Home" element={<Home auth={auth} updateAuth={updateAuth} setLoader={setLoader}/>}/>
-          <Route path="/Account" element={<Account  setLoader={setLoader}/>}/>
-          <Route path="/Contact" element={<Contact  setLoader={setLoader}/>}/>
+          <Route path="/Account" element={<Account auth={auth} setLoader={setLoader}/>}/>
+          <Route path="/Contact" element={<Contact auth={auth} setLoader={setLoader}/>}/>
           <Route path="/ProjectSettings" element={<ProjectSettings auth={auth} updateAuth={updateAuth} setLoader={setLoader}/>}/>
           <Route path="/ProjectPage" element={<ProjectPage auth={auth} setLoader={setLoader}/>}/>
           <Route path="/CreateProject" element={<CreateProject auth={auth} setLoader={setLoader}/>}/>
           <Route path="/FileEdit" element={<FileEdit auth={auth} setLoader={setLoader}/>}/>
-          {/* <Route path="resetPassword" element={<ResetPassword />}/> */}
+          <Route path="resetPassword" element={<ResetPassword auth={auth} updateAuth={updateAuth}/>}/>
         </Routes>
       </Router>
     );

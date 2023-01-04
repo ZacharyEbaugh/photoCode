@@ -352,128 +352,134 @@ function ProjectPage(props) {
     )
   } else {
     return (
+      <div className="gradientContainer">
       <div className="ProjectPageContainer">
           <PhotoCodeHeader setLoader={props.setLoader}/>
           <div className="directory-commits">
-            <div className="dirBlock">
-              <h1>{projectName}</h1>
-              <div className="create_search_file">
-                <button className="createFile" onClick={() => addNewFolder()}>            
-                  <img src={newFolder} alt="new folder" className="newFolderButtonIcon"/> 
-                </button>
-                <button className="createFile" onClick={() => addNewFile()}>            
-                  <img src={newFile} alt="new file" className="newFileButtonIcon"/>
-                </button>
-                <div className="searchBar">
-                  <input
-                    type="text"
-                    id="search-input"
-                    className="searchFile"
-                    placeholder="Search Files"
-                    onChange={event => search(event.target.value)}
-                  />
-                  {(searchQuery != '') && <button className="clearSearch" onClick={handleClear}>
-                    <MdClear 
-                      className="clearIcon"
+            <div className="directory">
+              <div className="dirBlock">
+                <h1>{projectName}</h1>
+                <div className="create_search_file">
+                  <button className="createFile" onClick={() => addNewFolder()}>            
+                    <img src={newFolder} alt="new folder" className="newFolderButtonIcon"/> 
+                  </button>
+                  <button className="createFile" onClick={() => addNewFile()}>            
+                    <img src={newFile} alt="new file" className="newFileButtonIcon"/>
+                  </button>
+                  <div className="searchBar">
+                    <input
+                      type="text"
+                      id="search-input"
+                      className="searchFile"
+                      placeholder="Search Files"
+                      onChange={event => search(event.target.value)}
                     />
+                    {(searchQuery != '') && <button className="clearSearch" onClick={handleClear}>
+                      <MdClear 
+                        className="clearIcon"
+                      />
+                    </button>}
+                  </div>
+                </div>
+                <div className="dirPath">
+                  {currentPath.map((folder, index) => (
+                    (currentPath.length > 0) ? <span className="dirPathButton" key={folder}>
+                      <a onClick={() => handleDirPathClick(folder, index)}>
+                        <h1>
+                          {folder.name}/
+                        </h1>
+                      </a>
+                    </span>
+                  : <></>))}
+                </div>
+                <div className="folderDisplay">
+                    {Object.entries((searchQuery === '') ? folders : searchFoldersResults).map(([key, folder]) => (
+                      <button className='goToFolder'>
+                        <div className="line"></div>
+                        <div className="folders" key={key}  onClick={() => handleFolderClick(folder)}>
+                          <img src={blueFolder} alt="blue folder" className="folderIcon"/>
+                          <h1>
+                            {folder.name}
+                          </h1>
+                        </div>
+                        <HiOutlineDownload
+                          className="downloadButton"
+                          // onClick={() => handleDownload(folder)}
+                        />
+                        <RiDeleteBin7Fill
+                          className="deleteButton"
+                          onClick={() => handleFolderDelete(folder)}
+                        />
+                      </button>
+                    ))}
+                    {Object.entries((searchQuery === '') ? files : searchFilesResults).map(([key, file]) => (
+                      <button className='goToFolder'>
+                        <div className="line"></div>
+                        <div className="folders" key={file._id}  onClick={() => 
+                        {
+                          navigate('/FileEdit?file_id=' + file._id + '&file_name=' + file.filename)
+                          props.setLoader(true);
+                        }
+                        }>
+                          <img src={fileIcon} alt="blue folder" className="folderIcon"/>
+                          <h1>
+                            {file.filename}
+                          </h1>
+                        </div>
+                        <HiOutlineDownload
+                          className="downloadButton"
+                          onClick={() => handleDownload(file)}
+                        />
+                        <RiDeleteBin7Fill
+                          className="deleteButton"
+                          onClick={() => handleFileDelete(file)}
+                        />
+                      </button>
+                    ))}
+                  {(createFile) && <button className="newFileInput">
+                    <div className="line"></div>
+                    <div className="newFile">
+                      <img src={fileIcon} alt="language" className="folderIcon"/>
+                      <input 
+                        type="text" 
+                        className="fileNameInput" 
+                        placeholder="New File Name"
+                        onChange={(event) => {setNewFileName(event.target.value)}}
+                        onKeyDown={(event) => {handleKeyDown(event)}}
+                        autoFocus
+                      />
+                    </div>
+                  </button>}
+                  {(createFolder) && <button className="newFileInput">
+                    <div className="line"></div>
+                    <div className="newFile">
+                      <img src={fileIcon} alt="language" className="folderIcon"/>
+                      <input 
+                        type="text" 
+                        className="fileNameInput" 
+                        placeholder="New Folder Name"
+                        onChange={(event) => {setNewFolderName(event.target.value)}}
+                        onKeyDown={(event) => {handleKeyDown(event)}}
+                        autoFocus
+                      />
+                    </div>
                   </button>}
                 </div>
               </div>
-              <div className="dirPath">
-                {currentPath.map((folder, index) => (
-                  (currentPath.length > 0) ? <span className="dirPathButton" key={folder}>
-                    <a onClick={() => handleDirPathClick(folder, index)}>
-                      <h1>
-                        {folder.name}/
-                      </h1>
-                    </a>
-                  </span>
-                : <></>))}
-              </div>
-              <div className="folderDisplay">
-                  {Object.entries((searchQuery === '') ? folders : searchFoldersResults).map(([key, folder]) => (
-                    <button className='goToFolder'>
-                      <div className="line"></div>
-                      <div className="folders" key={key}  onClick={() => handleFolderClick(folder)}>
-                        <img src={blueFolder} alt="blue folder" className="folderIcon"/>
-                        <h1>
-                          {folder.name}
-                        </h1>
-                      </div>
-                      <HiOutlineDownload
-                        className="downloadButton"
-                        // onClick={() => handleDownload(folder)}
-                      />
-                      <RiDeleteBin7Fill
-                        className="deleteButton"
-                        onClick={() => handleFolderDelete(folder)}
-                      />
-                    </button>
-                  ))}
-                  {Object.entries((searchQuery === '') ? files : searchFilesResults).map(([key, file]) => (
-                    <button className='goToFolder'>
-                      <div className="line"></div>
-                      <div className="folders" key={file._id}  onClick={() => 
-                      {
-                        navigate('/FileEdit?file_id=' + file._id + '&file_name=' + file.filename)
-                        props.setLoader(true);
-                      }
-                      }>
-                        <img src={fileIcon} alt="blue folder" className="folderIcon"/>
-                        <h1>
-                          {file.filename}
-                        </h1>
-                      </div>
-                      <HiOutlineDownload
-                        className="downloadButton"
-                        onClick={() => handleDownload(file)}
-                      />
-                      <RiDeleteBin7Fill
-                        className="deleteButton"
-                        onClick={() => handleFileDelete(file)}
-                      />
-                    </button>
-                  ))}
-                {(createFile) && <button className="newFileInput">
-                  <div className="line"></div>
-                  <div className="newFile">
-                    <img src={fileIcon} alt="language" className="folderIcon"/>
-                    <input 
-                      type="text" 
-                      className="fileNameInput" 
-                      placeholder="New File Name"
-                      onChange={(event) => {setNewFileName(event.target.value)}}
-                      onKeyDown={(event) => {handleKeyDown(event)}}
-                      autoFocus
-                    />
-                  </div>
-                </button>}
-                {(createFolder) && <button className="newFileInput">
-                  <div className="line"></div>
-                  <div className="newFile">
-                    <img src={fileIcon} alt="language" className="folderIcon"/>
-                    <input 
-                      type="text" 
-                      className="fileNameInput" 
-                      placeholder="New Folder Name"
-                      onChange={(event) => {setNewFolderName(event.target.value)}}
-                      onKeyDown={(event) => {handleKeyDown(event)}}
-                      autoFocus
-                    />
-                  </div>
-                </button>}
-              </div>
             </div>
             <div className="settings-commits">
-              <div className="settingsButton" onClick={() => 
-                {
-                  navigate('/ProjectSettings');
-                  props.setLoader(true);
-                }
-              }>Project Settings</div>
-              <ProjectCommits commits={ location.state.commits }/>
+              <div className="commitContent">
+                <div className="settingsButton" onClick={() => 
+                  {
+                    navigate('/ProjectSettings');
+                    props.setLoader(true);
+                  }
+                }>Project Settings</div>
+                <ProjectCommits commits={ location.state.commits }/>
+              </div>
             </div>
           </div>
+      </div>
       </div>
     );
   }

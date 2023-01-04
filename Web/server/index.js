@@ -30,9 +30,9 @@ const GridFSBucket = require('mongodb').GridFSBucket;
 
 app.use(express.json());
 
-app.use(cors({
-  origin: "http://localhost:3000"
-}));
+// app.use(cors({
+//   origin: "http://localhost:3000"
+// }));
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -149,6 +149,34 @@ function getUser(req, callback) {
 // Route handler for getting a user
 app.post('/getUser', function (req, res) {
   getUser(req, function (err, user) {
+    if (err) {
+      res.send({ message: 'User not found' });
+    }
+    else {
+      res.send(user);
+    }
+  });
+});
+
+// Get user info using user_id
+function getUserInfo(req, callback) {
+  const user_id = req.body.user_id;
+  const user = {
+    _id: ObjectId(user_id)
+  };
+  users.findOne (user, function (err, user) {
+    if (err || !user) {
+      return callback(err || new Error('the user does not exist'));
+    }
+    else {
+      return callback(null, user);
+    }
+  });
+}
+
+// Route handler for getting user info
+app.post('/getUserInfo', function (req, res) {
+  getUserInfo(req, function (err, user) {
     if (err) {
       res.send({ message: 'User not found' });
     }
@@ -419,6 +447,32 @@ app.get('/getFiles', function (req, res) {
 ||------------------End Project creation/information------------------||
 */
 
+/* 
+||----------------------------------------||
+||Project updates/collaboration           ||
+||----------------------------------------|| 
+*/
+
+// Function to delete a user account from the users collection and all related projects, folders and files
+// function deleteAccount(req, callback) {
+//   const user_id = req.body.user_id;
+//   const user = {
+//     _id: ObjectId(user_id)
+//   };
+//   users.deleteOne(user, function (err, deleted) {
+//     if (err) return callback(err);
+//     else {
+//       // Delete all projects that belong to the user
+//       projects.deleteMany({ user: user_id }, function (err, deleted) {
+//         if (err) return callback(err);
+//         else {
+//           // Delete all folders that belong to the user
+//           folders.deleteMany({ user: user_id }, function (err, deleted) {
+            
+
+/* 
+||------------------End Project creation/information------------------||
+*/
 
 /* 
 ||----------------------------------------||
@@ -638,7 +692,6 @@ app.post('/deleteProject', function (req, res) {
 /* 
 ||------------------End Project deletion------------------||
 */
-
 
 
 /* 
@@ -1046,14 +1099,70 @@ app.post('/sendPasswordReset', async function (req, res) {
     }
   });
   // Create the message with a link to the reset password page
-  const message = `You have requested to reset your password for ${email}. Click the link below to reset your password. \n\n http://localhost:3000/resetPassword?email=${email}`;
-  
+  const message = `You have requested to reset your password for ${email}. Click the link below to reset your password.`;
+  const link = `http://localhost:3000/resetPassword?email=${email}`;
+
   // send the email
   transporter.sendMail({
     from: 'photocodedev@gmail.com',
     to: email,
     subject: subject,
-    text: message,
+    // text: message,
+    html: `
+    <html>
+      <head>
+        <style>
+          /* Add your custom styles here */
+          .container {
+            width: 50%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-image: linear-gradient(#0066FF, #FFFFFF);
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid black;
+
+          }
+
+          .buttonWrapper {
+            cursor: pointer;
+          }
+
+          .button {
+            width: 80%;
+            height: 50px;
+            border-radius: 10px;
+            border: 1.5px solid black;
+            background-color: #0065FF;
+            color: white;
+            font-size: 30px;
+            font-weight: 500;
+            font-family: 'Mono-Regular';
+            margin-top: 1rem;
+            cursor: pointer;
+          }
+          h1 {
+            font-family: 'Arial', sans-serif;
+            color: white;
+            font-size: 40px;
+          }
+          h2 {
+            font-family: 'Arial', sans-serif;
+            color: black;
+            font-size: 20px;
+          }
+        </style>
+      </head>
+      <body class='container'>
+        <h1>PhotoCode Password Change</h1>
+        <h2>${message}</h2>
+        <a class='buttonWrapper' href="${link}"><button class="button">Reset Password</button></a>
+        <h2>If you're having trouble clicking the button (e.g. Safari users), copy and paste the following link in your browser:</h2>
+        <p>${link}</p>
+      </body>
+    </html>
+  `
   }, function(err) {
     // handle any errors that occurred while sending the email
     if (err) {
@@ -1104,6 +1213,53 @@ app.post('/resetPassword', async function (req, res) {
     });
   }
 });
+
+// Function to change users username
+function changeUsername(req, callback) {
+  const user_id = ObjectId(req.body.user_id);
+  const newUsername = req.body.newUsername;
+  users.updateOne({ _id: user_id }, { $set: { username: newUsername } }, function (err, result) {
+    if (err) return callback(err);
+    callback(null, result);
+  });
+}
+
+// Route handler to change users username
+app.post('/changeUsername', async function (req, res) {
+  changeUsername(req, function (err, result) {
+    if (err) {
+      console.log(err);
+      res.status(500).send({ error: err.message });
+    } else {
+      console.log(result);
+      res.status(200).send({ message: 'Username changed successfully' });
+    }
+  });
+});
+
+// Function to change users email
+function changeEmail(req, callback) {
+  const user_id = ObjectId(req.body.user_id);
+  const newEmail = req.body.newEmail;
+  users.updateOne({ _id: user_id }, { $set: { email: newEmail } }, function (err, result) {
+    if (err) return callback(err);
+    callback(null, result);
+  });
+}
+
+// Route handler to change users email
+app.post('/changeEmail', async function (req, res) {
+  changeEmail(req, function (err, result) {
+    if (err) {
+      console.log(err);
+      res.status(500).send({ error: err.message });
+    } else {
+      console.log(result);
+      res.status(200).send({ message: 'Email changed successfully' });
+    }
+  });
+});
+
 
 /* 
 ||------------------User updates------------------||

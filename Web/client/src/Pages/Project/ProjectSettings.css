@@ -344,6 +344,13 @@
     color: black;
 }
 
+h3 {
+    font-family: "Mono-Regular";
+    font-size: 2rem;
+    text-align: center;
+    color: green;
+}
+
 .DeleteProjectButton {
     width: 30%;
     height: 10%;

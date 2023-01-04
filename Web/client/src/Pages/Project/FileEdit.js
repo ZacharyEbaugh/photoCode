@@ -26,9 +26,14 @@ function File_Edit(props) {
   const [fileName, setFileName] = useState('');
   const [fileId, setFileId] = useState('');
   const [code, setCode] = useState('Hello World!');
+  const [originCode, setOriginCode] = useState('Hello World!');
+
+  const [updateTitle, setUpdateTitle] = useState('');
+  const [updateDescription, setUpdateDescription] = useState('');
+
+  const [error, setError] = useState('');
+
   const langLoad = loadLanguage('java');
-
-
  
   // Axios call to get file information
   useEffect(() => {
@@ -42,6 +47,7 @@ function File_Edit(props) {
         const response = await axios.get(`http://localhost:3001/getFile?file_id=${urlParams.get('file_id')}`);
         const buffer = Buffer.from(response.data.fileContents.data, 'hex')
         await setCode(buffer.toString());
+        await setOriginCode(buffer.toString());
       });
     }
     getFileInfo().then(() => {
@@ -52,13 +58,32 @@ function File_Edit(props) {
   // API call to update file information
   const updateFile = async () => {
     props.setLoader(true);
+    if (code === originCode) {
+      setError('File will not update since no changes were made');
+      props.setLoader(false);
+      return;
+    }
     const response = await axios.post(`http://localhost:3001/updateFile`, {
       file_id: fileId,
       file_contents: code
     });
     if (response.status === 200) {
-      console.log('File updated');
-      navigate(-1);
+      // Create commit for file update
+      console.log(updateTitle + "\t" + updateDescription);
+      const commitResponse = await axios.post(`http://localhost:3001/createCommit`, {
+        project_id: localStorage.getItem('project_id'),
+        user_id: localStorage.getItem('user_id'),
+        picture: localStorage.getItem('picture'),
+        title: (updateTitle === '') ? "Update " + fileName : updateTitle,
+        message: (updateDescription === '') ? "Changes made by " + localStorage.getItem('name') : updateDescription,
+      });
+      if (commitResponse.status === 200) {
+        console.log('Commit created');
+        navigate(-1);
+      }
+      else {
+        console.log('Commit not created');
+      }
     }
     else {
       console.log('File not updated');
@@ -108,13 +133,15 @@ function File_Edit(props) {
             </div>
             <div className="commit_information">
                 <input
-                type="text"
-                className="titleName"
-                placeholder={"Update " + fileName}
+                  type="text"
+                  className="titleName"
+                  placeholder={"Update " + fileName}
+                  onChange={(e) => setUpdateTitle(e.target.value)}
                 />
                 <textarea 
                   className="description"
                   placeholder="Changes made..."  
+                  onChange={(e) => setUpdateDescription(e.target.value)}
                 />
                 <div className='buttons'>
                   <button className="cancelButton" onClick={() => 
@@ -129,7 +156,7 @@ function File_Edit(props) {
                       Update File
                   </button>
                 </div>
-          
+                <p className="error">{error}</p>
             </div>
         </div>
       </div>
