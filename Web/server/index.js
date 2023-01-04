@@ -232,6 +232,7 @@ app.post('/createProject', function (req, res) {
 // Function to get all projects from the projects collection
 function getAllProjects(req, callback) {
   const user_id = req.query.user_id;
+  console.log("Getting all Projects: " + user_id);
   const user = {
     user: user_id
   };
