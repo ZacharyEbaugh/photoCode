@@ -42,7 +42,7 @@ function Home(props) {
     useEffect(() => {
         const user_id = localStorage.getItem('user_id');
         console.log(user_id);
-        axios.get(`https://photocode.app:443/getAllProjects?user_id=${user_id}`)
+        axios.get(`https://photocode.app/getAllProjects?user_id=${user_id}`)
             .then(res => {
                 // res.data.forEach(project => {
                 //     listOfProjects.push(project);
