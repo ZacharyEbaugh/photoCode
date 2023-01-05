@@ -51,11 +51,7 @@ function Register() {
     }
     
     try {
-<<<<<<< Updated upstream
-      axios.post("https://photocode.app/register", {
-=======
       axios.post("https://photocode.app:8443/register", {
->>>>>>> Stashed changes
         email: email,
         username: username,
         password: password,

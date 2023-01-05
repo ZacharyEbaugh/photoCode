@@ -44,11 +44,7 @@ function File_Edit(props) {
       const namePromise = setFileName(urlParams.get('file_name'));
 
       await Promise.resolve(idPromise, namePromise).then(async() => {
-<<<<<<< Updated upstream
-        const response = await axios.get(`https://photocode.app/getFile?file_id=${urlParams.get('file_id')}`);
-=======
         const response = await axios.get(`https://photocode.app:8443/getFile?file_id=${urlParams.get('file_id')}`);
->>>>>>> Stashed changes
         const buffer = Buffer.from(response.data.fileContents.data, 'hex')
         await setCode(buffer.toString());
         await setOriginCode(buffer.toString());
@@ -67,22 +63,14 @@ function File_Edit(props) {
       props.setLoader(false);
       return;
     }
-<<<<<<< Updated upstream
-    const response = await axios.post(`https://photocode.app/updateFile`, {
-=======
     const response = await axios.post(`https://photocode.app:8443/updateFile`, {
->>>>>>> Stashed changes
       file_id: fileId,
       file_contents: code
     });
     if (response.status === 200) {
       // Create commit for file update
       console.log(updateTitle + "\t" + updateDescription);
-<<<<<<< Updated upstream
-      const commitResponse = await axios.post(`https://photocode.app/createCommit`, {
-=======
       const commitResponse = await axios.post(`https://photocode.app:8443/createCommit`, {
->>>>>>> Stashed changes
         project_id: localStorage.getItem('project_id'),
         user_id: localStorage.getItem('user_id'),
         picture: localStorage.getItem('picture'),

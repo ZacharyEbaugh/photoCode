@@ -53,11 +53,7 @@ function ProjectPage(props) {
     const project_id = query.get('project_id');
     localStorage.setItem('project_id', project_id);
     console.log("ID: " + project_id);
-<<<<<<< Updated upstream
-    axios.get(`https://photocode.app/getFolders?project_id=${project_id}`)
-=======
     axios.get(`https://photocode.app:8443/getFolders?project_id=${project_id}`)
->>>>>>> Stashed changes
       .then(res => {
         const root_folder_id = (res.data[0]._id != undefined) ? res.data[0]._id : null;
         setProjectName(res.data[0].name);
@@ -65,11 +61,7 @@ function ProjectPage(props) {
         res.data[0].name = "root";
         setCurrentPath([...currentPath, res.data[0]]);
         if (root_folder_id != null) {
-<<<<<<< Updated upstream
-          axios.get(`https://photocode.app/getFolders?project_id=${root_folder_id}`)
-=======
           axios.get(`https://photocode.app:8443/getFolders?project_id=${root_folder_id}`)
->>>>>>> Stashed changes
           .then(async res => {
             setFolders(res.data);
             // Set Loader false after setFolders is done
@@ -93,13 +85,8 @@ function ProjectPage(props) {
   const updateDirContents = async(folder) => {
     // Get the folder_id from the folderName
     // Grab the folders and files within the folder that was clicked and change the states to display them
-<<<<<<< Updated upstream
-    const update_folders = await axios.get(`https://photocode.app/getFolders?project_id=${folder._id}`);
-    const files = await axios.get(`https://photocode.app/getFiles?project_id=${folder._id}`);
-=======
     const update_folders = await axios.get(`https://photocode.app:8443/getFolders?project_id=${folder._id}`);
     const files = await axios.get(`https://photocode.app:8443/getFiles?project_id=${folder._id}`);
->>>>>>> Stashed changes
     return [update_folders.data, files.data];
   };
 
@@ -162,11 +149,7 @@ function ProjectPage(props) {
   };
 
   const handleDownload = async(file) => {
-<<<<<<< Updated upstream
-    const response = await axios.get(`https://photocode.app/getFile?file_id=${file._id}&file_name=${file.filename}`);
-=======
     const response = await axios.get(`https://photocode.app:8443/getFile?file_id=${file._id}&file_name=${file.filename}`);
->>>>>>> Stashed changes
     // Convert the hex string to a buffer
     const buffer = Buffer.from(response.data.fileContents.data, 'hex')
     // Convert the buffer to a Blob object
@@ -186,11 +169,7 @@ function ProjectPage(props) {
   }
 
   const handleFileDelete = async(file) => {
-<<<<<<< Updated upstream
-    const response = await axios.post('https://photocode.app/deleteFile', {
-=======
     const response = await axios.post('https://photocode.app:8443/deleteFile', {
->>>>>>> Stashed changes
       "file_id": file._id
     });
 
@@ -203,11 +182,7 @@ function ProjectPage(props) {
   }
 
   const handleFolderDelete = async(folder) => {
-<<<<<<< Updated upstream
-    const response = await axios.post('https://photocode.app/deleteFolder', {
-=======
     const response = await axios.post('https://photocode.app:8443/deleteFolder', {
->>>>>>> Stashed changes
     "folder": folder,  
     "folder_id": folder._id
     });
@@ -262,11 +237,7 @@ function ProjectPage(props) {
     // Handle generating unique file object name
     const newFolder = newFolderName;
     // Axios call to create new folder
-<<<<<<< Updated upstream
-    await axios.post('https://photocode.app/createFolder', {
-=======
     await axios.post('https://photocode.app:8443/createFolder', {
->>>>>>> Stashed changes
       name: newFolder,
       parent_id: currentFolder._id
     })
@@ -288,11 +259,7 @@ function ProjectPage(props) {
     formData.append('files', file);
 
     // Axios call to upload file to gridfs
-<<<<<<< Updated upstream
-    await axios.post('https://photocode.app/uploadFile', formData, {
-=======
     await axios.post('https://photocode.app:8443/uploadFile', formData, {
->>>>>>> Stashed changes
       headers: {
         'Content-Type': 'multipart/form-data'
       }
