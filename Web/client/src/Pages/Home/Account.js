@@ -33,11 +33,7 @@ function Account(props) {
     useEffect(() => {
         // Get user information using user_id
         console.log(localStorage.getItem('user_id'));
-<<<<<<< Updated upstream
-        axios.post("https://photocode.app/getUserInfo", {
-=======
         axios.post("https://photocode.app:8443/getUserInfo", {
->>>>>>> Stashed changes
             user_id: localStorage.getItem('user_id')
         })
         .then((res) => {
@@ -66,11 +62,7 @@ function Account(props) {
         props.setLoader(true);
         // Make axios call to send email to user with link to reset password
         try {
-<<<<<<< Updated upstream
-            axios.post("https://photocode.app/changeEmail", {
-=======
             axios.post("https://photocode.app:8443/changeEmail", {
->>>>>>> Stashed changes
                 user_id: localStorage.getItem('user_id'),
                 newEmail: newEmail
             })
@@ -99,11 +91,7 @@ function Account(props) {
         props.setLoader(true);
         // Make axios call to send email to user with link to reset password
         try {
-<<<<<<< Updated upstream
-            axios.post("https://photocode.app/changeUsername", {
-=======
             axios.post("https://photocode.app:8443/changeUsername", {
->>>>>>> Stashed changes
                 user_id: localStorage.getItem('user_id'),
                 newUsername: newUsername
             })
@@ -132,11 +120,7 @@ function Account(props) {
     //     props.setLoader(true);
     //     // Make axios call to send email to user with link to reset password
     //     try {
-<<<<<<< Updated upstream
-    //         axios.post("https://photocode.app/sendPasswordReset", {
-=======
     //         axios.post("https://photocode.app:8443/sendPasswordReset", {
->>>>>>> Stashed changes
     //             email: user.email
     //         })
     //         .then((res) => {
@@ -163,11 +147,7 @@ function Account(props) {
         props.setLoader(true);
         // Make axios call to send email to user with link to reset password
         try {
-<<<<<<< Updated upstream
-            axios.post("https://photocode.app/resetPassword", {
-=======
             axios.post("https://photocode.app:8443/resetPassword", {
->>>>>>> Stashed changes
                 email: user.email,
                 password: password,
                 passwordConfirm: passwordConfirm
