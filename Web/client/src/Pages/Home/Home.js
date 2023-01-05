@@ -48,10 +48,10 @@ function Home(props) {
                 //     listOfProjects.push(project);
                 // });
                 setProjects(res.data);
-                console.log(res.data);
+                console.log("Response from server: " + res.data);
             })
             .catch(err => {
-                console.log(err);
+                console.log("There is error: " + err);
             });
         console.log(projects);
     }, []);
