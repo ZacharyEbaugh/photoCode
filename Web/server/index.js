@@ -30,15 +30,19 @@ const GridFSBucket = require('mongodb').GridFSBucket;
 
 app.use(express.json());
 
-// app.use(cors({
-//   origin: "http://localhost:3000"
-// }));
-
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "*");
   next();
 });
+
+const https = require('https');
+const fs = require('fs');
+
+const credentials = {
+  key: fs.readFileSync('generated-private-key.pem'),
+  cert: fs.readFileSync('fbc4b2fe0afb3741.pem')
+};
 
 // Connect to MongoDB Cluster
 const mongodbPS = process.env.MONGO_PASSWORD;
@@ -85,6 +89,7 @@ const ObjectId = require('mongodb').ObjectId;
 
 // Function to create a new user in the users collection
 function create(req, callback) {
+  console.log("In Create User Function");
   const email = req.body.email;
   const username = req.body.username;
   const password = req.body.password;
@@ -97,7 +102,7 @@ function create(req, callback) {
     username: username,
     connection: connection,
   };
-
+  console.log(user);
   users.findOne({ email: user.email, connection: user.connection }, function (err, withSameMail) {
     if (err || withSameMail) {
       return callback(err || new Error('the user already exists'));
@@ -111,6 +116,7 @@ function create(req, callback) {
       user.email_verified = false;
       user.tenant = 'photocode';
       user.client_id = process.env.REACT_APP_AUTH0_CLIENT_ID;
+      console.log("Before inserting User");
       users.insert(user, function (err, inserted) {
 
       if (err) return callback(err);
@@ -333,10 +339,7 @@ async function getAllProjects(req, callback) {
   // Check for all projects that have a user matching the user_id or if the user_id is found in the collaborators array
   const user = { $or: [{ user: user_id }, { collaborators: user_id }] };
 
-
   const allProjects = await projects.find(user).toArray();
-
-  console.log(allProjects);
 
   if (!allProjects) {
     return callback(err || new Error('the project does not exist'));
@@ -699,10 +702,6 @@ app.post('/deleteProject', function (req, res) {
 ||Folder/File uploading                   ||
 ||----------------------------------------|| 
 */
-
-const fs = require('fs');
-const { set } = require("mongoose");
-const { TIMEOUT } = require("dns");
 
 const dbURI = 'mongodb+srv://PhotoCodeAuth0:' +
     mongodbPS +
@@ -1344,5 +1343,9 @@ app.post('/createCommit', async function (req, res) {
 */
 
 // Start the app
-app.listen(3001, () => console.log('API listening on 3001'));
+// app.listen(3001, () => console.log('API listening on 3001'));
+// var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
 
+// httpServer.listen(8080);
+httpsServer.listen(8443, () => console.log('API listening on 8443'));

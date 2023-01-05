@@ -46,7 +46,7 @@ function Home(props) {
         setSearchQuery('');
     }
 
-    useEffect(() => {
+useEffect(() => {
         // Create a Promise to get the user ID from local storage
         const getUserId = new Promise((resolve, reject) => {
           const user_id = localStorage.getItem('user_id');
@@ -59,11 +59,7 @@ function Home(props) {
         // Wait for the Promise to resolve before making the API call
         getUserId.then(user_id => {
           // Fetch the projects from the database
-<<<<<<< Updated upstream
-          axios.get(`https://photocode.app/getAllProjects?user_id=${user_id}`)
-=======
           axios.get(`https://photocode.app:8443/getAllProjects?user_id=${user_id}`)
->>>>>>> Stashed changes
             .then(res => {
               // Update the state with the fetched projects
               setProjects(res.data);
