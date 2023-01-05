@@ -105,6 +105,7 @@ function App() {
               connection: localStorage.getItem('connection'),
             })
             .then(response => {
+              console.log("After Register calling getUser");
               // Get user id from mongoDB
               axios.post("https://photocode.app:8443/getUser", {
                 email: localStorage.getItem('email'),
