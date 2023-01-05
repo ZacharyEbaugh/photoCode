@@ -1,25 +1,25 @@
 @font-face {
     font-family: "Mono-Regular";
     src: local("JetBrainsMono-Regular"),
-        url(".././fonts/JetBrainsMono-Regular.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-Regular.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Mono-Medium";
     src: local("JetBrainsMono-Medium"),
-        url(".././fonts/JetBrainsMono-Medium.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-Medium.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Mono-Bold";
     src: local("JetBrainsMono-Bold"),
-        url(".././fonts/JetBrainsMono-Bold.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-Bold.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Mono-ExtraBold";
     src: local("JetBrainsMono-ExtraBold"),
-        url(".././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
 }
 
 .CreateProjectContainer {
@@ -135,7 +135,8 @@ file-attachment {
 }
 
 file-attachment[hover] {
-    background-color: #e6e6e65b;
+    background-color: #c2c2c262;
+    border: 2px dotted #d1d1d1;
 }
 
 file-attachment input {
@@ -143,11 +144,12 @@ file-attachment input {
     width: 100%;
     height: 100%;
     cursor: pointer;
-    /* background-color: black; */
+    position: absolute;
+    left: 0%;
+    top: 0%;
 }
 
 .file-attachment-text {
-    width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -156,8 +158,8 @@ file-attachment input {
     font-size: 3rem;
     font-family: "Mono-Regular";
     color: black;
-    position: absolute;
-    left: 0%;
+    padding-left: 2rem;
+    padding-right: 2rem;
 }
 
 .dropzone {

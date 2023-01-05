@@ -14,7 +14,7 @@ import github_icon from '../../images/github_icon_black.png';
 import terminal_icon from '../../images/terminal_icon_black.png';
 import { PhotoCodeHeader } from '../PhotoCodeHeader';
 
-function Contact() {
+function Contact(props) {
     const [listOfUsers, setListOfUsers] = useState([]);
     const [company, setCompany] = useState("");
     const [message, setMessage] = useState("");
@@ -23,7 +23,11 @@ function Contact() {
 
     // Axios call sendemail to user on button click
     const sendEmail = () => {
-        Axios.post("http://localhost:3001/sendEmail", {
+<<<<<<< Updated upstream
+        Axios.post("https://photocode.app/sendEmail", {
+=======
+        Axios.post("https://photocode.app:8443/sendEmail", {
+>>>>>>> Stashed changes
             name: localStorage.getItem("name"),
             email: localStorage.getItem("email"),
             company: company,
@@ -42,7 +46,7 @@ function Contact() {
 
     return (
       <div className="containerContact">  
-        <PhotoCodeHeader/>
+        <PhotoCodeHeader  setLoader={props.setLoader}/>
 
         <section className='main'>
             <div className='profileCardWrapper'>

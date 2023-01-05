@@ -1,31 +1,42 @@
 @font-face {
     font-family: "Mono-Regular";
     src: local("JetBrainsMono-Regular"),
-        url(".././fonts/JetBrainsMono-Regular.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-Regular.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Mono-Medium";
     src: local("JetBrainsMono-Medium"),
-        url(".././fonts/JetBrainsMono-Medium.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-Medium.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Mono-Bold";
     src: local("JetBrainsMono-Bold"),
-        url(".././fonts/JetBrainsMono-Bold.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-Bold.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Mono-ExtraBold";
     src: local("JetBrainsMono-ExtraBold"),
-        url(".././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
+        url("../.././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
+}
+
+body {
+    background-color: white;
+}
+
+.gradientContainer {
+    background: linear-gradient(to bottom, #0066FF 0%, #FFFFFF 100%);
+    width: 100%;
+    height: 55vh;
+    margin-bottom: 2rem;
 }
 
 .ProjectPageContainer {
-    height: 50vw;
     width: 100%;
-    background: linear-gradient(180deg, #0066FF 0%, #FFFFFF 100%);
+    height: 100%;
+    /* background: linear-gradient(50vh, #0066FF 0%, #FFFFFF 100%); */
     display: flex;
     flex-direction: column;
 }
@@ -38,11 +49,20 @@
     justify-content: space-around;
     align-items: flex-start;
     margin-top: 2%;
+}
 
+.directory {
+    width: 60%;
+    /* height: 100%; */
+    /* background-color: red; */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .dirBlock {
-    width: 60%;
+    width: 100%;
     /* height: 80%; */
     background: #FFFFFF;
     box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
@@ -51,6 +71,7 @@
     flex-direction: column;
     /* justify-content: center; */
     align-items: center;
+    margin-bottom: 2rem;
 }
 
 .dirBlock h1 {
@@ -103,7 +124,7 @@
 
 .searchFile {
     width: 100%;
-    /* height: 2vw; */
+    background-color: black;
     font-family: "Mono-Regular";
     font-size: 1.8vw;
     display: flex;
@@ -112,7 +133,6 @@
     border: none;
     border-radius: 7.76322px;
     justify-content: center;
-    padding: 0.45vw;
 }
 
 .searchFile:focus {
@@ -192,6 +212,20 @@
 .folders h1 {
     font-size: 1.5vw;
     margin-left: 1%;
+}
+
+.downloadButton {
+    width: 2vw;
+    height: 2vw;
+    cursor: pointer;
+    position: absolute;
+    right: 10%;
+    top: 30%;
+    color: white;
+}
+
+.downloadButton:hover {
+    color: green;
 }
 
 .deleteButton {
@@ -275,12 +309,18 @@
 }
 
 .settings-commits {
-    /* background-color: black; */
     width: 30%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.commitContent {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
 }
 
 .settingsButton {

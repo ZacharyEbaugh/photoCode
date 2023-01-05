@@ -1,5 +1,5 @@
 import './Home.css';
-import {
+import React, {
     useState, 
     useEffect
 } from "react";
@@ -7,115 +7,151 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
-import jwt from 'jwt-decode';
 
 import account_picture from '../../images/account.png';
 import folder_icon from '../../images/Folder_Icon.png';
+import { MdClear } from "react-icons/md";
 import search_icon from '../../images/Search_Icon.png';
 import { PhotoCodeHeader } from '../PhotoCodeHeader';
+import LoadingPage from '../LoadingPage';
+
 
 function Home(props) {
+
+    // UI Mounted Loader
+    const [isLoading, setIsLoading] = React.useState(false);
+
+    // const handleLoading = () => {
+    //     setIsLoading(false);
+    // }
+
+    // useEffect(()=>{
+    //     window.addEventListener("load",handleLoading);
+    //     return () => window.removeEventListener("load",handleLoading);
+    //     handleLoading();
+    // },[])
+
     const navigate = useNavigate();
 
     const [projects, setProjects] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
 
-    // const listOfProjects = [
-    //     {
-    //         name: "Portfolio Webpage",
-    //         date: "5/27/2022",
-    //         img_link: require("../../images/proj_1.png"),
-    //         lang_1: "HTML",
-    //         lang_2: "CSS",
-    //         lang_3: "JavaScript",
-    //     },
-    //     {
-    //         name: "Stupid Webpage",
-    //         date: "5/27/2022",
-    //         img_link: require("../../images/proj_1.png"),
-    //         lang_1: "HTML",
-    //         lang_2: "CSS",
-    //         lang_3: "JavaScript",
-    //     }
-    // ]
+    const search = (query) => {
+        // Set the searchQuery state variable to the query argument
+        setSearchQuery(query);
+        console.log(searchQuery);
+    }
 
-    // Get all projects for user from database
-    useEffect(() => {
-        console.log(localStorage);
-        const user_id = localStorage.getItem('user_id');
-        console.log(user_id);
-        axios.get(`https://photocode.app:8443/getAllProjects?user_id=${user_id}`)
+    const handleClear = () => {
+        setSearchQuery('');
+    }
+
+useEffect(() => {
+        // Create a Promise to get the user ID from local storage
+        const getUserId = new Promise((resolve, reject) => {
+          const user_id = localStorage.getItem('user_id');
+          if (user_id) {
+            resolve(user_id);
+          } else {
+            reject(new Error('No user ID found in local storage'));
+          }
+        });
+        // Wait for the Promise to resolve before making the API call
+        getUserId.then(user_id => {
+          // Fetch the projects from the database
+          axios.get(`https://photocode.app:8443/getAllProjects?user_id=${user_id}`)
             .then(res => {
-                // res.data.forEach(project => {
-                //     listOfProjects.push(project);
-                // });
-                setProjects(res.data);
-                console.log("Response from server: " + res.data);
+              // Update the state with the fetched projects
+              setProjects(res.data);
+              props.setLoader(false);
             })
             .catch(err => {
-                console.log("There is error: " + err);
+              console.log(err);
             });
-        console.log(projects);
-    }, []);
+        }).catch(err => {
+          console.error(err);
+        });
+      }, [localStorage.getItem('user_id')]);
 
+    // Filter projects based on search query and return the filtered projects list
+    const searchResults = projects.filter((item) => item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase()));
   
-    return (
-      <div className="containerHome">  
-        <PhotoCodeHeader/>
-        <section className='main'>
-            <div className='sidebar'>
-                <div className='projectsWrapper'>
-                    <header className='projectsHeader'>
-                        <h1 className='projectsTitle'>Projects</h1>
-                        <div className='projectsButtonWrapper'>
-                            <div className='inputWrapper'>
-                                <img className='searchIcon' src={search_icon} />
-                                <input className='searchProjectInput' placeholder='Search Projects'></input>
-                            </div>
-                            <button className='createProjectButton' onClick={() => navigate('/CreateProject')}>
-                                <img className='createProjectIcon' src={folder_icon} />
-                                New
-                            </button>
+    if (props.auth.isLoading) {
+        return (
+          <LoadingPage />
+        )
+      } else {
+        return (
+            <div className="containerHome">  
+                <PhotoCodeHeader  setLoader={props.setLoader}/>
+                <div className='main'>
+                    <div className='sidebar'>
+                        <div className='projectsWrapper'>
+                            <header className='projectsHeader'>
+                                <h1 className='projectsTitle'>Projects</h1>
+                                <div className='projectsButtonWrapper'>
+                                    <div className="inputWrapper">
+                                        <input
+                                            type="text"
+                                            id="search-input"
+                                            className="searchProjects"
+                                            placeholder="Search Projects"
+                                            onChange={event => search(event.target.value)}
+                                        />
+                                        {(searchQuery != '') && <button className="clearProjectSearch" onClick={handleClear}>
+                                            <MdClear 
+                                                className="clearProjectSearchIcon"
+                                            />
+                                        </button>}
+                                    </div>
+                                    <button className='createProjectButton' onClick={() => navigate('/CreateProject')}>
+                                        <img className='createProjectIcon' src={folder_icon} />
+                                        New
+                                    </button>
+                                </div>
+                            </header>
+                            {Object.entries((searchQuery === '') ? projects : searchResults).map(([key, project]) => {
+                                return (
+                                    <section className='project' key={project._id} onClick={() => {
+                                        props.setLoader(true);
+                                        navigate('/ProjectPage?project_id=' + project._id, { state: { commits: project.commits } });
+                                        }}>
+                                        <img className='projectImage' src={require("../../images/proj_1.png")} />
+                                        <div className='projectTitlesWrapper'>
+                                            <h1 className='projectTitle'>{project.name}</h1>
+                                            <h1 className='projectDesc'>{project.description}</h1>
+                                        </div>
+                                        <div className='commonLangWrapper'>
+                                            <div className='commonLang'>
+                                                <h2 className='lang'>{project.lang_1}</h2>
+                                                <span className='lang1Circle'></span>
+                                            </div>
+                                            <div className='commonLang'>
+                                                <h2 className='lang'>{project.lang_2}</h2>
+                                                <span className='lang2Circle'></span>
+                                            </div>
+                                            <div className='commonLang'>
+                                                <h2 className='lang'>{project.lang_3}</h2>
+                                                <span className='lang3Circle'></span>
+                                            </div>
+                                        </div>
+                                    </section>
+                                );
+                            })}
                         </div>
-                    </header>
-                    {projects.map((project) => {
-                        console.log(project);
-                        return (
-                            <section className='project' key={project._id}>
-                                <img className='projectImage' src={project.img_link} />
-                                <div className='projectTitlesWrapper'>
-                                    <h1 className='projectTitle'>{project.name}</h1>
-                                    {/* <h1 className='projectDateDesc'>Last Modified:</h1> */}
-                                    <h1 className='projectDate'>Last modified: {project.date}</h1>
-                                </div>
-                                <div className='commonLangWrapper'>
-                                    <div className='commonLang'>
-                                        <h2 className='lang'>{project.lang_1}</h2>
-                                        <span className='lang1Circle'></span>
-                                    </div>
-                                    <div className='commonLang'>
-                                        <h2 className='lang'>{project.lang_2}</h2>
-                                        <span className='lang2Circle'></span>
-                                    </div>
-                                    <div className='commonLang'>
-                                        <h2 className='lang'>{project.lang_3}</h2>
-                                        <span className='lang3Circle'></span>
-                                    </div>
-                                </div>
-                            </section>
-                        );
-                    })}
-                </div>
-
-                <div className='releaseNotesWrapper'>
-                    <h1 className='releaseNotesTitle'>Release Notes</h1>
+                    </div>
+                    <div className='projectInformationWrapper'>
+                        <div className='readMeWrapper'>
+                            <h1 className='readMeTitle'>Read Me</h1>
+                        </div>
+                        <div className='releaseNotesWrapper'>
+                            <h1 className='releaseNotesTitle'>Release Notes</h1>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div className='readMeWrapper'>
-                <h1 className='readMeTitle'>Read Me</h1>
-            </div>
-        </section>
-      </div>
-    );
+        );
+    }   
   }
   
   export default Home;

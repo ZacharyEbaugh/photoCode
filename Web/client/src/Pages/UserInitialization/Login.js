@@ -49,7 +49,7 @@ function Login(props) {
             'https://photocode.us.auth0.com/authorize?'
             + 'response_type=code' + '&'
             + 'client_id=' + process.env.REACT_APP_AUTH0_CLIENT_ID + '&'
-            + 'redirect_uri=' + 'http://localhost:3000/Home' + '&'
+            + 'redirect_uri=' + 'https://photocode.app/Home' + '&'
             + 'scope=openid%20profile%20email' + '&'
             + 'connection=' + 'google-oauth2'
           }} className="Login" id="Google"> 
@@ -64,7 +64,7 @@ function Login(props) {
           'https://photocode.us.auth0.com/authorize?'
           + 'response_type=code' + '&'
           + 'client_id=' + process.env.REACT_APP_AUTH0_CLIENT_ID + '&'
-          + 'redirect_uri=' + 'http://localhost:3000/Home' + '&'
+          + 'redirect_uri=' + 'https://photocode.app/Home' + '&'
           + 'scope=openid%20profile%20email' + '&'
           + 'connection=' + 'github'
          }} className="Login" id="GitHub"> 
@@ -79,7 +79,7 @@ function Login(props) {
             'https://photocode.us.auth0.com/authorize?'
           + 'response_type=code' + '&'
           + 'client_id=' + process.env.REACT_APP_AUTH0_CLIENT_ID + '&'
-          + 'redirect_uri=' + 'http://localhost:3000/Home' + '&'
+          + 'redirect_uri=' + 'https://photocode.app/Home' + '&'
           + 'scope=openid%20profile%20email' + '&'
           + 'connection=' + 'linkedin'
           }} 
