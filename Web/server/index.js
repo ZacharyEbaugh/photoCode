@@ -41,8 +41,8 @@ const https = require('https');
 const fs = require('fs');
 
 const credentials = {
-  key: fs.readFileSync('key.pem'),
-  cert: fs.readFileSync('cert.pem')
+  key: fs.readFileSync('generated-private-key.pem'),
+  cert: fs.readFileSync('fbc4b2fe0afb3741.pem')
 };
 
 // // Configure authentication middleware for the application 
