@@ -70,6 +70,7 @@ function App() {
           })
           .then(response => {
             // Local storage tokens
+            console.log("OAuth Responsse: " + response.data.access_token + "\t" + response.data.id_token);
             localStorage.setItem("access_token", response.data.access_token);
             localStorage.setItem("id_token", response.data.id_token);
 
@@ -97,7 +98,7 @@ function App() {
 
             // Attempt to register the user, if they already exist, it will fail
             // If they are logging in with a social, this will ensure all users are stored in the database
-            axios.post("https://photocode.app:8443/register", {
+            axios.post("http://photocode.app:8443/register", {
               email: localStorage.getItem('email'),
               username: localStorage.getItem('name'),
               password: Math.random().toString(36),
@@ -105,12 +106,12 @@ function App() {
             })
             .then(response => {
               // Get user id from mongoDB
-              axios.post("https://photocode.app:8443/getUser", {
+              axios.post("http://photocode.app:8443/getUser", {
                 email: localStorage.getItem('email'),
                 connection: localStorage.getItem('connection'),
               })
               .then(response => {
-                console.log(response.data._id);
+                console.log("User ID: " + response.data._id);
                 localStorage.setItem("user_id", response.data._id);
               })
               .catch(error => {
