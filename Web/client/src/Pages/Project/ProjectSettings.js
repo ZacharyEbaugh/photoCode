@@ -39,7 +39,11 @@ function ProjectSettings(props) {
       // Make a request to the MongoDB server to search for users
       async function fetchUsers() {
         try {
+<<<<<<< Updated upstream
           const response = await axios.get('https://photocode.app/searchUsers', {
+=======
+          const response = await axios.get('https://photocode.app:8443/searchUsers', {
+>>>>>>> Stashed changes
             params: {
               username: searchQuery
             }
@@ -75,7 +79,11 @@ function ProjectSettings(props) {
         });
         // Update project information
         const project_id = localStorage.getItem('project_id');
+<<<<<<< Updated upstream
         const response = await axios.post(`https://photocode.app/updateProject`, {
+=======
+        const response = await axios.post(`https://photocode.app:8443/updateProject`, {
+>>>>>>> Stashed changes
             project_id: project_id,
             name: projectName,
             description: projectDescriptionPlaceholder,
@@ -100,7 +108,11 @@ function ProjectSettings(props) {
         });
         // Update project information
         const project_id = localStorage.getItem('project_id');
+<<<<<<< Updated upstream
         const response = await axios.post(`https://photocode.app/updateProject`, {
+=======
+        const response = await axios.post(`https://photocode.app:8443/updateProject`, {
+>>>>>>> Stashed changes
             project_id: project_id,
             name: projectNamePlaceholder,
             description: projectDescription,
@@ -118,7 +130,11 @@ function ProjectSettings(props) {
         props.setLoader(true);
         // Update project information
         const project_id = localStorage.getItem('project_id');
+<<<<<<< Updated upstream
         await axios.post(`https://photocode.app/sendProjectInvite`, {
+=======
+        await axios.post(`https://photocode.app:8443/sendProjectInvite`, {
+>>>>>>> Stashed changes
             email: user.email,
             project_id: project_id,
             project_name: projectNamePlaceholder,
@@ -144,7 +160,11 @@ function ProjectSettings(props) {
         });
         // Update project information
         const project_id = localStorage.getItem('project_id');
+<<<<<<< Updated upstream
         const response = await axios.get(`https://photocode.app/removeCollaborator`, {
+=======
+        const response = await axios.get(`https://photocode.app:8443/removeCollaborator`, {
+>>>>>>> Stashed changes
             params: {
                 project_id: project_id,
                 user_id: user._id,
@@ -162,12 +182,20 @@ function ProjectSettings(props) {
         // Get project information
         const project_id = localStorage.getItem('project_id');
         async function getProject() {
+<<<<<<< Updated upstream
             const response = await axios.get(`https://photocode.app/getProject?project_id=${project_id}`)
+=======
+            const response = await axios.get(`https://photocode.app:8443/getProject?project_id=${project_id}`)
+>>>>>>> Stashed changes
             setProjectNamePlaceholder(response.data.name);
             setProjectOwner(response.data.user);
             setProjectDescriptionPlaceholder(response.data.description);
             // Get project collaborators information from users collection and add to projectMembers
+<<<<<<< Updated upstream
             const response2 = await axios.get('https://photocode.app/getCollaborators', {
+=======
+            const response2 = await axios.get('https://photocode.app:8443/getCollaborators', {
+>>>>>>> Stashed changes
                 params: {
                     project_id: project_id
                 }
@@ -188,12 +216,20 @@ function ProjectSettings(props) {
         });
         // Delete folders/files from projects contents
         const project_id = localStorage.getItem('project_id');
+<<<<<<< Updated upstream
         const response = await axios.post('https://photocode.app/deleteFolder', {
+=======
+        const response = await axios.post('https://photocode.app:8443/deleteFolder', {
+>>>>>>> Stashed changes
             "folder_id": project_id
         })
         .then(
             // Delete project object from projects collection
+<<<<<<< Updated upstream
             axios.post('https://photocode.app/deleteProject', {
+=======
+            axios.post('https://photocode.app:8443/deleteProject', {
+>>>>>>> Stashed changes
                 project_id: project_id
             })
         );

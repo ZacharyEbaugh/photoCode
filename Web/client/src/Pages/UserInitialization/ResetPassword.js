@@ -53,7 +53,11 @@ function ResetPassword(props) {
             return;
         }
         try {
+<<<<<<< Updated upstream
             axios.post("https://photocode.app/resetPassword", {
+=======
+            axios.post("https://photocode.app:8443/resetPassword", {
+>>>>>>> Stashed changes
                 email: email,
                 password: password,
                 passwordConfirm: passwordConfirm

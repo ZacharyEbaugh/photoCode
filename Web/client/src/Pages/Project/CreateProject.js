@@ -71,7 +71,11 @@ const CreateProject = (props) => {
   const handleCreateProject = () => {
     props.setLoader(true);
     // Call /createProject endpoint to create project in the database and get the project id
+<<<<<<< Updated upstream
     axios.post('https://photocode.app/createProject', {
+=======
+    axios.post('https://photocode.app:8443/createProject', {
+>>>>>>> Stashed changes
       name: projectName,
       description: projectDescription,
       user: localStorage.getItem('user_id'),
@@ -80,7 +84,11 @@ const CreateProject = (props) => {
     .then(async(response) => {
       const project_id = response.data.project_id;
       // Create Folder that will act as the root folder for the project with a parent id of the project id
+<<<<<<< Updated upstream
       axios.post('https://photocode.app/createFolder', {
+=======
+      axios.post('https://photocode.app:8443/createFolder', {
+>>>>>>> Stashed changes
         name: projectName,
         parent_id: project_id,
       })
@@ -104,7 +112,11 @@ const CreateProject = (props) => {
             for (let i = 0; i < folderPath.length; i++) {
               // Check if the folder already exists in the database and if not
               // create it with the parent id of the previous folder within this loop
+<<<<<<< Updated upstream
               const response = await axios.post('https://photocode.app/createFolder', {
+=======
+              const response = await axios.post('https://photocode.app:8443/createFolder', {
+>>>>>>> Stashed changes
                 name: folderPath[i],
                 parent_id: localStorage.getItem('parent_id'),
               })
@@ -132,7 +144,11 @@ const CreateProject = (props) => {
         });
         try {
           // Upload the files to the server using the /uploadFile endpoint with the folder id as the parent folder id 
+<<<<<<< Updated upstream
           const response = await axios.post('https://photocode.app/uploadFile', formData, {
+=======
+          const response = await axios.post('https://photocode.app:8443/uploadFile', formData, {
+>>>>>>> Stashed changes
             headers: {
               'Content-Type': 'multipart/form-data',
             },
