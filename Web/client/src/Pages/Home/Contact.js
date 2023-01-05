@@ -23,11 +23,7 @@ function Contact(props) {
 
     // Axios call sendemail to user on button click
     const sendEmail = () => {
-<<<<<<< Updated upstream
-        Axios.post("https://photocode.app/sendEmail", {
-=======
         Axios.post("https://photocode.app:8443/sendEmail", {
->>>>>>> Stashed changes
             name: localStorage.getItem("name"),
             email: localStorage.getItem("email"),
             company: company,
