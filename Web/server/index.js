@@ -118,6 +118,7 @@ const ObjectId = require('mongodb').ObjectId;
 
 // Function to create a new user in the users collection
 function create(req, callback) {
+  console.log("In Create User Function");
   const email = req.body.email;
   const username = req.body.username;
   const password = req.body.password;
@@ -128,7 +129,7 @@ function create(req, callback) {
     username: username,
     connection: connection,
   };
-
+  console.log(user);
   users.findOne({ email: user.email, connection: user.connection }, function (err, withSameMail) {
     if (err || withSameMail) {
       return callback(err || new Error('the user already exists'));
@@ -141,6 +142,7 @@ function create(req, callback) {
       user.email_verified = false;
       user.tenant = 'photocode';
       user.client_id = process.env.REACT_APP_AUTH0_CLIENT_ID;
+      console.log("Before inserting User");
       users.insert(user, function (err, inserted) {
 
       if (err) return callback(err);
