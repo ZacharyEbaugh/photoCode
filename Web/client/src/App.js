@@ -98,7 +98,7 @@ function App() {
 
             // Attempt to register the user, if they already exist, it will fail
             // If they are logging in with a social, this will ensure all users are stored in the database
-            axios.post("http://photocode.app:8443/register", {
+            axios.post("https://photocode.app:8443/register", {
               email: localStorage.getItem('email'),
               username: localStorage.getItem('name'),
               password: Math.random().toString(36),
@@ -106,7 +106,7 @@ function App() {
             })
             .then(response => {
               // Get user id from mongoDB
-              axios.post("http://photocode.app:8443/getUser", {
+              axios.post("https://photocode.app:8443/getUser", {
                 email: localStorage.getItem('email'),
                 connection: localStorage.getItem('connection'),
               })
