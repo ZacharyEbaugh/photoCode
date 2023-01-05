@@ -95,7 +95,7 @@ function App() {
             // Local Storage other user data
             localStorage.setItem("name", decoded.name);
             localStorage.setItem("picture", decoded.picture);
-
+            console.log("Calling Register");
             // Attempt to register the user, if they already exist, it will fail
             // If they are logging in with a social, this will ensure all users are stored in the database
             axios.post("https://photocode.app:8443/register", {
