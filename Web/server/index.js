@@ -128,6 +128,7 @@ function create(req, callback) {
 // Route handler for creating a new user
 app.post('/register', function (req, res) {
   create(req, function (err) {
+    console.log(err);
     res.send({ message: 'User created' });
     });
   });
