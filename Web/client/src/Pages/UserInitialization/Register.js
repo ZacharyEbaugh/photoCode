@@ -59,12 +59,6 @@ function Register() {
         })
         .then((res) => {
           console.log(res);
-          if (res.data.message === 'User already exists')
-          {
-            setError(res.data.message);
-            console.log(res.data.message);
-            return;
-          }
           if (res.data.error)
           {
 
