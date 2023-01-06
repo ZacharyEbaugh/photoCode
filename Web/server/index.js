@@ -116,7 +116,6 @@ function create(req, callback) {
       user.email_verified = false;
       user.tenant = 'photocode';
       user.client_id = process.env.REACT_APP_AUTH0_CLIENT_ID;
-      console.log("Before inserting User");
       users.insert(user, function (err, inserted) {
 
       if (err) return callback(err);
@@ -129,7 +128,15 @@ function create(req, callback) {
 // Route handler for creating a new user
 app.post('/register', function (req, res) {
   create(req, function (err) {
-    res.send({ message: 'User created' });
+    if (err)
+    {
+      console.log(err);
+      res.status(500).send({ error: err.message });
+    }
+    else
+    {
+      res.send({ message: 'User created' });
+    }
     });
   });
 
