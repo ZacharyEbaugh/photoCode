@@ -1,223 +1,351 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-
-import { View, ScrollView, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet } from 'react-native';
-import { Shadow } from 'react-native-shadow-2';
-
+import { 
+    View, 
+    ScrollView,
+    Pressable, 
+    Text,
+    TextInput, 
+    Dimensions, 
+    StyleSheet, 
+    Alert 
+} from 'react-native';
+import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 
-import { useNavigation } from '@react-navigation/native';
-
-function GoToButton({ screenName }) {
+function BackButton({ screenName }) {
   const navigation = useNavigation();
 
   return (
     <Pressable
-      // title={`Go to ${screenName}`}
       onPress={() => navigation.navigate(screenName)}
     >
         <Text style={styles.backText}>
             {'< Back'}
         </Text>
     </Pressable>
-
   );
 }
 
-class Settings extends React.Component {
+// Hard Coded User Information 
+id = '63bc7385c38907624d094eaa';
+
+// API Setup
+const baseUrl = "https://photocode.app:8443";
+var userInfo; 
+
+// Get User Info and store globally 
+const getUserInfo = async () => {
+    var userInfoResponse = await axios.post(baseUrl + '/getUserInfo', {
+        user_id: id
+    })
+    userInfo = userInfoResponse.data;
+}
+
+const changeEmail = async (newEmail) => {
+    var response = await axios.post(baseUrl + '/changeEmail', {
+        user_id: id,
+        newEmail: newEmail,
+    });
+    Alert.alert("Email Changed to " + newEmail);
+}
+
+const changeUsername = async (newUsername) => {
+    var response = await axios.post(baseUrl + '/changeUsername', {
+        user_id: id,
+        newUsername: newUsername,
+    });
+    Alert.alert("Username Changed to " + newUsername);
+}
+
+const changePassword = async (newPassword) => {
+    var response = await axios.post(baseUrl + '/resetPassword', {
+        email: userEmail,
+        password: newPassword,
+        passwordConfirm: newPassword
+    });
+    Alert.alert("Password Changed to " + newPassword);
+}
+
+function Settings() {
 
     state = {
-        usernamePressed: false,
-        exportPressed: false,
-        deletePressed: false,
-        syncPressed: false,
-        lightPressed: false,
-        darkPressed: false,
-        applyPressed: false,
-        darkTheme: false,
+        newUsername: String,
+        newEmail: String,
+        newPassword: String,
     };
 
-    themeNames = ['Light Theme', 'Dark Theme'];
-    themeIndex = 0;
+    useEffect(() => {
+        getUserInfo()
+    });
 
-    render () {
-        return (
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <View style={styles.backButton}>
-                        <GoToButton screenName='HomeScreen' />
-                    </View>
-                    <View>
-                        <Text style={[styles.title, this.state.darkTheme && styles.darkThemeText]}>
-                            {'Settings'}
+    const [emailPressed, setEmailPressed] = useState(false)
+    const [usernamePressed, setUsernamePressed] = useState(false)
+    const [passwordPressed, setPasswordPressed] = useState(false)
+    const [deletePressed, setDeletePressed] = useState(false)
+
+    const [showChangeEmail, setShowChangeEmail] = useState(false)
+    const [showChangeUsername, setShowChangeUsername] = useState(false)
+    const [showChangePassword, setShowChangePassword] = useState(false)
+
+    const [confirmDisabled, setConfirmedDisabled] = useState(true)
+
+    return (
+        <View style={styles.container}>
+
+            {/* Change Email Prompt */}
+            {showChangeEmail && (
+                <View style={[styles.changePrompt, {zIndex: 2}]}>    
+                    <Text style={styles.changePromptHeader}>
+                        {'Change Email'}
+                    </Text>
+                    <TextInput
+                        style={styles.changePromptInput}
+                        placeholder='New Email'
+                        placeholderTextColor='darkgrey'
+                        autoCapitalize='none'
+                        onChangeText={(text) => {this.state.newEmail = text; setConfirmedDisabled(false); if(text == ""){setConfirmedDisabled(true)} }} 
+                    />
+                    <Pressable
+                        style={[styles.changePromptConfirmButton, confirmDisabled && styles.disabled]}
+                        disabled={confirmDisabled}
+                        onPress={() => {setShowChangeEmail(!showChangeEmail); changeEmail(this.state.newEmail)}}
+                    >
+                    <Text style={styles.changePromptConfirmText}>{'Confirm'}</Text>
+                    </Pressable>
+
+                    <Pressable
+                        style={styles.changePromptCancelButton}
+                        onPress={() => {setShowChangeEmail(!showChangeEmail); setConfirmedDisabled(true)}}
+                    >
+                    <Text style={styles.changePromptConfirmText}>{'Cancel'}</Text>
+                    </Pressable>
+                </View>
+            )}
+            
+            {/* Change Username Prompt */}
+            {showChangeUsername && (
+                <View style={[styles.changePrompt, {zIndex: 2}]}>    
+                    <Text style={styles.changePromptHeader}>
+                        {'Change Username'}
+                    </Text>
+                    <TextInput
+                        style={styles.changePromptInput}
+                        placeholder='New Username'
+                        placeholderTextColor='darkgrey'
+                        autoCapitalize='none'
+                        onChangeText={(text) => {this.state.newUsername = text; setConfirmedDisabled(false); if(text == ""){setConfirmedDisabled(true)} }} 
+                    />
+                    <Pressable
+                        style={[styles.changePromptConfirmButton, confirmDisabled && styles.disabled]}
+                        disabled={confirmDisabled}
+                        onPress={() => {setShowChangeUsername(false); changeUsername(this.state.newUsername)}}
+                    >
+                    <Text style={styles.changePromptConfirmText}>{'Confirm'}</Text>
+                    </Pressable>
+
+                    <Pressable
+                        style={styles.changePromptCancelButton}
+                        onPress={() => {setShowChangeUsername(false); setConfirmedDisabled(true)}}
+                    >
+                    <Text style={styles.changePromptConfirmText}>{'Cancel'}</Text>
+                    </Pressable>
+                </View>
+            )}
+
+            {/* Change Password Prompt */}
+            {showChangePassword && (
+                <View style={[styles.changePrompt, {zIndex: 2}]}>    
+                    <Text style={styles.changePromptHeader}>
+                        {'Change Password'}
+                    </Text>
+                    <TextInput
+                        style={styles.changePromptInput}
+                        placeholder='New Password'
+                        placeholderTextColor='darkgrey'
+                        autoCapitalize='none'
+                        onChangeText={(text) => {this.state.newPassword = text; setConfirmedDisabled(false); if(text == ""){setConfirmedDisabled(true)} }} 
+                    />
+                    <Pressable
+                        style={[styles.changePromptConfirmButton, confirmDisabled && styles.disabled]}
+                        disabled={confirmDisabled}
+                        onPress={() => {setShowChangePassword(!showChangePassword); changePassword(this.state.newPassword)}}
+                    >
+                    <Text style={styles.changePromptConfirmText}>{'Confirm'}</Text>
+                    </Pressable>
+
+                    <Pressable
+                        style={styles.changePromptCancelButton}
+                        onPress={() => {setShowChangePassword(!showChangePassword);setConfirmedDisabled(true)}}
+                    >
+                    <Text style={styles.changePromptConfirmText}>{'Cancel'}</Text>
+                    </Pressable>
+                </View>
+            )}
+
+            <View style={styles.header}>
+                <View style={styles.backButton}>
+                    <BackButton screenName='HomeScreen' />
+                </View>
+                <View>
+                    <Text style={[styles.title, this.state.darkTheme && styles.darkThemeText]}>
+                        {'Settings'}
+                    </Text>
+                </View>
+            </View>
+
+            <View style={styles.main}>
+                <ScrollView>
+                    <View style={styles.optionWrapper}>
+                        <Text style={styles.sectionHeaders}>
+                            {'Account'}
                         </Text>
-                    </View>
-                </View>
 
-                <View style={[styles.main, styles.lightTheme, this.state.darkTheme && styles.darkThemeMain]}>
-                    <ScrollView>
-                        <View style={styles.optionWrapper}>
-                            <Text style={styles.sectionHeaders}>
-                                {'Account'}
-                            </Text>
-                            <View style={styles.blackLine} />
-                            <Pressable
-                                style={[styles.optionButtons, this.state.usernamePressed && styles.opacity, this.state.darkTheme && styles.darkThemeButtons]}
-                                onPress={() => {}}
-                                onPressOut={() => {
-                                    this.setState({usernamePressed: !this.state.usernamePressed})
-                                }}
-                                onPressIn={() => {
-                                    this.setState({usernamePressed: !this.state.usernamePressed})
-                                }}
-                            >
-                                <Text style={styles.optionText}>
-                                    {'Change Username'}
-                                </Text>
-                            </Pressable>
+                        <View style={styles.blackLine} />
 
-                            <Pressable
-                                style={[styles.optionButtons, this.state.exportPressed && styles.opacity, this.state.darkTheme && styles.darkThemeButtons]}
-                                onPress={() => {}}
-                                onPressOut={() => {
-                                    this.setState({exportPressed: !this.state.exportPressed})
-                                }}
-                                onPressIn={() => {
-                                    this.setState({exportPressed: !this.state.exportPressed})
-                                }}
-                            >
-                                <Text style={styles.optionText}>
-                                    {'Export User Data'}
-                                </Text>
-
-                            </Pressable>
-                            <Pressable
-                                style={[styles.optionButtons, this.state.deletePressed && styles.opacity, this.state.darkTheme && styles.darkThemeButtons]}
-                                onPress={() => {}}
-                                onPressOut={() => {
-                                    this.setState({deletePressed: !this.state.deletePressed})
-                                }}
-                                onPressIn={() => {
-                                    this.setState({deletePressed: !this.state.deletePressed})
-                                }}
-                            >
-                                <Text style={styles.deleteText}>
-                                    {'Delete Account'}
-                                </Text>
-                            </Pressable>
-                        </View>
-                        <View style={styles.optionWrapper}>
-                            <Text style={styles.sectionHeaders}>
-                                {'Appearance'}
-                            </Text>
-                            <View style={styles.blackLine} />
-                            <Pressable
-                                style={[styles.optionButtons, this.state.syncPressed && styles.opacity, this.state.darkTheme && styles.darkThemeButtons]}
-                                onPress={() => {}}
-                                onPressOut={() => {
-                                    this.setState({syncPressed: !this.state.syncPressed})
-                                }}
-                                onPressIn={() => {
-                                    this.setState({syncPressed: !this.state.syncPressed})
-                                }}
-                            >
-                                <Text style={styles.optionText}>
-                                    {'Sync with Account'}
-                                </Text>
-                            </Pressable>
-
-                            <View style={[styles.themeWrapper, this.state.darkTheme && styles.darkThemeButtons]}>
-                                <Text style={styles.themeText}>
-                                    {this.themeNames[this.themeIndex]}
-                                </Text>
-                                <View style={styles.themeButtonWrapper}>
-                                    <Pressable
-                                        style={[this.state.lightPressed && styles.opacity]}
-                                        onPress={() => {
-                                            this.themeIndex = 0;
-                                            this.setState({darkTheme: false})
-                                        }}
-                                        onPressOut={() => {
-                                            this.setState({lightPressed: !this.state.lightPressed})
-                                        }}
-                                        onPressIn={() => {
-                                            this.setState({lightPressed: !this.state.lightPressed})
-                                        }}
-                                    >
-                                        <Image style={styles.themeButtons} source={require('../assets/images/Light_Mode.png')} />
-                                    </Pressable>
-                                    <Pressable
-                                        style={[this.state.darkPressed && styles.opacity]}
-                                        onPress={() => {
-                                            this.themeIndex = 1;
-                                            this.setState({darkTheme: true})
-                                        }}
-                                        onPressOut={() => {
-                                            this.setState({darkPressed: !this.state.darkPressed})
-                                        }}
-                                        onPressIn={() => {
-                                            this.setState({darkPressed: !this.state.darkPressed})
-                                        }}
-                                    >
-                                        <Image style={styles.themeButtons} source={require('../assets/images/Dark_Mode.png')} />
-                                    </Pressable>
-                                </View>
-                            </View>
-                        </View>
-                    </ScrollView>
-                </View>
-
-                <Shadow viewStyle={{alignSelf: 'stretch'}}>
-                    <View style={[styles.apply, this.state.darkTheme && styles.darkThemeMain]}>
+                        {/* Change Email Button */}
                         <Pressable
-                            style={[styles.applyButton, this.state.applyPressed && styles.opacity]}
-                            onPress={() => {}}
+                            style={[styles.optionButtons, emailPressed && styles.opacity]}
+                            onPress={() => {setShowChangeEmail(!showChangeEmail)}}
                             onPressOut={() => {
-                                this.setState({applyPressed: !this.state.applyPressed})
+                                setEmailPressed(!emailPressed)
                             }}
                             onPressIn={() => {
-                                this.setState({applyPressed: !this.state.applyPressed})
+                                setEmailPressed(!emailPressed)
                             }}
                         >
-                            <Text style={[styles.applyText, this.state.darkTheme && styles.darkThemeText]}>
-                                {'Apply'}
+                            <Text style={styles.optionText}>
+                                {'Change Email'}
+                            </Text>
+                        </Pressable>
+
+                        {/* Change Username Button */}
+                        <Pressable
+                            style={[styles.optionButtons, usernamePressed && styles.opacity]}
+                            onPress={() => {setShowChangeUsername(!showChangeEmail)}}
+                            onPressOut={() => {
+                                setUsernamePressed(!usernamePressed)
+                            }}
+                            onPressIn={() => {
+                                setUsernamePressed(!usernamePressed)
+                            }} 
+                        >
+                            <Text style={styles.optionText}>
+                                {'Change Username'}
+                            </Text>
+                        </Pressable>
+
+                        
+
+                        {/* Change Password Button */}
+                        <Pressable
+                            style={[styles.optionButtons, passwordPressed && styles.opacity]}
+                            onPress={() => {setShowChangePassword(!showChangePassword)}}
+                            onPressOut={() => {
+                                setPasswordPressed(!passwordPressed)
+                            }}
+                            onPressIn={() => {
+                                setPasswordPressed(!passwordPressed)
+                            }} 
+                        >
+                            <Text style={styles.optionText}>
+                                {'Change Password'}
+                            </Text>
+                        </Pressable>
+                            
+                        {/* Delete Account Button */}
+                        <Pressable
+                            disabled={true}
+                            style={[styles.optionButtons, deletePressed && styles.opacity, styles.disabled]}
+                            onPress={() => {}}
+                            onPressOut={() => {
+                                setDeletePressed(!deletePressed)
+                            }}
+                            onPressIn={() => {
+                                setDeletePressed(!deletePressed)
+                            }}
+                        >
+                            <Text style={styles.deleteText}>
+                                {'Delete Account'}
                             </Text>
                         </Pressable>
                     </View>
-                </Shadow>
+                </ScrollView>
             </View>
-        );
-    }
+        </View>
+    );
 }
+
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    changePrompt: {
+        position: 'absolute',
+        height: 250,
+        alignSelf: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#0066FF',
+        top: windowHeight/2 - 100,
+        borderRadius: 5,
+        borderWidth: 2,
+        borderColor: 'black',        
+    },
+    changePromptHeader: {
+        fontFamily: 'JetBrainsMono-Light',
+        fontSize: 25,
+        paddingHorizontal: 15,
+        color: 'white',
+        // paddingVertical: 10,
+    },
+    changePromptInput: {
+        fontFamily: 'JetBrainsMono-Light',
+        backgroundColor: 'white',
+        fontSize: 20,
+        marginHorizontal: 15,
+        marginVertical: 20,
+        borderRadius: 5,
+        paddingVertical: 2,
+        paddingLeft: 5,
+        borderColor: 'black',
+        borderWidth: 1,
+
+    },
+    changePromptConfirmButton: {
+        backgroundColor: '#008000',
+        borderRadius: 10,
+        borderWidth: 2,
+        padding: 10,
+        marginHorizontal: 15,
+        // marginVertical: 20,
+    },
+    changePromptCancelButton: {
+        backgroundColor: 'red',
+        borderRadius: 10,
+        borderWidth: 2,
+        padding: 10,
+        marginHorizontal: 15,
+        marginVertical: 10,
+    },
+    changePromptConfirmText: {
+        color: 'white',
+        textAlign: 'center',
+        fontFamily: 'JetBrainsMono-Medium',
+    },
+    disabled: {
+        opacity: 0.5,
+    },
     header: {
         backgroundColor: '#0066FF',
         flex: 1.15,
-        // justifyContent: 'space-around',
-
     },
     main: {
         flex: 5,
-    },
-    lightTheme: {
-        backgroundColor: '#FFFFFF',
-    },
-    darkThemeMain: {
-        backgroundColor: '#414141',
-    },
-    darkThemeText: {
-        color: 'black',
-        fontFamily: 'JetBrainsMono-Medium',
-    },
-    darkThemeButtons: {
-        backgroundColor: '#A6A6A6',
     },
     title: {
         fontSize: 50,
@@ -276,49 +404,6 @@ const styles = StyleSheet.create({
     },
     opacity: {
         opacity: 0.5,
-    },
-    themeWrapper: {
-        backgroundColor: '#E9E9E9',
-        borderRadius: 10,
-        borderWidth: 3,
-    },
-    themeText: {
-        paddingLeft: 20,
-        textAlign: 'left',
-        fontSize: 25,
-        marginBottom: 10,
-        marginTop: 15,
-        fontFamily: 'JetBrainsMono-Medium',
-    },
-    themeButtonWrapper: {
-        backgroundColor: '#D9D9D9',
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginBottom: 20,
-        paddingVertical: 20,
-    },
-    themeButtons: {
-        height: 190,
-        width: 100,
-    },
-    apply: {
-        backgroundColor: '#FFFFFF',
-        paddingVertical: 20,
-        justifyContent: 'center',
-        width: windowWidth,
-    },
-    applyButton: {
-        alignSelf: 'center',
-        width: windowWidth * 0.75,
-        borderRadius: 10,
-        borderWidth: 5,
-        backgroundColor: '#0066FF',
-    },
-    applyText: {
-        textAlign: 'center',
-        fontSize: 50,
-        color: 'white',
-        fontFamily: 'JetBrainsMono-Medium',
     },
 });
 
