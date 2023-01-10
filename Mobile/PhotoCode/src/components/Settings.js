@@ -38,39 +38,6 @@ id = '63bc7385c38907624d094eaa';
 const baseUrl = "https://photocode.app:8443";
 var userInfo; 
 
-// Get User Info and store globally 
-const getUserInfo = async () => {
-    var userInfoResponse = await axios.post(baseUrl + '/getUserInfo', {
-        user_id: id
-    })
-    userInfo = userInfoResponse.data;
-}
-
-const changeEmail = async (newEmail) => {
-    var response = await axios.post(baseUrl + '/changeEmail', {
-        user_id: id,
-        newEmail: newEmail,
-    });
-    Alert.alert("Email Changed to " + newEmail);
-}
-
-const changeUsername = async (newUsername) => {
-    var response = await axios.post(baseUrl + '/changeUsername', {
-        user_id: id,
-        newUsername: newUsername,
-    });
-    Alert.alert("Username Changed to " + newUsername);
-}
-
-const changePassword = async (newPassword) => {
-    var response = await axios.post(baseUrl + '/resetPassword', {
-        email: userEmail,
-        password: newPassword,
-        passwordConfirm: newPassword
-    });
-    Alert.alert("Password Changed to " + newPassword);
-}
-
 function Settings() {
 
     state = {
@@ -78,10 +45,6 @@ function Settings() {
         newEmail: String,
         newPassword: String,
     };
-
-    useEffect(() => {
-        getUserInfo()
-    });
 
     const [emailPressed, setEmailPressed] = useState(false)
     const [usernamePressed, setUsernamePressed] = useState(false)
@@ -93,6 +56,48 @@ function Settings() {
     const [showChangePassword, setShowChangePassword] = useState(false)
 
     const [confirmDisabled, setConfirmedDisabled] = useState(true)
+
+    const [email, setEmail] = useState("")
+    const [username, setUsername] = useState("")
+
+    useEffect(() => {
+        async function getUserInfo() {
+            var userInfoResponse = await axios.post(baseUrl + '/getUserInfo', {
+                user_id: id
+            })
+            userInfo = userInfoResponse.data;
+            setEmail(userInfo.email)
+            setUsername(userInfo.username)
+        }
+        getUserInfo()
+    });
+
+    const changeEmail = async (newEmail) => {
+        var response = await axios.post(baseUrl + '/changeEmail', {
+            user_id: id,
+            newEmail: newEmail,
+        });
+        setEmail(newEmail)
+        Alert.alert("Email Changed to " + newEmail);
+    }
+    
+    const changeUsername = async (newUsername) => {
+        var response = await axios.post(baseUrl + '/changeUsername', {
+            user_id: id,
+            newUsername: newUsername,
+        });
+        setUsername(newUsername)
+        Alert.alert("Username Changed to " + newUsername);
+    }
+    
+    const changePassword = async (newPassword) => {
+        var response = await axios.post(baseUrl + '/resetPassword', {
+            email: userEmail,
+            password: newPassword,
+            passwordConfirm: newPassword
+        });
+        Alert.alert("Password Changed to " + newPassword);
+    }
 
     return (
         <View style={styles.container}>
@@ -206,7 +211,10 @@ function Settings() {
                         </Text>
 
                         <View style={styles.blackLine} />
-
+                        <View>
+                            <Text style={styles.accountInfoText}>{'Username: ' + username}</Text>
+                            <Text style={styles.accountInfoText}>{'Email: ' + email}</Text>
+                        </View>
                         {/* Change Email Button */}
                         <Pressable
                             style={[styles.optionButtons, emailPressed && styles.opacity]}
@@ -381,6 +389,11 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 5,
         borderColor: 'black',
+    },
+    accountInfoText: {
+        fontFamily: 'JetBrainsMono-Medium',
+        fontSize: 15,
+        padding: 5,
     },
     optionButtons: {
         backgroundColor: '#E9E9E9',
