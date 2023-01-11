@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 import {    
@@ -9,7 +9,8 @@ import {
     Dimensions, 
     StyleSheet, 
     Easing, 
-    ScrollView} from 'react-native';
+    ScrollView,
+    Button} from 'react-native';
 
 import { Shadow } from 'react-native-shadow-2';
 import { useNavigation } from '@react-navigation/native';
@@ -44,49 +45,48 @@ var PROJECT_INFO= [
   },
 ];
 
+// Animation Starting Values
+sideBarXPos = new Animated.Value(-windowWidth * 0.7);
+cameraOptionsYPos = new Animated.Value(windowHeight);
 
-class HomeScreen extends React.Component {
+function HomeScreen() {
 
-    state = {
-        sideBarActive: false,
-        cameraOptionsActive: false,
-    };
-    
+    const [sideBarActive, setSideBarActive] = useState(false);
+    const [cameraOptionsActive, setCameraOptionsActive] = useState(false);
+
     //#region Sidebar Animations
-    sideBarXPos = new Animated.Value(-windowWidth * 0.7);
     animateSideBarOpen = () => {
-        Animated.timing(this.sideBarXPos, {
+        Animated.timing(sideBarXPos, {
             toValue: 0,
             duration: 200,
-            easing: Easing.inertia,
+            // easing: Easing.inertia,
             useNativeDriver: false,
         }).start();
     };
     animateSideBarClose = () => {
-        Animated.timing(this.sideBarXPos, {
+        Animated.timing(sideBarXPos, {
             toValue: -windowWidth * 0.7,
             duration: 150,
             // easing: Easing.ease,
             useNativeDriver: false,
         }).start(() => {
-            this.setState({sideBarActive: !this.state.sideBarActive});
+            setSideBarActive(!sideBarActive);
         });
     };
 
     openSidebar = () => {
-        this.setState({sideBarActive: !this.state.sideBarActive});
-        this.animateSideBarOpen();
+        setSideBarActive(!sideBarActive);
+        animateSideBarOpen();
     };
 
     closeSidebar = () => {
-        this.animateSideBarClose();
+        animateSideBarClose();
     };
     //#endregion
 
     //#region Camera Option Animation
-    cameraOptionsYPos = new Animated.Value(windowHeight);
     animateCameraOptionsOpen = () => {
-        Animated.timing(this.cameraOptionsYPos, {
+        Animated.timing(cameraOptionsYPos, {
             toValue: (windowHeight/2 - (windowHeight * 0.25)/2),
             duration: 200,
             easing: Easing.inertia,
@@ -94,36 +94,32 @@ class HomeScreen extends React.Component {
         }).start();
     };
     animateCameraOptionsClose = () => {
-        Animated.timing(this.cameraOptionsYPos, {
+        Animated.timing(cameraOptionsYPos, {
             toValue: windowHeight,
             duration: 150,
             // easing: Easing.ease,
             useNativeDriver: false,
         }).start(() => {
-            this.setState({cameraOptionsActive: !this.state.cameraOptionsActive});
+            setCameraOptionsActive(!cameraOptionsActive)
         });
     };
 
     openCameraOptions = () => {
-        this.setState({cameraOptionsActive: !this.state.cameraOptionsActive});
-        this.animateCameraOptionsOpen();
+        setCameraOptionsActive(!cameraOptionsActive)
+        animateCameraOptionsOpen();
     };
 
     closeCameraOptions = () => {
-        this.setState({cameraOptionsActive: !this.state.cameraOptionsActive});
-        this.animateCameraOptionsClose();
+        setCameraOptionsActive(!cameraOptionsActive)
+        animateCameraOptionsClose();
     };
     //#endregion
 
-    render () {
         return (
             <View style={styles.container}>
-                <Animated.View style={[{zIndex: 3}, { left: this.sideBarXPos}]}>
-                    {this.state.sideBarActive && (
-                        <SideBar
-                            onPress={this.closeSidebar}
-                            userName={userName}
-                        />
+                <Animated.View style={[{zIndex: 3}, { left: sideBarXPos}]}>
+                    {sideBarActive && (
+                        <SideBar onPress={closeSidebar} userName={userName}/>
                     )}
                 </Animated.View>
 
@@ -133,7 +129,7 @@ class HomeScreen extends React.Component {
 
                 <View style={{zIndex: 1, position: 'absolute', height: windowHeight, alignSelf: 'center'}}>
                     <Header
-                        onPress={this.openSidebar}
+                        onPress={openSidebar}
                     />
                     <ScrollView style={styles.main}>
                         {PROJECT_INFO.map((project, i) => (
@@ -158,7 +154,7 @@ class HomeScreen extends React.Component {
             </View>
         );
     }
-}
+
 
 function ToNewDoc() {
     const navigation = useNavigation();
