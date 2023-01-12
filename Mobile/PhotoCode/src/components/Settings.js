@@ -44,6 +44,7 @@ function Settings() {
         newUsername: String,
         newEmail: String,
         newPassword: String,
+        confirmPassword: String,
     };
 
     const [emailPressed, setEmailPressed] = useState(false)
@@ -51,11 +52,15 @@ function Settings() {
     const [passwordPressed, setPasswordPressed] = useState(false)
     const [deletePressed, setDeletePressed] = useState(false)
 
+    const [newPassword, setNewPassword] = useState("null")
+    const [confirmPassword, setConfirmPassword] = useState("null_1")
+
     const [showChangeEmail, setShowChangeEmail] = useState(false)
     const [showChangeUsername, setShowChangeUsername] = useState(false)
     const [showChangePassword, setShowChangePassword] = useState(false)
 
     const [confirmDisabled, setConfirmedDisabled] = useState(true)
+    const [passwordConfirmDisabled, setPasswordConfirmDisabled] = useState(true)
 
     const [email, setEmail] = useState("")
     const [username, setUsername] = useState("")
@@ -78,7 +83,7 @@ function Settings() {
                 user_id: id,
                 newEmail: newEmail,
             });
-            setEmail(newEmail)
+            setEmail(newEmail);
             Alert.alert("Email Changed to " + newEmail);
         } catch (err) {
             Alert.alert("Failed to change email");
@@ -91,14 +96,18 @@ function Settings() {
                 user_id: id,
                 newUsername: newUsername,
             });
-            setUsername(newUsername)
+            setUsername(newUsername);
             Alert.alert("Username Changed to " + newUsername);
         } catch (err) {
             Alert.alert("Failed to change username");
         }
     }
     
-    const changePassword = async (newPassword) => {
+    const changePassword = async (newPassword, confirmPassword) => {
+        if (newPassword != confirmPassword){
+            Alert.alert("Passwords Must Match!");
+            return;
+        }
         try {
             var response = await axios.post(baseUrl + '/resetPassword', {
                 email: userEmail,
@@ -130,7 +139,7 @@ function Settings() {
                     <Pressable
                         style={[styles.changePromptConfirmButton, confirmDisabled && styles.disabled]}
                         disabled={confirmDisabled}
-                        onPress={() => {setShowChangeEmail(!showChangeEmail); changeEmail(this.state.newEmail)}}
+                        onPress={() => {setShowChangeEmail(!showChangeEmail); setConfimedDisbaled(true); changeEmail(this.state.newEmail)}}
                     >
                     <Text style={styles.changePromptConfirmText}>{'Confirm'}</Text>
                     </Pressable>
@@ -160,7 +169,7 @@ function Settings() {
                     <Pressable
                         style={[styles.changePromptConfirmButton, confirmDisabled && styles.disabled]}
                         disabled={confirmDisabled}
-                        onPress={() => {setShowChangeUsername(false); changeUsername(this.state.newUsername)}}
+                        onPress={() => {setShowChangeUsername(false); setConfirmedDisabled(true); changeUsername(this.state.newUsername)}}
                     >
                     <Text style={styles.changePromptConfirmText}>{'Confirm'}</Text>
                     </Pressable>
@@ -176,7 +185,7 @@ function Settings() {
 
             {/* Change Password Prompt */}
             {showChangePassword && (
-                <View style={[styles.changePrompt, {zIndex: 2}]}>    
+                <View style={[styles.changePrompt, styles.changePromptPasswordHeight, {zIndex: 2}]}>    
                     <Text style={styles.changePromptHeader}>
                         {'Change Password'}
                     </Text>
@@ -185,12 +194,19 @@ function Settings() {
                         placeholder='New Password'
                         placeholderTextColor='darkgrey'
                         autoCapitalize='none'
-                        onChangeText={(text) => {this.state.newPassword = text; setConfirmedDisabled(false); if(text == ""){setConfirmedDisabled(true)} }} 
+                        onChangeText={(text) => {setNewPassword(text); setConfirmedDisabled(false); if(text == ""){setConfirmedDisabled(true)} }} 
+                    />
+                    <TextInput
+                        style={styles.changePromptInput}
+                        placeholder='Confirm Password'
+                        placeholderTextColor='darkgrey'
+                        autoCapitalize='none'
+                        onChangeText={(text) => {setConfirmPassword(text); setPasswordConfirmDisabled(false); if(text == ""){setPasswordConfirmDisabled(true)} }} 
                     />
                     <Pressable
-                        style={[styles.changePromptConfirmButton, confirmDisabled && styles.disabled]}
-                        disabled={confirmDisabled}
-                        onPress={() => {setShowChangePassword(!showChangePassword); changePassword(this.state.newPassword)}}
+                        style={[styles.changePromptConfirmButton, (confirmDisabled || passwordConfirmDisabled) && styles.disabled]}
+                        disabled={(confirmDisabled || passwordConfirmDisabled)}
+                        onPress={() => {setShowChangePassword(!showChangePassword); setConfirmedDisabled(true); changePassword(newPassword, confirmPassword)}}
                     >
                     <Text style={styles.changePromptConfirmText}>{'Confirm'}</Text>
                     </Pressable>
@@ -311,10 +327,14 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         justifyContent: 'center',
         backgroundColor: '#0066FF',
-        top: windowHeight/2 - 100,
+        top: windowHeight/2 - 125,
         borderRadius: 5,
         borderWidth: 2,
         borderColor: 'black',        
+    },
+    changePromptPasswordHeight: {
+        height: 300, 
+        top: windowHeight/2 - 150,
     },
     changePromptHeader: {
         fontFamily: 'JetBrainsMono-Light',
