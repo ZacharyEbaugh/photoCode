@@ -99,7 +99,7 @@ class SideBar extends React.Component {
                     <View style={styles.sidebar}>
                         <View style={styles.crossButtonWrapper}>
                             <Pressable onPress={this.props.onPress}>
-                                <Image style={styles.crossButton} source={require('../assets/images/CrossButton.png')} />
+                                <Image style={styles.crossButton} source={require('../../assets/images/CrossButton.png')} />
                             </Pressable>
                         </View>
                         <View>
@@ -133,12 +133,12 @@ class SideBar extends React.Component {
                                 </Text>
                                 <OpenURLButton url={zacGitHub} children={<Image
                                     style={styles.creatorLogos}
-                                    source={require('./../assets/images/GitHub-Mark.png')}
+                                    source={require('./../../assets/images/GitHub-Mark.png')}
                                     />}>
                                 </OpenURLButton>
                                 <OpenURLButton url={zacLinkedIn} children={<Image
                                     style={styles.creatorLogos}
-                                    source={require('./../assets/images/linkedInLogo-Black.png')}
+                                    source={require('./../../assets/images/linkedInLogo-Black.png')}
                                     />}>
                                 </OpenURLButton>
                             </View>
@@ -148,18 +148,18 @@ class SideBar extends React.Component {
                                 </Text>
                                 <OpenURLButton url={brandonGitHub} children={<Image
                                     style={styles.creatorLogos}
-                                    source={require('./../assets/images/GitHub-Mark.png')}
+                                    source={require('./../../assets/images/GitHub-Mark.png')}
                                     />}>
                                 </OpenURLButton>
                                 <OpenURLButton url={brandonLinkedIn} children={<Image
                                     style={styles.creatorLogos}
-                                    source={require('./../assets/images/linkedInLogo-Black.png')}
+                                    source={require('./../../assets/images/linkedInLogo-Black.png')}
                                     />}>
                                 </OpenURLButton>
                             </View>
                         </View>
                         <View style={styles.logoContainer}>
-                            <Image style={styles.logo} source={require('../assets/images/photoCode-logo.png')} />
+                            <Image style={styles.logo} source={require('../../assets/images/photoCode-logo.png')} />
                         </View>
                     </View>
                 </Shadow>

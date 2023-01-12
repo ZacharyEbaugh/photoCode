@@ -78,15 +78,18 @@ export function GoToContact() {
         </Pressable>
     );
 }
-
-const showAlert = () =>
+import { useAuth0 } from 'react-native-auth0';
+const showAlert = () => {
+    const { clearSession } = useAuth0();
     Alert.alert(
         "Are you\nsure?",
         "",
         [
             {
                 text: 'Logout',
-                onPress: () => console.warn('logged out'),
+                onPress: () => {
+                    clearSession();
+                }
             },
             {
                 text: 'Cancel',
@@ -94,22 +97,17 @@ const showAlert = () =>
             },
         ],
     );
-
+    };
 
 export function GoToLogout() {
-    const navigation = useNavigation();
+    const { clearSession } = useAuth0();
     const [isPressed, setIsPressed] = useState(false);
     return (
         <Pressable
             onPress={() => {
-                [showAlert(), navigation.navigate('SplashPage')];
+                console.log("TEST");
             }}
-            onPressOut={() => {
-                setIsPressed(current => !current);
-            }}
-            onPressIn={() => {
-                setIsPressed(current => !current);
-            }}
+           
             style={[styles.button, isPressed && styles.updateBackground]}
         >
             <Text style={styles.options}>

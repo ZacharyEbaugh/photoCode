@@ -147,7 +147,7 @@ class Settings extends React.Component {
                                             this.setState({lightPressed: !this.state.lightPressed})
                                         }}
                                     >
-                                        <Image style={styles.themeButtons} source={require('../assets/images/Light_Mode.png')} />
+                                        <Image style={styles.themeButtons} source={require('../../assets/images/Light_Mode.png')} />
                                     </Pressable>
                                     <Pressable
                                         style={[this.state.darkPressed && styles.opacity]}
@@ -162,7 +162,7 @@ class Settings extends React.Component {
                                             this.setState({darkPressed: !this.state.darkPressed})
                                         }}
                                     >
-                                        <Image style={styles.themeButtons} source={require('../assets/images/Dark_Mode.png')} />
+                                        <Image style={styles.themeButtons} source={require('./../../assets/images/Dark_Mode.png')} />
                                     </Pressable>
                                 </View>
                             </View>

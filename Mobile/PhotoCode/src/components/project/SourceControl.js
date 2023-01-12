@@ -9,7 +9,7 @@ import {
     StyleSheet, 
     Easing } from 'react-native';
 
-import { BackButton } from './BackButton';
+import { BackButton } from './../BackButton';
 import { CommitList } from './CommitList';
 
 const windowWidth = Dimensions.get('window').width;
@@ -18,7 +18,7 @@ const windowHeight = Dimensions.get('window').height;
 var commits= [
   {
     UserName: 'Zachary Ebaugh',
-    ProfilePicture: require('./../assets/images/zacProfilePic.jpg'),
+    ProfilePicture: require('./../../assets/images/zacProfilePic.jpg'),
     Title: 'Fix router bug',
     Message: 'Implement all pages into the router blah blah blah blah blah',
     Date: 'Aug 1, 2021',
@@ -26,7 +26,7 @@ var commits= [
   // We will need to limit the length of the title, message and be however long
   {
     UserName: 'Brandon Spangler',
-    ProfilePicture: require('./../assets/images/brandonProfilePic.png'),
+    ProfilePicture: require('./../../assets/images/brandonProfilePic.png'),
     Title: 'Upgrade to React Native 0.64',
     Message: 'Upgrading to React Native 0.65 took blah blah React Native 0.65 took blah blahReact Native 0.65 took blah blahReact Native 0.65 took blah blah',
     Date: 'Aug 19, 2021',

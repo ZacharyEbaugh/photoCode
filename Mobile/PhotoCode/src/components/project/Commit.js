@@ -9,7 +9,7 @@ import {
     Dimensions, 
     StyleSheet } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
-import { BackButton } from './BackButton';
+import { BackButton } from '../BackButton';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;

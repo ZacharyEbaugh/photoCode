@@ -14,11 +14,11 @@ import {
 import { Shadow } from 'react-native-shadow-2';
 import { useNavigation } from '@react-navigation/native';
 
-import Header from './Header';
-import SideBar from './SideBar';
-import { GoToProject } from './GoToProject';
-import GoToCamera from './GoToCamera';
-import CameraOptions from './CameraOptions';
+import Header from '../Header';
+import SideBar from '../sidebar/SideBar';
+import { GoToProject } from '../project/GoToProject';
+import GoToCamera from '../GoToCamera';
+import CameraOptions from '../CameraOptions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -28,7 +28,7 @@ var userName = 'Brandon';
 var PROJECT_INFO= [
   {
     title: 'Portfolio Website',
-    imageFile: require('../assets/images/siteIcon.png'),
+    imageFile: require('../../assets/images/siteIcon.png'),
     languageOne: 'HTML',
     languageTwo: 'CSS',
     languageThree: 'JavaScript',
@@ -36,7 +36,7 @@ var PROJECT_INFO= [
   },
   {
     title: 'SkipList Visual',
-    imageFile: require('../assets/images/skipList-Icon.png'),
+    imageFile: require('../../assets/images/skipList-Icon.png'),
     languageOne: 'Java',
     languageTwo: 'JavaScript',
     languageThree: 'Shell',
@@ -174,7 +174,7 @@ function ToNewDoc() {
         >
             <Image
                 style={styles.newFileImage}
-                source={require('../assets/images/new-file.png')}
+                source={require('./../../assets/images/new-file.png')}
             />
         </Pressable>
     );

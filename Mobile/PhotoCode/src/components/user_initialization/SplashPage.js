@@ -1,13 +1,11 @@
 import React, { startTransition } from 'react';
 import PropTypes from 'prop-types';
 
-import LoginButtons from './LoginRegisterButtons';
-
 import {View, Text, StyleSheet} from 'react-native';
 import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
+import { LoginButtons } from './LoginButtons';
 
 class SplashPage extends React.Component {
-
     render() {
         return (
             <View style = {styles.container}>
@@ -15,10 +13,8 @@ class SplashPage extends React.Component {
                 <Text style={styles.TitleText}>PhotoCode</Text>
                 <Text style={styles.SubTitleText}>Scan-in Repository</Text>
                 <Text style={styles.CText}>C</Text>
-                <LoginButtons />
-
+                <LoginButtons style={styles.loginButtons}/>
             </View>
-
         );
     };
 }
@@ -29,6 +25,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#0066FF',
         flexDirection: 'column',
     },
+
     PText: {
         width: '130%',
         color: '#0049B8',
@@ -42,8 +39,6 @@ const styles = StyleSheet.create({
         top: -200,
         left: -60,
         fontFamily: 'JetBrainsMono-Medium',
-        // backgroundColor: 'white',
-
     },
 
     CText: {
@@ -79,7 +74,11 @@ const styles = StyleSheet.create({
         top: 310,
         left: 95,
         fontFamily: 'JetBrainsMono-Medium',
-    }
+    },
+
+    loginButtons: {
+        marginTop: 10,
+    },
 
 });
 

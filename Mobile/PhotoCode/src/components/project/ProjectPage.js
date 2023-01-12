@@ -9,45 +9,45 @@ const windowHeight = Dimensions.get('window').height;
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { height } from '@mui/system';
-import { BackButton } from './BackButton';
+import { BackButton } from '../BackButton';
 
 var PROJECT_FILES= [
     {
       folder: true,
       name: 'Fonts',
-      imageFile: require('../assets/images/folder_icon.png'),
+      imageFile: require('../../assets/images/folder_icon.png'),
     },
     {
         folder: true,
         name: 'Images',
-        imageFile: require('../assets/images/folder_icon.png'),
+        imageFile: require('../../assets/images/folder_icon.png'),
     },
     {
         folder: false,
         inFolder: 'Images',
         name: 'profile-pic.png',
-        imageFile: require('../assets/images/folder_icon.png'),
+        imageFile: require('../../assets/images/folder_icon.png'),
     },
     {
         folder: false,
         inFolder: 'Images',
         name: 'project-logo.png',
-        imageFile: require('../assets/images/folder_icon.png'),
+        imageFile: require('../../assets/images/folder_icon.png'),
     },
     {
         folder: false,
         name: 'index.css',
-        imageFile: require('../assets/images/cssIcon.png'),
+        imageFile: require('../../assets/images/cssIcon.png'),
     },
     {
         folder: false,
         name: 'index.html',
-        imageFile: require('../assets/images/html_Icon.png'),
+        imageFile: require('../../assets/images/html_Icon.png'),
     },
     {
         folder: false,
         name: 'README.md',
-        imageFile: require('../assets/images/readmeIcon.png'),
+        imageFile: require('../../assets/images/readmeIcon.png'),
     },
   ];
 
@@ -126,12 +126,12 @@ class ProjectPage extends React.Component {
                 <View style={styles.main}>
                     <View style={styles.searchCreateWrapper}>
                         <View style={styles.createButton}>
-                            <Image style={styles.createIcon} source={require('../assets/images/plus.png')} />
+                            <Image style={styles.createIcon} source={require('../../assets/images/plus.png')} />
                         </View>
 
                         <View style={styles.searchArea}>
                             <Pressable onPress={() => {}} >
-                                <Image style={styles.searchImage} source={require('../assets/images/search.png')} />
+                                <Image style={styles.searchImage} source={require('../../assets/images/search.png')} />
                             </Pressable>
                             <TextInput
                                 style={styles.search}
