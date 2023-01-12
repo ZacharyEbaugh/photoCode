@@ -2,13 +2,15 @@ import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet } from 'react-native';
+import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, ScrollView } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-import { useNavigation, useRoute } from '@react-navigation/native';
+
+
+import { BaseRouter, useNavigation, useRoute } from '@react-navigation/native';
 import { height } from '@mui/system';
 import { BackButton } from './BackButton';
 
@@ -51,6 +53,12 @@ var PROJECT_FILES= [
     //     imageFile: require('../assets/images/readmeIcon.png'),
     // },
   ];
+
+  newFolder = require('../assets/images/newFolder.png');
+  newFile = require('../assets/images/newFile.png');
+  blueFolder = require('../assets/images/blueFolder.png');
+  fileIcon = require('../assets/images/file.png');
+
 
 function GoBackButton() {
   const navigation = useNavigation();
@@ -111,7 +119,8 @@ var root_folder_id;
 var root_folder;
 
 
-
+// API Setup
+baseUrl = 'https://photocode.app:8443';
 
 
 function ProjectPage() {
@@ -119,22 +128,30 @@ function ProjectPage() {
     const [currentFolders, setCurrentFolders] = useState([])
     const [currentPath, setCurrentPath] = useState([])
     const [folderSet, setFolderSet] = useState(false)
+    const [currentFiles, setCurrentFiles] = useState([])
+    const [filesFound, setFilesFound] = useState(false)
+
+    const [loading, setLoading] = useState(true)
 
     const route = useRoute();
     const { projectId } = route.params;
     
     function getProjectFiles(projectId) {
-        var response = axios.get(`https://photocode.app:8443/getFolders?project_id=${projectId}`).then(res => {
+        var response = axios.get(baseUrl + `/getFolders?project_id=${projectId}`).then(res => {
             root_folder = res.data;
            root_folder_id = (res.data[0]._id != undefined) ? res.data[0]._id : null;
-        //    setCurrentPath([...currentPath, 'root'])
-           console.warn(currentPath)
+           res.data[0].name = 'root'
+           setCurrentPath([...currentPath, res.data[0]])
         //    console.warn(root_folder_id);
         //    console.warn(root_folder[0].name)
            if (root_folder_id != null) {
-            axios.get(`https://photocode.app:8443/getFolders?project_id=${root_folder_id}`).then(res => {
-                console.warn(res.data[0])
-    
+            axios.get(baseUrl + `/getFolders?project_id=${root_folder_id}`).then( async res => {
+                // console.warn(res.data[0])
+                setCurrentFolders(res.data)
+                // console.warn(currentFolders)
+
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+                setLoading(false)
             })
            }
             // axios.get(`https://photocode.app:8443/getFiles?project_id=${folder._id}`);
@@ -144,14 +161,43 @@ function ProjectPage() {
 
 
     useEffect(() => {
- 
-
+        // console.warn(currentPath)
         getProjectFiles(projectId);
     }, [])
 
-    function DisplayProject() {
+    async function updateFolders(folder) {
+        // console.warn(folder.name)
+        var folders = await axios.get(baseUrl + `/getFolders?project_id=${folder._id}`)
+        var files = await axios.get(baseUrl + `/getFiles?project_id=${folder._id}`)
+        setCurrentFolders(folders.data)
+        if (files != undefined) {
+            setCurrentFiles(files.data)
+            setFilesFound(true)
+        } else {
+            setFilesFound(false)
+        }
+
+        setCurrentPath([...currentPath, folder])
+    }
+
+    function DisplayFolders() {
         return (
-            <Text>{'Hello'}</Text>
+            currentFolders.map((folder, i) => (
+                <View key={i}>
+                    <View style={styles.greyLine} />
+                <Pressable
+                    key={i}
+                    style={styles.fileLine}
+                    onPress={() => {updateFolders(folder)}}
+                >
+                    <Image style={styles.fileImage} source={blueFolder} />
+                    <Text style={styles.fileText}>{folder.name}</Text>
+                </Pressable>
+                </View>
+            ))
+
+            
+            
             // PROJECT_FILES.map((file, i) => (
             //     file.folder ? 
             //         <View key={i}>
@@ -192,7 +238,27 @@ function ProjectPage() {
         );
     }
 
+    function DisplayFiles() {
+        return (
+            currentFiles.map((file, i) => (
+                <View key={i}>
+                <View style={styles.greyLine} />
+                <Pressable
+
+                    style={styles.fileLine}
+                    onPress={() => {}}
+                >
+                    
+                    <Image style={styles.fileImage} source={fileIcon} />
+                    <Text style={styles.fileText}>{file.filename}</Text>
+                </Pressable>
+                </View>
+            ))
+        );
+    }
+
     return (
+        loading == true ? (<View style={styles.loadingWrapper}><Text style={styles.loadingText}>{'Loading'}</Text></View>) :
         <View style={styles.container}>
             <View style={styles.header}>
                 <BackButton/>
@@ -204,7 +270,13 @@ function ProjectPage() {
             <View style={styles.main}>
                 <View style={styles.searchCreateWrapper}>
                     <View style={styles.createButton}>
-                        <Image style={styles.createIcon} source={require('../assets/images/plus.png')} />
+                        <Pressable style={styles.createImageWrapper}>
+                            <Image style={styles.createIcon} source={newFolder} />
+                        </Pressable>
+
+                        <Pressable style={styles.createImageWrapper}>
+                            <Image style={styles.createIcon} source={newFile} />
+                        </Pressable>
                     </View>
 
                     <View style={styles.searchArea}>
@@ -220,9 +292,18 @@ function ProjectPage() {
                     </View>
                 </View>
 
-                <View style={styles.fileExplore}>
-                    <DisplayProject />
+                <View style={styles.directoryPath}>
+                    {currentPath.map((folder, i) => (
+                        <Text style={styles.directoryPathText}>{folder.name + '/'}</Text>
+                    ))}
                 </View>
+
+                <ScrollView style={styles.fileExplore}>
+                    <DisplayFolders />
+                    {filesFound ? <DisplayFiles /> : null}
+                </ScrollView>
+                
+                <View style={styles.greyLine} />
 
                 <View style={styles.buttonWrapper}>
                     <GoToSourceControl/>
@@ -235,6 +316,15 @@ function ProjectPage() {
 }
 
 const styles = StyleSheet.create({
+    loadingWrapper: {
+        height: windowHeight,
+        // display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    loadingText: {
+        fontFamily: 'JetBrainsMono-Medium',
+    },
     container: {
         flex: 1,
     },
@@ -328,7 +418,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#D9D9D9',
         alignItems: 'center',
         borderRadius: 5,
-        width: windowWidth * 0.75,
+        width: windowWidth * 0.65,
         alignSelf: 'center',
     },
     search: {
@@ -347,22 +437,32 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     createButton: {
-        backgroundColor: '#6DE959',
+        backgroundColor: 'white',
         borderRadius: 5,
-        width: windowWidth * 0.1,
+        width: windowWidth * 0.26,
         height: windowHeight * 0.05,
         display: 'flex',
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         marginRight: 15,
     },
+    createImageWrapper: {
+        borderColor: '#d8d8d8',
+        borderWidth: 3,
+        borderRadius: 5,
+        paddingVertical: 2.5,
+        paddingHorizontal: 5,
+        // border: 3px solid #d8d8d8;
+    },
     createIcon: {
-        width: windowWidth * 0.06,
-        height: windowHeight * 0.025,
+        width: windowWidth * 0.08,
+        height: windowHeight * 0.0375,
     },
     buttonWrapper: {
         display: 'flex',
         alignItems: 'center',
+        marginTop: 10,
         marginBottom: 20,
     },
     actionButton: {
@@ -413,6 +513,36 @@ const styles = StyleSheet.create({
     },
     fileWrapper: {
         paddingLeft: 10,
+    },
+    directoryPath: {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        paddingHorizontal: 10,
+        marginBottom: 5,
+    },
+    directoryPathText: {
+        fontFamily: 'JetBrainsMono-Light',
+    },
+    greyLine: {
+        backgroundColor: '#808080',
+        height: 1,
+    },
+    fileLine: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 10,
+        marginVertical: 5,
+    },
+    fileImage: {
+        width: windowWidth * 0.075,
+        height: windowHeight * 0.0375,
+        marginRight: 10,
+    },
+    fileText: {
+        fontFamily: 'JetBrainsMono-Light',
+        fontSize: 20,
     }
 });
 
