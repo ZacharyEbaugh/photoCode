@@ -64,10 +64,21 @@ class HomeScreen extends React.Component {
             connection: this.props.user.sub.split('|')[0],
         })
         .then(response => {
-            console.log(response);
+            console.log(response.data);
         })
             .catch(error => {
             console.log(error);
+        });
+        // Get user id using the user information
+        axios.post('https://photocode.app:8443/getUser', {
+            email: this.props.user.email,
+            connection: this.props.user.sub.split('|')[0]
+        })
+        .then(response => {
+            this.props.setUser_Id(response.data._id);
+        })
+        .catch(() => {
+            console.log('Error');
         });
     }
 

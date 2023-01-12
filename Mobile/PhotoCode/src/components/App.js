@@ -28,10 +28,12 @@ import { Text, View } from 'react-native';
 const App = () => {
 
     const [user, setUser] = useState(null);
+    const [user_id, setUser_Id] = useState(null);
     
     useEffect(() => {
         console.log(user);
-    }, [user]);
+        console.log(user_id);
+    }, [user, user_id]);
 
     if (user == null) {
         return (
@@ -56,7 +58,7 @@ const App = () => {
                     <Stack.Navigator screenOptions={{ headerShown: false}}>
                         <Stack.Screen
                             name="HomeScreen"
-                            component={() => <HomeScreen user={user} setUser={setUser}/>}
+                            component={() => <HomeScreen user={user} setUser={setUser} user_id={user_id} setUser_Id={setUser_Id}/>}
                             options={{ title: 'My Home'}}
                         />
                         <Stack.Screen
