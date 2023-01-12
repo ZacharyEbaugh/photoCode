@@ -1,23 +1,20 @@
-import React, { startTransition } from 'react';
+import React, { startTransition, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import {View, Text, StyleSheet} from 'react-native';
-import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
 import { LoginButtons } from './LoginButtons';
 
-class SplashPage extends React.Component {
-    render() {
-        return (
-            <View style = {styles.container}>
-                <Text style = {styles.PText}>P</Text>
-                <Text style={styles.TitleText}>PhotoCode</Text>
-                <Text style={styles.SubTitleText}>Scan-in Repository</Text>
-                <Text style={styles.CText}>C</Text>
-                <LoginButtons style={styles.loginButtons}/>
-            </View>
-        );
-    };
-}
+const SplashPage = (props) => {
+    return (
+        <View style = {styles.container}>
+            <Text style = {styles.PText}>P</Text>
+            <Text style={styles.TitleText}>PhotoCode</Text>
+            <Text style={styles.SubTitleText}>Scan-in Repository</Text>
+            <Text style={styles.CText}>C</Text>
+            <LoginButtons style={styles.loginButtons} isUser={props.isUser} setUser={props.setUser}/>
+        </View>
+    );
+};
 
 const styles = StyleSheet.create({
     container: {

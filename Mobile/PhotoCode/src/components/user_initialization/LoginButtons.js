@@ -10,10 +10,11 @@ import githubLogo from './../../assets/images/github-mark-white.png';
 import LinkedInLogo from './../../assets/images/LinkedInLogo.png';
 
 import { useAuth0 } from 'react-native-auth0';
+import { useEffect } from 'react';
 
-export const LoginButtons = () => {
-    const {authorize, user} = useAuth0({
-        clientId: "Hk5ax5o8U2rqvwffMvGnHUoeajC7Tk2W",
+export const LoginButtons = (props) => {
+    const {authorize, user, clearSession} = useAuth0({
+        clientId: "MpksNgQRuYsc9tp9ZJcsgODwhOqjbn1n",
         domain: "photocode.us.auth0.com",
         redirectUri: "org.reactjs.native.example.PhotoCode://photocode.us.auth0.com/ios/org.reactjs.native.example.PhotoCode/callback",
         audience: "https://photocode.auth0.com/api/v2/",
@@ -27,7 +28,8 @@ export const LoginButtons = () => {
                 connection: 'Username-Password-Authentication',
             })
             .then(() => {
-                navigate.navigate('HomeScreen');
+                if (successLogin())
+                    navigate.navigate('HomeScreen');
             })
             .catch((e) => {
                 console.log(e);
@@ -43,7 +45,8 @@ export const LoginButtons = () => {
                 connection: 'google-oauth2',
             })
             .then(() => {
-                navigate.navigate('HomeScreen');
+                if (successLogin())
+                    navigate.navigate('HomeScreen');
             })
             .catch((e) => {
                 console.log(e);
@@ -59,7 +62,8 @@ export const LoginButtons = () => {
                 connection: 'github',
             })
             .then(() => {
-                navigate.navigate('HomeScreen');
+                if (successLogin())
+                    navigate.navigate('HomeScreen');
             })
             .catch((e) => {
                 console.log(e);
@@ -75,7 +79,8 @@ export const LoginButtons = () => {
                 connection: 'linkedin',
             })
             .then(() => {
-                navigate.navigate('HomeScreen');
+                if (successLogin())
+                    navigate.navigate('HomeScreen');
             })
             .catch((e) => {
                 console.log(e);
@@ -84,6 +89,26 @@ export const LoginButtons = () => {
             console.log(e);
         }
     };
+
+    const successLogin = () => {
+        if (user != null)
+            return true;
+        else
+            return false;
+    };
+
+    const onLogout = async () => {
+        console.log("Logging out...");
+        try {
+            await clearSession();
+        } catch (e) {
+            console.log('Log out cancelled');
+        }
+    };
+
+    useEffect(() => {
+        props.setUser(user);
+    }, [user]);
 
     return (
         <View style={styles.container}>
@@ -110,9 +135,14 @@ export const LoginButtons = () => {
                     Login or Register
                 </Text>
             </Pressable>
+            {(user != null) ? <Pressable onPress={onLogout} style={styles.authButton} title="Log in">
+                <Text style={styles.buttonText}>
+                    Logout
+                </Text>
+            </Pressable> : <></>}
             <View>
-            {user && <Text>You are logged in as {user.name}</Text>}
-            {!user && <Text>You are not logged in</Text>}
+                {user && <Text>You are logged in as {user.name}</Text>}
+                {!user && <Text>You are not logged in</Text>}
 
             </View>
             
