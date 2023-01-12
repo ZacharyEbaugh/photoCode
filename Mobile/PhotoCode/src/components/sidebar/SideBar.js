@@ -104,7 +104,7 @@ class SideBar extends React.Component {
                         </View>
                         <View>
                             <Text style={styles.userDisplay}>
-                                {'Hi,\n' + this.props.userName}
+                                {'Hi,\n' + this.props.user.name}
                             </Text>
                         </View>
                         <View>
@@ -124,7 +124,7 @@ class SideBar extends React.Component {
                                     {'Help'}
                                 </Text>
                             </Pressable>
-                            <GoToLogout/>
+                            <GoToLogout setUser={this.props.setUser}/>
                         </View>
                         <View>
                             <View style={styles.creatorInfo}>
@@ -190,7 +190,8 @@ const styles = StyleSheet.create({
         // marginLeft: windowWidth * 0.025,
     },
     userDisplay: {
-        fontSize: windowWidth * 0.11,
+        width: windowWidth * 0.6,
+        fontSize: windowWidth * 0.10,
         marginLeft: windowWidth * 0.025,
         color: 'white',
         fontFamily: 'JetBrainsMono-Regular',

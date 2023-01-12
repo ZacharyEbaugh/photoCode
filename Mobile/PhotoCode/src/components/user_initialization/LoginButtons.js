@@ -97,15 +97,6 @@ export const LoginButtons = (props) => {
             return false;
     };
 
-    const onLogout = async () => {
-        console.log("Logging out...");
-        try {
-            await clearSession();
-        } catch (e) {
-            console.log('Log out cancelled');
-        }
-    };
-
     useEffect(() => {
         props.setUser(user);
     }, [user]);
@@ -135,20 +126,7 @@ export const LoginButtons = (props) => {
                     Login or Register
                 </Text>
             </Pressable>
-            {(user != null) ? <Pressable onPress={onLogout} style={styles.authButton} title="Log in">
-                <Text style={styles.buttonText}>
-                    Logout
-                </Text>
-            </Pressable> : <></>}
-            <View>
-                {user && <Text>You are logged in as {user.name}</Text>}
-                {!user && <Text>You are not logged in</Text>}
-
-            </View>
-            
         </View>
-    
-
     );
 }
 

@@ -99,13 +99,30 @@ const showAlert = () => {
     );
     };
 
-export function GoToLogout() {
+export function GoToLogout(props) {
     const { clearSession } = useAuth0();
     const [isPressed, setIsPressed] = useState(false);
+
+    const onLogout = async () => {
+        console.log("Logging out...");
+        try {
+            await clearSession({
+                prompt: 'login',
+            },
+            {
+                ephemeralSession: true,
+            });
+
+            props.setUser(null);
+        } catch (e) {
+            console.log('Log out cancelled');
+        }
+    };
+
     return (
         <Pressable
             onPress={() => {
-                console.log("TEST");
+                onLogout();
             }}
            
             style={[styles.button, isPressed && styles.updateBackground]}

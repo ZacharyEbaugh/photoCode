@@ -123,6 +123,8 @@ class HomeScreen extends React.Component {
                         <SideBar
                             onPress={this.closeSidebar}
                             userName={userName}
+                            user={this.props.user}
+                            setUser={this.props.setUser}
                         />
                     )}
                 </Animated.View>

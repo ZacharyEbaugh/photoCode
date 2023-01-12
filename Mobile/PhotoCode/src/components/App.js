@@ -27,23 +27,20 @@ import { Text, View } from 'react-native';
 
 const App = () => {
 
-    const {authorize, user} = useAuth0({
-        clientId: "MpksNgQRuYsc9tp9ZJcsgODwhOqjbn1n",
-        domain: "photocode.us.auth0.com",
-        redirectUri: "org.reactjs.native.example.PhotoCode://photocode.us.auth0.com/ios/org.reactjs.native.example.PhotoCode/callback",
-        audience: "https://photocode.auth0.com/api/v2/",
-    });
+    const [user, setUser] = useState(null);
+    
+    useEffect(() => {
+        console.log(user);
+    }, [user]);
 
-    const [isUser, setUser] = useState(null);
-
-    if (isUser == null) {
+    if (user == null) {
         return (
             <Auth0Provider domain={"photocode.us.auth0.com"} clientId={"MpksNgQRuYsc9tp9ZJcsgODwhOqjbn1n"}>
                 <NavigationContainer>
                     <Stack.Navigator screenOptions={{ headerShown: false}}>
                         <Stack.Screen
                             name="SplashPage"
-                            component={() => <SplashPage isUser={isUser} setUser={setUser} />}
+                            component={() => <SplashPage isUser={user} setUser={setUser} />}
                             options={{ title: 'SplashPage' }}
                         />
                     </Stack.Navigator>
@@ -59,7 +56,7 @@ const App = () => {
                     <Stack.Navigator screenOptions={{ headerShown: false}}>
                         <Stack.Screen
                             name="HomeScreen"
-                            component={HomeScreen}
+                            component={() => <HomeScreen user={user} setUser={setUser}/>}
                             options={{ title: 'My Home'}}
                         />
                         <Stack.Screen
