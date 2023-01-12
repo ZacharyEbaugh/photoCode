@@ -110,7 +110,7 @@ function Settings() {
         }
         try {
             var response = await axios.post(baseUrl + '/resetPassword', {
-                email: userEmail,
+                email: email,
                 password: newPassword,
                 passwordConfirm: newPassword
             });
