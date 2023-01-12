@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 
 import {    
@@ -46,6 +47,29 @@ var PROJECT_INFO= [
 
 
 class HomeScreen extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            user: null
+        };
+    }
+
+    componentDidMount() {
+        axios.post('https://photocode.app:8443/register', {
+            email: this.props.user.email,
+            username: this.props.user.name,
+            picture: this.props.user.picture,
+            password: '',
+            connection: this.props.user.sub.split('|')[0],
+        })
+        .then(response => {
+            console.log(response);
+        })
+            .catch(error => {
+            console.log(error);
+        });
+    }
 
     state = {
         sideBarActive: false,
@@ -113,6 +137,8 @@ class HomeScreen extends React.Component {
         this.setState({cameraOptionsActive: !this.state.cameraOptionsActive});
         this.animateCameraOptionsClose();
     };
+
+    
     //#endregion
 
     render () {
