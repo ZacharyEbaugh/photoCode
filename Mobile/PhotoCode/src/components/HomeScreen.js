@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 import {    
     View, 
@@ -24,26 +25,11 @@ import CameraOptions from './CameraOptions';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-var userName = 'Brandon';
+// Hard Coded User Information 
+id = '63bc7385c38907624d094eaa';
 
-var PROJECT_INFO= [
-  {
-    title: 'Portfolio Website',
-    imageFile: require('../assets/images/siteIcon.png'),
-    languageOne: 'HTML',
-    languageTwo: 'CSS',
-    languageThree: 'JavaScript',
-    date: '5/27/2022',
-  },
-  {
-    title: 'SkipList Visual',
-    imageFile: require('../assets/images/skipList-Icon.png'),
-    languageOne: 'Java',
-    languageTwo: 'JavaScript',
-    languageThree: 'Shell',
-    date: '10/22/2021',
-  },
-];
+// API Setup
+const baseUrl = "https://photocode.app:8443";
 
 // Animation Starting Values
 sideBarXPos = new Animated.Value(-windowWidth * 0.7);
@@ -53,6 +39,31 @@ function HomeScreen() {
 
     const [sideBarActive, setSideBarActive] = useState(false);
     const [cameraOptionsActive, setCameraOptionsActive] = useState(false);
+
+    const [email, setEmail] = useState("")
+    const [username, setUsername] = useState("")
+    const [projects, setProjects] = useState({})
+    const [projectsSet, setProjectsSet] = useState(false)
+
+    getAllProjects = async () => {
+        var response = await axios.get(baseUrl + `/getAllProjects?user_id=${id}`)
+        setProjects(response.data)
+        setProjectsSet(true)
+    }
+
+    useEffect(() => {
+        async function getUserInfo() {
+            var userInfoResponse = await axios.post(baseUrl + '/getUserInfo', {
+                user_id: id
+            })
+            userInfo = userInfoResponse.data;
+            setEmail(userInfo.email)
+            setUsername(userInfo.username)
+            getAllProjects()
+        }
+        getUserInfo()
+    }, []);
+    
 
     //#region Sidebar Animations
     animateSideBarOpen = () => {
@@ -119,7 +130,7 @@ function HomeScreen() {
             <View style={styles.container}>
                 <Animated.View style={[{zIndex: 3}, { left: sideBarXPos}]}>
                     {sideBarActive && (
-                        <SideBar onPress={closeSidebar} userName={userName}/>
+                        <SideBar onPress={closeSidebar} userName={username}/>
                     )}
                 </Animated.View>
 
@@ -132,17 +143,20 @@ function HomeScreen() {
                         onPress={openSidebar}
                     />
                     <ScrollView style={styles.main}>
-                        {PROJECT_INFO.map((project, i) => (
-                            <GoToProject
-                                key={i}
-                                imageSource={project.imageFile}
-                                projectName={project.title}
-                                languageOne={project.languageOne}
-                                languageTwo={project.languageTwo}
-                                languageThree={project.languageThree}
-                                date={project.date}
-                            />
-                        ))}
+                        {projectsSet == true ?
+                            projects.map((project, i) => (
+                                <GoToProject
+                                    key={i}
+                                    projectId={project._id}
+                                    imageSource={require('../assets/images/siteIcon.png')}
+                                    projectName={project.name}
+                                    // languageOne={project.languageOne}
+                                    // languageTwo={project.languageTwo}
+                                    // languageThree={project.languageThree}
+                                    // date={project.date}
+                                />
+                            )) : null
+                        }
                     </ScrollView>
                     <Shadow viewStyle={{alignSelf: 'stretch'}}>
                         <View style={styles.actionView}>

@@ -70,7 +70,7 @@ function Settings() {
             setUsername(userInfo.username)
         }
         getUserInfo()
-    });
+    }, []);
 
     const changeEmail = async (newEmail) => {
         var response = await axios.post(baseUrl + '/changeEmail', {

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
@@ -12,43 +13,43 @@ import { height } from '@mui/system';
 import { BackButton } from './BackButton';
 
 var PROJECT_FILES= [
-    {
-      folder: true,
-      name: 'Fonts',
-      imageFile: require('../assets/images/folder_icon.png'),
-    },
-    {
-        folder: true,
-        name: 'Images',
-        imageFile: require('../assets/images/folder_icon.png'),
-    },
-    {
-        folder: false,
-        inFolder: 'Images',
-        name: 'profile-pic.png',
-        imageFile: require('../assets/images/folder_icon.png'),
-    },
-    {
-        folder: false,
-        inFolder: 'Images',
-        name: 'project-logo.png',
-        imageFile: require('../assets/images/folder_icon.png'),
-    },
-    {
-        folder: false,
-        name: 'index.css',
-        imageFile: require('../assets/images/cssIcon.png'),
-    },
-    {
-        folder: false,
-        name: 'index.html',
-        imageFile: require('../assets/images/html_Icon.png'),
-    },
-    {
-        folder: false,
-        name: 'README.md',
-        imageFile: require('../assets/images/readmeIcon.png'),
-    },
+    // {
+    //   folder: true,
+    //   name: 'Fonts',
+    //   imageFile: require('../assets/images/folder_icon.png'),
+    // },
+    // {
+    //     folder: true,
+    //     name: 'Images',
+    //     imageFile: require('../assets/images/folder_icon.png'),
+    // },
+    // {
+    //     folder: false,
+    //     inFolder: 'Images',
+    //     name: 'profile-pic.png',
+    //     imageFile: require('../assets/images/folder_icon.png'),
+    // },
+    // {
+    //     folder: false,
+    //     inFolder: 'Images',
+    //     name: 'project-logo.png',
+    //     imageFile: require('../assets/images/folder_icon.png'),
+    // },
+    // {
+    //     folder: false,
+    //     name: 'index.css',
+    //     imageFile: require('../assets/images/cssIcon.png'),
+    // },
+    // {
+    //     folder: false,
+    //     name: 'index.html',
+    //     imageFile: require('../assets/images/html_Icon.png'),
+    // },
+    // {
+    //     folder: false,
+    //     name: 'README.md',
+    //     imageFile: require('../assets/images/readmeIcon.png'),
+    // },
   ];
 
 function GoBackButton() {
@@ -105,92 +106,132 @@ function GetProjectName() {
     );
 }
 
-class ProjectPage extends React.Component {
 
-    // static propTypes = {
-    //     projectName: PropTypes.string.isRequired,
-    // };
+var root_folder_id;
+var root_folder;
 
 
 
-    render () {
+
+
+function ProjectPage() {
+
+    const [currentFolders, setCurrentFolders] = useState([])
+    const [currentPath, setCurrentPath] = useState([])
+    const [folderSet, setFolderSet] = useState(false)
+
+    const route = useRoute();
+    const { projectId } = route.params;
+    
+    function getProjectFiles(projectId) {
+        var response = axios.get(`https://photocode.app:8443/getFolders?project_id=${projectId}`).then(res => {
+            root_folder = res.data;
+           root_folder_id = (res.data[0]._id != undefined) ? res.data[0]._id : null;
+        //    setCurrentPath([...currentPath, 'root'])
+           console.warn(currentPath)
+        //    console.warn(root_folder_id);
+        //    console.warn(root_folder[0].name)
+           if (root_folder_id != null) {
+            axios.get(`https://photocode.app:8443/getFolders?project_id=${root_folder_id}`).then(res => {
+                console.warn(res.data[0])
+    
+            })
+           }
+            // axios.get(`https://photocode.app:8443/getFiles?project_id=${folder._id}`);
+        });
+        // console.warn(response.data);
+    }
+
+
+    useEffect(() => {
+ 
+
+        getProjectFiles(projectId);
+    }, [])
+
+    function DisplayProject() {
         return (
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <BackButton/>
-                    <View>
-                        <GetProjectName />
-                    </View>
-                </View>
+            <Text>{'Hello'}</Text>
+            // PROJECT_FILES.map((file, i) => (
+            //     file.folder ? 
+            //         <View key={i}>
+            //             <Pressable style={styles.folder}>
+            //                 <Image 
+            //                     style={styles.folderIcon}
+            //                     source={file.imageFile}
+            //                 />
+            //                 <Text style={styles.fileName}>{file.name}</Text> 
+            //             </Pressable>
+            //             <View style={styles.line} />
+            //         </View>
+            //     : 
+            //         file.inFolder ? 
+            //             <View key={i}>
+            //                 {/* <Pressable style={styles.file}>
+            //                     <Image 
+            //                         style={styles.folderIcon}
+            //                         source={file.imageFile}
+            //                     />
+            //                     <Text style={styles.fileName}>{file.name}</Text>
+            //                 </Pressable>
+            //                 <View style={styles.line} /> */}
+            //             </View>
+            //         :
+            //             <View key={i}>
+            //                 <Pressable style={styles.file}>
+            //                     <Image 
+            //                         style={styles.folderIcon}
+            //                         source={file.imageFile}
+            //                     />
+            //                     <Text style={styles.fileName}>{file.name}</Text>
+            //                 </Pressable>
+            //                 <View style={styles.line} />
+            //             </View>
+    
+            // ))
+        );
+    }
 
-                <View style={styles.main}>
-                    <View style={styles.searchCreateWrapper}>
-                        <View style={styles.createButton}>
-                            <Image style={styles.createIcon} source={require('../assets/images/plus.png')} />
-                        </View>
-
-                        <View style={styles.searchArea}>
-                            <Pressable onPress={() => {}} >
-                                <Image style={styles.searchImage} source={require('../assets/images/search.png')} />
-                            </Pressable>
-                            <TextInput
-                                style={styles.search}
-                                placeholderTextColor={'black'}
-                                placeholder='Search Files'
-                                placeholderTextColor='darkgrey' 
-                            />
-                        </View>
-                    </View>
-
-                    <View style={styles.fileExplore}>
-                        {PROJECT_FILES.map((file, i) => (
-                            file.folder ? 
-                                <View key={i}>
-                                    <Pressable style={styles.folder}>
-                                        <Image 
-                                            style={styles.folderIcon}
-                                            source={file.imageFile}
-                                        />
-                                        <Text style={styles.fileName}>{file.name}</Text> 
-                                    </Pressable>
-                                    <View style={styles.line} />
-                                </View>
-                            : 
-                                file.inFolder ? 
-                                    <View key={i}>
-                                        {/* <Pressable style={styles.file}>
-                                            <Image 
-                                                style={styles.folderIcon}
-                                                source={file.imageFile}
-                                            />
-                                            <Text style={styles.fileName}>{file.name}</Text>
-                                        </Pressable>
-                                        <View style={styles.line} /> */}
-                                    </View>
-                                :
-                                    <View key={i}>
-                                        <Pressable style={styles.file}>
-                                            <Image 
-                                                style={styles.folderIcon}
-                                                source={file.imageFile}
-                                            />
-                                            <Text style={styles.fileName}>{file.name}</Text>
-                                        </Pressable>
-                                        <View style={styles.line} />
-                                    </View>
-
-                        ))}
-                    </View>
-
-                    <View style={styles.buttonWrapper}>
-                        <GoToSourceControl/>
-                        <GoToProjectSettings/>
-                    </View>
+    return (
+        <View style={styles.container}>
+            <View style={styles.header}>
+                <BackButton/>
+                <View>
+                    <GetProjectName />
                 </View>
             </View>
 
-        );
-    }
+            <View style={styles.main}>
+                <View style={styles.searchCreateWrapper}>
+                    <View style={styles.createButton}>
+                        <Image style={styles.createIcon} source={require('../assets/images/plus.png')} />
+                    </View>
+
+                    <View style={styles.searchArea}>
+                        <Pressable onPress={() => {}} >
+                            <Image style={styles.searchImage} source={require('../assets/images/search.png')} />
+                        </Pressable>
+                        <TextInput
+                            style={styles.search}
+                            placeholderTextColor={'black'}
+                            placeholder='Search Files'
+                            // placeholderTextColor='darkgrey' 
+                        />
+                    </View>
+                </View>
+
+                <View style={styles.fileExplore}>
+                    <DisplayProject />
+                </View>
+
+                <View style={styles.buttonWrapper}>
+                    <GoToSourceControl/>
+                    <GoToProjectSettings/>
+                </View>
+            </View>
+        </View>
+
+    );
 }
 
 const styles = StyleSheet.create({
