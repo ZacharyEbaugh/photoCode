@@ -73,30 +73,42 @@ function Settings() {
     });
 
     const changeEmail = async (newEmail) => {
-        var response = await axios.post(baseUrl + '/changeEmail', {
-            user_id: id,
-            newEmail: newEmail,
-        });
-        setEmail(newEmail)
-        Alert.alert("Email Changed to " + newEmail);
+        try {
+            var response = await axios.post(baseUrl + '/changeEmail', {
+                user_id: id,
+                newEmail: newEmail,
+            });
+            setEmail(newEmail)
+            Alert.alert("Email Changed to " + newEmail);
+        } catch (err) {
+            Alert.alert("Failed to change email");
+        }
     }
     
     const changeUsername = async (newUsername) => {
-        var response = await axios.post(baseUrl + '/changeUsername', {
-            user_id: id,
-            newUsername: newUsername,
-        });
-        setUsername(newUsername)
-        Alert.alert("Username Changed to " + newUsername);
+        try {
+            var response = await axios.post(baseUrl + '/changeUsername', {
+                user_id: id,
+                newUsername: newUsername,
+            });
+            setUsername(newUsername)
+            Alert.alert("Username Changed to " + newUsername);
+        } catch (err) {
+            Alert.alert("Failed to change username");
+        }
     }
     
     const changePassword = async (newPassword) => {
-        var response = await axios.post(baseUrl + '/resetPassword', {
-            email: userEmail,
-            password: newPassword,
-            passwordConfirm: newPassword
-        });
-        Alert.alert("Password Changed to " + newPassword);
+        try {
+            var response = await axios.post(baseUrl + '/resetPassword', {
+                email: userEmail,
+                password: newPassword,
+                passwordConfirm: newPassword
+            });
+            Alert.alert("Password Changed to " + newPassword);
+        } catch (err) {
+            Alert.alert("Failed to change password");
+        }
     }
 
     return (
