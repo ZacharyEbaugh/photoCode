@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
+import { Buffer } from 'buffer';
 
 import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, Alert } from 'react-native';
 
@@ -20,7 +22,7 @@ const languages = ["HTML", "CSS", "JavaScript", "Python", "React", "Java"];
 
 var selectedLanguage = '';
 
-function Example ({language}) {
+function NewDocumentOrigin ({language}) {
     const keyboard = useKeyboard();
     const insets = useSafeAreaInsets();
 
@@ -52,6 +54,54 @@ function Example ({language}) {
         </SafeAreaView>
     );
 };
+
+function ProjectFileOrigin({language}) {
+    const keyboard = useKeyboard();
+    const insets = useSafeAreaInsets();
+
+    const route = useRoute();
+    const { fileId } = route.params;
+
+    const [loading, setLoading] = useState(true)
+
+    const [code, setCode] = useState('Hello World!');
+    const [originCode, setOriginCode] = useState('Hello World!');
+    
+
+    const getFileContents = async() => {
+        const response = await axios.get(`https://photocode.app:8443/getFile?file_id=${fileId}`);
+        const buffer = Buffer.from(response.data.fileContents.data, 'hex')
+        await setCode(buffer.toString());
+        await setOriginCode(buffer.toString());
+        setLoading(false);
+    }
+    getFileContents()
+
+
+    return (
+        <SafeAreaView style={styles.codeEditorBox}>
+            {loading == true ? <Text>{'Loading'}</Text> : <CodeEditor
+                style={{
+                    ...{
+                        fontSize: 20,
+                        inputLineHeight: 26,
+                        highlighterLineHeight: 26,
+                        height: windowHeight * 0.75,
+                        width: windowWidth,
+                        marginTop: windowHeight * -0.06,
+                    },
+                    ...(keyboard.keyboardShown
+                        ? { marginBottom: keyboard.keyboardHeight - insets.bottom }
+                        : {}),
+                }}
+                language={language}
+                syntaxStyle={CodeEditorSyntaxStyles.vs2015}
+                showLineNumbers
+                initialValue={code}
+            />}
+        </SafeAreaView>
+    );
+}
 
 function BackButton({ screenName, fileName }) {
     const navigation = useNavigation();
@@ -143,16 +193,20 @@ function SendButton({ screenName, fileName }) {
 
 
 function TextEditor() {
-    var fileName = '';
-    
     const route = useRoute();
 
-    if (route.params.fileName == '')
-        fileName = route.params.fileName;
-    else
-        fileName = '';
+    // Possible Origins: camera/new document (1), project file (2)
+    const { editorOrigin, originFilename } = route.params;
 
     var [fileName, setFileName] = useState("");
+    
+    useEffect(() => {
+        if (originFilename != undefined)
+            setFileName(originFilename)
+        else
+            fileName = '';
+    }, [])
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -200,7 +254,7 @@ function TextEditor() {
             </View>
 
             <View style={styles.main}>
-                <Example language={selectedLanguage}/>
+                {editorOrigin == 1 ? <NewDocumentOrigin language={selectedLanguage}/> : <ProjectFileOrigin language={selectedLanguage}/>}
               
                 <SendButton screenName={'SaveDoc'} fileName={fileName} />
              
@@ -271,7 +325,7 @@ const styles = StyleSheet.create({
     },
 
     titleInput: {
-        fontSize: 40,
+        fontSize: 35,
         width: windowWidth * 0.6,
         marginLeft: windowWidth * 0.02,
         color: 'white',

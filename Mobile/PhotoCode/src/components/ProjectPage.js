@@ -165,13 +165,16 @@ function ProjectPage() {
     }
 
     function DisplayFiles() {
+        const navigation = useNavigation();
+        
+        
         return (
             currentFiles.map((file, i) => (
                 <View key={i}>
                     <View style={styles.greyLine} />
                     <Pressable
                         style={styles.fileLine}
-                        onPress={() => {}}
+                        onPress={() => {navigation.navigate('TextEditor', {originFilename: file.filename, fileId: file._id, editorOrigin: 2})}}
                     >
                         
                         <Image style={styles.fileImage} source={fileIcon} />

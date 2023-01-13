@@ -179,6 +179,7 @@ function ToNewDoc() {
                 navigation.navigate('TextEditor', {
                     fileName: '',
                     initialText: '',
+                    editorOrigin: 1,
                 });
             }}
         >

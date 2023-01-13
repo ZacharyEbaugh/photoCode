@@ -83,6 +83,7 @@ function TakePhoto() {
                             fileName: '',
                             // initialText: JSON.stringify(value, null, 1).slice(1, -1).replaceAll(',', '').replaceAll('"', '').replaceAll('\n', '!').trim(),
                             initialText: value,
+                            editorOrigin: 1,
                           })
                         })),
                         setResponse(null) 
