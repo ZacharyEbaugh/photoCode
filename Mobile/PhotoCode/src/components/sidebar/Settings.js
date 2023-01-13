@@ -31,14 +31,11 @@ function BackButton({ screenName }) {
   );
 }
 
-// Hard Coded User Information 
-id = '63bc7385c38907624d094eaa';
-
 // API Setup
 const baseUrl = "https://photocode.app:8443";
 var userInfo; 
 
-function Settings() {
+function Settings(props) {
 
     state = {
         newUsername: String,
@@ -68,19 +65,19 @@ function Settings() {
     useEffect(() => {
         async function getUserInfo() {
             var userInfoResponse = await axios.post(baseUrl + '/getUserInfo', {
-                user_id: id
+                user_id: props.user_id
             })
             userInfo = userInfoResponse.data;
             setEmail(userInfo.email)
             setUsername(userInfo.username)
         }
         getUserInfo()
-    });
+    }, []);
 
     const changeEmail = async (newEmail) => {
         try {
             var response = await axios.post(baseUrl + '/changeEmail', {
-                user_id: id,
+                user_id: props.user_id,
                 newEmail: newEmail,
             });
             setEmail(newEmail);
@@ -93,7 +90,7 @@ function Settings() {
     const changeUsername = async (newUsername) => {
         try {
             var response = await axios.post(baseUrl + '/changeUsername', {
-                user_id: id,
+                user_id: props.user_id,
                 newUsername: newUsername,
             });
             setUsername(newUsername);
@@ -110,7 +107,7 @@ function Settings() {
         }
         try {
             var response = await axios.post(baseUrl + '/resetPassword', {
-                email: email,
+                email: props.user.email,
                 password: newPassword,
                 passwordConfirm: newPassword
             });

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { View, Animated, Pressable, Button, Text, Image, Linking, Dimensions, StyleSheet, Alert } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 
-import HomeScreen from './HomeScreen';
+import HomeScreen from '../user_initialization/HomeScreen';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -81,23 +81,23 @@ class ContactUs extends React.Component {
                             </Text>
                             <Image
                                 style={styles.profilePicture}
-                                source={require('./../assets/images/zacProfilePic.jpg')}
+                                source={require('./../../assets/images/zacProfilePic.jpg')}
                                 />
                         </View>
                         <View style={styles.Links}>
                             <OpenURLButton url={zacWebsite} children={<Image
                                 style={styles.websiteLinkButton}
-                                source={require('./../assets/images/siteIcon.png')}
+                                source={require('./../../assets/images/siteIcon.png')}
                             />}>
                             </OpenURLButton>
                             <OpenURLButton url={zacGitHub} children={<Image
                                 style={styles.linkButton}
-                                source={require('./../assets/images/GitHub-Mark.png')}
+                                source={require('./../../assets/images/GitHub-Mark.png')}
                             />}>
                             </OpenURLButton>
                             <OpenURLButton url={zacLinkedIn} children={<Image
                                 style={styles.linkButton}
-                                source={require('./../assets/images/linkedInLogo-Black.png')}
+                                source={require('./../../assets/images/linkedInLogo-Black.png')}
                             />}>
                             </OpenURLButton>
                         </View>
@@ -111,23 +111,23 @@ class ContactUs extends React.Component {
                             </Text>
                             <Image
                                 style={styles.profilePicture}
-                                source={require('./../assets/images/brandonProfilePic.png')}
+                                source={require('./../../assets/images/brandonProfilePic.png')}
                             />
                         </View>
                         <View style={styles.Links}>
                             <OpenURLButton url={brandonWebsite} children={<Image
                                 style={styles.websiteLinkButton}
-                                source={require('./../assets/images/siteIcon.png')}
+                                source={require('./../../assets/images/siteIcon.png')}
                             />}>
                             </OpenURLButton>
                             <OpenURLButton url={brandonGitHub} children={<Image
                                 style={styles.linkButton}
-                                source={require('./../assets/images/GitHub-Mark.png')}
+                                source={require('./../../assets/images/GitHub-Mark.png')}
                             />}>
                             </OpenURLButton>
                             <OpenURLButton url={brandonLinkedIn} children={<Image
                                 style={styles.linkButton}
-                                source={require('./../assets/images/linkedInLogo-Black.png')}
+                                source={require('./../../assets/images/linkedInLogo-Black.png')}
                             />}>
                             </OpenURLButton>
                         </View>

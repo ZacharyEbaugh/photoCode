@@ -46,7 +46,7 @@ function Home(props) {
         setSearchQuery('');
     }
 
-useEffect(() => {
+    useEffect(() => {
         // Create a Promise to get the user ID from local storage
         const getUserId = new Promise((resolve, reject) => {
           const user_id = localStorage.getItem('user_id');
