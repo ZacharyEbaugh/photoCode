@@ -43,10 +43,12 @@ function GoBackButton() {
 
 function GoToSourceControl() {
     const navigation = useNavigation();
+    const route = useRoute();
+    const { projectId } = route.params;
     return (
         <Pressable 
             style={styles.actionButton}
-            onPress={() => navigation.navigate('SourceControl')}
+            onPress={() => navigation.navigate('SourceControl', { projectId })}
         >
             <Text style={styles.actionButtonText}>
                 Version Control

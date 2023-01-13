@@ -85,7 +85,7 @@ const App = () => {
                         />
                         <Stack.Screen
                             name="SourceControl"
-                            component={SourceControl}
+                            component={() => <SourceControl user={user}/>}
                             options={{ title: 'SourceControl' }}
                         />
                         <Stack.Screen
