@@ -2,62 +2,30 @@ import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, ScrollView } from 'react-native';
-import { Shadow } from 'react-native-shadow-2';
-
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
-
-
+import { 
+    View,
+    ScrollView,
+    Pressable, 
+    Text,
+    Image, 
+    TextInput, 
+    Dimensions, 
+    StyleSheet, 
+    Alert
+} from 'react-native';
 
 import { BaseRouter, useNavigation, useRoute } from '@react-navigation/native';
 import { height } from '@mui/system';
 import { BackButton } from './BackButton';
 
-var PROJECT_FILES= [
-    // {
-    //   folder: true,
-    //   name: 'Fonts',
-    //   imageFile: require('../assets/images/folder_icon.png'),
-    // },
-    // {
-    //     folder: true,
-    //     name: 'Images',
-    //     imageFile: require('../assets/images/folder_icon.png'),
-    // },
-    // {
-    //     folder: false,
-    //     inFolder: 'Images',
-    //     name: 'profile-pic.png',
-    //     imageFile: require('../assets/images/folder_icon.png'),
-    // },
-    // {
-    //     folder: false,
-    //     inFolder: 'Images',
-    //     name: 'project-logo.png',
-    //     imageFile: require('../assets/images/folder_icon.png'),
-    // },
-    // {
-    //     folder: false,
-    //     name: 'index.css',
-    //     imageFile: require('../assets/images/cssIcon.png'),
-    // },
-    // {
-    //     folder: false,
-    //     name: 'index.html',
-    //     imageFile: require('../assets/images/html_Icon.png'),
-    // },
-    // {
-    //     folder: false,
-    //     name: 'README.md',
-    //     imageFile: require('../assets/images/readmeIcon.png'),
-    // },
-  ];
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
-  newFolder = require('../assets/images/newFolder.png');
-  newFile = require('../assets/images/newFile.png');
-  blueFolder = require('../assets/images/blueFolder.png');
-  fileIcon = require('../assets/images/file.png');
+const newFolder = require('../assets/images/newFolder.png');
+const newFile = require('../assets/images/newFile.png');
+const blueFolder = require('../assets/images/blueFolder.png');
+const fileIcon = require('../assets/images/file.png');
+const goBackFolderIcon = require('../assets/images/backFolder.png');
 
 
 function GoBackButton() {
@@ -161,7 +129,6 @@ function ProjectPage() {
 
 
     useEffect(() => {
-        // console.warn(currentPath)
         getProjectFiles(projectId);
     }, [])
 
@@ -185,56 +152,15 @@ function ProjectPage() {
             currentFolders.map((folder, i) => (
                 <View key={i}>
                     <View style={styles.greyLine} />
-                <Pressable
-                    key={i}
-                    style={styles.fileLine}
-                    onPress={() => {updateFolders(folder)}}
-                >
-                    <Image style={styles.fileImage} source={blueFolder} />
-                    <Text style={styles.fileText}>{folder.name}</Text>
-                </Pressable>
+                    <Pressable
+                        style={styles.fileLine}
+                        onPress={() => {updateFolders(folder)}}
+                    >
+                        <Image style={styles.fileImage} source={blueFolder} />
+                        <Text style={styles.fileText}>{folder.name}</Text>
+                    </Pressable>
                 </View>
             ))
-
-            
-            
-            // PROJECT_FILES.map((file, i) => (
-            //     file.folder ? 
-            //         <View key={i}>
-            //             <Pressable style={styles.folder}>
-            //                 <Image 
-            //                     style={styles.folderIcon}
-            //                     source={file.imageFile}
-            //                 />
-            //                 <Text style={styles.fileName}>{file.name}</Text> 
-            //             </Pressable>
-            //             <View style={styles.line} />
-            //         </View>
-            //     : 
-            //         file.inFolder ? 
-            //             <View key={i}>
-            //                 {/* <Pressable style={styles.file}>
-            //                     <Image 
-            //                         style={styles.folderIcon}
-            //                         source={file.imageFile}
-            //                     />
-            //                     <Text style={styles.fileName}>{file.name}</Text>
-            //                 </Pressable>
-            //                 <View style={styles.line} /> */}
-            //             </View>
-            //         :
-            //             <View key={i}>
-            //                 <Pressable style={styles.file}>
-            //                     <Image 
-            //                         style={styles.folderIcon}
-            //                         source={file.imageFile}
-            //                     />
-            //                     <Text style={styles.fileName}>{file.name}</Text>
-            //                 </Pressable>
-            //                 <View style={styles.line} />
-            //             </View>
-    
-            // ))
         );
     }
 
@@ -242,19 +168,39 @@ function ProjectPage() {
         return (
             currentFiles.map((file, i) => (
                 <View key={i}>
-                <View style={styles.greyLine} />
-                <Pressable
-
-                    style={styles.fileLine}
-                    onPress={() => {}}
-                >
-                    
-                    <Image style={styles.fileImage} source={fileIcon} />
-                    <Text style={styles.fileText}>{file.filename}</Text>
-                </Pressable>
+                    <View style={styles.greyLine} />
+                    <Pressable
+                        style={styles.fileLine}
+                        onPress={() => {}}
+                    >
+                        
+                        <Image style={styles.fileImage} source={fileIcon} />
+                        <Text style={styles.fileText}>{file.filename}</Text>
+                    </Pressable>
                 </View>
             ))
         );
+    }
+
+    async function goBackFolder() {
+        folder = currentPath[currentPath.length - 1];
+        if (folder.name == 'root'){
+            Alert.alert("Cannot return from root");
+            return; 
+        }
+
+        var folders = await axios.get(baseUrl + `/getFolders?project_id=${folder.parent_folder}`)
+        var files = await axios.get(baseUrl + `/getFiles?project_id=${folder.parent_folder}`)
+        // console.warn(folders.data)
+        setCurrentFolders(folders.data)
+        if (files != undefined) {
+            setCurrentFiles(files.data)
+            setFilesFound(true)
+        } else {
+            setFilesFound(false)
+        }
+
+        setCurrentPath(currentPath.slice(0, currentPath.length - 1));
     }
 
     return (
@@ -285,16 +231,21 @@ function ProjectPage() {
                         </Pressable>
                         <TextInput
                             style={styles.search}
-                            placeholderTextColor={'black'}
                             placeholder='Search Files'
-                            // placeholderTextColor='darkgrey' 
+                            placeholderTextColor='#5A5A5A' 
                         />
                     </View>
                 </View>
 
                 <View style={styles.directoryPath}>
+                    <Pressable 
+                        style={styles.goBackFolderWrapper}
+                        onPress={() => {goBackFolder()}}
+                    >
+                        <Image style={styles.goBackFolderIcon} source={goBackFolderIcon} />
+                    </Pressable>
                     {currentPath.map((folder, i) => (
-                        <Text style={styles.directoryPathText}>{folder.name + '/'}</Text>
+                        <Text key={i} style={styles.directoryPathText}>{folder.name + '/'}</Text>
                     ))}
                 </View>
 
@@ -318,7 +269,6 @@ function ProjectPage() {
 const styles = StyleSheet.create({
     loadingWrapper: {
         height: windowHeight,
-        // display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -349,7 +299,6 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 35,
-        // marginTop: -100,
         textAlign: 'center',
         width: windowWidth,
         color: '#FFFFFF',
@@ -514,10 +463,19 @@ const styles = StyleSheet.create({
     fileWrapper: {
         paddingLeft: 10,
     },
+    goBackFolderWrapper: {
+        marginRight: 10,
+        // marginLeft: 5,
+    },
+    goBackFolderIcon: {
+        width: windowWidth * 0.075,
+        height: windowHeight * 0.0375,
+    },
     directoryPath: {
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
+        alignItems: 'center',
         paddingHorizontal: 10,
         marginBottom: 5,
     },
