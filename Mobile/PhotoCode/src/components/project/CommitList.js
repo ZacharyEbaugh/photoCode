@@ -57,7 +57,7 @@ export function CommitList({ UserName, UserImage, CommitTitle, CommitMessage, Co
         <View>
             <View style={styles.commitItem}>
                 <Pressable style={styles.commitInfo} onPress={() => toggleListItem()}>
-                    <Image style={styles.commitImage} source={UserImage} />
+                    <Image style={styles.commitImage} source={{uri: UserImage}} />
                     <Text style={styles.commitTitle}>
                         {CommitTitle}
                     </Text>
