@@ -20,26 +20,6 @@ const windowHeight = Dimensions.get('window').height;
 // API Setup
 const baseUrl = `https://photocode.app:8443`;
 
-
-
-// var commits= [
-//   {
-//     UserName: 'Zachary Ebaugh',
-//     ProfilePicture: require('./../../assets/images/zacProfilePic.jpg'),
-//     Title: 'Fix router bug',
-//     Message: 'Implement all pages into the router blah blah blah blah blah',
-//     Date: 'Aug 1, 2021',
-//   },
-//   // We will need to limit the length of the title, message and be however long
-//   {
-//     UserName: 'Brandon Spangler',
-//     ProfilePicture: require('./../../assets/images/brandonProfilePic.png'),
-//     Title: 'Upgrade to React Native 0.64',
-//     Message: 'Upgrading to React Native 0.65 took blah blah React Native 0.65 took blah blahReact Native 0.65 took blah blahReact Native 0.65 took blah blah',
-//     Date: 'Aug 19, 2021',
-//   },
-// ];
-
 function SourceControl(props) {
 
     const [loading, setLoading] = useState(true);
@@ -63,7 +43,6 @@ function SourceControl(props) {
 
     useEffect(() => {
         getCommits(projectId);
-        // console.warn(props.user.name)
     }, [])
 
     return (
