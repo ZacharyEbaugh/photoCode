@@ -25,8 +25,8 @@ import CameraOptions from './CameraOptions';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-// Hard Coded User Information 
-id = '63bc7385c38907624d094eaa';
+// // Hard Coded User Information 
+// id = '63bc7385c38907624d094eaa';
 
 // API Setup
 const baseUrl = "https://photocode.app:8443";
@@ -35,7 +35,7 @@ const baseUrl = "https://photocode.app:8443";
 sideBarXPos = new Animated.Value(-windowWidth * 0.7);
 cameraOptionsYPos = new Animated.Value(windowHeight);
 
-function HomeScreen() {
+function HomeScreen(props) {
 
     const [sideBarActive, setSideBarActive] = useState(false);
     const [cameraOptionsActive, setCameraOptionsActive] = useState(false);
@@ -45,7 +45,7 @@ function HomeScreen() {
     const [projects, setProjects] = useState({})
     const [projectsSet, setProjectsSet] = useState(false)
 
-    getAllProjects = async () => {
+    const getAllProjects = async () => {
         var response = await axios.get(baseUrl + `/getAllProjects?user_id=${id}`)
         setProjects(response.data)
         setProjectsSet(true)
@@ -54,7 +54,7 @@ function HomeScreen() {
     useEffect(() => {
         async function getUserInfo() {
             var userInfoResponse = await axios.post(baseUrl + '/getUserInfo', {
-                user_id: id
+                user_id: props.user_id
             })
             userInfo = userInfoResponse.data;
             setEmail(userInfo.email)
