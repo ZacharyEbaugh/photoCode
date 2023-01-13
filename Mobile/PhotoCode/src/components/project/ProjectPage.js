@@ -165,15 +165,24 @@ function ProjectPage(props) {
 
     function DisplayFiles() {
         const navigation = useNavigation();
-        
-        
+        const rout = useRoute();
+
+        const { projectId, projectName } = route.params;
+         
         return (
             currentFiles.map((file, i) => (
                 <View key={i}>
                     <View style={styles.greyLine} />
                     <Pressable
                         style={styles.fileLine}
-                        onPress={() => {navigation.navigate('TextEditor', {user: props.user, originFilename: file.filename, fileId: file._id, editorOrigin: 2})}}
+                        onPress={() => {navigation.navigate('TextEditor', {
+                            user: props.user, 
+                            originFilename: file.filename, 
+                            fileId: file._id, 
+                            editorOrigin: 2, 
+                            projectId: projectId,
+                            projectName: projectName,
+                        })}}
                     >
                         
                         <Image style={styles.fileImage} source={fileIcon} />

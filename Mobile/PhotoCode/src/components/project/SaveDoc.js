@@ -12,10 +12,6 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-var fileName = '';
-
-var updateFile = "Update " + fileName;
-
 // API Setup
 baseUrl = `https://photocode.app:8443`;
 
@@ -24,7 +20,6 @@ function GoToButton({ screenName }) {
 
     return (
         <Pressable
-            // title={`Go to ${screenName}`}
             onPress={() => navigation.goBack()}
         >
             <Text style={styles.backText}>
@@ -35,25 +30,15 @@ function GoToButton({ screenName }) {
     );
 };
 
-function TitleText() {
-    const route = useRoute();
-    if (route.params.fileName != '')
-        fileName = route.params.fileName;
-    else
-        fileName = 'No File';
-    
-    updateFile = "Update " + fileName;
-
-    return (
-        <Text style={styles.title}>{fileName}</Text>
-    );
-}
-
 async function updateFileContents(fileId, code) {
-    const response = await axios.post(baseUrl + `/updateFile`, {
-      file_id: fileId,
-      file_contents: code
-    });
+    if (fileId != undefined && code != undefined) {
+        const response = await axios.post(baseUrl + `/updateFile`, {
+        file_id: fileId,
+        file_contents: code
+        });
+    } else {
+        Alert.alert("Could not update file");
+    }
 }
 
 
@@ -61,12 +46,13 @@ function UpdateButton({ isDisabled, screenName }) {
     const navigation = useNavigation();
     const route = useRoute();
 
-    const { fileId, textToSave, editorOrigin } = route.params;
+    const { fileId, textToSave, editorOrigin, projectId, projectName } = route.params;
+    console.warn(projectId);
 
     return (
         <Pressable style={styles.SendButton}
             onPress={async () =>
-                {await updateFileContents(fileId, textToSave); navigation.navigate(screenName)}}
+                {await updateFileContents(fileId, textToSave); navigation.navigate(screenName, { projectId, projectName })}}
             disabled={isDisabled}
         >
             <Text style={[styles.SendText, isDisabled && styles.opacity]}>
@@ -82,12 +68,14 @@ function SaveDoc(props) {
 
     const route = useRoute();
     const [disabled, setDisabled] = useState(false);
+    const [updateFile, setUpdateFile] = useState("Update");
 
-    const {filename, fileId, textToSave} = route.params;
+    const {filename, fileId, textToSave, projectId} = route.params;
 
     useEffect(() => {
         if (filename == '' || fileId == undefined || textToSave == undefined)
             setDisabled(true)
+        setUpdateFile("Update " + filename)
     }, [])
 
     return (
@@ -97,7 +85,7 @@ function SaveDoc(props) {
                     <GoToButton screenName={HomeScreen} />
                 </View>
                 <View style={styles.titleBox}>
-                    <TitleText/>
+                    <Text style={styles.title}>{filename}</Text>
                     <Text style={styles.subTitle}>changes made</Text>
 
                 </View>
@@ -123,7 +111,11 @@ function SaveDoc(props) {
                             placeholder={"Commit from " + props.user.name}
                         ></TextInput>
                     </View>
-                    <UpdateButton isDisabled={disabled} screenName={HomeScreen} />
+                    {projectId == undefined ? 
+                        <UpdateButton isDisabled={disabled} screenName={'HomeScreen'} /> 
+                        : 
+                        <UpdateButton isDisabled={disabled} screenName={'ProjectPage'} />
+                    } 
                 </View>
             </View>
         </View>

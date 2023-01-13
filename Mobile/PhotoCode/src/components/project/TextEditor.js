@@ -52,6 +52,7 @@ function NewDocumentOrigin ({language}) {
                 syntaxStyle={CodeEditorSyntaxStyles.vs2015}
                 showLineNumbers
                 initialValue={initialText}
+                onChange={(text) => {updateText(text)}}
             />
         </SafeAreaView>
     );
@@ -116,89 +117,85 @@ function ProjectFileOrigin({language}) {
 
 function BackButton({ screenName, fileName }) {
     const navigation = useNavigation();
+    const route = useRoute();
 
-    if (fileName != '')
-    {
-        return (
-            <Pressable
-                // title={`Go to ${screenName}`}
-                onPress={() => Alert.alert(
-                    "Leave without saving?",
-                    "",
-                    [
-                        {
-                            text: 'Save',
-                            onPress: () => [navigation.navigate('SaveDoc', {
-                                fileName: fileName
-                            })]
-                        },
-                        {
-                            text: 'Leave',
-                            onPress: () => navigation.navigate('HomeScreen')
-                        },
-                        {
-                            text: 'Cancel',
-                        },
-                    ],
-                )
-                }
-            >
-                <Text style={styles.backText}>
-                    {'< Back'}
-                </Text>
-            </Pressable>
+    const { fileId, editorOrigin, projectId, projectName} = route.params;
 
-        );
+    function saveDocument() {
+        if (fileName == '' && getText() == '') {
+            Alert.alert("Must Set a Filename and Add Text to File");
+        } else if (fileName == ''){
+            Alert.alert("Must Set a Filename");
+        } else if (getText() == '') {
+            Alert.alert("Must Add Text to File");
+        } else {
+            navigation.navigate('SaveDoc', {
+                filename: fileName,
+                fileId: fileId,
+                editorOrigin: editorOrigin,
+                textToSave: getText(),
+            });
+        }
     }
 
-    else
-    {
-        return (
-            <Pressable
-                onPress={() => Alert.alert(
-                    "Leave without saving?",
-                    "",
-                    [
-                        {
-                            text: 'Save',
-                            onPress: () => Alert.alert("Please set a name for the file!"),
-                        },
-                        {
-                            text: 'Leave',
-                            onPress: () => navigation.navigate('HomeScreen')
-                        },
-                        {
-                            text: 'Cancel',
-                        },
-                    ],
-                    )
-                }
-            >
-                <Text style={styles.backText}>
-                    {'< Back'}
-                </Text>
-            </Pressable>
+    return (
+        <Pressable
+            onPress={() => Alert.alert(
+                "Leave without saving?",
+                "",
+                [
+                    {
+                        text: 'Save',
+                        onPress: () => {saveDocument()}
+                    },
+                    {
+                        text: 'Leave',
+                        onPress: () => navigation.navigate(screenName, { projectId, projectName })
+                    },
+                    {
+                        text: 'Cancel',
+                    },
+                ],
+            )
+            }
+        >
+            <Text style={styles.backText}>
+                {'< Back'}
+            </Text>
+        </Pressable>
 
-        );
-    }
+    );
 }
 
-function SendButton({ screenName, fileName }) {
+function SaveButton({ fileName }) {
     const navigation = useNavigation();
     const route = useRoute();
 
-    const { fileId, editorOrigin} = route.params;
+    const { fileId, editorOrigin, projectId, projectName} = route.params;
+
+    function saveDocument() {
+        if (fileName == '' && getText() == '') {
+            Alert.alert("Must Set a Filename and Add Text to File");
+        } else if (fileName == ''){
+            Alert.alert("Must Set a Filename");
+        } else if (getText() == '') {
+            Alert.alert("Must Add Text to File");
+        } else {
+            navigation.navigate('SaveDoc', {
+                filename: fileName,
+                fileId: fileId,
+                editorOrigin: editorOrigin,
+                textToSave: getText(),
+                projectId: projectId,
+                projectName: projectName,
+            });
+        }
+    }
 
     return (
         <Pressable style={styles.SendButton}
-            onPress={() =>
-                [navigation.navigate('SaveDoc', {
-                    fileName: fileName,
-                    fileId: fileId,
-                    editorOrigin: editorOrigin,
-                    textToSave: getText(),
-                })]
-            }>
+            onPress={() => {saveDocument()}}
+        >
             <Text style={styles.SendText}>
                 Save
             </Text>
@@ -228,7 +225,7 @@ function TextEditor(props) {
         <View style={styles.container}>
             <View style={styles.header}>
                 <View style={styles.backButton}>
-                    <BackButton screenName={HomeScreen} fileName={fileName} />
+                    {editorOrigin == 1 ? <BackButton screenName={'HomeScreen'} fileName={fileName} /> : <BackButton screenName={'ProjectPage'} fileName={fileName} />}
                 </View>
                 <View style={styles.titleAndLanguage}>
                     <View style={styles.title}>
@@ -273,7 +270,7 @@ function TextEditor(props) {
             <View style={styles.main}>
                 {editorOrigin == 1 ? <NewDocumentOrigin language={selectedLanguage}/> : <ProjectFileOrigin language={selectedLanguage}/>}
               
-                <SendButton screenName={'SaveDoc'} fileName={fileName} user={props.user} />
+                <SaveButton fileName={fileName} user={props.user} />
              
                
             </View>
