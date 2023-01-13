@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, Alert } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 
-import HomeScreen from './HomeScreen';
+import HomeScreen from '../user_initialization/HomeScreen';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -63,15 +63,15 @@ class ContactUs extends React.Component {
                 <View style={styles.main}>
                     <View style={styles.inputBox}>
                         <View style={styles.Name}>
-                            <Image style={styles.NameIcon} source={require('../assets/images/NameIcon.png')} />
+                            <Image style={styles.NameIcon} source={require('../../assets/images/NameIcon.png')} />
                             <TextInput style={styles.NameInput} placeholder="Name"></TextInput>
                         </View>
                         <View style={styles.Email}>
-                            <Image style={styles.MailIcon} source={require('../assets/images/MailIcon.png')} />
+                            <Image style={styles.MailIcon} source={require('../../assets/images/MailIcon.png')} />
                             <TextInput style={styles.EmailInput} placeholder="Photo@gmail.com"></TextInput>
                         </View>
                         <View style={styles.Subject}>
-                            <Image style={styles.SubjectIcon} source={require('../assets/images/SubjectIcon.png')} />
+                            <Image style={styles.SubjectIcon} source={require('../../assets/images/SubjectIcon.png')} />
                             <TextInput style={styles.SubjectInput} placeholder="Subject"></TextInput>
                         </View>
                         <View style={styles.Message}>

@@ -10,7 +10,7 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { BackButton } from './BackButton';
+import { BackButton } from './../BackButton';
 
 function DeleteProject() {
     const navigation = useNavigation();
@@ -79,7 +79,7 @@ function ConfirmNameChange() {
           >
         <Image
             style={styles.confirmProjectNameImage}
-            source={require('./../assets/images/checkmark.png')}
+            source={require('./../../assets/images/checkmark.png')}
         />
         </Pressable>
     )
