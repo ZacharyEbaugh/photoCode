@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, Alert } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
@@ -16,7 +17,8 @@ var fileName = '';
 
 var updateFile = "Update " + fileName;
 
-var userName = "Zachary Ebaugh";
+// API Setup
+baseUrl = `https://photocode.app:8443`;
 
 function GoToButton({ screenName }) {
     const navigation = useNavigation();
@@ -40,20 +42,32 @@ function TitleText() {
         fileName = route.params.fileName;
     else
         fileName = 'No File';
+    
+    updateFile = "Update " + fileName;
 
     return (
         <Text style={styles.title}>{fileName}</Text>
     );
 }
 
+async function updateFileContents(fileId, code) {
+    const response = await axios.post(baseUrl + `/updateFile`, {
+      file_id: fileId,
+      file_contents: code
+    });
+}
+
 
 function UpdateButton({ screenName }) {
     const navigation = useNavigation();
+    const route = useRoute();
+
+    const { fileId, textToSave } = route.params;
 
     return (
         <Pressable style={styles.SendButton}
-            onPress={() =>
-                [navigation.navigate(screenName)]}
+            onPress={async () =>
+                {await updateFileContents(fileId, textToSave); navigation.navigate(screenName)}}
         >
             <Text style={styles.SendText}>
                 Update
@@ -64,48 +78,45 @@ function UpdateButton({ screenName }) {
     );
 }
 
-class SaveDoc extends React.Component {
-
-    render() {
-        return (
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <View style={styles.backButton}>
-                        <GoToButton screenName={HomeScreen} />
-                    </View>
-                    <View style={styles.titleBox}>
-                        <TitleText/>
-                        <Text style={styles.subTitle}>changes made</Text>
-
-                    </View>
+function SaveDoc(props) {
+    return (
+        <View style={styles.container}>
+            <View style={styles.header}>
+                <View style={styles.backButton}>
+                    <GoToButton screenName={HomeScreen} />
                 </View>
+                <View style={styles.titleBox}>
+                    <TitleText/>
+                    <Text style={styles.subTitle}>changes made</Text>
 
-                <View style={styles.main}>
-                    <View style={styles.inputBox}>
-                        
-                        <View style={styles.titleHeader}>
-                            <Text style={styles.subjectTitle}>Title</Text>
-                            <View style={styles.underLine}></View>
-                            <TextInput style={styles.SubjectInput} placeholder={updateFile}></TextInput>
-                        </View>
-                       
-                       
-                        <View style={styles.Message}>
-                            <Text style={styles.subjectTitle}>Description</Text>
-                            <View style={styles.underLine}></View>
-                            <TextInput
-                                style={styles.MessageInput}
-                                multiline={true}
-                                numberOfLines={'auto'}
-                                placeholder={"Commit from " + userName}
-                            ></TextInput>
-                        </View>
-                        <UpdateButton screenName={HomeScreen} />
-                    </View>
                 </View>
             </View>
-        );
-    }
+
+            <View style={styles.main}>
+                <View style={styles.inputBox}>
+                    
+                    <View style={styles.titleHeader}>
+                        <Text style={styles.subjectTitle}>Commit Title</Text>
+                        <View style={styles.underLine}></View>
+                        <TextInput style={styles.SubjectInput} placeholder={updateFile}></TextInput>
+                    </View>
+                    
+                    
+                    <View style={styles.Message}>
+                        <Text style={styles.subjectTitle}>Description</Text>
+                        <View style={styles.underLine}></View>
+                        <TextInput
+                            style={styles.MessageInput}
+                            multiline={true}
+                            numberOfLines={'auto'}
+                            placeholder={"Commit from " + props.user.name}
+                        ></TextInput>
+                    </View>
+                    <UpdateButton screenName={HomeScreen} />
+                </View>
+            </View>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({

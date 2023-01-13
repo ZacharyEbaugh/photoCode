@@ -77,7 +77,7 @@ const App = () => {
                         />
                         <Stack.Screen
                             name="ProjectPage"
-                            component={ProjectPage}
+                            component={() => <ProjectPage user={user}/>}
                         />
                         <Stack.Screen
                             name="ProjectSettings"
@@ -99,11 +99,11 @@ const App = () => {
                         />
                         <Stack.Screen
                             name="TextEditor"
-                            component={TextEditor}
+                            component={() => <TextEditor user={user}/>}
                         />
                         <Stack.Screen
                             name="SaveDoc"
-                            component={SaveDoc}
+                            component={() => <SaveDoc user={user}/>} 
                         />
                     </Stack.Navigator>
                 </NavigationContainer>

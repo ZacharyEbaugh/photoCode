@@ -20,6 +20,8 @@ const windowHeight = Dimensions.get('window').height;
 
 const languages = ["HTML", "CSS", "JavaScript", "Python", "React", "Java"];
 
+var updatedText = "";
+
 var selectedLanguage = '';
 
 function NewDocumentOrigin ({language}) {
@@ -54,6 +56,14 @@ function NewDocumentOrigin ({language}) {
         </SafeAreaView>
     );
 };
+
+function updateText(text) {
+    updatedText = text;
+}
+
+function getText() {
+    return updatedText;
+}
 
 function ProjectFileOrigin({language}) {
     const keyboard = useKeyboard();
@@ -98,6 +108,7 @@ function ProjectFileOrigin({language}) {
                 syntaxStyle={CodeEditorSyntaxStyles.vs2015}
                 showLineNumbers
                 initialValue={code}
+                onChange={(text) => {updateText(text)}}
             />}
         </SafeAreaView>
     );
@@ -174,12 +185,17 @@ function BackButton({ screenName, fileName }) {
 
 function SendButton({ screenName, fileName }) {
     const navigation = useNavigation();
+    const route = useRoute();
+
+    const { fileId } = route.params;
 
     return (
         <Pressable style={styles.SendButton}
             onPress={() =>
                 [navigation.navigate('SaveDoc', {
-                    fileName: fileName
+                    fileName: fileName,
+                    fileId: fileId,
+                    textToSave: getText(),
                 })]
             }>
             <Text style={styles.SendText}>
@@ -192,7 +208,7 @@ function SendButton({ screenName, fileName }) {
 }
 
 
-function TextEditor() {
+function TextEditor(props) {
     const route = useRoute();
 
     // Possible Origins: camera/new document (1), project file (2)
@@ -256,7 +272,7 @@ function TextEditor() {
             <View style={styles.main}>
                 {editorOrigin == 1 ? <NewDocumentOrigin language={selectedLanguage}/> : <ProjectFileOrigin language={selectedLanguage}/>}
               
-                <SendButton screenName={'SaveDoc'} fileName={fileName} />
+                <SendButton screenName={'SaveDoc'} fileName={fileName} user={props.user} />
              
                
             </View>
