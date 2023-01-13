@@ -16,17 +16,14 @@ import {
 import { Shadow } from 'react-native-shadow-2';
 import { useNavigation } from '@react-navigation/native';
 
-import Header from './Header';
-import SideBar from './SideBar';
-import { GoToProject } from './GoToProject';
-import GoToCamera from './GoToCamera';
-import CameraOptions from './CameraOptions';
+import Header from '../Header';
+import SideBar from '../sidebar/SideBar';
+import { GoToProject } from '../project/GoToProject';
+import GoToCamera from '../GoToCamera';
+import CameraOptions from '../CameraOptions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-
-// // Hard Coded User Information 
-// id = '63bc7385c38907624d094eaa';
 
 // API Setup
 const baseUrl = "https://photocode.app:8443";
@@ -45,13 +42,39 @@ function HomeScreen(props) {
     const [projects, setProjects] = useState({})
     const [projectsSet, setProjectsSet] = useState(false)
 
-    const getAllProjects = async () => {
-        var response = await axios.get(baseUrl + `/getAllProjects?user_id=${id}`)
-        setProjects(response.data)
-        setProjectsSet(true)
-    }
-
     useEffect(() => {
+        async function registerUser() {
+            if (props.user.sub.split('|')[0] === 'auth0')
+                props.user.sub = 'Username-Password-Authentication';
+            axios.post('https://photocode.app:8443/register', {
+                email: props.user.email,
+                username: props.user.name,
+                picture: props.user.picture,
+                password: '',
+                connection: props.user.sub.split('|')[0],
+            })
+            .then(response => {
+                console.log(response.data);
+            })
+                .catch(error => {
+                console.log(error);
+            });
+        }
+
+        async function getUser() {
+            // Get user id using the user information
+            axios.post('https://photocode.app:8443/getUser', {
+                email: props.user.email,
+                connection: props.user.sub.split('|')[0]
+            })
+            .then(response => {
+                props.setUser_Id(response.data._id);
+            })
+            .catch(() => {
+                console.log('Error');
+            });
+        }
+
         async function getUserInfo() {
             var userInfoResponse = await axios.post(baseUrl + '/getUserInfo', {
                 user_id: props.user_id
@@ -61,6 +84,15 @@ function HomeScreen(props) {
             setUsername(userInfo.username)
             getAllProjects()
         }
+
+        async function getAllProjects() {
+            var response = await axios.get(baseUrl + `/getAllProjects?user_id=${props.user_id}`)
+            setProjects(response.data)
+            setProjectsSet(true)
+        }
+
+        registerUser();
+        getUser();
         getUserInfo()
     }, []);
     
@@ -125,12 +157,11 @@ function HomeScreen(props) {
         animateCameraOptionsClose();
     };
     //#endregion
-
         return (
             <View style={styles.container}>
                 <Animated.View style={[{zIndex: 3}, { left: sideBarXPos}]}>
                     {sideBarActive && (
-                        <SideBar onPress={closeSidebar} userName={username}/>
+                        <SideBar onPress={closeSidebar} user={props.user} setUser={props.setUser} />
                     )}
                 </Animated.View>
 
@@ -148,7 +179,7 @@ function HomeScreen(props) {
                                 <GoToProject
                                     key={i}
                                     projectId={project._id}
-                                    imageSource={require('../assets/images/siteIcon.png')}
+                                    imageSource={require('./../../assets/images/siteIcon.png')}
                                     projectName={project.name}
                                     // languageOne={project.languageOne}
                                     // languageTwo={project.languageTwo}
@@ -185,7 +216,7 @@ function ToNewDoc() {
         >
             <Image
                 style={styles.newFileImage}
-                source={require('../assets/images/new-file.png')}
+                source={require('./../../assets/images/new-file.png')}
             />
         </Pressable>
     );

@@ -16,17 +16,16 @@ import {
 
 import { BaseRouter, useNavigation, useRoute } from '@react-navigation/native';
 import { height } from '@mui/system';
-import { BackButton } from './BackButton';
+import { BackButton } from './../BackButton';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const newFolder = require('../assets/images/newFolder.png');
-const newFile = require('../assets/images/newFile.png');
-const blueFolder = require('../assets/images/blueFolder.png');
-const fileIcon = require('../assets/images/file.png');
-const goBackFolderIcon = require('../assets/images/backFolder.png');
-
+const newFolder = require('./../../assets/images/newFolder.png');
+const newFile = require('./../../assets/images/newFile.png');
+const blueFolder = require('./../../assets/images/blueFolder.png');
+const fileIcon = require('./../../assets/images/file.png');
+const goBackFolderIcon = require('./../../assets/images/backFolder.png');
 
 function GoBackButton() {
   const navigation = useNavigation();
@@ -230,7 +229,7 @@ function ProjectPage() {
 
                     <View style={styles.searchArea}>
                         <Pressable onPress={() => {}} >
-                            <Image style={styles.searchImage} source={require('../assets/images/search.png')} />
+                            <Image style={styles.searchImage} source={require('./../../assets/images/search.png')} />
                         </Pressable>
                         <TextInput
                             style={styles.search}

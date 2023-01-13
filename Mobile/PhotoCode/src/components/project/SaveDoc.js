@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, Alert } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 
-import HomeScreen from './HomeScreen';
+import HomeScreen from './../user_initialization/HomeScreen';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 

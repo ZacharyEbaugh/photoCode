@@ -65,7 +65,7 @@ export function CommitList({ UserName, UserImage, CommitTitle, CommitMessage, Co
                         <Text style={styles.commitDate}>
                             {CommitDate}
                         </Text>
-                        <Animated.Image style={[styles.infoArrow, {transform: [{rotate: arrowTransform}]}]} source={require('./../assets/images/infoArrow.png')} />
+                        <Animated.Image style={[styles.infoArrow, {transform: [{rotate: arrowTransform}]}]} source={require('./../../assets/images/infoArrow.png')} />
                     </View>
                 <View/>
             </Pressable>

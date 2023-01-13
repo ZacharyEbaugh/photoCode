@@ -13,7 +13,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useKeyboard } from '@react-native-community/hooks';
 import CodeEditor, { CodeEditorSyntaxStyles } from '@rivascva/react-native-code-editor';
 
-import HomeScreen from './HomeScreen';
+import HomeScreen from './../user_initialization/HomeScreen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
