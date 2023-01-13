@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 import {    
     View, 
@@ -10,7 +10,8 @@ import {
     Dimensions, 
     StyleSheet, 
     Easing, 
-    ScrollView} from 'react-native';
+    ScrollView,
+    Button} from 'react-native';
 
 import { Shadow } from 'react-native-shadow-2';
 import { useNavigation } from '@react-navigation/native';
@@ -24,104 +25,111 @@ import CameraOptions from '../CameraOptions';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-var userName = 'Brandon';
+// API Setup
+const baseUrl = "https://photocode.app:8443";
 
-var PROJECT_INFO= [
-  {
-    title: 'Portfolio Website',
-    imageFile: require('../../assets/images/siteIcon.png'),
-    languageOne: 'HTML',
-    languageTwo: 'CSS',
-    languageThree: 'JavaScript',
-    date: '5/27/2022',
-  },
-  {
-    title: 'SkipList Visual',
-    imageFile: require('../../assets/images/skipList-Icon.png'),
-    languageOne: 'Java',
-    languageTwo: 'JavaScript',
-    languageThree: 'Shell',
-    date: '10/22/2021',
-  },
-];
+// Animation Starting Values
+sideBarXPos = new Animated.Value(-windowWidth * 0.7);
+cameraOptionsYPos = new Animated.Value(windowHeight);
 
+function HomeScreen(props) {
 
-class HomeScreen extends React.Component {
+    const [sideBarActive, setSideBarActive] = useState(false);
+    const [cameraOptionsActive, setCameraOptionsActive] = useState(false);
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            user: null
-        };
-    }
+    const [email, setEmail] = useState("")
+    const [username, setUsername] = useState("")
+    const [projects, setProjects] = useState({})
+    const [projectsSet, setProjectsSet] = useState(false)
 
-    componentDidMount() {
-        axios.post('https://photocode.app:8443/register', {
-            email: this.props.user.email,
-            username: this.props.user.name,
-            picture: this.props.user.picture,
-            password: '',
-            connection: this.props.user.sub.split('|')[0],
-        })
-        .then(response => {
-            console.log(response.data);
-        })
-            .catch(error => {
-            console.log(error);
-        });
-        // Get user id using the user information
-        axios.post('https://photocode.app:8443/getUser', {
-            email: this.props.user.email,
-            connection: this.props.user.sub.split('|')[0]
-        })
-        .then(response => {
-            this.props.setUser_Id(response.data._id);
-        })
-        .catch(() => {
-            console.log('Error');
-        });
-    }
+    useEffect(() => {
+        async function registerUser() {
+            if (props.user.sub.split('|')[0] === 'auth0')
+                props.user.sub = 'Username-Password-Authentication';
+            axios.post('https://photocode.app:8443/register', {
+                email: props.user.email,
+                username: props.user.name,
+                picture: props.user.picture,
+                password: '',
+                connection: props.user.sub.split('|')[0],
+            })
+            .then(response => {
+                console.log(response.data);
+            })
+                .catch(error => {
+                console.log(error);
+            });
+        }
 
-    state = {
-        sideBarActive: false,
-        cameraOptionsActive: false,
-    };
+        async function getUser() {
+            // Get user id using the user information
+            axios.post('https://photocode.app:8443/getUser', {
+                email: props.user.email,
+                connection: props.user.sub.split('|')[0]
+            })
+            .then(response => {
+                props.setUser_Id(response.data._id);
+            })
+            .catch(() => {
+                console.log('Error');
+            });
+        }
+
+        async function getUserInfo() {
+            var userInfoResponse = await axios.post(baseUrl + '/getUserInfo', {
+                user_id: props.user_id
+            })
+            userInfo = userInfoResponse.data;
+            setEmail(userInfo.email)
+            setUsername(userInfo.username)
+            getAllProjects()
+        }
+
+        async function getAllProjects() {
+            var response = await axios.get(baseUrl + `/getAllProjects?user_id=${props.user_id}`)
+            setProjects(response.data)
+            setProjectsSet(true)
+        }
+
+        registerUser();
+        getUser();
+        getUserInfo()
+    }, []);
     
+
     //#region Sidebar Animations
-    sideBarXPos = new Animated.Value(-windowWidth * 0.7);
     animateSideBarOpen = () => {
-        Animated.timing(this.sideBarXPos, {
+        Animated.timing(sideBarXPos, {
             toValue: 0,
             duration: 200,
-            easing: Easing.inertia,
+            // easing: Easing.inertia,
             useNativeDriver: false,
         }).start();
     };
     animateSideBarClose = () => {
-        Animated.timing(this.sideBarXPos, {
+        Animated.timing(sideBarXPos, {
             toValue: -windowWidth * 0.7,
             duration: 150,
             // easing: Easing.ease,
             useNativeDriver: false,
         }).start(() => {
-            this.setState({sideBarActive: !this.state.sideBarActive});
+            setSideBarActive(!sideBarActive);
         });
     };
 
     openSidebar = () => {
-        this.setState({sideBarActive: !this.state.sideBarActive});
-        this.animateSideBarOpen();
+        setSideBarActive(!sideBarActive);
+        animateSideBarOpen();
     };
 
     closeSidebar = () => {
-        this.animateSideBarClose();
+        animateSideBarClose();
     };
     //#endregion
 
     //#region Camera Option Animation
-    cameraOptionsYPos = new Animated.Value(windowHeight);
     animateCameraOptionsOpen = () => {
-        Animated.timing(this.cameraOptionsYPos, {
+        Animated.timing(cameraOptionsYPos, {
             toValue: (windowHeight/2 - (windowHeight * 0.25)/2),
             duration: 200,
             easing: Easing.inertia,
@@ -129,40 +137,31 @@ class HomeScreen extends React.Component {
         }).start();
     };
     animateCameraOptionsClose = () => {
-        Animated.timing(this.cameraOptionsYPos, {
+        Animated.timing(cameraOptionsYPos, {
             toValue: windowHeight,
             duration: 150,
             // easing: Easing.ease,
             useNativeDriver: false,
         }).start(() => {
-            this.setState({cameraOptionsActive: !this.state.cameraOptionsActive});
+            setCameraOptionsActive(!cameraOptionsActive)
         });
     };
 
     openCameraOptions = () => {
-        this.setState({cameraOptionsActive: !this.state.cameraOptionsActive});
-        this.animateCameraOptionsOpen();
+        setCameraOptionsActive(!cameraOptionsActive)
+        animateCameraOptionsOpen();
     };
 
     closeCameraOptions = () => {
-        this.setState({cameraOptionsActive: !this.state.cameraOptionsActive});
-        this.animateCameraOptionsClose();
+        setCameraOptionsActive(!cameraOptionsActive)
+        animateCameraOptionsClose();
     };
-
-    
     //#endregion
-
-    render () {
         return (
             <View style={styles.container}>
-                <Animated.View style={[{zIndex: 3}, { left: this.sideBarXPos}]}>
-                    {this.state.sideBarActive && (
-                        <SideBar
-                            onPress={this.closeSidebar}
-                            userName={userName}
-                            user={this.props.user}
-                            setUser={this.props.setUser}
-                        />
+                <Animated.View style={[{zIndex: 3}, { left: sideBarXPos}]}>
+                    {sideBarActive && (
+                        <SideBar onPress={closeSidebar} user={props.user} setUser={props.setUser} />
                     )}
                 </Animated.View>
 
@@ -172,20 +171,23 @@ class HomeScreen extends React.Component {
 
                 <View style={{zIndex: 1, position: 'absolute', height: windowHeight, alignSelf: 'center'}}>
                     <Header
-                        onPress={this.openSidebar}
+                        onPress={openSidebar}
                     />
                     <ScrollView style={styles.main}>
-                        {PROJECT_INFO.map((project, i) => (
-                            <GoToProject
-                                key={i}
-                                imageSource={project.imageFile}
-                                projectName={project.title}
-                                languageOne={project.languageOne}
-                                languageTwo={project.languageTwo}
-                                languageThree={project.languageThree}
-                                date={project.date}
-                            />
-                        ))}
+                        {projectsSet == true ?
+                            projects.map((project, i) => (
+                                <GoToProject
+                                    key={i}
+                                    projectId={project._id}
+                                    imageSource={require('./../../assets/images/siteIcon.png')}
+                                    projectName={project.name}
+                                    // languageOne={project.languageOne}
+                                    // languageTwo={project.languageTwo}
+                                    // languageThree={project.languageThree}
+                                    // date={project.date}
+                                />
+                            )) : null
+                        }
                     </ScrollView>
                     <Shadow viewStyle={{alignSelf: 'stretch'}}>
                         <View style={styles.actionView}>
@@ -197,7 +199,7 @@ class HomeScreen extends React.Component {
             </View>
         );
     }
-}
+
 
 function ToNewDoc() {
     const navigation = useNavigation();

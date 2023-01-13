@@ -63,7 +63,7 @@ const App = () => {
                         />
                         <Stack.Screen
                             name="Settings"
-                            component={Settings}
+                            component={() => <Settings user={user} user_id={user_id}/>}
                         />
                         <Stack.Screen
                             name="About Us"

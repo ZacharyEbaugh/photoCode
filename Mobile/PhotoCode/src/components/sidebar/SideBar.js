@@ -76,7 +76,6 @@ class SideBar extends React.Component {
 
     static propTypes = {
         onPress: PropTypes.func.isRequired,
-        userName: PropTypes.string.isRequired,
     };
 
 
