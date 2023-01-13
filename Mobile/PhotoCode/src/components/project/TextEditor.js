@@ -187,7 +187,7 @@ function SendButton({ screenName, fileName }) {
     const navigation = useNavigation();
     const route = useRoute();
 
-    const { fileId } = route.params;
+    const { fileId, editorOrigin} = route.params;
 
     return (
         <Pressable style={styles.SendButton}
@@ -195,6 +195,7 @@ function SendButton({ screenName, fileName }) {
                 [navigation.navigate('SaveDoc', {
                     fileName: fileName,
                     fileId: fileId,
+                    editorOrigin: editorOrigin,
                     textToSave: getText(),
                 })]
             }>

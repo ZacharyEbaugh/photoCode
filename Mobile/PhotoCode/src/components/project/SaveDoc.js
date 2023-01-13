@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -13,7 +13,6 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 var fileName = '';
-
 
 var updateFile = "Update " + fileName;
 
@@ -58,18 +57,19 @@ async function updateFileContents(fileId, code) {
 }
 
 
-function UpdateButton({ screenName }) {
+function UpdateButton({ isDisabled, screenName }) {
     const navigation = useNavigation();
     const route = useRoute();
 
-    const { fileId, textToSave } = route.params;
+    const { fileId, textToSave, editorOrigin } = route.params;
 
     return (
         <Pressable style={styles.SendButton}
             onPress={async () =>
                 {await updateFileContents(fileId, textToSave); navigation.navigate(screenName)}}
+            disabled={isDisabled}
         >
-            <Text style={styles.SendText}>
+            <Text style={[styles.SendText, isDisabled && styles.opacity]}>
                 Update
             </Text>
 
@@ -79,6 +79,17 @@ function UpdateButton({ screenName }) {
 }
 
 function SaveDoc(props) {
+
+    const route = useRoute();
+    const [disabled, setDisabled] = useState(false);
+
+    const {filename, fileId, textToSave} = route.params;
+
+    useEffect(() => {
+        if (filename == '' || fileId == undefined || textToSave == undefined)
+            setDisabled(true)
+    }, [])
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -112,7 +123,7 @@ function SaveDoc(props) {
                             placeholder={"Commit from " + props.user.name}
                         ></TextInput>
                     </View>
-                    <UpdateButton screenName={HomeScreen} />
+                    <UpdateButton isDisabled={disabled} screenName={HomeScreen} />
                 </View>
             </View>
         </View>
@@ -262,6 +273,9 @@ const styles = StyleSheet.create({
         color: 'white',
         fontFamily: 'JetBrainsMono-Medium',
     },
+    opacity: {
+        opacity: 0.5
+    }
 });
 
 export default SaveDoc;
