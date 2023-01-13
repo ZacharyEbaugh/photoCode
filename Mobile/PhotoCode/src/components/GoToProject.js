@@ -15,12 +15,12 @@ const windowHeight = Dimensions.get('window').height;
 
 import { useNavigation } from '@react-navigation/native';
 
-export function GoToProject({ imageSource, projectName, languageOne, languageTwo, languageThree, date }) {
+export function GoToProject({ projectId, imageSource, projectName, languageOne, languageTwo, languageThree, date }) {
     const navigation = useNavigation();
     return (
         <Pressable
             onPress={() => {
-                navigation.navigate('ProjectPage', { projectName });
+                navigation.navigate('ProjectPage', { projectId, projectName });
             }}
         >
             <View style={styles.projectBlock}>
