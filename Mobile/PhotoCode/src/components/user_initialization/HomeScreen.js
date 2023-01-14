@@ -4,6 +4,9 @@ import axios from 'axios';
 
 import {    
     View, 
+    Text,
+    TouchableOpacity,
+    TextInput,
     Animated, 
     Pressable, 
     Image, 
@@ -29,8 +32,8 @@ const windowHeight = Dimensions.get('window').height;
 const baseUrl = "https://photocode.app:8443";
 
 // Animation Starting Values
-sideBarXPos = new Animated.Value(-windowWidth * 0.7);
 cameraOptionsYPos = new Animated.Value(windowHeight);
+
 
 function HomeScreen(props) {
 
@@ -41,6 +44,7 @@ function HomeScreen(props) {
     const [username, setUsername] = useState("")
     const [projects, setProjects] = useState({})
     const [projectsSet, setProjectsSet] = useState(false)
+
 
     useEffect(() => {
         async function registerUser() {
@@ -95,43 +99,13 @@ function HomeScreen(props) {
         getUser();
         getUserInfo()
     }, []);
-    
-
-    //#region Sidebar Animations
-    animateSideBarOpen = () => {
-        Animated.timing(sideBarXPos, {
-            toValue: 0,
-            duration: 200,
-            // easing: Easing.inertia,
-            useNativeDriver: false,
-        }).start();
-    };
-    animateSideBarClose = () => {
-        Animated.timing(sideBarXPos, {
-            toValue: -windowWidth * 0.7,
-            duration: 150,
-            // easing: Easing.ease,
-            useNativeDriver: false,
-        }).start(() => {
-            setSideBarActive(!sideBarActive);
-        });
-    };
-
-    openSidebar = () => {
-        setSideBarActive(!sideBarActive);
-        animateSideBarOpen();
-    };
-
-    closeSidebar = () => {
-        animateSideBarClose();
-    };
-    //#endregion
 
     //#region Camera Option Animation
     animateCameraOptionsOpen = () => {
         Animated.timing(cameraOptionsYPos, {
-            toValue: (windowHeight/2 - (windowHeight * 0.25)/2),
-            duration: 200,
+            // toValue: (windowHeight/2 - (windowHeight * 0.25)/2),
+            toValue: -windowHeight/2 - windowHeight*0.125,
+            duration: 300,
             easing: Easing.inertia,
             useNativeDriver: false,
         }).start();
@@ -157,31 +131,25 @@ function HomeScreen(props) {
         animateCameraOptionsClose();
     };
     //#endregion
+
         return (
             <View style={styles.container}>
-                <Animated.View style={[{zIndex: 3}, { left: sideBarXPos}]}>
-                    {sideBarActive && (
-                        <SideBar onPress={closeSidebar} user={props.user} setUser={props.setUser} />
-                    )}
-                </Animated.View>
+                <View style={[styles.main]}>
 
-                <Animated.View style={[{zIndex: 2}, { top: this.cameraOptionsYPos}, {left: windowWidth/2-(windowWidth * 0.6)/2}]}>
-                        <CameraOptions onPress={this.closeCameraOptions}/>
-                </Animated.View>
+                    <Header user={props.user} setUser={props.setUser} />
 
-                <View style={{zIndex: 1, position: 'absolute', height: windowHeight, alignSelf: 'center'}}>
-                    <Header
-                        onPress={openSidebar}
-                    />
-                    <ScrollView style={styles.main}>
+
+                    <ScrollView contentContainerStyle={[styles.projectWrapper]}>
                         {projectsSet == true ?
                             projects.map((project, i) => (
                                 <GoToProject
+                                    style={styles.project}
                                     key={i}
                                     projectId={project._id}
                                     imageSource={require('./../../assets/images/siteIcon.png')}
                                     projectName={project.name}
                                     user={props.user}
+                                    user_id={props.user_id}
                                     // languageOne={project.languageOne}
                                     // languageTwo={project.languageTwo}
                                     // languageThree={project.languageThree}
@@ -190,12 +158,18 @@ function HomeScreen(props) {
                             )) : null
                         }
                     </ScrollView>
+
                     <Shadow viewStyle={{alignSelf: 'stretch'}}>
                         <View style={styles.actionView}>
                             <GoToCamera onPress={this.openCameraOptions}/>
                             <ToNewDoc/>
                         </View>
                     </Shadow>
+
+
+                    <Animated.View style={[{zIndex: 2}, { top: this.cameraOptionsYPos}, {left: windowWidth/2-(windowWidth * 0.6)/2}]}>
+                        <CameraOptions onPress={this.closeCameraOptions}/>
+                    </Animated.View>
                 </View>
             </View>
         );
@@ -228,8 +202,25 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     main: {
-        backgroundColor: '#FFFFFF',
+        // height: windowHeight,
+        // position: 'absolute',
+        // justifyContent: 'flex-start',
+        // position: 'absolute',
+        // backgroundColor: '#FFFFFF',
         // flex: 5,
+    },
+    projectWrapper: {
+        backgroundColor: '#FFFFFF',
+        // minHeight must be cameraOptions height + actionBar height + header height
+        // cameraOptions height is windowHeight*0.25 + 64 
+        // actionBar height is 125
+        // headerHeight is 150
+        // minHeight: m,
+        // flex: 1,
+        minHeight: windowHeight*0.637,
+    },
+    project: {
+        // flex: 1,
     },
     target: {
         fontSize: 40,
@@ -286,7 +277,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingBottom: 30,
         paddingTop: 20,
-        width: '100%',
+        width: windowWidth,
     },
     newFileImage: {
         height: 75,

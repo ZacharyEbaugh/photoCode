@@ -5,6 +5,7 @@ import axios from 'axios';
 import { 
     View,
     ScrollView,
+    Animated,
     Pressable, 
     Text,
     Image, 
@@ -91,6 +92,7 @@ var root_folder;
 // API Setup
 baseUrl = 'https://photocode.app:8443';
 
+var loadingProgress = new Animated.Value(0);
 
 function ProjectPage(props) {
 
@@ -105,6 +107,22 @@ function ProjectPage(props) {
     const route = useRoute();
     const { projectId } = route.params;
 
+    animateLoadingProgress = () => {
+        Animated.timing(loadingProgress, {
+            toValue: 10,
+            duration: 1500,
+            // easing: Easing.inertia,
+            useNativeDriver: false,
+        }).start(() => {
+            setLoading(false)
+            Animated.timing(loadingProgress, {
+                toValue: 0,
+                duration: 1,
+                // easing: Easing.inertia,
+                useNativeDriver: false,
+            }).start()
+        })
+    }   
     function getProjectFiles(projectId) {
         var response = axios.get(baseUrl + `/getFolders?project_id=${projectId}`).then(res => {
             root_folder = res.data;
@@ -118,9 +136,8 @@ function ProjectPage(props) {
                 // console.warn(res.data[0])
                 setCurrentFolders(res.data)
                 // console.warn(currentFolders)
-
-                await new Promise((resolve) => setTimeout(resolve, 1000));
-                setLoading(false)
+                // await new Promise((resolve) => setTimeout(resolve, 1000));
+                animateLoadingProgress()
             })
            }
             // axios.get(`https://photocode.app:8443/getFiles?project_id=${folder._id}`);
@@ -178,7 +195,7 @@ function ProjectPage(props) {
                     <Pressable
                         style={styles.fileLine}
                         onPress={() => {navigation.navigate('TextEditor', {
-                            user: props.user, 
+                            user: props.user,
                             originFilename: file.filename, 
                             fileId: file._id, 
                             editorOrigin: 2, 
@@ -216,8 +233,13 @@ function ProjectPage(props) {
         setCurrentPath(currentPath.slice(0, currentPath.length - 1));
     }
 
+    const loadingColor = loadingProgress.interpolate({
+        inputRange: [0, 10],
+        outputRange: ['0%', '100%']
+    })
+
     return (
-        loading == true ? (<View style={styles.loadingWrapper}><Text style={styles.loadingText}>{'Loading'}</Text></View>) :
+        loading == true ? (<View style={styles.loadingWrapper}><Text style={styles.loadingText}>{'Loading'}</Text><View style={styles.loadingBarWrapper}><Animated.View style={[styles.loadingBar, {width: loadingColor}]}/></View></View>) :
         <View style={styles.container}>
             <View style={styles.header}>
                 <BackButton/>
@@ -286,15 +308,34 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     loadingText: {
+        fontSize: 20,
         fontFamily: 'JetBrainsMono-Medium',
+    },
+    loadingBarWrapper: {
+        width: windowWidth/2,
+        marginTop: 15,
+        borderWidth: 3,
+        height: 10,
+        borderColor: 'black',
+        borderRadius: 10,
+    },
+    loadingBar: { 
+        height: 4,
+        borderColor: 'black',
+        borderRadius: 10,
+        backgroundColor: '#0066FF',
     },
     container: {
         flex: 1,
     },
     header: {
         backgroundColor: '#0066FF',
-        flex: 1.5,
-        justifyContent: 'space-evenly',
+        // flex: 1.5,
+        height: windowHeight*0.2,
+        // paddingTop: windowHeight*0.05,
+        // justifyContent: 'center',
+        // flexDirection: 'row',
+        // alignItems: 'center',
     },
     main: {
         backgroundColor: '#FFFFFF',
@@ -311,6 +352,7 @@ const styles = StyleSheet.create({
         fontFamily: 'JetBrainsMono-Medium',
     },
     title: {
+        marginTop: 25,
         fontSize: 35,
         textAlign: 'center',
         width: windowWidth,

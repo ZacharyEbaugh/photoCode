@@ -96,17 +96,12 @@ class SideBar extends React.Component {
         return (
                 <Shadow distance={20}>
                     <View style={styles.sidebar}>
-                        <View style={styles.crossButtonWrapper}>
-                            <Pressable onPress={this.props.onPress}>
-                                <Image style={styles.crossButton} source={require('../../assets/images/CrossButton.png')} />
-                            </Pressable>
-                        </View>
-                        <View>
+                        <View style={styles.userDisplayWrapper}>
                             <Text style={styles.userDisplay}>
                                 {'Hi,\n' + this.props.user.name}
                             </Text>
                         </View>
-                        <View>
+                        <View style={styles.optionsWrapper}>
                             <GoToAbout/>
                             <GoToContact/>
                             <GoToSettings />
@@ -125,7 +120,7 @@ class SideBar extends React.Component {
                             </Pressable>
                             <GoToLogout setUser={this.props.setUser}/>
                         </View>
-                        <View>
+                        <View style={styles.creatorInfoWrapper}>
                             <View style={styles.creatorInfo}>
                                 <Text style={styles.creatorName}>
                                     {'zle'}
@@ -169,12 +164,13 @@ class SideBar extends React.Component {
 const styles = StyleSheet.create({
     sidebar: {
         backgroundColor: '#0066FF',
-        height: windowHeight,
+        height: windowHeight*1.5,
         width: windowWidth * 0.7,
-        flex: 1,
+        // flex: 1,
         alignItems: 'flex-start',
-        justifyContent: 'space-around',
+        justifyContent: 'center',
         borderColor: 'black',
+        paddingBottom: windowHeight*0.45,
         borderRightWidth: 3,
     },
     crossButtonWrapper: {
@@ -188,10 +184,13 @@ const styles = StyleSheet.create({
         height: 30,
         // marginLeft: windowWidth * 0.025,
     },
+    userDisplayWrapper: {
+        marginTop: windowHeight*0.09,
+    },
     userDisplay: {
         width: windowWidth * 0.6,
         fontSize: windowWidth * 0.10,
-        marginLeft: windowWidth * 0.025,
+        marginLeft: windowWidth * 0.05,
         color: 'white',
         fontFamily: 'JetBrainsMono-Regular',
     },
@@ -203,10 +202,16 @@ const styles = StyleSheet.create({
     updateBackground: {
         backgroundColor: '#C2C2C2',
     },
+    optionsWrapper: {
+        marginTop: windowHeight*0.05,
+    },
     options: {
-        marginLeft: windowWidth * 0.025,
+        marginLeft: windowWidth * 0.05,
         fontSize: windowWidth * 0.09,
         fontFamily: 'JetBrainsMono-Bold',
+    },
+    creatorInfoWrapper: {
+        marginTop: windowHeight*0.05,
     },
     creatorInfo: {
         flexDirection: 'row',
@@ -214,7 +219,7 @@ const styles = StyleSheet.create({
     },
     creatorName: {
         fontSize: windowWidth * 0.12,
-        marginLeft: windowWidth * 0.07,
+        marginLeft: windowWidth * 0.05,
         fontFamily: 'JetBrainsMono-ExtraBold',
     },
     creatorLogos: {
@@ -224,6 +229,7 @@ const styles = StyleSheet.create({
     },
     logoContainer: {
         alignItems: 'center',
+        paddingTop: windowHeight*0.05,
         width: windowWidth * 0.66 - 3
     },
     logo: {
