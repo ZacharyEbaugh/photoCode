@@ -14,10 +14,12 @@ import {
     StyleSheet, 
     Easing, 
     ScrollView,
+    ImageBackground,
     Button} from 'react-native';
 
 import { Shadow } from 'react-native-shadow-2';
 import { useNavigation } from '@react-navigation/native';
+import {BlurView} from '@react-native-community/blur';
 
 import Header from '../Header';
 import SideBar from '../sidebar/SideBar';
@@ -113,7 +115,7 @@ function HomeScreen(props) {
     animateCameraOptionsClose = () => {
         Animated.timing(cameraOptionsYPos, {
             toValue: windowHeight,
-            duration: 150,
+            duration: 200,
             // easing: Easing.ease,
             useNativeDriver: false,
         }).start(() => {
@@ -165,7 +167,8 @@ function HomeScreen(props) {
                             <ToNewDoc/>
                         </View>
                     </Shadow>
-
+                    
+                    <BlurView style={[styles.blur, cameraOptionsActive && {opacity: 1}]} blurType="light" blurAmount={10}/>
 
                     <Animated.View style={[{zIndex: 2}, { top: this.cameraOptionsYPos}, {left: windowWidth/2-(windowWidth * 0.6)/2}]}>
                         <CameraOptions onPress={this.closeCameraOptions}/>
@@ -282,6 +285,15 @@ const styles = StyleSheet.create({
     newFileImage: {
         height: 75,
         width: 75,
+    },
+    blur: {
+        zIndex: 2,
+        position: "absolute",
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        opacity: 0
     },
 });
 

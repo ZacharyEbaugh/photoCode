@@ -162,7 +162,7 @@ function Header(props) {
     }
 
     return (
-        <View style={[styles.header, {zIndex: 4}]}>
+        <View style={[styles.header, {zIndex: 1}]}>
             <View style={[styles.topBar, {zIndex: 4}]}>
                 <Pressable
                     onPress={() => { sideBarController()}}
