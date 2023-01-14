@@ -27,7 +27,6 @@ function SourceControl(props) {
 
     const route = useRoute();
     const { projectId } = route.params;
-    console.warn(projectId)
 
     async function getCommits(projectId) {  
         var response = await axios.post(baseUrl + `/getAllCommits`, {
@@ -37,8 +36,6 @@ function SourceControl(props) {
             await new Promise((resolve) => setTimeout(resolve, 1000));
             setLoading(false)
         });
-        
-        
     };
 
     useEffect(() => {

@@ -30,45 +30,18 @@ function GoToButton({ screenName }) {
     );
 };
 
-async function updateFileContents(fileId, code) {
-    if (fileId != undefined && code != undefined) {
-        const response = await axios.post(baseUrl + `/updateFile`, {
-        file_id: fileId,
-        file_contents: code
-        });
-    } else {
-        Alert.alert("Could not update file");
-    }
-}
 
 
-function UpdateButton({ isDisabled, screenName }) {
-    const navigation = useNavigation();
-    const route = useRoute();
 
-    const { fileId, textToSave, editorOrigin, projectId, projectName } = route.params;
-    console.warn(projectId);
-
-    return (
-        <Pressable style={styles.SendButton}
-            onPress={async () =>
-                {await updateFileContents(fileId, textToSave); navigation.navigate(screenName, { projectId, projectName })}}
-            disabled={isDisabled}
-        >
-            <Text style={[styles.SendText, isDisabled && styles.opacity]}>
-                Update
-            </Text>
-
-        </Pressable>
-
-    );
-}
 
 function SaveDoc(props) {
-
+    const navigation = useNavigation()
     const route = useRoute();
     const [disabled, setDisabled] = useState(false);
     const [updateFile, setUpdateFile] = useState("Update");
+
+    const [commitTitle, setCommitTitle] = useState("");
+    const [commitMessage, setCommitMessage] = useState("");
 
     const {filename, fileId, textToSave, projectId} = route.params;
 
@@ -77,6 +50,59 @@ function SaveDoc(props) {
             setDisabled(true)
         setUpdateFile("Update " + filename)
     }, [])
+
+    function updateCommitTitle(text) {
+        setCommitTitle(text);
+    }
+    
+    function updateCommitMessage(text) {
+        setCommitMessage(text);
+    }
+
+    async function updateFileContents(fileId, code, screenName, projectId, projectName) {
+
+        if (commitTitle == "" || commitMessage == "") {
+            Alert.alert("Please add a title and description");
+            return;
+        }
+
+        if (fileId != undefined && code != undefined) {
+            const response = await axios.post(baseUrl + `/updateFile`, {
+            file_id: fileId,
+            file_contents: code
+            }).then(async res => {
+                const commitResponse = await axios.post(baseUrl + `/createCommit`, {
+                    project_id: projectId,
+                    user_id: props.user_id,
+                    picture: props.user.picture,
+                    title: commitTitle,
+                    message: commitMessage,
+                })
+                navigation.navigate(screenName, { projectId, projectName })
+            });
+        } else {
+            Alert.alert("Could not update file");
+        }
+    }
+
+    function UpdateButton({ isDisabled, screenName }) {
+        const { fileId, textToSave, editorOrigin, projectId, projectName } = route.params;
+    
+        return (
+            <Pressable style={styles.SendButton}
+                onPress={async () =>
+                    {await updateFileContents(fileId, textToSave, screenName, projectId, projectName); }}
+                disabled={isDisabled}
+            >
+                <Text style={[styles.SendText, isDisabled && styles.opacity]}>
+                    Update
+                </Text>
+    
+            </Pressable>
+    
+        );
+    }
+    
 
     return (
         <View style={styles.container}>
@@ -97,7 +123,11 @@ function SaveDoc(props) {
                     <View style={styles.titleHeader}>
                         <Text style={styles.subjectTitle}>Commit Title</Text>
                         <View style={styles.underLine}></View>
-                        <TextInput style={styles.SubjectInput} placeholder={updateFile}></TextInput>
+                        <TextInput 
+                            style={styles.SubjectInput} 
+                            placeholder={updateFile}
+                            onChangeText={(text) => {updateCommitTitle(text)}}
+                        />
                     </View>
                     
                     
@@ -109,6 +139,7 @@ function SaveDoc(props) {
                             multiline={true}
                             numberOfLines={'auto'}
                             placeholder={"Commit from " + props.user.name}
+                            onChangeText={(text) => {updateCommitMessage(text)}}
                         ></TextInput>
                     </View>
                     {projectId == undefined ? 

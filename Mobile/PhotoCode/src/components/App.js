@@ -103,7 +103,7 @@ const App = () => {
                         />
                         <Stack.Screen
                             name="SaveDoc"
-                            component={() => <SaveDoc user={user}/>} 
+                            component={() => <SaveDoc user={user} user_id={user_id}/>} 
                         />
                     </Stack.Navigator>
                 </NavigationContainer>

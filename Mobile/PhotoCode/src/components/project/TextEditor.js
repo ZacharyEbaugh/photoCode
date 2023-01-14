@@ -21,6 +21,7 @@ const windowHeight = Dimensions.get('window').height;
 const languages = ["HTML", "CSS", "JavaScript", "Python", "React", "Java"];
 
 var updatedText = "";
+var originalText = "";
 
 var selectedLanguage = '';
 
@@ -66,6 +67,10 @@ function getText() {
     return updatedText;
 }
 
+function getOriginCode() {
+    return originalText;
+}
+
 function ProjectFileOrigin({language}) {
     const keyboard = useKeyboard();
     const insets = useSafeAreaInsets();
@@ -76,17 +81,16 @@ function ProjectFileOrigin({language}) {
     const [loading, setLoading] = useState(true)
 
     const [code, setCode] = useState('Hello World!');
-    const [originCode, setOriginCode] = useState('Hello World!');
     
 
     const getFileContents = async() => {
         const response = await axios.get(`https://photocode.app:8443/getFile?file_id=${fileId}`);
-        const buffer = Buffer.from(response.data.fileContents.data, 'hex')
+        const buffer = Buffer.from(response.data.fileContents.data, 'hex');
         await setCode(buffer.toString());
-        await setOriginCode(buffer.toString());
+        originalText = buffer.toString();
         setLoading(false);
     }
-    getFileContents()
+    getFileContents();
 
 
     return (
@@ -180,6 +184,8 @@ function SaveButton({ fileName }) {
             Alert.alert("Must Set a Filename");
         } else if (getText() == '') {
             Alert.alert("Must Add Text to File");
+        } else if (getText() == getOriginCode()) {
+            Alert.alert("You haven't made any changes. Please make a change to save.");
         } else {
             navigation.navigate('SaveDoc', {
                 filename: fileName,
