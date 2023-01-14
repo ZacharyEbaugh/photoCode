@@ -102,7 +102,6 @@ function SaveDoc(props) {
     
         );
     }
-    
 
     return (
         <View style={styles.container}>

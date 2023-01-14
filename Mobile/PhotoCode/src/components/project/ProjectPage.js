@@ -195,7 +195,7 @@ function ProjectPage(props) {
                     <Pressable
                         style={styles.fileLine}
                         onPress={() => {navigation.navigate('TextEditor', {
-                            user: props.user, 
+                            user: props.user,
                             originFilename: file.filename, 
                             fileId: file._id, 
                             editorOrigin: 2, 

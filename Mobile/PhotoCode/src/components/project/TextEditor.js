@@ -227,6 +227,7 @@ function TextEditor(props) {
             fileName = '';
     }, [])
 
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -276,7 +277,7 @@ function TextEditor(props) {
             <View style={styles.main}>
                 {editorOrigin == 1 ? <NewDocumentOrigin language={selectedLanguage}/> : <ProjectFileOrigin language={selectedLanguage}/>}
               
-                <SaveButton fileName={fileName} user={props.user} />
+                <SaveButton fileName={fileName} user={props.user} user_id={props.user_id} />
              
                
             </View>

@@ -45,6 +45,7 @@ function HomeScreen(props) {
     const [projects, setProjects] = useState({})
     const [projectsSet, setProjectsSet] = useState(false)
 
+
     useEffect(() => {
         async function registerUser() {
             if (props.user.sub.split('|')[0] === 'auth0')
@@ -148,6 +149,7 @@ function HomeScreen(props) {
                                     imageSource={require('./../../assets/images/siteIcon.png')}
                                     projectName={project.name}
                                     user={props.user}
+                                    user_id={props.user_id}
                                     // languageOne={project.languageOne}
                                     // languageTwo={project.languageTwo}
                                     // languageThree={project.languageThree}
