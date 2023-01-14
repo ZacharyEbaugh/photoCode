@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#C2C2C2',
     },
     options: {
-        marginLeft: windowWidth * 0.025,
+        marginLeft: windowWidth * 0.05,
         fontSize: windowWidth * 0.09,
         fontFamily: 'JetBrainsMono-Bold',
     },
