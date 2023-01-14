@@ -1,20 +1,24 @@
 import React, {useState} from 'react';
-import PropTypes from 'prop-types';
-
-import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, Easing } from 'react-native';
-import { Shadow } from 'react-native-shadow-2';
+import { 
+    View,
+    Animated, 
+    Pressable, 
+    Text, 
+    TouchableOpacity, 
+    Image, 
+    TextInput, 
+    Dimensions, 
+    StyleSheet, 
+    Easing 
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
 import SideBar from './sidebar/SideBar';
-
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-
 function GoToSettings(picture) {
     const navigation = useNavigation()
-    // console.log(picture)
     return (
         <Pressable
             onPress={() => {navigation.navigate('Settings');}}
@@ -22,7 +26,6 @@ function GoToSettings(picture) {
             <Image style={styles.profilePicture} source={{uri: picture.picture}} />
         </Pressable>
     )
-    
 }
 
 sideBarXPos = new Animated.Value(-windowWidth);
@@ -160,45 +163,38 @@ function Header(props) {
 
     return (
         <View style={[styles.header, {zIndex: 4}]}>
-        <View style={[styles.topBar, {zIndex: 4}]}>
-            <Pressable
-                onPress={() => { sideBarController()}}
-                style={styles.hamburgerMenu}
-            >
-                <Animated.View style={[styles.menuLine, {top: this.topBar}, {zIndex: 10}, {transform: [{rotate: topSpin}]}]}/>
-                <Animated.View style={[styles.menuLine, {top: this.bottomBar}, {zIndex: 10}, {transform: [{rotate: bottomSpin}]}]}/>
-                {/* <Image style={styles.hamburgerMenuButton} source={require('../assets/images/MenuButton.png')} /> */}
-            </Pressable>
+            <View style={[styles.topBar, {zIndex: 4}]}>
+                <Pressable
+                    onPress={() => { sideBarController()}}
+                    style={styles.hamburgerMenu}
+                >
+                    <Animated.View style={[styles.menuLine, {top: this.topBar}, {zIndex: 10}, {transform: [{rotate: topSpin}]}]}/>
+                    <Animated.View style={[styles.menuLine, {top: this.bottomBar}, {zIndex: 10}, {transform: [{rotate: bottomSpin}]}]}/>
+                </Pressable>
 
-            <Text style={[styles.title, sideBarActive && {opacity: 0}]}>
-                {'PhotoCode'}
-            </Text>
-            <GoToSettings picture={props.user.picture} />
-        </View>
+                <Text style={[styles.title, sideBarActive && {opacity: 0}]}>
+                    {'PhotoCode'}
+                </Text>
+                <GoToSettings picture={props.user.picture} />
+            </View>
 
+            <View style={styles.searchArea}>
+                <TouchableOpacity onPress={() => {}}>
+                    <Image style={styles.searchImage} source={require('../assets/images/search.png')} />
+                </TouchableOpacity>
+                <TextInput
+                    style={styles.search}
+                    placeholder='Search Projects'
+                    placeholderTextColor='darkgrey' 
+                />
+            </View>
 
-        <View style={styles.searchArea}>
-            <TouchableOpacity onPress={() => {}}>
-                <Image style={styles.searchImage} source={require('../assets/images/search.png')} />
-            </TouchableOpacity>
-            <TextInput
-                style={styles.search}
-                placeholder='Search Projects'
-                placeholderTextColor='darkgrey' 
-            />
-        </View>
-
-        <Animated.View style={[{zIndex: 3}, { left: sideBarXPos}, {top: (-windowHeight*0.2)}]}>
-            
+            <Animated.View style={[{zIndex: 3}, { left: sideBarXPos}, {top: (-windowHeight*0.2)}]}>
                 <SideBar onPress={closeSidebar} user={props.user} setUser={props.setUser} />
-           
-        </Animated.View>
-
-    </View>
-
+            </Animated.View>
+        </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     header: {
