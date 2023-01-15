@@ -18,6 +18,7 @@ import {
 import { BaseRouter, useNavigation, useRoute } from '@react-navigation/native';
 import { height } from '@mui/system';
 import { BackButton } from './../BackButton';
+import { Loading } from '../components/Loading';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -42,14 +43,13 @@ function GoBackButton() {
   );
 }
 
-function GoToSourceControl() {
+function GoToSourceControl(commitList) {
     const navigation = useNavigation();
-    const route = useRoute();
-    const { projectId } = route.params;
+
     return (
         <Pressable 
             style={styles.actionButton}
-            onPress={() => navigation.navigate('SourceControl', { projectId })}
+            onPress={() => navigation.navigate('SourceControl', { commitList: commitList.commitList })}
         >
             <Text style={styles.actionButtonText}>
                 Version Control
@@ -92,8 +92,6 @@ var root_folder;
 // API Setup
 baseUrl = 'https://photocode.app:8443';
 
-var loadingProgress = new Animated.Value(0);
-
 function ProjectPage(props) {
 
     const [currentFolders, setCurrentFolders] = useState([])
@@ -102,27 +100,13 @@ function ProjectPage(props) {
     const [currentFiles, setCurrentFiles] = useState([])
     const [filesFound, setFilesFound] = useState(false)
 
+    const [commits, setCommits] = useState([])
+
     const [loading, setLoading] = useState(true)
 
     const route = useRoute();
     const { projectId } = route.params;
 
-    animateLoadingProgress = () => {
-        Animated.timing(loadingProgress, {
-            toValue: 10,
-            duration: 1500,
-            // easing: Easing.inertia,
-            useNativeDriver: false,
-        }).start(() => {
-            setLoading(false)
-            Animated.timing(loadingProgress, {
-                toValue: 0,
-                duration: 1,
-                // easing: Easing.inertia,
-                useNativeDriver: false,
-            }).start()
-        })
-    }   
     function getProjectFiles(projectId) {
         var response = axios.get(baseUrl + `/getFolders?project_id=${projectId}`).then(res => {
             root_folder = res.data;
@@ -145,9 +129,26 @@ function ProjectPage(props) {
         // console.warn(response.data);
     }
 
+    async function getCommits(projectId) {  
+        var response = await axios.post(baseUrl + `/getAllCommits`, {
+            project_id: projectId,
+        }).then(async res => {
+            // console.warn(res.data.reverse())
+            // var userInfoResponse = await axios.post(baseUrl + '/getUserInfo', {
+            //     user_id: props.user_id
+            // })
+            // console.warn(userInfoResponse.data)
+            setCommits(res.data.reverse())
+            // await new Promise((resolve) => setTimeout(resolve, 1000));
+            // setLoading(false)
+        });
+    };
+
+
 
     useEffect(() => {
         getProjectFiles(projectId);
+        getCommits(projectId);
     }, [])
 
     async function updateFolders(folder) {
@@ -184,7 +185,7 @@ function ProjectPage(props) {
 
     function DisplayFiles() {
         const navigation = useNavigation();
-        const rout = useRoute();
+        const route = useRoute();
 
         const { projectId, projectName } = route.params;
          
@@ -233,13 +234,12 @@ function ProjectPage(props) {
         setCurrentPath(currentPath.slice(0, currentPath.length - 1));
     }
 
-    const loadingColor = loadingProgress.interpolate({
-        inputRange: [0, 10],
-        outputRange: ['0%', '100%']
-    })
+    function updateLoading(state) {
+        setLoading(state)
+    }
 
     return (
-        loading == true ? (<View style={styles.loadingWrapper}><Text style={styles.loadingText}>{'Loading'}</Text><View style={styles.loadingBarWrapper}><Animated.View style={[styles.loadingBar, {width: loadingColor}]}/></View></View>) :
+        loading == true ? <Loading updateLoad={updateLoading}/>:
         <View style={styles.container}>
             <View style={styles.header}>
                 <BackButton/>
@@ -292,7 +292,7 @@ function ProjectPage(props) {
                 <View style={styles.greyLine} />
 
                 <View style={styles.buttonWrapper}>
-                    <GoToSourceControl/>
+                    <GoToSourceControl commitList={commits} />
                     <GoToProjectSettings/>
                 </View>
             </View>

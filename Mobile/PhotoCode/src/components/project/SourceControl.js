@@ -7,7 +7,8 @@ import {
     Image, 
     Dimensions, 
     StyleSheet, 
-    Easing } from 'react-native';
+    Easing, 
+    ScrollView} from 'react-native';
 import axios from 'axios';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -20,30 +21,12 @@ const windowHeight = Dimensions.get('window').height;
 // API Setup
 const baseUrl = `https://photocode.app:8443`;
 
-function SourceControl(props) {
-
-    const [loading, setLoading] = useState(true);
-    const [commits, setCommits] = useState([])
-
+// Takes an array of commits from navigation route 
+function SourceControl() {
     const route = useRoute();
-    const { projectId } = route.params;
-
-    async function getCommits(projectId) {  
-        var response = await axios.post(baseUrl + `/getAllCommits`, {
-            project_id: projectId,
-        }).then(async res => {
-            setCommits(res.data.reverse())
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            setLoading(false)
-        });
-    };
-
-    useEffect(() => {
-        getCommits(projectId);
-    }, [])
+    const { commitList } = route.params;
 
     return (
-        loading == true ? (<View style={styles.loadingWrapper}><Text style={styles.loadingText}>{'Loading'}</Text></View>) :
         <View style={styles.container}>
             <View style={styles.header}>
                     <BackButton />
@@ -53,18 +36,18 @@ function SourceControl(props) {
                         </Text>
                     </View>
             </View>
-            <View style={styles.main}>
-                {commits.map((commit, i) => (
+            <ScrollView style={styles.main}>
+                {commitList.map((commit, i) => (
                     <CommitList
                         key={i}
                         UserImage={commit.picture}
-                        UserName={props.user.name}
+                        // UserName={props.user.name}
                         CommitTitle={commit.title}
                         CommitDate={commit.date}
                         CommitMessage={commit.message}
                     />
                 ))}
-            </View>
+            </ScrollView>
         </View>
     );
 };
@@ -83,7 +66,8 @@ const styles = StyleSheet.create({
     },
     header: {
         backgroundColor: '#0066FF',
-        flex: 1.5,
+        // flex: 1.5,
+        height: windowHeight*0.2,
         justifyContent: 'space-evenly',
     },
     main: {
