@@ -181,6 +181,7 @@ function HomeScreen(props) {
                                     projectId={project._id}
                                     imageSource={require('./../../assets/images/siteIcon.png')}
                                     projectName={project.name}
+                                    user={props.user}
                                     // languageOne={project.languageOne}
                                     // languageTwo={project.languageTwo}
                                     // languageThree={project.languageThree}

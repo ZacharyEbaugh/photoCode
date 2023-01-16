@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, Alert } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
@@ -11,19 +12,14 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-var fileName = '';
-
-
-var updateFile = "Update " + fileName;
-
-var userName = "Zachary Ebaugh";
+// API Setup
+baseUrl = `https://photocode.app:8443`;
 
 function GoToButton({ screenName }) {
     const navigation = useNavigation();
 
     return (
         <Pressable
-            // title={`Go to ${screenName}`}
             onPress={() => navigation.goBack()}
         >
             <Text style={styles.backText}>
@@ -34,28 +30,32 @@ function GoToButton({ screenName }) {
     );
 };
 
-function TitleText() {
-    const route = useRoute();
-    if (route.params.fileName != '')
-        fileName = route.params.fileName;
-    else
-        fileName = 'No File';
-
-    return (
-        <Text style={styles.title}>{fileName}</Text>
-    );
+async function updateFileContents(fileId, code) {
+    if (fileId != undefined && code != undefined) {
+        const response = await axios.post(baseUrl + `/updateFile`, {
+        file_id: fileId,
+        file_contents: code
+        });
+    } else {
+        Alert.alert("Could not update file");
+    }
 }
 
 
-function UpdateButton({ screenName }) {
+function UpdateButton({ isDisabled, screenName }) {
     const navigation = useNavigation();
+    const route = useRoute();
+
+    const { fileId, textToSave, editorOrigin, projectId, projectName } = route.params;
+    console.warn(projectId);
 
     return (
         <Pressable style={styles.SendButton}
-            onPress={() =>
-                [navigation.navigate(screenName)]}
+            onPress={async () =>
+                {await updateFileContents(fileId, textToSave); navigation.navigate(screenName, { projectId, projectName })}}
+            disabled={isDisabled}
         >
-            <Text style={styles.SendText}>
+            <Text style={[styles.SendText, isDisabled && styles.opacity]}>
                 Update
             </Text>
 
@@ -64,48 +64,62 @@ function UpdateButton({ screenName }) {
     );
 }
 
-class SaveDoc extends React.Component {
+function SaveDoc(props) {
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <View style={styles.backButton}>
-                        <GoToButton screenName={HomeScreen} />
-                    </View>
-                    <View style={styles.titleBox}>
-                        <TitleText/>
-                        <Text style={styles.subTitle}>changes made</Text>
+    const route = useRoute();
+    const [disabled, setDisabled] = useState(false);
+    const [updateFile, setUpdateFile] = useState("Update");
 
-                    </View>
+    const {filename, fileId, textToSave, projectId} = route.params;
+
+    useEffect(() => {
+        if (filename == '' || fileId == undefined || textToSave == undefined)
+            setDisabled(true)
+        setUpdateFile("Update " + filename)
+    }, [])
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.header}>
+                <View style={styles.backButton}>
+                    <GoToButton screenName={HomeScreen} />
                 </View>
+                <View style={styles.titleBox}>
+                    <Text style={styles.title}>{filename}</Text>
+                    <Text style={styles.subTitle}>changes made</Text>
 
-                <View style={styles.main}>
-                    <View style={styles.inputBox}>
-                        
-                        <View style={styles.titleHeader}>
-                            <Text style={styles.subjectTitle}>Title</Text>
-                            <View style={styles.underLine}></View>
-                            <TextInput style={styles.SubjectInput} placeholder={updateFile}></TextInput>
-                        </View>
-                       
-                       
-                        <View style={styles.Message}>
-                            <Text style={styles.subjectTitle}>Description</Text>
-                            <View style={styles.underLine}></View>
-                            <TextInput
-                                style={styles.MessageInput}
-                                multiline={true}
-                                numberOfLines={'auto'}
-                                placeholder={"Commit from " + userName}
-                            ></TextInput>
-                        </View>
-                        <UpdateButton screenName={HomeScreen} />
-                    </View>
                 </View>
             </View>
-        );
-    }
+
+            <View style={styles.main}>
+                <View style={styles.inputBox}>
+                    
+                    <View style={styles.titleHeader}>
+                        <Text style={styles.subjectTitle}>Commit Title</Text>
+                        <View style={styles.underLine}></View>
+                        <TextInput style={styles.SubjectInput} placeholder={updateFile}></TextInput>
+                    </View>
+                    
+                    
+                    <View style={styles.Message}>
+                        <Text style={styles.subjectTitle}>Description</Text>
+                        <View style={styles.underLine}></View>
+                        <TextInput
+                            style={styles.MessageInput}
+                            multiline={true}
+                            numberOfLines={'auto'}
+                            placeholder={"Commit from " + props.user.name}
+                        ></TextInput>
+                    </View>
+                    {projectId == undefined ? 
+                        <UpdateButton isDisabled={disabled} screenName={'HomeScreen'} /> 
+                        : 
+                        <UpdateButton isDisabled={disabled} screenName={'ProjectPage'} />
+                    } 
+                </View>
+            </View>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -251,6 +265,9 @@ const styles = StyleSheet.create({
         color: 'white',
         fontFamily: 'JetBrainsMono-Medium',
     },
+    opacity: {
+        opacity: 0.5
+    }
 });
 
 export default SaveDoc;

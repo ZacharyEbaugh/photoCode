@@ -90,7 +90,7 @@ var root_folder;
 baseUrl = 'https://photocode.app:8443';
 
 
-function ProjectPage() {
+function ProjectPage(props) {
 
     const [currentFolders, setCurrentFolders] = useState([])
     const [currentPath, setCurrentPath] = useState([])
@@ -102,7 +102,7 @@ function ProjectPage() {
 
     const route = useRoute();
     const { projectId } = route.params;
-    
+
     function getProjectFiles(projectId) {
         var response = axios.get(baseUrl + `/getFolders?project_id=${projectId}`).then(res => {
             root_folder = res.data;
@@ -165,15 +165,24 @@ function ProjectPage() {
 
     function DisplayFiles() {
         const navigation = useNavigation();
-        
-        
+        const rout = useRoute();
+
+        const { projectId, projectName } = route.params;
+         
         return (
             currentFiles.map((file, i) => (
                 <View key={i}>
                     <View style={styles.greyLine} />
                     <Pressable
                         style={styles.fileLine}
-                        onPress={() => {navigation.navigate('TextEditor', {originFilename: file.filename, fileId: file._id, editorOrigin: 2})}}
+                        onPress={() => {navigation.navigate('TextEditor', {
+                            user: props.user, 
+                            originFilename: file.filename, 
+                            fileId: file._id, 
+                            editorOrigin: 2, 
+                            projectId: projectId,
+                            projectName: projectName,
+                        })}}
                     >
                         
                         <Image style={styles.fileImage} source={fileIcon} />
