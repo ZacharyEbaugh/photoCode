@@ -77,7 +77,7 @@ const App = () => {
                         />
                         <Stack.Screen
                             name="ProjectPage"
-                            component={() => <ProjectPage user={user}/>}
+                            component={() => <ProjectPage user={user} user_id={user_id}/>}
                         />
                         <Stack.Screen
                             name="ProjectSettings"
@@ -85,7 +85,7 @@ const App = () => {
                         />
                         <Stack.Screen
                             name="SourceControl"
-                            component={SourceControl}
+                            component={() => <SourceControl user={user}/>}
                             options={{ title: 'SourceControl' }}
                         />
                         <Stack.Screen
@@ -99,11 +99,11 @@ const App = () => {
                         />
                         <Stack.Screen
                             name="TextEditor"
-                            component={() => <TextEditor user={user}/>}
+                            component={() => <TextEditor user={user} user_id={user_id}/>}
                         />
                         <Stack.Screen
                             name="SaveDoc"
-                            component={() => <SaveDoc user={user}/>} 
+                            component={() => <SaveDoc user={user} user_id={user_id}/>} 
                         />
                     </Stack.Navigator>
                 </NavigationContainer>

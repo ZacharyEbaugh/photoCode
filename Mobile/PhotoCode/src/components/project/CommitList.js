@@ -15,11 +15,16 @@ import { Shadow } from 'react-native-shadow-2';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
+const dateOptions = {month: 'short', day: 'numeric', year: 'numeric'};
+
 import { useNavigation } from '@react-navigation/native';
 
 export function CommitList({ UserName, UserImage, CommitTitle, CommitMessage, CommitDate }) {
     const navigation = useNavigation();
     const [ShowMessage, setShowMessage] = useState(false);
+
+    convertedDate = new Date(CommitDate);
+    formattedDate = convertedDate.toLocaleDateString('en-US', dateOptions);
 
     const toggleAnimation = {
         duration: 500,
@@ -57,13 +62,13 @@ export function CommitList({ UserName, UserImage, CommitTitle, CommitMessage, Co
         <View>
             <View style={styles.commitItem}>
                 <Pressable style={styles.commitInfo} onPress={() => toggleListItem()}>
-                    <Image style={styles.commitImage} source={UserImage} />
+                    <Image style={styles.commitImage} source={{uri: UserImage}} />
                     <Text style={styles.commitTitle}>
                         {CommitTitle}
                     </Text>
                     <View style={styles.commitDateInfo}>
                         <Text style={styles.commitDate}>
-                            {CommitDate}
+                            {formattedDate}
                         </Text>
                         <Animated.Image style={[styles.infoArrow, {transform: [{rotate: arrowTransform}]}]} source={require('./../../assets/images/infoArrow.png')} />
                     </View>
