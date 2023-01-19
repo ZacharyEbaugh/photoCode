@@ -137,7 +137,6 @@ app.post('/register', function (req, res) {
 // Function to get a user from the users collection
 function getUser(req, callback) {
   const email = req.body.email;
-  const password = req.body.password;
   const connection = req.body.connection;
   const user = {
     email: email,
