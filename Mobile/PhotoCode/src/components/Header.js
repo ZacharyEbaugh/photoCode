@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 5,
         height: windowHeight*0.05,
-        width: windowWidth * 0.75,
+        width: windowWidth * 0.85,
     },
     search: {
         width: windowWidth * 0.75,

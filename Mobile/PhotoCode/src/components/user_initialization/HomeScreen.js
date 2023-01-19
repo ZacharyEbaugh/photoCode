@@ -22,6 +22,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import Header from '../Header';
 import SideBar from '../sidebar/SideBar';
+import CreateProject from './CreateProject';
 import { GoToProject } from '../project/GoToProject';
 import GoToCamera from '../GoToCamera';
 import CameraOptions from '../CameraOptions';
@@ -107,6 +108,10 @@ function HomeScreen(props) {
         setProjectsSet(true);
     }
 
+    function handleProjectCreation() {
+        console.log("Project Creation");
+    }
+
     //#region Camera Option Animation
     animateCameraOptionsOpen = () => {
         Animated.timing(cameraOptionsYPos, {
@@ -174,7 +179,7 @@ function HomeScreen(props) {
                                 )) : null
                             }
                         </ScrollView>
-
+                        <CreateProject/>
                         <Shadow viewStyle={{alignSelf: 'stretch'}}>
                             <View style={styles.actionView}>
                                 <GoToCamera onPress={this.openCameraOptions}/>
@@ -294,9 +299,11 @@ const styles = StyleSheet.create({
         width: windowWidth,
     },
     newFileImage: {
-        height: 75,
-        width: 75,
+        height: windowHeight * 0.09,
+        width: windowHeight * 0.09,
     },
+
+
 });
 
 export default HomeScreen;

@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const SearchCollaborators = ({projectName}) => {
+const CreateProject = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [projectMembers, setProjectMembers] = useState([]);
     const [collaboratorsList, setCollaboratorsList] = useState([]);
@@ -42,91 +42,17 @@ const SearchCollaborators = ({projectName}) => {
         pan.setValue(0);
     };
 
-    function AddCollaborator() {
+    function CreateProjectButton() {
         return (
-            <TouchableOpacity style={styles.addCollaborator} onPress={handleModalOpen}>
-                <Text style={styles.addCollaboratorText}>
-                    {'Add Collaborator'}
-                </Text>
+            <TouchableOpacity style={styles.addProjectButton} onPress={handleModalOpen}>
+                <Text style={styles.addProjectText}>+</Text>
             </TouchableOpacity>
         )
-    }
-    useEffect(() => {
-        console.warn(searchUser);
-        async function handleSearch() {
-            // Make axios request to /searchUsers using the searchUser string as the body
-            // Set the response to a state variable
-            const response = await axios.get('https://photocode.app:8443/searchUsers', {
-                params: {
-                    username: searchUser
-                }
-            });
-            
-            // Check if user is already a member of the project
-            for (let i = 0; i < response.data.length; i++) {
-                for (let j = 0; j < projectMembers.length; j++) {
-                    if (response.data[i]._id == projectMembers[j]._id) {
-                        console.warn(response.data[i]._id, projectMembers[j]._id)
-                        response.data[i].connection = 'Member';
-                        console.log("Found Repeat");
-                    }
-                }
-            }
-            setCollaboratorsList(response.data);
-        }
-        handleSearch(searchUser);
-    }, [searchUser]);
-
-    useEffect(() => {
-        _retrieveData = async () => {
-            try {
-                const projectId = await AsyncStorage.getItem('project_id');
-                if (projectId !== null) {
-                    await setProject_id(projectId);
-                    getCollaborators(projectId);
-                }
-            } catch (error) {
-                // Error retrieving data
-                console.warn(error);
-            }
-        };
-        async function getCollaborators(projectId) {
-            console.warn(projectId);
-            // Grab the collaborators already part of the project
-            const projectMembers = await axios.get('https://photocode.app:8443/getCollaborators', {
-                params: {
-                    project_id: projectId
-                }
-            });
-            setProjectMembers(projectMembers.data);
-        }
-        _retrieveData();
-    }, []);
-
-        // Function to handle adding a collaborator to a project
-    const handleInviteCollaborator = async(user) => {
-        // Update project information;
-        console.warn(user);
-        await axios.post(`https://photocode.app:8443/sendProjectInvite`, {
-            email: user.email,
-            project_id: project_id,
-            project_name: projectName,
-            user_id: user._id,
-        })
-        .then(() => {
-            // setAddCollab(false)
-            setResponseMessage("Successfully invited " + user.username + " to the project!");
-            console.log("Successfully sent invite")
-        })
-        .catch((error) => {
-            console.log("Error sending invite");
-            setErrorMessage("Error sending invite");
-        });
     }
 
     return (
         <View style={styles.SearchCollaboratorsContainer}>
-            <AddCollaborator />
+            <CreateProjectButton />
 
             <Modal
                 animationType="slide"
@@ -161,31 +87,7 @@ const SearchCollaborators = ({projectName}) => {
                                     onChangeText={(text) => setSearchUser(text)}
                                 />
                             </View>
-                            <ScrollView style={styles.collaboratorsList}>
-                                {collaboratorsList.map((collaborator) => {
-                                    return (
-                                        <View style={styles.collaborator}>
-                                            <View style={styles.collaboratorInfo}>
-                                                <Image style={styles.profilePicture} source={{uri: collaborator.picture}} />
-                                                <View style={styles.collaboratorNameConnection}>
-                                                    <Text style={styles.collaboratorText}>{collaborator.username}</Text>
-                                                    <Text style={styles.connectionText}>{collaborator.connection}</Text>
-                                                </View>
-                                            </View>
-                                            {(collaborator.connection == 'Member') ? 
-                                                    <TouchableOpacity disabled style={styles.addIndividualCollaboratorDisabled}>
-                                                        <Text style={styles.addCollaboratorText}>Already Added</Text>
-                                                    </TouchableOpacity> :
-                                                    <TouchableOpacity style={styles.addIndividualCollaborator} onPress={() => handleInviteCollaborator(collaborator)}>
-                                                        <Text style={styles.addCollaboratorText}>Add</Text>
-                                                    </TouchableOpacity>}
-                                        </View>
-                                    )
-                                    })
-                                }
-                            {(responseMessage != '') ? <Text style={styles.responseMessage}>{responseMessage}</Text> : <></>}
-                            {(errorMessage != '') ? <Text style={styles.errorMessage}>{errorMessage}</Text> : <></>}
-                            </ScrollView>
+                           
                             <TouchableOpacity style={styles.exitModal} onPress={handleModalClose}>
                                 <Text style={styles.exitModalText}>x</Text>
                             </TouchableOpacity>
@@ -223,9 +125,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     addCollaborator: {
-        width: windowWidth * 0.8,
         backgroundColor: 'green',
         borderRadius: 10,
+        borderWidth: 3,
         padding: 10,
         marginVertical: 10,
     },
@@ -355,9 +257,26 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: 'red',
     },
+        addProjectButton: {
+        // position: 'absolute',
+        // bottom: (windowHeight * 0.45),
+        // right: (windowWidth - (windowWidth * 0.9)) * 0.5,
+        marginBottom: 120,
+        height: 75,
+        width: windowWidth * 0.9,
+        backgroundColor: '#00C853',
+        borderRadius: 11,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    addProjectText: {
+        fontSize: 40,
+        fontFamily: 'JetBrainsMono-Regular',
+        color: 'white',
+    },
 });
 
-export default SearchCollaborators;
+export default CreateProject;
 
 
 
