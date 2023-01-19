@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import {AsyncStorage} from '@react-native-community/async-storage';
 
 import {    
     View, 
@@ -21,6 +22,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import Header from '../Header';
 import SideBar from '../sidebar/SideBar';
+import CreateProject from './CreateProject';
 import { GoToProject } from '../project/GoToProject';
 import GoToCamera from '../GoToCamera';
 import CameraOptions from '../CameraOptions';
@@ -37,6 +39,10 @@ cameraOptionsYPos = new Animated.Value(windowHeight);
 
 function HomeScreen(props) {
 
+    const [scrollY, setScrollY] = useState(0);
+
+    const [isLoading, setIsLoading] = useState(true);
+
     const [sideBarActive, setSideBarActive] = useState(false);
     const [cameraOptionsActive, setCameraOptionsActive] = useState(false);
 
@@ -47,58 +53,64 @@ function HomeScreen(props) {
 
 
     useEffect(() => {
-        async function registerUser() {
-            if (props.user.sub.split('|')[0] === 'auth0')
-                props.user.sub = 'Username-Password-Authentication';
-            axios.post('https://photocode.app:8443/register', {
-                email: props.user.email,
-                username: props.user.name,
-                picture: props.user.picture,
-                password: '',
-                connection: props.user.sub.split('|')[0],
-            })
-            .then(response => {
-                console.log(response.data);
-            })
-                .catch(error => {
-                console.log(error);
-            });
-        }
-
-        async function getUser() {
-            // Get user id using the user information
-            axios.post('https://photocode.app:8443/getUser', {
-                email: props.user.email,
-                connection: props.user.sub.split('|')[0]
-            })
-            .then(response => {
-                props.setUser_Id(response.data._id);
-            })
-            .catch(() => {
-                console.log('Error');
-            });
-        }
-
-        async function getUserInfo() {
-            var userInfoResponse = await axios.post(baseUrl + '/getUserInfo', {
-                user_id: props.user_id
-            })
-            userInfo = userInfoResponse.data;
-            setEmail(userInfo.email)
-            setUsername(userInfo.username)
-            getAllProjects()
-        }
-
-        async function getAllProjects() {
-            var response = await axios.get(baseUrl + `/getAllProjects?user_id=${props.user_id}`)
-            setProjects(response.data)
-            setProjectsSet(true)
-        }
-
         registerUser();
         getUser();
         getUserInfo()
+        getAllProjects();
+        setIsLoading(false);
     }, []);
+
+    async function registerUser() {
+        if (props.user.sub.split('|')[0] === 'auth0')
+            props.user.sub = 'Username-Password-Authentication';
+        axios.post('https://photocode.app:8443/register', {
+            email: props.user.email,
+            username: props.user.name,
+            picture: props.user.picture,
+            password: '',
+            connection: props.user.sub.split('|')[0],
+        })
+        .then(response => {
+            console.log(response.data);
+        })
+            .catch(error => {
+            console.log(error);
+        });
+    }
+
+    async function getUser() {
+        // Get user id using the user information
+        axios.post('https://photocode.app:8443/getUser', {
+            email: props.user.email,
+            connection: props.user.sub.split('|')[0]
+        })
+        .then(response => {
+            props.setUser_Id(response.data._id);
+        })
+        .catch(() => {
+            console.log('Error');
+        });
+    }
+
+    async function getUserInfo() {
+        const userInfoResponse = await axios.post(baseUrl + '/getUserInfo', {
+            user_id: props.user_id
+        })
+        userInfo = userInfoResponse.data;
+        setEmail(userInfo.email)
+        setUsername(userInfo.username)
+        getAllProjects()
+    }
+
+    async function getAllProjects() {
+        const response = await axios.get(baseUrl + `/getAllProjects?user_id=${props.user_id}`);
+        setProjects(response.data);
+        setProjectsSet(true);
+    }
+
+    function handleProjectCreation() {
+        console.log("Project Creation");
+    }
 
     //#region Camera Option Animation
     animateCameraOptionsOpen = () => {
@@ -131,50 +143,57 @@ function HomeScreen(props) {
         animateCameraOptionsClose();
     };
     //#endregion
-
-        return (
-            <View style={styles.container}>
-                <View style={[styles.main]}>
-
-                    <Header user={props.user} setUser={props.setUser} />
-
-
-                    <ScrollView contentContainerStyle={[styles.projectWrapper]}>
-                        {projectsSet == true ?
-                            projects.map((project, i) => (
-                                <GoToProject
-                                    style={styles.project}
-                                    key={i}
-                                    projectId={project._id}
-                                    imageSource={require('./../../assets/images/siteIcon.png')}
-                                    projectName={project.name}
-                                    user={props.user}
-                                    user_id={props.user_id}
-                                    // languageOne={project.languageOne}
-                                    // languageTwo={project.languageTwo}
-                                    // languageThree={project.languageThree}
-                                    // date={project.date}
-                                />
-                            )) : null
-                        }
-                    </ScrollView>
-
-                    <Shadow viewStyle={{alignSelf: 'stretch'}}>
-                        <View style={styles.actionView}>
-                            <GoToCamera onPress={this.openCameraOptions}/>
-                            <ToNewDoc/>
-                        </View>
-                    </Shadow>
-
-
-                    <Animated.View style={[{zIndex: 2}, { top: this.cameraOptionsYPos}, {left: windowWidth/2-(windowWidth * 0.6)/2}]}>
-                        <CameraOptions onPress={this.closeCameraOptions}/>
-                    </Animated.View>
-                </View>
+        if (isLoading) {
+            return <View style={styles.container}>
+                <Text>Loading...</Text>
             </View>
-        );
+        }
+        else {
+            return (
+                <View style={styles.container}>
+                    <View style={[styles.main]}>
+                        <Header user={props.user} setUser={props.setUser} />
+                        <ScrollView 
+                            contentContainerStyle={[styles.projectWrapper]}
+                            onScroll={e => {
+                                setScrollY(e.nativeEvent.contentOffset.y);
+                                if (scrollY < -50) {
+                                    getAllProjects();
+                                }
+                            }}
+                            scrollEventThrottle={250}
+                        >
+                            {projectsSet == true ?
+                                projects.map((project, i) => (
+                                    <GoToProject
+                                        style={styles.project}
+                                        key={i}
+                                        projectId={project._id}
+                                        imageSource={require('./../../assets/images/siteIcon.png')}
+                                        projectName={project.name}
+                                        projectDescription={project.description}
+                                        projectCollaborators={project.collaborators}
+                                        user={props.user}
+                                        user_id={props.user_id}
+                                    />
+                                )) : null
+                            }
+                        </ScrollView>
+                        <CreateProject/>
+                        <Shadow viewStyle={{alignSelf: 'stretch'}}>
+                            <View style={styles.actionView}>
+                                <GoToCamera onPress={this.openCameraOptions}/>
+                                <ToNewDoc/>
+                            </View>
+                        </Shadow>
+                        <Animated.View style={[{zIndex: 2}, { top: this.cameraOptionsYPos}, {left: windowWidth/2-(windowWidth * 0.6)/2}]}>
+                            <CameraOptions onPress={this.closeCameraOptions}/>
+                        </Animated.View>
+                    </View>
+                </View>
+            );
+        }
     }
-
 
 function ToNewDoc() {
     const navigation = useNavigation();
@@ -280,9 +299,11 @@ const styles = StyleSheet.create({
         width: windowWidth,
     },
     newFileImage: {
-        height: 75,
-        width: 75,
+        height: windowHeight * 0.09,
+        width: windowHeight * 0.09,
     },
+
+
 });
 
 export default HomeScreen;

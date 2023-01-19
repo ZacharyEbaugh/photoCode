@@ -18,6 +18,7 @@ import {
 import { BaseRouter, useNavigation, useRoute } from '@react-navigation/native';
 import { height } from '@mui/system';
 import { BackButton } from './../BackButton';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -60,12 +61,12 @@ function GoToSourceControl() {
 
 function GoToProjectSettings() {
     const route = useRoute();
-    const { projectName } = route.params;
+    const { projectName, projectDescription, projectId } = route.params;
     const navigation = useNavigation();
     return (
         <Pressable 
             style={styles.actionButton}
-            onPress={() => navigation.navigate('ProjectSettings', {projectName: projectName})}>
+            onPress={() => navigation.navigate('ProjectSettings')}>
             <Text style={styles.actionButtonText}>
                 Project Settings
             </Text>
@@ -96,6 +97,7 @@ var loadingProgress = new Animated.Value(0);
 
 function ProjectPage(props) {
 
+    const [project_id, setProject_Id] = useState('');
     const [currentFolders, setCurrentFolders] = useState([])
     const [currentPath, setCurrentPath] = useState([])
     const [folderSet, setFolderSet] = useState(false)
@@ -105,7 +107,7 @@ function ProjectPage(props) {
     const [loading, setLoading] = useState(true)
 
     const route = useRoute();
-    const { projectId } = route.params;
+    // const { projectId, projectName, projectDescription, projectCollaborators } = route.params;
 
     animateLoadingProgress = () => {
         Animated.timing(loadingProgress, {
@@ -125,7 +127,7 @@ function ProjectPage(props) {
     }   
     function getProjectFiles(projectId) {
         var response = axios.get(baseUrl + `/getFolders?project_id=${projectId}`).then(res => {
-            root_folder = res.data;
+           root_folder = res.data;
            root_folder_id = (res.data[0]._id != undefined) ? res.data[0]._id : null;
            res.data[0].name = 'root'
            setCurrentPath([...currentPath, res.data[0]])
@@ -145,9 +147,21 @@ function ProjectPage(props) {
         // console.warn(response.data);
     }
 
-
     useEffect(() => {
-        getProjectFiles(projectId);
+        _retrieveData = async () => {
+            try {
+                const value = await AsyncStorage.getItem('project_id');
+                if (value !== null) {
+                // We have data!!
+                    await setProject_Id(value);
+                    getProjectFiles(value);
+                }
+            } catch (error) {
+                // Error retrieving data
+                console.warn(error);
+            }
+        };
+        _retrieveData();
     }, [])
 
     async function updateFolders(folder) {

@@ -81,7 +81,7 @@ const App = () => {
                         />
                         <Stack.Screen
                             name="ProjectSettings"
-                            component={ProjectSettings}
+                            component={() => <ProjectSettings user={user} user_id={user_id}/> }
                         />
                         <Stack.Screen
                             name="SourceControl"
