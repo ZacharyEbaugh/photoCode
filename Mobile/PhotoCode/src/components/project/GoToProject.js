@@ -14,13 +14,18 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-community/async-storage';
 
-export function GoToProject({ projectId, imageSource, projectName, languageOne, languageTwo, languageThree, date }) {
+export function GoToProject({ projectId, imageSource, projectName, projectDescription, projectCollaborators, languageOne, languageTwo, languageThree, date }) {
     const navigation = useNavigation();
     return (
         <Pressable
             onPress={() => {
-                navigation.navigate('ProjectPage', { projectId, projectName });
+                console.warn(projectCollaborators);
+                AsyncStorage.setItem('project_id', projectId);
+                const collaboratorsList = JSON.stringify(projectCollaborators);
+                AsyncStorage.setItem('collaborators', collaboratorsList);
+                navigation.navigate('ProjectPage', { projectId, projectName, projectDescription, projectCollaborators });
             }}
         >
             <View style={styles.projectBlock}>

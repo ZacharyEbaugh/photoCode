@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
 import PropTypes from 'prop-types';
 
 import { View, ScrollView, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet } from 'react-native';
@@ -9,138 +11,265 @@ import { Alert } from 'react-native';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { BackButton } from './../BackButton';
+import SearchCollaborators from './SearchCollaborators';
 
-function DeleteProject() {
-    const navigation = useNavigation();
-    return (
-        <Pressable
-            style={styles.optionButtons}
-            onPress={() => {
-                Alert.alert(
-                    "Are you sure you want to delete this project?",
-                    "",
-                    [
-                        {
-                            text: 'Confirm',
-                            onPress: () => navigation.navigate('HomeScreen'),
-                        },
-                        {
-                            text: 'Cancel',
-                        },
-                    ],
+function ProjectSettings(props) {
+    const [loading, setLoading] = useState(true);
+
+    const [project_id, setProject_Id] = useState('');
+
+    const [projectNamePlaceholder, setProjectNamePlaceholder] = useState('');
+    const [projectDescriptionPlaceholder, setProjectDescriptionPlaceholder] = useState('');
+
+    const [projectName, setProjectName] = useState('');
+    const [projectDescription, setProjectDescription] = useState('');
+
+    const [projectOwner, setProjectOwner] = useState('');
+    const [collaboratorsInfo, setCollaboratorsInfo] = useState([]);
+
+    // Get project information from route params and set state
+    // Make axios call to get users information based on user ID
+    useEffect(() => {
+        _retrieveData = async () => {
+            try {
+                const value = await AsyncStorage.getItem('project_id');
+                if (value !== null) {
+                    setProject_Id(value);
+                    getProject(value);
+                }
+            } catch (error) {
+                // Error retrieving data
+                console.warn(error);
+            }
+        };
+        async function getProject(project_id) {
+            const response = await axios.get(`https://photocode.app:8443/getProject?project_id=${project_id}`)
+            setProjectNamePlaceholder(response.data.name);
+            setProjectDescriptionPlaceholder(response.data.description);
+            setProjectOwner(response.data.user);
+            getCollaboratorsInfo(project_id);
+        }
+        _retrieveData();
+        setLoading(false);
+    }, []);
+
+    function ConfirmNameChange() {
+        return (
+            <Pressable
+                style={styles.confirmProjectName}      
+                onPress={() => {
+                    axios.post('https://photocode.app:8443/updateProject', {
+                        project_id: project_id,
+                        name: (projectName === '') ? projectNamePlaceholder : projectName,
+                        description: (projectDescription === '') ? projectDescriptionPlaceholder : projectDescription
+                    })
+                    .then((response) => {
+                        setProjectNamePlaceholder(projectName);
+                        setProjectDescriptionPlaceholder(projectDescription);
+                    })
+                    .catch((error) => {
+                        console.warn(error);
+                    }
                 )
-            }}
-        >
-            <Text style={styles.deleteText}>
-                {'Delete Project'}
-            </Text>
-        </Pressable>
-    )
-}
+            }}>
+                <Text style={styles.confirmProjectNameText}>
+                    {'Update Project'}
+                </Text>
+            </Pressable>
+        )
+    }   
 
-function ProjectNameInput() {
-    const route = useRoute();
-    const { projectName } = route.params;
+    async function getCollaboratorsInfo(projectId) {
+        const response2 = await axios.get('https://photocode.app:8443/getCollaborators', {
+            params: {
+                project_id: projectId
+            }
+        })
+        setCollaboratorsInfo(response2.data);
+    }
+
+    function ListCollaborators({projectCollaborators}) {
+        return projectCollaborators.map((collaborator, i) => {
+            return (
+                <Pressable style={styles.collaborator} key={i}>
+                    <Image source={{uri: collaborator.picture}} style={styles.collaboratorsImage} />
+                    <Text style={styles.collaboratorName}>
+                        {collaborator.username}
+                    </Text>
+                    {(collaborator._id === projectOwner) ? <Text style={styles.collaboratorOwner}>Owner</Text> : 
+                        (props.user_id != projectOwner) ? <Text style={styles.collaboratorOwner}>Member</Text>  :
+                        <Pressable style={styles.removeCollaborator} onPress={() => {removeCollaborator(collaborator._id, project_id)}}>
+                        <Text style={styles.removeCollaboratorText}>
+                            {'x'}
+                        </Text>
+                    </Pressable>
+                    }
+                </Pressable>
+            );
+        })
+    }
+
+    async function removeCollaborator(collaboratorID, projectID) {
+        await axios.get('https://photocode.app:8443/removeCollaborator', {
+            params: {
+                user_id: collaboratorID,
+                project_id: projectID
+            }
+        })
+        .then((response) => {
+            getCollaboratorsInfo(projectID);
+        }, (error) => {
+            console.log(error);
+        });
+    }
+
+    async function handleProjectUpdate() {
+        const update = await axios.post('https://photocode.app:8443/updateProject', {
+            project_id: project_id,
+            name: (projectName === '') ? projectNamePlaceholder : projectName,
+            description: (projectDescription === '') ? projectDescriptionPlaceholder : projectDescription
+        })
+        .then(async(response) => {
+            await setProjectNamePlaceholder(projectName);
+            await setProjectDescriptionPlaceholder(projectDescription);
+        })
+        .catch((error) => {
+            console.warn(error);
+        });
+        Promise.resolve(update);
+        setProjectName('');
+        setProjectDescription('');
+    }
+
+    function DeleteProject() {
+        const navigation = useNavigation();
+        if (props.user_id === projectOwner)
+            return (
+                <View style={styles.optionWrapper}>
+                    <Text style={styles.dangerHeader}>
+                        {'Danger'}
+                    </Text>
+                    <View style={styles.blackLine} />
+                    <Pressable
+                        style={styles.optionButtons}
+                        onPress={() => {
+                            Alert.alert(
+                                "Are you sure you want to delete this project?",
+                                "",
+                                [
+                                    {
+                                        text: 'Confirm',
+                                        onPress: () => {
+                                            axios.post('https://photocode.app:8443/deleteProject', {
+                                                project_id: project_id,
+                                            })
+                                            .then((response) => {
+                                                console.log(response);
+                                                navigation.navigate('HomeScreen');
+                                            })
+                                            .catch((error) => {
+                                                console.log(error);
+                                            });
+                                        }
+                                    },
+                                    {
+                                        text: 'Cancel',
+                                    },
+                                ],
+                            )
+                        }}
+                    >
+                        <Text style={styles.deleteText}>
+                            {'Delete Project'}
+                        </Text>
+                    </Pressable>  
+                </View>
+                
+            )
+        else
+            return null;
+    }
+
     return (
-        <View>
-            <TextInput
-                style={styles.newProjectName}
-                placeholder={projectName}
-                placeholderTextColor={'#000000'}
-                // onChangeText={(text) => this.setState({text})}
-                // value={this.state.text}
-            />
+        loading == true ? (<View style={styles.loadingWrapper}><Text style={styles.loadingText}>{'Loading'}</Text></View>) :
+        <View style={styles.container}>
+            <View style={styles.header}>
+                <View style={styles.backButton}>
+                    <BackButton/>
+                </View>
+                <View>
+                    <Text style={styles.title}>
+                        {'Project Settings'}
+                    </Text>
+                </View>
+            </View>
+            <View style={styles.main}>
+                <ScrollView>
+                    <View style={styles.optionWrapper}>
+                        <Text style={styles.sectionHeaders}>
+                            {'Name'}
+                        </Text>
+                        <View style={styles.blackLine} />
+                        <View style={styles.projectNameChange}>
+                            <View style={styles.section}>
+                                <TextInput
+                                    style={styles.newProjectName}
+                                    placeholder={projectNamePlaceholder}
+                                    placeholderTextColor={'grey'}
+                                    value={projectName}
+                                    onChangeText={(text) => setProjectName(text)}
+                                />
+                            </View>
+                        </View>
+                    </View>
+                    <View style={styles.optionWrapper}>
+                        <Text style={styles.sectionHeaders}>
+                            {'Description'}
+                        </Text>
+                        <View style={styles.blackLine} />
+                        <View style={styles.projectNameChange}>
+                            <View style={styles.section}>
+                                <TextInput
+                                    editable
+                                    style={styles.newProjectName}
+                                    placeholder={projectDescriptionPlaceholder}
+                                    placeholderTextColor={'grey'}
+                                    multiline={true}
+                                    numberOfLines={4}
+                                    value={projectDescription}
+                                    onChangeText={(text) => setProjectDescription(text)}
+                                />
+                            </View>
+                            <Pressable
+                                style={styles.confirmProjectName}      
+                                onPress={() => {handleProjectUpdate()}}>
+                                <Text style={styles.confirmProjectNameText}>
+                                    {'Update Project'}
+                                </Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                    <View style={styles.optionWrapper}>
+                        <Text style={styles.sectionHeaders}>
+                            {'Collaborators'}
+                        </Text>
+                        <View style={styles.blackLine} />
+                        <View style={styles.projectCollaboratorsChange}>
+                            <ListCollaborators projectCollaborators={collaboratorsInfo}/>
+                            {/* <AddCollaborator/> */}
+                            <SearchCollaborators projectName={projectNamePlaceholder}/>
+                        </View>
+                    </View>
+                    <DeleteProject/>
+                    <View style={styles.padding}/>
+                </ScrollView>
+            </View>
         </View>
     );
 }
 
-function ConfirmNameChange() {
-    const navigation = useNavigation();
-    return (
-         <Pressable
-            style={styles.confirmProjectName}      
-            onPress={() => {
-                Alert.alert(
-                    "Are you sure you want to change the name of the project?",
-                    "",
-                    [
-                        {
-                            text: 'Confirm',
-                            onPress: () => navigation.navigate('HomeScreen'),
-                        },
-                        {
-                            text: 'Cancel',
-                        },
-                    ],
-                )
-            }}
-          >
-        <Image
-            style={styles.confirmProjectNameImage}
-            source={require('./../../assets/images/checkmark.png')}
-        />
-        </Pressable>
-    )
-}       
-
-
-class ProjectSettings extends React.Component {
-
-    render () {
-        return (
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <View style={styles.backButton}>
-                        <BackButton/>
-                    </View>
-                    <View>
-                        <Text style={styles.title}>
-                            {'Project Settings'}
-                        </Text>
-                    </View>
-                </View>
-
-                <View style={styles.main}>
-                    <ScrollView>
-                        <View style={styles.optionWrapper}>
-                            <Text style={styles.sectionHeaders}>
-                                {'Project Name'}
-                            </Text>
-                            <View style={styles.blackLine} />
-                            {/* <Pressable
-                                style={styles.optionButtons}
-                                onPress={() => {}}
-                            >
-                                <Text style={styles.optionText}>
-                                    {'Change Project Name'}
-                                </Text>
-                            </Pressable> */}
-                            <View style={styles.projectNameChange}>
-                                <ProjectNameInput/>
-                                <ConfirmNameChange/>
-
-                            </View>
-                            
-                        </View>
-                        <View style={styles.optionWrapper}>
-                            <Text style={styles.dangerHeader}>
-                                {'Danger'}
-                            </Text>
-                            <View style={styles.blackLine} />
-                            
-                            <DeleteProject/>
-                        </View>
-                        
-                    </ScrollView>
-                </View>
-
-               
-            </View>
-        );
-    }
-}
 
 const styles = StyleSheet.create({
     container: {
@@ -166,6 +295,7 @@ const styles = StyleSheet.create({
     optionWrapper: {
         width: windowWidth * 0.8,
         alignSelf: 'center',
+        flexDirection: 'column',
     },
     sectionHeaders: {
         textAlign: 'left',
@@ -174,6 +304,9 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         marginLeft: windowWidth * 0.05,
         fontFamily: 'JetBrainsMono-Medium',
+    },
+    section: {
+        flexDirection: 'column',
     },
     blackLine: {
         borderWidth: 2,
@@ -194,15 +327,18 @@ const styles = StyleSheet.create({
         fontFamily: 'JetBrainsMono-Medium',
     },
     projectNameChange: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
     confirmProjectName: {
+        // width: windowWidth * 0.,
+        alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: '#0066FF',
         borderRadius: 10,
         borderWidth: 3,
-        padding: 6,
+        padding: 10,
         margin: 10,
     },
     confirmProjectNameImage: {
@@ -210,16 +346,16 @@ const styles = StyleSheet.create({
         height: 40,
     },
     newProjectName: {
-        width: windowWidth * 0.65,
+        width: windowWidth * 0.75,
         backgroundColor: '#E9E9E9',
         borderRadius: 10,
         borderWidth: 3,
         paddingVertical: 10,
+        paddingHorizontal: 10,
         marginVertical: 10,
         paddingLeft: 10,
-        fontSize: 24,
-        fontWeight: 'bold',
-        fontFamily: 'JetBrainsMono-Medium',
+        fontSize: 20,
+        fontFamily: 'JetBrainsMono-light',
     },
     dangerHeader: {
         textAlign: 'left',
@@ -236,9 +372,55 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontFamily: 'JetBrainsMono-Medium',
     },
-   
-    
-    
+    collaboratorsImage: {
+        width: 50,
+        height: 50,
+        borderRadius: 50,
+    },
+    collaboratorsList: {
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: windowWidth,
+    },
+    collaborator: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginVertical: 10,
+    },
+    collaboratorName: {
+        fontSize: 24,
+        fontFamily: 'JetBrainsMono-Medium',
+        width: windowWidth * 0.4,
+    },
+    collaboratorOwner: {
+        fontSize: 15,
+        fontFamily: 'JetBrainsMono-light',
+        color: 'black',
+    },
+    removeCollaborator: {
+        backgroundColor: 'red',
+        borderRadius: 11,
+        // borderWidth: 2,
+        padding: 2,
+        paddingHorizontal: 10,
+        marginVertical: 10,
+    },
+    removeCollaboratorText: {
+        fontSize: 24,
+        fontFamily: 'JetBrainsMono-Medium',
+        color: 'white',
+    },
+    confirmProjectNameText: {
+        textAlign: 'center',
+        fontFamily: 'JetBrainsMono-Medium',
+        fontSize: 24,
+        color: 'white',
+    },
+    padding: {
+        height: 60,
+    },
 });
 
 export default ProjectSettings;
