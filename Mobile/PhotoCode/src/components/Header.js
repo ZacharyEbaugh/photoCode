@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { 
     View,
     Animated, 
@@ -63,6 +63,7 @@ function Header(props) {
 
     closeSidebar = () => {
         animateSideBarClose();
+        console.log('closing sidebar');
     };
 
     animateOpenTopBar = () => {
@@ -161,11 +162,16 @@ function Header(props) {
         }
     }
 
+    logoutCloseSidebar = () => {
+        animateCloseTopBar()
+        animateCloseBottomBar()
+    }
+
     return (
         <View style={[styles.header, {zIndex: 4}]}>
             <View style={[styles.topBar, {zIndex: 2}]}>
                 <Animated.View style={[ { left: sideBarXPos}, {top: (windowHeight/1.55)}, {zIndex: 2}]}>
-                    <SideBar onPress={closeSidebar} user={props.user} setUser={props.setUser} />
+                    <SideBar onPress={this.logoutCloseSidebar} user={props.user} setUser={props.setUser} />
                 </Animated.View>
 
                 <Pressable

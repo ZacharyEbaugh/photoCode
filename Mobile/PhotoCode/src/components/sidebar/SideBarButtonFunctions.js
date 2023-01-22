@@ -112,8 +112,7 @@ export function GoToLogout(props) {
             },
             {
                 ephemeralSession: true,
-            });
-
+            })
             props.setUser(null);
         } catch (e) {
             console.log('Log out cancelled');
@@ -122,8 +121,9 @@ export function GoToLogout(props) {
 
     return (
         <Pressable
-            onPress={() => {
-                onLogout();
+            onPress={async () => {
+                await onLogout();
+                props.closeSideBar();
             }}
            
             style={[styles.button, isPressed && styles.updateBackground]}
