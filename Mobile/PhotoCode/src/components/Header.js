@@ -39,7 +39,7 @@ function Header(props) {
 
     animateSideBarOpen = () => {
         Animated.timing(sideBarXPos, {
-            toValue: (windowWidth * 0.6),
+            toValue: (windowWidth * 0.65),
             duration: 200,
             easing: Easing.ease,
             useNativeDriver: false,
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
         marginLeft: -windowWidth * 0.7,
         marginBottom: windowHeight*0.015,
         height: windowHeight*0.07,
-        borderWidth: 2,
+        // borderWidth: 2,
         display: 'flex',
         // justifyContent: 'space-around',
         flexDirection: 'row',
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
         fontSize: 40,
         color: 'white',
         fontFamily: 'JetBrainsMono-Medium',
-        // marginHorizontal: windowWidth*0.05,
+        marginHorizontal: windowWidth*0.09,
         // textAlign: 'center',
     },
     hamburgerMenu: {

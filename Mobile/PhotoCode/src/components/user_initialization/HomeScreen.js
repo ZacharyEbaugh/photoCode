@@ -19,6 +19,7 @@ import {
 
 import { Shadow } from 'react-native-shadow-2';
 import { useNavigation } from '@react-navigation/native';
+import { BlurView } from '@react-native-community/blur';
 
 import Header from '../Header';
 import SideBar from '../sidebar/SideBar';
@@ -186,6 +187,9 @@ function HomeScreen(props) {
                                 <ToNewDoc/>
                             </View>
                         </Shadow>
+
+                        <BlurView style={[styles.blur, cameraOptionsActive && {opacity: 1}]} blurType='light' blurAmount={10}/>
+
                         <Animated.View style={[{zIndex: 2}, { top: this.cameraOptionsYPos}, {left: windowWidth/2-(windowWidth * 0.6)/2}]}>
                             <CameraOptions onPress={this.closeCameraOptions}/>
                         </Animated.View>
