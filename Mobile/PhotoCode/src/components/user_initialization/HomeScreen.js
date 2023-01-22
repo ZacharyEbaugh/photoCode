@@ -190,7 +190,7 @@ function HomeScreen(props) {
 
                         <BlurView style={[styles.blur, cameraOptionsActive && {opacity: 1}]} blurType='light' blurAmount={10}/>
 
-                        <Animated.View style={[{zIndex: 2}, { top: this.cameraOptionsYPos}, {left: windowWidth/2-(windowWidth * 0.6)/2}]}>
+                        <Animated.View style={[{zIndex: 5}, { top: this.cameraOptionsYPos}, {left: windowWidth/2-(windowWidth * 0.6)/2}]}>
                             <CameraOptions onPress={this.closeCameraOptions}/>
                         </Animated.View>
                     </View>
@@ -306,8 +306,15 @@ const styles = StyleSheet.create({
         height: windowHeight * 0.09,
         width: windowHeight * 0.09,
     },
-
-
+    blur: {
+        zIndex: 5,
+        position: "absolute",
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        opacity: 0
+    },
 });
 
 export default HomeScreen;
