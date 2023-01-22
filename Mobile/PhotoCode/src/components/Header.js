@@ -39,7 +39,7 @@ function Header(props) {
 
     animateSideBarOpen = () => {
         Animated.timing(sideBarXPos, {
-            toValue: -(windowWidth * 0.3)/2,
+            toValue: (windowWidth * 0.6),
             duration: 200,
             easing: Easing.ease,
             useNativeDriver: false,
@@ -163,22 +163,26 @@ function Header(props) {
 
     return (
         <View style={[styles.header, {zIndex: 4}]}>
-            <View style={[styles.topBar, {zIndex: 4}]}>
+            <View style={[styles.topBar, {zIndex: 2}]}>
+                <Animated.View style={[ { left: sideBarXPos}, {top: (windowHeight/1.55)}, {zIndex: 2}]}>
+                    <SideBar onPress={closeSidebar} user={props.user} setUser={props.setUser} />
+                </Animated.View>
+
                 <Pressable
                     onPress={() => { sideBarController()}}
-                    style={styles.hamburgerMenu}
+                    style={[styles.hamburgerMenu, {zIndex: 3}]}
                 >
                     <Animated.View style={[styles.menuLine, {top: this.topBar}, {zIndex: 10}, {transform: [{rotate: topSpin}]}]}/>
                     <Animated.View style={[styles.menuLine, {top: this.bottomBar}, {zIndex: 10}, {transform: [{rotate: bottomSpin}]}]}/>
                 </Pressable>
 
-                <Text style={[styles.title, sideBarActive && {opacity: 0}]}>
+                <Text style={[styles.title, {zIndex: 1}]}>
                     {'PhotoCode'}
                 </Text>
                 <GoToSettings picture={props.user.picture} />
             </View>
 
-            <View style={styles.searchArea}>
+            <View style={[styles.searchArea]}>
                 <TouchableOpacity onPress={() => {}}>
                     <Image style={styles.searchImage} source={require('../assets/images/search.png')} />
                 </TouchableOpacity>
@@ -189,9 +193,7 @@ function Header(props) {
                 />
             </View>
 
-            <Animated.View style={[{zIndex: 3}, { left: sideBarXPos}, {top: (-windowHeight*0.2)}]}>
-                <SideBar onPress={closeSidebar} user={props.user} setUser={props.setUser} />
-            </Animated.View>
+            
         </View>
     );
 }
@@ -204,11 +206,16 @@ const styles = StyleSheet.create({
         paddingTop: windowHeight*0.05,
     },
     topBar: {
+        // position: 'absolute',
+        marginLeft: -windowWidth * 0.7,
+        marginBottom: windowHeight*0.015,
+        height: windowHeight*0.07,
+        borderWidth: 2,
         display: 'flex',
-        justifyContent: 'space-around',
+        // justifyContent: 'space-around',
         flexDirection: 'row',
-        width: windowWidth,
-        paddingBottom: windowHeight*0.025,
+        // width: windowWidth,
+        // paddingBottom: windowHeight*0.025,
         alignItems: 'center',
     },
     menuLine: {
@@ -222,10 +229,12 @@ const styles = StyleSheet.create({
         fontSize: 40,
         color: 'white',
         fontFamily: 'JetBrainsMono-Medium',
+        // marginHorizontal: windowWidth*0.05,
+        // textAlign: 'center',
     },
     hamburgerMenu: {
-        alignItems: 'center',
-        justifyContent: 'center',
+        // alignItems: 'center',
+        // justifyContent: 'center',
     },
     profilePicture: {
         width: 40,
