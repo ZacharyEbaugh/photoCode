@@ -176,10 +176,12 @@ function HomeScreen(props) {
                                         user={props.user}
                                         user_id={props.user_id}
                                     />
+                                    
                                 )) : null
                             }
+                            <View style={styles.padding}></View>
                         </ScrollView>
-                        <CreateProject/>
+                        <CreateProject user_id={props.user_id}/>
                         <Shadow viewStyle={{alignSelf: 'stretch'}}>
                             <View style={styles.actionView}>
                                 <GoToCamera onPress={this.openCameraOptions}/>
@@ -291,6 +293,8 @@ const styles = StyleSheet.create({
         marginVertical: 1,
     },
     actionView: {
+        height: windowHeight * 0.125,
+        // position: 'absolute',
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
@@ -302,7 +306,9 @@ const styles = StyleSheet.create({
         height: windowHeight * 0.09,
         width: windowHeight * 0.09,
     },
-
+    padding: {
+        height: windowHeight * 0.2,
+    }
 
 });
 

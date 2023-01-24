@@ -16,6 +16,7 @@ import TextEditor from './project/TextEditor';
 import SaveDoc from './project/SaveDoc';
 import SourceControl from './project/SourceControl';
 import ProjectSettings from './project/ProjectSettings';
+import CreateProject from './user_initialization/CreateProject';
 
 import ProjectPage from './project/ProjectPage';
 import CameraView from './CameraView';
@@ -82,6 +83,10 @@ const App = () => {
                         <Stack.Screen
                             name="ProjectSettings"
                             component={() => <ProjectSettings user={user} user_id={user_id}/> }
+                        />
+                        <Stack.Screen
+                            name="CreateProject"
+                            component={() => <CreateProject user={user} user_id={user_id}/>}
                         />
                         <Stack.Screen
                             name="SourceControl"

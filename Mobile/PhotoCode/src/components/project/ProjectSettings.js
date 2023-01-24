@@ -24,7 +24,7 @@ function ProjectSettings(props) {
     const [projectDescriptionPlaceholder, setProjectDescriptionPlaceholder] = useState('');
 
     const [projectName, setProjectName] = useState('');
-    const [projectDescription, setProjectDescription] = useState('');
+    const [projectDescription, setProjectDescription] = useState('\n');
 
     const [projectOwner, setProjectOwner] = useState('');
     const [collaboratorsInfo, setCollaboratorsInfo] = useState([]);
@@ -48,6 +48,7 @@ function ProjectSettings(props) {
             const response = await axios.get(`https://photocode.app:8443/getProject?project_id=${project_id}`)
             setProjectNamePlaceholder(response.data.name);
             setProjectDescriptionPlaceholder(response.data.description);
+            setProjectDescription('');
             setProjectOwner(response.data.user);
             getCollaboratorsInfo(project_id);
         }
@@ -131,9 +132,11 @@ function ProjectSettings(props) {
             name: (projectName === '') ? projectNamePlaceholder : projectName,
             description: (projectDescription === '') ? projectDescriptionPlaceholder : projectDescription
         })
-        .then(async(response) => {
-            await setProjectNamePlaceholder(projectName);
-            await setProjectDescriptionPlaceholder(projectDescription);
+        .then(() => {
+            if (projectName != '')
+                setProjectNamePlaceholder(projectName);
+            if (projectDescription != '')
+                setProjectDescriptionPlaceholder(projectDescription);
         })
         .catch((error) => {
             console.warn(error);
@@ -141,6 +144,7 @@ function ProjectSettings(props) {
         Promise.resolve(update);
         setProjectName('');
         setProjectDescription('');
+        console.warn(projectDescriptionPlaceholder);
     }
 
     function DeleteProject() {
@@ -233,10 +237,10 @@ function ProjectSettings(props) {
                             <View style={styles.section}>
                                 <TextInput
                                     editable
-                                    style={styles.newProjectName}
+                                    style={styles.newProjectDescription}
                                     placeholder={projectDescriptionPlaceholder}
                                     placeholderTextColor={'grey'}
-                                    multiline={true}
+                                    multiline
                                     numberOfLines={4}
                                     value={projectDescription}
                                     onChangeText={(text) => setProjectDescription(text)}
@@ -354,6 +358,19 @@ const styles = StyleSheet.create({
     newProjectName: {
         width: windowWidth * 0.8,
         height: 60,
+        backgroundColor: '#E9E9E9',
+        borderRadius: 10,
+        // borderWidth: 3,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        marginVertical: 10,
+        paddingLeft: 10,
+        fontSize: 24,
+        fontFamily: 'JetBrainsMono-light',
+    },
+    newProjectDescription: {
+        width: windowWidth * 0.8,
+        height: 100,
         backgroundColor: '#E9E9E9',
         borderRadius: 10,
         // borderWidth: 3,

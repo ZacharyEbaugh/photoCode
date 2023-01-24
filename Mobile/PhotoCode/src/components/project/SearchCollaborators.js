@@ -162,9 +162,9 @@ const SearchCollaborators = ({projectName}) => {
                                 />
                             </View>
                             <ScrollView style={styles.collaboratorsList}>
-                                {collaboratorsList.map((collaborator) => {
+                                {collaboratorsList.map((collaborator, i) => {
                                     return (
-                                        <View style={styles.collaborator}>
+                                        <View style={styles.collaborator} key={i}>
                                             <View style={styles.collaboratorInfo}>
                                                 <Image style={styles.profilePicture} source={{uri: collaborator.picture}} />
                                                 <View style={styles.collaboratorNameConnection}>
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     },
     addCollaborator: {
         width: windowWidth * 0.8,
-        backgroundColor: 'green',
+        backgroundColor: '#00C853',
         borderRadius: 10,
         padding: 10,
         marginVertical: 10,
