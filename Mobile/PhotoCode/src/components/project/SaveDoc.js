@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, Alert } from 'react-native';
+import { View, ScrollView, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, Alert } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 
 import HomeScreen from './../user_initialization/HomeScreen';
+import SaveDestination from './SaveDestination';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -99,6 +100,7 @@ function SaveDoc(props) {
 
     return (
         <View style={styles.container}>
+            {/* <ScrollView> */}
             <View style={styles.header}>
                 <View style={styles.backButton}>
                     <GoToButton screenName={HomeScreen} />
@@ -106,12 +108,16 @@ function SaveDoc(props) {
                 <View style={styles.titleBox}>
                     <Text style={styles.title}>{filename}</Text>
                     <Text style={styles.subTitle}>changes made</Text>
-
                 </View>
             </View>
 
             <View style={styles.main}>
                 <View style={styles.inputBox}>
+                    <View style={styles.destinationHeader}>
+                        {/* <Text style={styles.subjectTitleDest}>Commit Title</Text> */}
+                        {/* <View style={styles.underLineDest}></View> */}
+                        <SaveDestination user_id={props.user_id}/>
+                    </View>
                     <View style={styles.titleHeader}>
                         <Text style={styles.subjectTitle}>Commit Title</Text>
                         <View style={styles.underLine}></View>
@@ -139,18 +145,24 @@ function SaveDoc(props) {
                     } 
                 </View>
             </View>
+            {/* </ScrollView> */}
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+
     },
 
     header: {
         backgroundColor: '#0066FF',
-        flex: 1,
+        // flex: 1,
         // alignItems: 'center',
         // justifyContent: 'space-around',
 
@@ -186,12 +198,17 @@ const styles = StyleSheet.create({
         width: windowWidth,
         color: '#FFFFFF',
         marginTop: windowHeight * -0.006,
+        marginBottom: windowHeight * 0.01,
         fontFamily: 'JetBrainsMono-Medium',
     },
 
     main: {
         backgroundColor: '#FFFFFF',
-        flex: 5,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        // flex: 5,
     },
 
 
@@ -205,15 +222,22 @@ const styles = StyleSheet.create({
 
     titleHeader: {
         width: windowWidth * 0.8,
-        height: windowHeight * 0.18,
         justifyContent: 'center',
-        // alignItems: 'center',
-        // backgroundColor: 'black'
         fontFamily: 'JetBrainsMono-Medium',
+        paddingTop: 10,
     },
 
     subjectTitle: {
-        fontSize: 35,
+        fontSize: 30,
+        // padding: 5,
+        alignSelf: 'flex-start',
+        fontWeight: '600',
+        fontFamily: 'JetBrainsMono-Medium',
+
+    },
+
+    subjectTitleDest: {
+        fontSize: 25,
         // padding: 5,
         alignSelf: 'flex-start',
         fontWeight: '600',
@@ -225,6 +249,14 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'black',
         marginBottom: windowHeight * 0.02,
+        alignSelf: 'center'
+    },
+
+    underLineDest: {
+        width: windowWidth * 0.82,
+        borderWidth: 1,
+        borderColor: 'black',
+        // marginBottom: windowHeight * 0.02,
         alignSelf: 'center'
     },
 
@@ -244,7 +276,7 @@ const styles = StyleSheet.create({
 
     Message: {
         width: windowWidth * 0.8,
-        height: windowHeight * 0.45,
+        // height: windowHeight * 0.45,
         // backgroundColor: 'black',
         justifyContent: 'center',
         alignItems: 'center',
@@ -258,7 +290,7 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 25,
         width: windowWidth * 0.8,
-        height: windowHeight * 0.4,
+        height: windowHeight * 0.3,
         borderRadius: windowHeight * 0.015,
         padding: 10,
         paddingTop: 10,
@@ -288,7 +320,8 @@ const styles = StyleSheet.create({
     },
     opacity: {
         opacity: 0.5
-    }
+    },
+
 });
 
 export default SaveDoc;
