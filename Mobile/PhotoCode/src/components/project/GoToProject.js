@@ -20,6 +20,7 @@ export function GoToProject({ projectId, imageSource, projectName, projectDescri
     const navigation = useNavigation();
     return (
         <Pressable
+            style={styles.projectBlockWrapper}
             onPress={() => {
                 console.warn(projectCollaborators);
                 AsyncStorage.setItem('project_id', projectId);

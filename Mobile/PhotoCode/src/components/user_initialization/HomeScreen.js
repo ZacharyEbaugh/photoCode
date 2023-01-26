@@ -167,7 +167,6 @@ function HomeScreen(props) {
                             {projectsSet == true ?
                                 projects.map((project, i) => (
                                     <GoToProject
-                                        style={styles.project}
                                         key={i}
                                         projectId={project._id}
                                         imageSource={require('./../../assets/images/siteIcon.png')}
@@ -241,9 +240,6 @@ const styles = StyleSheet.create({
         // minHeight: m,
         // flex: 1,
         minHeight: windowHeight*0.637,
-    },
-    project: {
-        // flex: 1,
     },
     target: {
         fontSize: 40,

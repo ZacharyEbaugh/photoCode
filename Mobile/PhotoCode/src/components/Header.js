@@ -168,7 +168,7 @@ function Header(props) {
     }
 
     return (
-        <View style={[styles.header, {zIndex: 4}]}>
+        <View style={[styles.header, {zIndex: 2}]}>
             <View style={[styles.topBar, {zIndex: 2}]}>
                 <View style={styles.topBarShift}>
                     <Animated.View style={[ { left: sideBarXPos}, {top: (windowHeight/1.55)}, {zIndex: 2}]}>
@@ -214,11 +214,12 @@ const styles = StyleSheet.create({
     topBar: {
         // width 390 for regular, 428 for max
         // borderWidth: 2,
-        position: 'absolute',
-        top: windowHeight*0.05,
+        // position: 'absolute',
+        // top: windowHeight*0.05,
         alignItems: 'center',
         width: windowWidth,
         height:  windowWidth <= 390 ? 60 : 70,
+        // height: 60,
         justifyContent: 'center',
     },
     topBarShift: {
@@ -226,6 +227,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         left: -windowWidth*0.2,
+        // borderWidth: 2,
+        height: windowWidth <= 390 ? 60 : 70,
     },  
     menuLine: {
         backgroundColor: 'white',
@@ -257,7 +260,7 @@ const styles = StyleSheet.create({
         height: windowHeight*0.05,
         width: windowWidth * 0.85,
         // title font size + 25
-        marginTop: windowWidth <= 390 ? 65 : 75,
+        // marginTop: windowWidth <= 390 ? 65 : 75,
     },
     search: {
         width: windowWidth * 0.75,
