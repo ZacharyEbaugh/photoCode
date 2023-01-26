@@ -31,24 +31,23 @@ function GoToButton({ screenName }) {
 };
 
 
-
-
-
 function SaveDoc(props) {
     const navigation = useNavigation()
     const route = useRoute();
     const [disabled, setDisabled] = useState(false);
-    const [updateFile, setUpdateFile] = useState("Update");
 
     const [commitTitle, setCommitTitle] = useState("");
     const [commitMessage, setCommitMessage] = useState("");
+
+    const [commitTitlePlaceholder, setCommitTitlePlaceholder] = useState();
+    const [commitMessagePlaceholder, setCommitMessagePlaceholder] = useState("Commit from " + props.user.name);
 
     const {filename, fileId, textToSave, projectId} = route.params;
 
     useEffect(() => {
         if (filename == '' || fileId == undefined || textToSave == undefined)
             setDisabled(true)
-        setUpdateFile("Update " + filename)
+        setCommitTitlePlaceholder("Update " + filename)
     }, [])
 
     function updateCommitTitle(text) {
@@ -60,23 +59,18 @@ function SaveDoc(props) {
     }
 
     async function updateFileContents(fileId, code, screenName, projectId, projectName) {
-
-        if (commitTitle == "" || commitMessage == "") {
-            Alert.alert("Please add a title and description");
-            return;
-        }
-
         if (fileId != undefined && code != undefined) {
             const response = await axios.post(baseUrl + `/updateFile`, {
             file_id: fileId,
-            file_contents: code
+            file_contents: code,
+            file_name: filename
             }).then(async res => {
                 const commitResponse = await axios.post(baseUrl + `/createCommit`, {
                     project_id: projectId,
                     user_id: props.user_id,
                     picture: props.user.picture,
-                    title: commitTitle,
-                    message: commitMessage,
+                    title: commitTitle === '' ? commitTitlePlaceholder : commitTitle,
+                    message: commitMessage === '' ? commitMessagePlaceholder : commitMessage,
                 })
                 navigation.navigate(screenName, { projectId, projectName })
             });
@@ -118,18 +112,15 @@ function SaveDoc(props) {
 
             <View style={styles.main}>
                 <View style={styles.inputBox}>
-                    
                     <View style={styles.titleHeader}>
                         <Text style={styles.subjectTitle}>Commit Title</Text>
                         <View style={styles.underLine}></View>
                         <TextInput 
                             style={styles.SubjectInput} 
-                            placeholder={updateFile}
+                            placeholder={commitTitlePlaceholder}
                             onChangeText={(text) => {updateCommitTitle(text)}}
                         />
                     </View>
-                    
-                    
                     <View style={styles.Message}>
                         <Text style={styles.subjectTitle}>Description</Text>
                         <View style={styles.underLine}></View>
@@ -137,7 +128,7 @@ function SaveDoc(props) {
                             style={styles.MessageInput}
                             multiline={true}
                             numberOfLines={'auto'}
-                            placeholder={"Commit from " + props.user.name}
+                            placeholder={commitMessagePlaceholder}
                             onChangeText={(text) => {updateCommitMessage(text)}}
                         ></TextInput>
                     </View>

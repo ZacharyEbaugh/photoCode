@@ -39,10 +39,10 @@ app.use((req, res, next) => {
 const https = require('https');
 const fs = require('fs');
 
-const credentials = {
-  key: fs.readFileSync('generated-private-key.pem'),
-  cert: fs.readFileSync('fbc4b2fe0afb3741.pem')
-};
+// const credentials = {
+//   key: fs.readFileSync('generated-private-key.pem'),
+//   cert: fs.readFileSync('fbc4b2fe0afb3741.pem')
+// };
 
 // Connect to MongoDB Cluster
 const mongodbPS = process.env.MONGO_PASSWORD;
@@ -916,7 +916,7 @@ app.post('/deleteFolder', function (req, res) {
 async function editFile(req, callback) {
   const file_id = req.body.file_id;
   const file_contents = req.body.file_contents;
-  console.log(file_contents);
+  const file_name = req.body.file_name;
 
   bucket.find({ _id: ObjectId(file_id) }).next(
     function (err, file) {
@@ -931,7 +931,6 @@ async function editFile(req, callback) {
           }
           else {
             const uploadStream = bucket.openUploadStreamWithId(file._id, file.filename, {
-              // contentType: encoding,
               contentType: file.contentType,
               metadata: {
                 parent_folder: file.metadata.parent_folder
@@ -941,6 +940,9 @@ async function editFile(req, callback) {
             // uploadStream.write(fileContents);
             // uploadStream.end();
     
+            // Update filename
+            uploadStream.filename = file_name;
+
             // Update the file
             uploadStream.end(Buffer.from(file_contents, 'utf8'), (err) => {
               if (err) {
@@ -1343,9 +1345,9 @@ app.post('/createCommit', async function (req, res) {
 */
 
 // Start the app
-// app.listen(3001, () => console.log('API listening on 3001'));
+app.listen(3001, () => console.log('API listening on 3001'));
 // var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
+// var httpsServer = https.createServer(credentials, app);
 
-// httpServer.listen(8080);
-httpsServer.listen(8443, () => console.log('API listening on 8443'));
+// // httpServer.listen(8080);
+// httpsServer.listen(8443, () => console.log('API listening on 8443'));

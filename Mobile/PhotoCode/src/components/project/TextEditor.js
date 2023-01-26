@@ -25,14 +25,14 @@ var originalText = "";
 
 var selectedLanguage = '';
 
-function NewDocumentOrigin ({language}) {
+function NewDocumentOrigin ({language, originalText, setOriginalText, updatedText, setUpdatedText}) {
     const keyboard = useKeyboard();
     const insets = useSafeAreaInsets();
 
     const route = useRoute();
     const { initialText } = route.params;
 
-
+    console.warn(initialText);
     return (
         <SafeAreaView style={styles.codeEditorBox}>
             <CodeEditor
@@ -53,7 +53,10 @@ function NewDocumentOrigin ({language}) {
                 syntaxStyle={CodeEditorSyntaxStyles.vs2015}
                 showLineNumbers
                 initialValue={initialText}
-                onChange={(text) => {updateText(text)}}
+                onChange={(text) => {
+                    updateText(text);
+                    setUpdatedText(text);
+                }}
             />
         </SafeAreaView>
     );
@@ -64,6 +67,7 @@ function updateText(text) {
 }
 
 function getText() {
+    console.warn(updatedText);
     return updatedText;
 }
 
@@ -71,7 +75,7 @@ function getOriginCode() {
     return originalText;
 }
 
-function ProjectFileOrigin({language}) {
+function ProjectFileOrigin({language, setOriginalText, setUpdatedText}) {
     const keyboard = useKeyboard();
     const insets = useSafeAreaInsets();
 
@@ -88,6 +92,7 @@ function ProjectFileOrigin({language}) {
         const buffer = Buffer.from(response.data.fileContents.data, 'hex');
         await setCode(buffer.toString());
         originalText = buffer.toString();
+        setOriginalText(buffer.toString());
         setLoading(false);
     }
     getFileContents();
@@ -113,13 +118,16 @@ function ProjectFileOrigin({language}) {
                 syntaxStyle={CodeEditorSyntaxStyles.vs2015}
                 showLineNumbers
                 initialValue={code}
-                onChange={(text) => {updateText(text)}}
+                onChange={(text) => {
+                    updateText(text);
+                    setUpdatedText(text);
+                }}
             />}
         </SafeAreaView>
     );
 }
 
-function BackButton({ screenName, fileName }) {
+function BackButton({ screenName, fileName, originalFileName }) {
     const navigation = useNavigation();
     const route = useRoute();
 
@@ -142,36 +150,53 @@ function BackButton({ screenName, fileName }) {
         }
     }
 
-    return (
-        <Pressable
-            onPress={() => Alert.alert(
-                "Leave without saving?",
-                "",
-                [
-                    {
-                        text: 'Save',
-                        onPress: () => {saveDocument()}
-                    },
-                    {
-                        text: 'Leave',
-                        onPress: () => navigation.navigate(screenName, { projectId, projectName })
-                    },
-                    {
-                        text: 'Cancel',
-                    },
-                ],
-            )
-            }
-        >
-            <Text style={styles.backText}>
-                {'< Back'}
-            </Text>
-        </Pressable>
+    if (originalText == updatedText && fileName == originalFileName && originalFileName != '')
+    {
+        return (
+            <Pressable
+                onPress={() => navigation.navigate(screenName, { projectId, projectName })}
+                >
+                <Text style={styles.backText}>
+                    {'< Back'}
+                </Text>
+            </Pressable>
+        )
+    }
 
-    );
+    else
+    {
+        return (
+            
+            <Pressable
+                onPress={() => Alert.alert(
+                    "Leave without saving?",
+                    "",
+                    [
+                        {
+                            text: 'Save',
+                            onPress: () => {saveDocument()}
+                        },
+                        {
+                            text: 'Leave',
+                            onPress: () => navigation.navigate(screenName, { projectId, projectName })
+                        },
+                        {
+                            text: 'Cancel',
+                        },
+                    ],
+                )
+                }
+            >
+                <Text style={styles.backText}>
+                    {'< Back'}
+                </Text>
+            </Pressable>
+
+        );
+    }
 }
 
-function SaveButton({ fileName }) {
+function SaveButton({ fileName, originalFileName }) {
     const navigation = useNavigation();
     const route = useRoute();
 
@@ -184,7 +209,7 @@ function SaveButton({ fileName }) {
             Alert.alert("Must Set a Filename");
         } else if (getText() == '') {
             Alert.alert("Must Add Text to File");
-        } else if (getText() == getOriginCode()) {
+        } else if (getText() == getOriginCode() && fileName == originalFileName) {
             Alert.alert("You haven't made any changes. Please make a change to save.");
         } else {
             navigation.navigate('SaveDoc', {
@@ -217,12 +242,18 @@ function TextEditor(props) {
 
     // Possible Origins: camera/new document (1), project file (2)
     const { editorOrigin, originFilename } = route.params;
-
     var [fileName, setFileName] = useState("");
+    const [originalFileName, setOriginalFileName] = useState("");
+
+    const [originalText, setOriginalText] = useState("");
+    const [updatedText, setUpdatedText] = useState("");
     
     useEffect(() => {
         if (originFilename != undefined)
-            setFileName(originFilename)
+        {
+            setFileName(originFilename);
+            setOriginalFileName(originFilename);
+        }
         else
             fileName = '';
     }, [])
@@ -232,7 +263,7 @@ function TextEditor(props) {
         <View style={styles.container}>
             <View style={styles.header}>
                 <View style={styles.backButton}>
-                    {editorOrigin == 1 ? <BackButton screenName={'HomeScreen'} fileName={fileName} /> : <BackButton screenName={'ProjectPage'} fileName={fileName} />}
+                    {editorOrigin == 1 ? <BackButton screenName={'HomeScreen'} fileName={fileName} originalFileName={originalFileName} /> : <BackButton screenName={'ProjectPage'} fileName={fileName} originalFileName={originalFileName}/>}
                 </View>
                 <View style={styles.titleAndLanguage}>
                     <View style={styles.title}>
@@ -275,11 +306,10 @@ function TextEditor(props) {
             </View>
 
             <View style={styles.main}>
-                {editorOrigin == 1 ? <NewDocumentOrigin language={selectedLanguage}/> : <ProjectFileOrigin language={selectedLanguage}/>}
+                {editorOrigin == 1 ? <NewDocumentOrigin language={selectedLanguage} setOriginalText={setOriginalText} setUpdatedText={setUpdatedText}/> : <ProjectFileOrigin language={selectedLanguage} setOriginalText={setOriginalText} setUpdatedText={setUpdatedText}/>}
               
                 <SaveButton fileName={fileName} user={props.user} user_id={props.user_id} />
              
-               
             </View>
         </View>
     );
