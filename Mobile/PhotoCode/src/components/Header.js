@@ -170,22 +170,24 @@ function Header(props) {
     return (
         <View style={[styles.header, {zIndex: 4}]}>
             <View style={[styles.topBar, {zIndex: 2}]}>
-                <Animated.View style={[ { left: sideBarXPos}, {top: (windowHeight/1.55)}, {zIndex: 2}]}>
-                    <SideBar onPress={this.logoutCloseSidebar} user={props.user} setUser={props.setUser} />
-                </Animated.View>
+                <View style={styles.topBarShift}>
+                    <Animated.View style={[ { left: sideBarXPos}, {top: (windowHeight/1.55)}, {zIndex: 2}]}>
+                        <SideBar onPress={this.logoutCloseSidebar} user={props.user} setUser={props.setUser} />
+                    </Animated.View>
 
-                <Pressable
-                    onPress={() => { sideBarController()}}
-                    style={[styles.hamburgerMenu, {zIndex: 3}]}
-                >
-                    <Animated.View style={[styles.menuLine, {top: this.topBar}, {zIndex: 10}, {transform: [{rotate: topSpin}]}]}/>
-                    <Animated.View style={[styles.menuLine, {top: this.bottomBar}, {zIndex: 10}, {transform: [{rotate: bottomSpin}]}]}/>
-                </Pressable>
+                    <Pressable
+                        onPress={() => { sideBarController()}}
+                        style={[styles.hamburgerMenu, {zIndex: 3}]}
+                    >
+                        <Animated.View style={[styles.menuLine, {top: this.topBar}, {zIndex: 10}, {transform: [{rotate: topSpin}]}]}/>
+                        <Animated.View style={[styles.menuLine, {top: this.bottomBar}, {zIndex: 10}, {transform: [{rotate: bottomSpin}]}]}/>
+                    </Pressable>
 
-                <Text style={[styles.title, {zIndex: 1}]}>
-                    {'PhotoCode'}
-                </Text>
-                <GoToSettings picture={props.user.picture} />
+                    <Text style={[styles.title, {zIndex: 1}]}>
+                        {'PhotoCode'}
+                    </Text>
+                    <GoToSettings picture={props.user.picture} />
+                </View>
             </View>
 
             <View style={[styles.searchArea]}>
@@ -198,8 +200,6 @@ function Header(props) {
                     placeholderTextColor='darkgrey' 
                 />
             </View>
-
-            
         </View>
     );
 }
@@ -212,18 +212,21 @@ const styles = StyleSheet.create({
         paddingTop: windowHeight*0.05,
     },
     topBar: {
-        // position: 'absolute',
-        marginLeft: -windowWidth * 0.7,
-        marginBottom: windowHeight*0.015,
-        height: windowHeight*0.07,
+        // width 390 for regular, 428 for max
         // borderWidth: 2,
-        display: 'flex',
-        // justifyContent: 'space-around',
-        flexDirection: 'row',
-        // width: windowWidth,
-        // paddingBottom: windowHeight*0.025,
+        position: 'absolute',
+        top: windowHeight*0.05,
         alignItems: 'center',
+        width: windowWidth,
+        height:  windowWidth <= 390 ? 60 : 70,
+        justifyContent: 'center',
     },
+    topBarShift: {
+        flexDirection: 'row', 
+        justifyContent: 'center',
+        alignItems: 'center',
+        left: -windowWidth*0.2,
+    },  
     menuLine: {
         backgroundColor: 'white',
         marginBottom: 5,
@@ -232,15 +235,14 @@ const styles = StyleSheet.create({
         borderRadius: 2,
     },
     title: {
-        fontSize: 40,
+        fontSize: windowWidth <= 390 ? 40 : 50,
         color: 'white',
         fontFamily: 'JetBrainsMono-Medium',
-        marginHorizontal: windowWidth*0.09,
-        // textAlign: 'center',
+        // width 390 for regular, 428 for max
+        marginHorizontal: windowWidth <= 390 ? windowWidth*0.09 : windowWidth*0.1,
     },
     hamburgerMenu: {
-        // alignItems: 'center',
-        // justifyContent: 'center',
+
     },
     profilePicture: {
         width: 40,
@@ -254,6 +256,8 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         height: windowHeight*0.05,
         width: windowWidth * 0.85,
+        // title font size + 25
+        marginTop: windowWidth <= 390 ? 65 : 75,
     },
     search: {
         width: windowWidth * 0.75,

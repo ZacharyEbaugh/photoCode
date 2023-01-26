@@ -165,7 +165,8 @@ const styles = StyleSheet.create({
     sidebar: {
         backgroundColor: '#0066FF',
         height: windowHeight*1.5,
-        width: windowWidth * 0.7,
+        width: windowWidth <= 390 ? windowWidth * 0.7 : windowWidth*0.72,
+        paddingLeft: windowWidth <= 390 ? 0 : 10,
         // flex: 1,
         alignItems: 'flex-start',
         justifyContent: 'center',
