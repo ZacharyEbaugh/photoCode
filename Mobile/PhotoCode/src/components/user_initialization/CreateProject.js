@@ -10,6 +10,7 @@ const CreateProject = (props) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [projectName, setProjectName] = useState("");
     const [projectDescription, setProjectDescription] = useState("");
+    const [responseMessage, setResponseMessage] = useState("");
 
     const [pan] = useState(new Animated.Value(0));
     const [panResponder] = useState(
@@ -47,7 +48,10 @@ const CreateProject = (props) => {
     };
 
     const handleProjectCreation = () => {
-        console.log(props.user_id);
+        if (projectName === "" || projectDescription === "") {
+            setResponseMessage("Please fill out all fields");
+            return;
+        }
         axios.post('https://photocode.app:8443/createProject', {
             name: projectName,
             description: projectDescription,
@@ -61,10 +65,10 @@ const CreateProject = (props) => {
                 parent_id: project_id,
             })
             .then(() => {
-                console.log("Created Project");
                 setProjectName("");
                 setProjectDescription("");
                 handleModalClose();
+                props.setIsLoading(true);
             })
             .catch((error) => {
                 console.log(error);
@@ -135,6 +139,7 @@ const CreateProject = (props) => {
                                 <TouchableOpacity style={styles.createProject} onPress={() => handleProjectCreation()}>
                                     <Text style={styles.createProjectText}>Create Project</Text>
                                 </TouchableOpacity>
+                                {responseMessage !== "" ? <Text style={styles.responseMessage}>{responseMessage}</Text> : null}
                             </View>
                             <TouchableOpacity style={styles.exitModal} onPress={handleModalClose}>
                                 <Text style={styles.exitModalText}>x</Text>
@@ -264,6 +269,13 @@ const styles = StyleSheet.create({
         fontFamily: 'JetBrainsMono-Medium',
         fontSize: 24,
         color: 'white',
+    },
+
+    responseMessage: {
+        textAlign: 'center',
+        fontFamily: 'JetBrainsMono-Medium',
+        fontSize: 15,
+        color: 'red',
     },
 });
 

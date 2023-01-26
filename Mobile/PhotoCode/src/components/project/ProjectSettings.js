@@ -18,6 +18,7 @@ import SearchCollaborators from './SearchCollaborators';
 function ProjectSettings(props) {
     const [loading, setLoading] = useState(true);
 
+    const [user_id, setUser_Id] = useState('');
     const [project_id, setProject_Id] = useState('');
 
     const [projectNamePlaceholder, setProjectNamePlaceholder] = useState('');
@@ -46,6 +47,8 @@ function ProjectSettings(props) {
         };
         async function getProject(project_id) {
             const response = await axios.get(`https://photocode.app:8443/getProject?project_id=${project_id}`)
+            const user_id = await AsyncStorage.getItem('user_id');
+            setUser_Id(user_id);
             setProjectNamePlaceholder(response.data.name);
             setProjectDescriptionPlaceholder(response.data.description);
             setProjectDescription('');
@@ -71,7 +74,7 @@ function ProjectSettings(props) {
                         setProjectDescriptionPlaceholder(projectDescription);
                     })
                     .catch((error) => {
-                        console.warn(error);
+                        console.warn("Update Project: " + error);
                     }
                 )
             }}>
@@ -144,12 +147,12 @@ function ProjectSettings(props) {
         Promise.resolve(update);
         setProjectName('');
         setProjectDescription('');
-        console.warn(projectDescriptionPlaceholder);
     }
 
     function DeleteProject() {
         const navigation = useNavigation();
-        if (props.user_id === projectOwner)
+
+        if (user_id === projectOwner)
             return (
                 <View style={styles.optionWrapper}>
                     <Text style={styles.dangerHeader}>
@@ -171,10 +174,11 @@ function ProjectSettings(props) {
                                             })
                                             .then((response) => {
                                                 console.log(response);
+                                                props.setIsLoading(true);
                                                 navigation.navigate('HomeScreen');
                                             })
                                             .catch((error) => {
-                                                console.log(error);
+                                                console.log("Delete project: " + error);
                                             });
                                         }
                                     },

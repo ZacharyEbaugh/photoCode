@@ -52,7 +52,6 @@ const SearchCollaborators = ({projectName}) => {
         )
     }
     useEffect(() => {
-        console.warn(searchUser);
         async function handleSearch() {
             // Make axios request to /searchUsers using the searchUser string as the body
             // Set the response to a state variable
@@ -91,7 +90,6 @@ const SearchCollaborators = ({projectName}) => {
             }
         };
         async function getCollaborators(projectId) {
-            console.warn(projectId);
             // Grab the collaborators already part of the project
             const projectMembers = await axios.get('https://photocode.app:8443/getCollaborators', {
                 params: {
@@ -106,7 +104,6 @@ const SearchCollaborators = ({projectName}) => {
         // Function to handle adding a collaborator to a project
     const handleInviteCollaborator = async(user) => {
         // Update project information;
-        console.warn(user);
         await axios.post(`https://photocode.app:8443/sendProjectInvite`, {
             email: user.email,
             project_id: project_id,
