@@ -7,7 +7,8 @@ import {
     Image, 
     Dimensions, 
     StyleSheet, 
-    Easing } from 'react-native';
+    Easing, 
+    ScrollView} from 'react-native';
 import axios from 'axios';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -53,7 +54,7 @@ function SourceControl(props) {
                         </Text>
                     </View>
             </View>
-            <View style={styles.main}>
+            <ScrollView style={styles.main}>
                 {commits.map((commit, i) => (
                     <CommitList
                         key={i}
@@ -64,7 +65,7 @@ function SourceControl(props) {
                         CommitMessage={commit.message}
                     />
                 ))}
-            </View>
+            </ScrollView>
         </View>
     );
 };
@@ -83,12 +84,11 @@ const styles = StyleSheet.create({
     },
     header: {
         backgroundColor: '#0066FF',
-        flex: 1.5,
         justifyContent: 'space-evenly',
+        height: windowHeight*0.2,
     },
     main: {
         backgroundColor: '#FFFFFF',
-        flex: 5,
     },
     title: {
         fontSize: 35,

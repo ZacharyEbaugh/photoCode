@@ -20,6 +20,7 @@ import {
 
 import { Shadow } from 'react-native-shadow-2';
 import { useNavigation } from '@react-navigation/native';
+import { BlurView } from '@react-native-community/blur';
 
 import Header from '../Header';
 import SideBar from '../sidebar/SideBar';
@@ -171,7 +172,6 @@ function HomeScreen(props) {
                             {projectsSet == true ?
                                 projects.map((project, i) => (
                                     <GoToProject
-                                        style={styles.project}
                                         key={i}
                                         projectId={project._id}
                                         imageSource={require('./../../assets/images/siteIcon.png')}
@@ -193,7 +193,10 @@ function HomeScreen(props) {
                                 <ToNewDoc/>
                             </View>
                         </Shadow>
-                        <Animated.View style={[{zIndex: 2}, { top: this.cameraOptionsYPos}, {left: windowWidth/2-(windowWidth * 0.6)/2}]}>
+
+                        <BlurView style={[styles.blur, cameraOptionsActive && {opacity: 1}]} blurType='light' blurAmount={10}/>
+
+                        <Animated.View style={[{zIndex: 5}, { top: this.cameraOptionsYPos}, {left: windowWidth/2-(windowWidth * 0.6)/2}]}>
                             <CameraOptions onPress={this.closeCameraOptions}/>
                         </Animated.View>
                     </View>
@@ -244,9 +247,6 @@ const styles = StyleSheet.create({
         // minHeight: m,
         // flex: 1,
         minHeight: windowHeight*0.637,
-    },
-    project: {
-        // flex: 1,
     },
     target: {
         fontSize: 40,
@@ -311,10 +311,18 @@ const styles = StyleSheet.create({
         height: windowHeight * 0.09,
         width: windowHeight * 0.09,
     },
+    blur: {
+        zIndex: 5,
+        position: "absolute",
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        opacity: 0
+    },
     padding: {
         height: windowHeight * 0.2,
     }
-
 });
 
 export default HomeScreen;

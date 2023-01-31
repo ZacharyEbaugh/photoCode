@@ -20,6 +20,7 @@ export function GoToProject({ projectId, imageSource, projectName, projectDescri
     const navigation = useNavigation();
     return (
         <Pressable
+            style={styles.projectBlockWrapper}
             onPress={() => {
                 AsyncStorage.setItem('project_id', projectId);
                 const collaboratorsList = JSON.stringify(projectCollaborators);

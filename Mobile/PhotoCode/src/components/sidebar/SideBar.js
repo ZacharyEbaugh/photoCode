@@ -94,69 +94,69 @@ class SideBar extends React.Component {
 
     render () {
         return (
-                <Shadow distance={20}>
-                    <View style={styles.sidebar}>
-                        <View style={styles.userDisplayWrapper}>
-                            <Text style={styles.userDisplay}>
-                                {'Hi,\n' + this.props.user.name}
+            <Shadow distance={20}>
+                <View style={styles.sidebar}>
+                    <View style={styles.userDisplayWrapper}>
+                        <Text style={styles.userDisplay}>
+                            {'Hi,\n' + this.props.user.name}
+                        </Text>
+                    </View>
+                    <View style={styles.optionsWrapper}>
+                        <GoToAbout/>
+                        <GoToContact/>
+                        <GoToSettings />
+                        <Pressable
+                            onPressOut={() => {
+                                this.setState({help: !this.state.help})
+                            }}
+                            onPressIn={() => {
+                                this.setState({help: !this.state.help})
+                            }}
+                            style={[styles.button, this.state.help && styles.updateBackground]}
+                        >
+                            <Text style={styles.options}>
+                                {'Help'}
                             </Text>
+                        </Pressable>
+                        <GoToLogout setUser={this.props.setUser} closeSideBar={this.props.onPress}/>
+                    </View>
+                    <View style={styles.creatorInfoWrapper}>
+                        <View style={styles.creatorInfo}>
+                            <Text style={styles.creatorName}>
+                                {'zle'}
+                            </Text>
+                            <OpenURLButton url={zacGitHub} children={<Image
+                                style={styles.creatorLogos}
+                                source={require('./../../assets/images/GitHub-Mark.png')}
+                                />}>
+                            </OpenURLButton>
+                            <OpenURLButton url={zacLinkedIn} children={<Image
+                                style={styles.creatorLogos}
+                                source={require('./../../assets/images/linkedInLogo-Black.png')}
+                                />}>
+                            </OpenURLButton>
                         </View>
-                        <View style={styles.optionsWrapper}>
-                            <GoToAbout/>
-                            <GoToContact/>
-                            <GoToSettings />
-                            <Pressable
-                                onPressOut={() => {
-                                    this.setState({help: !this.state.help})
-                                }}
-                                onPressIn={() => {
-                                    this.setState({help: !this.state.help})
-                                }}
-                                style={[styles.button, this.state.help && styles.updateBackground]}
-                            >
-                                <Text style={styles.options}>
-                                    {'Help'}
-                                </Text>
-                            </Pressable>
-                            <GoToLogout setUser={this.props.setUser}/>
-                        </View>
-                        <View style={styles.creatorInfoWrapper}>
-                            <View style={styles.creatorInfo}>
-                                <Text style={styles.creatorName}>
-                                    {'zle'}
-                                </Text>
-                                <OpenURLButton url={zacGitHub} children={<Image
-                                    style={styles.creatorLogos}
-                                    source={require('./../../assets/images/GitHub-Mark.png')}
-                                    />}>
-                                </OpenURLButton>
-                                <OpenURLButton url={zacLinkedIn} children={<Image
-                                    style={styles.creatorLogos}
-                                    source={require('./../../assets/images/linkedInLogo-Black.png')}
-                                    />}>
-                                </OpenURLButton>
-                            </View>
-                            <View style={styles.creatorInfo}>
-                                <Text style={styles.creatorName}>
-                                    {'bss'}
-                                </Text>
-                                <OpenURLButton url={brandonGitHub} children={<Image
-                                    style={styles.creatorLogos}
-                                    source={require('./../../assets/images/GitHub-Mark.png')}
-                                    />}>
-                                </OpenURLButton>
-                                <OpenURLButton url={brandonLinkedIn} children={<Image
-                                    style={styles.creatorLogos}
-                                    source={require('./../../assets/images/linkedInLogo-Black.png')}
-                                    />}>
-                                </OpenURLButton>
-                            </View>
-                        </View>
-                        <View style={styles.logoContainer}>
-                            <Image style={styles.logo} source={require('../../assets/images/photoCode-logo.png')} />
+                        <View style={styles.creatorInfo}>
+                            <Text style={styles.creatorName}>
+                                {'bss'}
+                            </Text>
+                            <OpenURLButton url={brandonGitHub} children={<Image
+                                style={styles.creatorLogos}
+                                source={require('./../../assets/images/GitHub-Mark.png')}
+                                />}>
+                            </OpenURLButton>
+                            <OpenURLButton url={brandonLinkedIn} children={<Image
+                                style={styles.creatorLogos}
+                                source={require('./../../assets/images/linkedInLogo-Black.png')}
+                                />}>
+                            </OpenURLButton>
                         </View>
                     </View>
-                </Shadow>
+                    <View style={styles.logoContainer}>
+                        <Image style={styles.logo} source={require('../../assets/images/photoCode-logo.png')} />
+                    </View>
+                </View>
+            </Shadow>
         );
     }
 }
@@ -165,7 +165,8 @@ const styles = StyleSheet.create({
     sidebar: {
         backgroundColor: '#0066FF',
         height: windowHeight*1.5,
-        width: windowWidth * 0.7,
+        width: windowWidth <= 390 ? windowWidth * 0.7 : windowWidth*0.72,
+        paddingLeft: windowWidth <= 390 ? 0 : 10,
         // flex: 1,
         alignItems: 'flex-start',
         justifyContent: 'center',

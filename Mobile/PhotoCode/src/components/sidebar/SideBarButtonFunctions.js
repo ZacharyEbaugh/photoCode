@@ -103,6 +103,7 @@ const showAlert = () => {
 export function GoToLogout(props) {
     const { clearSession } = useAuth0();
     const [isPressed, setIsPressed] = useState(false);
+    console.log(props.closeSideBar)
 
     const onLogout = async () => {
         console.log("Logging out...");
@@ -122,8 +123,9 @@ export function GoToLogout(props) {
 
     return (
         <Pressable
-            onPress={() => {
-                onLogout();
+            onPress={async () => {
+                await onLogout();
+                props.closeSideBar();
             }}
            
             style={[styles.button, isPressed && styles.updateBackground]}
