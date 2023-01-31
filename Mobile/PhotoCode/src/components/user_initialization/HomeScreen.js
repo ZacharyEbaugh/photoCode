@@ -63,6 +63,8 @@ function HomeScreen(props) {
     async function registerUser() {
         if (props.user.sub.split('|')[0] === 'auth0')
             props.user.sub = 'Username-Password-Authentication';
+        else if (props.user.sub.split('|')[0] === 'google-oauth2')
+            props.user.sub = 'google';
         axios.post('https://photocode.app:8443/register', {
             email: props.user.email,
             username: props.user.name,

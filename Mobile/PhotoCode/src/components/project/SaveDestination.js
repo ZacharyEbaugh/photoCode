@@ -24,14 +24,24 @@ function SaveDestination(props) {
     async function getAllProjects() {
         const response = await axios.get(baseUrl + `/getAllProjects?user_id=${props.user_id}`);
         setProjects(response.data);
+        props.setNumProjects(response.data.length);
         console.warn(response.data);
         setProjectsSet(true);
+    }
+
+    async function getAllFolders(project_id) {
+        const folders = await axios.get(baseUrl + `/getFolders?project_id=${project_id}`)
+        .then(async(response) => {
+            const rootFolder = response.data._id;
+            const folders = await axios.get(baseUrl + `/getFolders?project_id=${project_id}`)
+        })
+        console.warn(response.data);
     }
 
     function ProjectObject(project) {
         return (
             <TouchableOpacity style={style.projectObjectContainer}>
-                <Text>{project.project.name}</Text>
+                <Text style={style.projectName}>{project.project.name}</Text>
             </TouchableOpacity>
         );
     }
@@ -46,26 +56,11 @@ function SaveDestination(props) {
 
     return (
         <View style={style.saveDestinationContainer}>
-            <Text style={style.currentPath}>Choose the project</Text>
-            <ScrollView 
-                contentContainerStyle={
-                    {
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        alignContent: 'center',
-                        height: '100%',
-                        width: '100%',
-                    }
-                }>
-                <View style={style.scrollPadding}/>
+            <View style={style.projects}>
                 {projects.map((project, i) => (
                     <ProjectObject project={project} key={i}/>
                 ))}
-                <View style={style.scrollPadding}/>
-
-            </ScrollView>
+            </View>
         </View>
     );
 }
@@ -73,12 +68,18 @@ function SaveDestination(props) {
 const style = StyleSheet.create({
     saveDestinationContainer: {
         borderRadius: 10,
-        height: windowHeight * 0.17,
-        width: windowWidth * 0.9,
         alignSelf: 'center',
         display: 'flex',
-        alignContent: 'center',
-       
+        alignItems: 'center',
+        justifyContent: 'center',
+        // backgroundColor: 'black',
+    },
+
+    projects: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
     },
 
     currentPath: {
@@ -87,18 +88,20 @@ const style = StyleSheet.create({
         fontFamily: 'JetBrainsMono-light',
     },
 
-    scrollPadding: {
-        height: 70,
-        width: windowWidth * 0.9,
-    },
-
     projectObjectContainer: {
         height: 50,
         width: windowWidth * 0.8,
         borderWidth: 2,
         borderRadius: 10,
         margin: 5,
+        display: 'flex',
+        justifyContent: 'center',
         alignItems: 'center',
+    },
+
+    projectName: {
+        fontSize: 20,
+        fontFamily: 'JetBrainsMono-light',
     },
 });
 

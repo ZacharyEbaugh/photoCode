@@ -20,10 +20,7 @@ import ProjectSettings from './project/ProjectSettings';
 import ProjectPage from './project/ProjectPage';
 import CameraView from './CameraView';
 
-
 const Stack = createNativeStackNavigator();
-
-import { Text, View } from 'react-native';
 
 const App = () => {
 

@@ -43,6 +43,8 @@ function SaveDoc(props) {
     const [commitTitlePlaceholder, setCommitTitlePlaceholder] = useState();
     const [commitMessagePlaceholder, setCommitMessagePlaceholder] = useState("Commit from " + props.user.name);
 
+    const [numProjects, setNumProjects] = useState(0);
+
     const {filename, fileId, textToSave, projectId} = route.params;
 
     useEffect(() => {
@@ -100,7 +102,6 @@ function SaveDoc(props) {
 
     return (
         <View style={styles.container}>
-            {/* <ScrollView> */}
             <View style={styles.header}>
                 <View style={styles.backButton}>
                     <GoToButton screenName={HomeScreen} />
@@ -110,13 +111,22 @@ function SaveDoc(props) {
                     <Text style={styles.subTitle}>changes made</Text>
                 </View>
             </View>
-
-            <View style={styles.main}>
+            <ScrollView 
+                style={styles.main}
+                contentContainerStyle={
+                    {
+                        flex: 1,
+                        height: windowHeight * 1,
+                        paddingBottom: windowHeight + windowHeight * 0.05 * numProjects,
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }
+                }>
                 <View style={styles.inputBox}>
-                    <View style={styles.destinationHeader}>
-                        {/* <Text style={styles.subjectTitleDest}>Commit Title</Text> */}
-                        {/* <View style={styles.underLineDest}></View> */}
-                        <SaveDestination user_id={props.user_id}/>
+                    <View style={styles.titleHeader}>
+                        <Text style={styles.subjectTitle}>Save Destination</Text>
+                        <View style={styles.underLine}></View>
+                        <SaveDestination setNumProjects={setNumProjects} user_id={props.user_id}/>
                     </View>
                     <View style={styles.titleHeader}>
                         <Text style={styles.subjectTitle}>Commit Title</Text>
@@ -144,8 +154,8 @@ function SaveDoc(props) {
                         <UpdateButton isDisabled={disabled} screenName={'ProjectPage'} />
                     } 
                 </View>
-            </View>
-            {/* </ScrollView> */}
+            </ScrollView>
+            {/* </View> */}
         </View>
     );
 }
@@ -206,8 +216,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        // justifyContent: 'space-between',
+        // alignItems: 'center',
         // flex: 5,
     },
 
@@ -311,6 +321,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         zIndex: 9999,
         elevation: 9999,
+        marginBottom: 2000,
     },
 
     SendText: {
