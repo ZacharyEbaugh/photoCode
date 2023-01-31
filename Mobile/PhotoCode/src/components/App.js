@@ -16,6 +16,7 @@ import TextEditor from './project/TextEditor';
 import SaveDoc from './project/SaveDoc';
 import SourceControl from './project/SourceControl';
 import ProjectSettings from './project/ProjectSettings';
+import CreateProject from './user_initialization/CreateProject';
 
 import ProjectPage from './project/ProjectPage';
 import CameraView from './CameraView';
@@ -29,6 +30,7 @@ const App = () => {
 
     const [user, setUser] = useState(null);
     const [user_id, setUser_Id] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     
     useEffect(() => {
         console.log(user);
@@ -58,7 +60,7 @@ const App = () => {
                     <Stack.Navigator screenOptions={{ headerShown: false}}>
                         <Stack.Screen
                             name="HomeScreen"
-                            component={() => <HomeScreen user={user} setUser={setUser} user_id={user_id} setUser_Id={setUser_Id}/>}
+                            component={() => <HomeScreen user={user} setUser={setUser} user_id={user_id} setUser_Id={setUser_Id} isLoading={isLoading} setIsLoading={setIsLoading}/>}
                             options={{ title: 'My Home'}}
                         />
                         <Stack.Screen
@@ -81,7 +83,11 @@ const App = () => {
                         />
                         <Stack.Screen
                             name="ProjectSettings"
-                            component={() => <ProjectSettings user={user} user_id={user_id}/> }
+                            component={() => <ProjectSettings user={user} user_id={user_id} isLoading={isLoading} setIsLoading={setIsLoading}/> }
+                        />
+                        <Stack.Screen
+                            name="CreateProject"
+                            component={() => <CreateProject user={user} user_id={user_id} isLoading={isLoading} setIsLoading={setIsLoading}/>}
                         />
                         <Stack.Screen
                             name="SourceControl"

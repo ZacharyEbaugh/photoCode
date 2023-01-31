@@ -22,7 +22,6 @@ export function GoToProject({ projectId, imageSource, projectName, projectDescri
         <Pressable
             style={styles.projectBlockWrapper}
             onPress={() => {
-                console.warn(projectCollaborators);
                 AsyncStorage.setItem('project_id', projectId);
                 const collaboratorsList = JSON.stringify(projectCollaborators);
                 AsyncStorage.setItem('collaborators', collaboratorsList);

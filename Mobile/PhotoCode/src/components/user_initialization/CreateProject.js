@@ -6,14 +6,12 @@ import AsyncStorage from '@react-native-community/async-storage';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const CreateProject = () => {
+const CreateProject = (props) => {
     const [modalVisible, setModalVisible] = useState(false);
-    const [projectMembers, setProjectMembers] = useState([]);
-    const [collaboratorsList, setCollaboratorsList] = useState([]);
-    const [project_id, setProject_id] = useState('');
-    const [searchUser, setSearchUser] = useState('');
-    const [responseMessage, setResponseMessage] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+    const [projectName, setProjectName] = useState("");
+    const [projectDescription, setProjectDescription] = useState("");
+    const [responseMessage, setResponseMessage] = useState("");
+
     const [pan] = useState(new Animated.Value(0));
     const [panResponder] = useState(
         PanResponder.create({
@@ -38,9 +36,48 @@ const CreateProject = () => {
 
     const handleModalClose = () => {
         setModalVisible(false);
-        setCollaboratorsList([]);
         pan.setValue(0);
     };
+
+    const handleProjectNameChange = (text) => {
+        setProjectName(text);
+    };
+
+    const handleProjectDescriptionChange = (text) => {
+        setProjectDescription(text);
+    };
+
+    const handleProjectCreation = () => {
+        if (projectName === "" || projectDescription === "") {
+            setResponseMessage("Please fill out all fields");
+            return;
+        }
+        axios.post('https://photocode.app:8443/createProject', {
+            name: projectName,
+            description: projectDescription,
+            user: props.user_id,
+        })
+        .then((response) => {
+            const project_id = response.data.project_id;
+            // Create Folder that will act as the root folder for the project with a parent id of the project id
+            axios.post('https://photocode.app:8443/createFolder', {
+                name: projectName,
+                parent_id: project_id,
+            })
+            .then(() => {
+                setProjectName("");
+                setProjectDescription("");
+                handleModalClose();
+                props.setIsLoading(true);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
 
     function CreateProjectButton() {
         return (
@@ -52,7 +89,7 @@ const CreateProject = () => {
 
     return (
         <View style={styles.SearchCollaboratorsContainer}>
-            <CreateProjectButton />
+            <CreateProjectButton/>
 
             <Modal
                 animationType="slide"
@@ -76,18 +113,34 @@ const CreateProject = () => {
                     {...panResponder.panHandlers}
                 >
                         <View style={styles.modalContent}>
-                            <View style={styles.searchArea}>
-                                <Pressable onPress={() => {}} >
-                                    <Image style={styles.searchImage} source={require('./../../assets/images/search.png')} />
-                                </Pressable>
+                            <Image style={styles.modalClose} source={require('../../assets/images/siteIcon.png')} />
+                            <View style={styles.section}>
                                 <TextInput
-                                    style={styles.search}
-                                    placeholder='Search Collaborators'
-                                    placeholderTextColor='#5A5A5A' 
-                                    onChangeText={(text) => setSearchUser(text)}
+                                    style={styles.newProjectName}
+                                    placeholder={"Project Name"}
+                                    placeholderTextColor={'grey'}
+                                    value={projectName}
+                                    onChangeText={(text) => setProjectName(text)}
                                 />
                             </View>
-                           
+                            <View style={styles.section}>
+                                <TextInput
+                                    editable
+                                    style={styles.newProjectDescription}
+                                    placeholder={"Project Description"}
+                                    placeholderTextColor={'grey'}
+                                    multiline={true}
+                                    numberOfLines={4}
+                                    value={projectDescription}
+                                    onChangeText={(text) => setProjectDescription(text)}
+                                />
+                            </View>
+                            <View style={styles.section}>
+                                <TouchableOpacity style={styles.createProject} onPress={() => handleProjectCreation()}>
+                                    <Text style={styles.createProjectText}>Create Project</Text>
+                                </TouchableOpacity>
+                                {responseMessage !== "" ? <Text style={styles.responseMessage}>{responseMessage}</Text> : null}
+                            </View>
                             <TouchableOpacity style={styles.exitModal} onPress={handleModalClose}>
                                 <Text style={styles.exitModalText}>x</Text>
                             </TouchableOpacity>
@@ -107,16 +160,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     ModalContainer: {
+        alignSelf: 'center',
         // flex: 1,
         display: "flex",
-        marginTop: "15%",
-        height: "95%",
-        width: "100%",
+        marginTop: "35%",
+        height: "50%",
+        width: "90%",
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
         borderColor: 'black',
         borderRadius: 30,
+        borderWidth: 1,
+        shadowColor: "#000",
+        
     },
     modalContent: {
         height: "100%",
@@ -157,107 +214,8 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: 'white',
     },
-     searchArea: {
-        flexDirection: 'row',
-        backgroundColor: '#D9D9D9',
-        alignItems: 'center',
-        borderRadius: 10,
-        width: windowWidth * 0.9,
-        paddingVertical: 5,
-        alignSelf: 'center',
-        position: 'absolute',
-        top: windowHeight * 0.05,
-    },
-    search: {
-        width: windowWidth * 0.75,
-        height: windowHeight * 0.05,
-        fontSize: 23,
-        textAlign: 'left',
-        paddingLeft: 10,
-        fontFamily: 'JetBrainsMono-Light',
-        color: 'black',
-
-    },
-    searchImage: {
-        width: 28,
-        height: 27,
-        marginLeft: 10,
-    },
-    collaboratorsList: {
-        marginTop: windowHeight * 0.15,
-    },
-    collaborator: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: windowWidth * 0.9,
-        borderRadius: 20,
-        paddingVertical: 5,
-        alignSelf: 'center',
-        borderWidth: 2,
-        borderColor: 'lightgrey',
-        marginVertical: 10,
-    },    
-    collaboratorInfo: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    collaboratorNameConnection: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: windowWidth * 0.6,
-    },
-    collaboratorText: {
-        textAlign: 'center',
-        fontFamily: 'JetBrainsMono-Medium',
-        fontSize: 24,
-    },
-    connectionText: {
-        textAlign: 'center',
-        fontFamily: 'JetBrainsMono-Light',
-        fontSize: 15,
-    },
-    profilePicture: {
-        width: 90,
-        height: 90,
-        margin: 10,
-        borderRadius: 1000,
-        // marginLeft: 10,
-    },
-    addIndividualCollaborator: {
-        backgroundColor: '#1AC137',
-        width: windowWidth * 0.8,
-        borderRadius: 1000,
-        padding: 5,
-        paddingHorizontal: 13,
-        marginVertical: 10,
-        paddingBottom: 7,
-
-    },
-    addIndividualCollaboratorDisabled: {
-        backgroundColor: '#74AD7E',
-        width: windowWidth * 0.8,
-        borderRadius: 1000,
-        padding: 5,
-        paddingHorizontal: 13,
-        marginVertical: 10,
-        paddingBottom: 7,
-    },
-    responseMessage: {
-        textAlign: 'center',
-        fontFamily: 'JetBrainsMono-Medium',
-        fontSize: 20,
-        color: 'green',
-    },
-    errorMessage: {
-        textAlign: 'center',
-        fontFamily: 'JetBrainsMono-Medium',
-        fontSize: 20,
-        color: 'red',
-    },
-        addProjectButton: {
+     
+    addProjectButton: {
         // position: 'absolute',
         // bottom: (windowHeight * 0.45),
         // right: (windowWidth - (windowWidth * 0.9)) * 0.5,
@@ -273,6 +231,51 @@ const styles = StyleSheet.create({
         fontSize: 40,
         fontFamily: 'JetBrainsMono-Regular',
         color: 'white',
+    },
+    newProjectName: {
+        width: windowWidth * 0.8,
+        height: 60,
+        backgroundColor: '#E9E9E9',
+        borderRadius: 10,
+        // borderWidth: 3,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        marginVertical: 10,
+        paddingLeft: 10,
+        fontSize: 24,
+        fontFamily: 'JetBrainsMono-light',
+    },
+    newProjectDescription: {
+        width: windowWidth * 0.8,
+        height: 100,
+        backgroundColor: '#E9E9E9',
+        borderRadius: 10,
+        // borderWidth: 3,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        marginVertical: 10,
+        paddingLeft: 10,
+        fontSize: 24,
+        fontFamily: 'JetBrainsMono-light',
+    },
+    createProject: {
+        backgroundColor: '#00C853',
+        borderRadius: 10,
+        padding: 10,
+        marginVertical: 10,
+    },
+    createProjectText: {
+        textAlign: 'center',
+        fontFamily: 'JetBrainsMono-Medium',
+        fontSize: 24,
+        color: 'white',
+    },
+
+    responseMessage: {
+        textAlign: 'center',
+        fontFamily: 'JetBrainsMono-Medium',
+        fontSize: 15,
+        color: 'red',
     },
 });
 

@@ -131,20 +131,13 @@ function ProjectPage(props) {
            root_folder_id = (res.data[0]._id != undefined) ? res.data[0]._id : null;
            res.data[0].name = 'root'
            setCurrentPath([...currentPath, res.data[0]])
-        //    console.warn(root_folder_id);
-        //    console.warn(root_folder[0].name)
            if (root_folder_id != null) {
             axios.get(baseUrl + `/getFolders?project_id=${root_folder_id}`).then( async res => {
-                // console.warn(res.data[0])
                 setCurrentFolders(res.data)
-                // console.warn(currentFolders)
-                // await new Promise((resolve) => setTimeout(resolve, 1000));
                 animateLoadingProgress()
             })
            }
-            // axios.get(`https://photocode.app:8443/getFiles?project_id=${folder._id}`);
         });
-        // console.warn(response.data);
     }
 
     useEffect(() => {
@@ -307,7 +300,7 @@ function ProjectPage(props) {
 
                 <View style={styles.buttonWrapper}>
                     <GoToSourceControl/>
-                    <GoToProjectSettings/>
+                    <GoToProjectSettings setIsLoading={props.setIsLoading}/>
                 </View>
             </View>
         </View>

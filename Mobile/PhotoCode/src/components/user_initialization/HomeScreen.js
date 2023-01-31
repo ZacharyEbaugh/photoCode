@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import {AsyncStorage} from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {    
     View, 
@@ -15,7 +15,8 @@ import {
     StyleSheet, 
     Easing, 
     ScrollView,
-    Button} from 'react-native';
+    Button,
+    Alert} from 'react-native';
 
 import { Shadow } from 'react-native-shadow-2';
 import { useNavigation } from '@react-navigation/native';
@@ -58,7 +59,7 @@ function HomeScreen(props) {
         getUser();
         getUserInfo()
         getAllProjects();
-        setIsLoading(false);
+        props.setIsLoading(false);
     }, []);
 
     async function registerUser() {
@@ -74,8 +75,8 @@ function HomeScreen(props) {
         .then(response => {
             console.log(response.data);
         })
-            .catch(error => {
-            console.log(error);
+        .catch(error => {
+            console.log("Register: " + error);
         });
     }
 
@@ -85,11 +86,13 @@ function HomeScreen(props) {
             email: props.user.email,
             connection: props.user.sub.split('|')[0]
         })
-        .then(response => {
+        .then(async(response) => {
+            console.log(response.data._id);
             props.setUser_Id(response.data._id);
+            await AsyncStorage.setItem("user_id", response.data._id);
         })
-        .catch(() => {
-            console.log('Error');
+        .catch((e) => {
+            console.log('Get User: ' + e);
         });
     }
 
@@ -144,7 +147,9 @@ function HomeScreen(props) {
         animateCameraOptionsClose();
     };
     //#endregion
-        if (isLoading) {
+        if (props.isLoading) {
+            getAllProjects();
+            props.setIsLoading(false);
             return <View style={styles.container}>
                 <Text>Loading...</Text>
             </View>
@@ -176,10 +181,12 @@ function HomeScreen(props) {
                                         user={props.user}
                                         user_id={props.user_id}
                                     />
+                                    
                                 )) : null
                             }
+                            <View style={styles.padding}></View>
                         </ScrollView>
-                        <CreateProject/>
+                        <CreateProject user_id={props.user_id} setIsLoading={props.setIsLoading}/>
                         <Shadow viewStyle={{alignSelf: 'stretch'}}>
                             <View style={styles.actionView}>
                                 <GoToCamera onPress={this.openCameraOptions}/>
@@ -291,6 +298,8 @@ const styles = StyleSheet.create({
         marginVertical: 1,
     },
     actionView: {
+        height: windowHeight * 0.125,
+        // position: 'absolute',
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
@@ -311,6 +320,9 @@ const styles = StyleSheet.create({
         right: 0,
         opacity: 0
     },
+    padding: {
+        height: windowHeight * 0.2,
+    }
 });
 
 export default HomeScreen;
