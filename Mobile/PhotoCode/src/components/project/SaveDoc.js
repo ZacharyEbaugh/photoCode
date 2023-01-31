@@ -45,11 +45,15 @@ function SaveDoc(props) {
 
     const [numProjects, setNumProjects] = useState(0);
 
+    const [folderDestination, setFolderDestination] = useState('');
+
     const {filename, fileId, textToSave, projectId} = route.params;
 
     useEffect(() => {
         if (filename == '' || fileId == undefined || textToSave == undefined)
             setDisabled(true)
+        const fileId = route.params.fileId;
+        console.warn(fileId);
         setCommitTitlePlaceholder("Update " + filename)
     }, [])
 
@@ -78,13 +82,20 @@ function SaveDoc(props) {
                 navigation.navigate(screenName, { projectId, projectName })
             });
         } else {
+            // Create the new file Object and get the fileId
+            const file_id = await axios.post(baseUrl + `/uploadFile`, {
+                // file_name: filename,
+                // file_contents: code,
+                // project_id: projectId,
+            // Call updateFileContents again with the new fileId
             Alert.alert("Could not update file");
         }
     }
 
     function UpdateButton({ isDisabled, screenName }) {
         const { fileId, textToSave, editorOrigin, projectId, projectName } = route.params;
-    
+        // if (editorOrigin == 1)
+
         return (
             <Pressable style={styles.SendButton}
                 onPress={async () =>
@@ -126,7 +137,7 @@ function SaveDoc(props) {
                     <View style={styles.titleHeader}>
                         <Text style={styles.subjectTitle}>Save Destination</Text>
                         <View style={styles.underLine}></View>
-                        <SaveDestination setNumProjects={setNumProjects} user_id={props.user_id}/>
+                        <SaveDestination setFolderDestination={setFolderDestination} setNumProjects={setNumProjects} user_id={props.user_id}/>
                     </View>
                     <View style={styles.titleHeader}>
                         <Text style={styles.subjectTitle}>Commit Title</Text>
