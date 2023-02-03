@@ -63,7 +63,6 @@ function Header(props) {
 
     closeSidebar = () => {
         animateSideBarClose();
-        console.log('closing sidebar');
     };
 
     animateOpenTopBar = () => {

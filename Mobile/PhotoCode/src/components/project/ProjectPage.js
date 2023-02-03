@@ -103,6 +103,7 @@ function ProjectPage(props) {
     const [folderSet, setFolderSet] = useState(false)
     const [currentFiles, setCurrentFiles] = useState([])
     const [filesFound, setFilesFound] = useState(false)
+    const [commits, setCommits] = useState([])
 
     const [loading, setLoading] = useState(true)
 
@@ -140,6 +141,14 @@ function ProjectPage(props) {
         });
     }
 
+    async function getCommits(projectId) {  
+        var response = await axios.post(baseUrl + `/getAllCommits`, {
+            project_id: projectId,
+        }).then(async res => {
+            setCommits(res.data.reverse())
+        });
+    };
+
     useEffect(() => {
         _retrieveData = async () => {
             try {
@@ -147,6 +156,7 @@ function ProjectPage(props) {
                 if (value !== null) {
                 // We have data!!
                     await setProject_Id(value);
+                    await getCommits(value);
                     getProjectFiles(value);
                 }
             } catch (error) {
@@ -299,7 +309,7 @@ function ProjectPage(props) {
                 <View style={styles.greyLine} />
 
                 <View style={styles.buttonWrapper}>
-                    <GoToSourceControl/>
+                    <GoToSourceControl commitList={commits}/>
                     <GoToProjectSettings setIsLoading={props.setIsLoading}/>
                 </View>
             </View>

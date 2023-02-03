@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import PropTypes from 'prop-types';
 import {    
     View, 
     Text,
@@ -21,53 +22,49 @@ const windowHeight = Dimensions.get('window').height;
 // API Setup
 const baseUrl = `https://photocode.app:8443`;
 
-function SourceControl(props) {
+class SourceControl extends React.Component {
 
-    const [loading, setLoading] = useState(true);
-    const [commits, setCommits] = useState([])
+    // const [loading, setLoading] = useState(true);
 
-    const route = useRoute();
-    const { projectId } = route.params;
+    static propTypes = {
+        commitList: PropTypes.object.isRequired,
+    }
+    
 
-    async function getCommits(projectId) {  
-        var response = await axios.post(baseUrl + `/getAllCommits`, {
-            project_id: projectId,
-        }).then(async res => {
-            setCommits(res.data.reverse())
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            setLoading(false)
-        });
-    };
+    // const route = useRoute();
+    // const { projectId } = route.params;
 
-    useEffect(() => {
-        getCommits(projectId);
-    }, [])
+   
 
-    return (
-        loading == true ? (<View style={styles.loadingWrapper}><Text style={styles.loadingText}>{'Loading'}</Text></View>) :
-        <View style={styles.container}>
-            <View style={styles.header}>
-                    <BackButton />
-                    <View>
-                        <Text style={styles.title}>
-                            Commits
-                        </Text>
-                    </View>
+    // useEffect(() => {
+    //     getCommits(projectId);
+    // }, [])
+    render() {
+        return (
+            <View style={styles.container}>
+                <View style={styles.header}>
+                        <BackButton />
+                        <View>
+                            <Text style={styles.title}>
+                                Commits
+                            </Text>
+                        </View>
+                </View>
+                <ScrollView style={styles.main}>
+                    {/* {commits.map((commit, i) => (
+                        <CommitList
+                            key={i}
+                            UserImage={commit.picture}
+                            UserName={props.user.name}
+                            CommitTitle={commit.title}
+                            CommitDate={commit.date}
+                            CommitMessage={commit.message}
+                        />
+                    ))} */}
+                </ScrollView>
             </View>
-            <ScrollView style={styles.main}>
-                {commits.map((commit, i) => (
-                    <CommitList
-                        key={i}
-                        UserImage={commit.picture}
-                        UserName={props.user.name}
-                        CommitTitle={commit.title}
-                        CommitDate={commit.date}
-                        CommitMessage={commit.message}
-                    />
-                ))}
-            </ScrollView>
-        </View>
-    );
+        );
+    }
 };
 
 const styles = StyleSheet.create({

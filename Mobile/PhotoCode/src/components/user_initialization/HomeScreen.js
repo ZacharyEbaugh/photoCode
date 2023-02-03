@@ -1,7 +1,9 @@
-import React, {useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
+
+import loginContext from './loginContext';
 
 import {    
     View, 
@@ -52,6 +54,10 @@ function HomeScreen(props) {
     const [username, setUsername] = useState("")
     const [projects, setProjects] = useState({})
     const [projectsSet, setProjectsSet] = useState(false)
+
+    const { user } = useContext(loginContext)
+
+    console.log("user from context " + user.email)
 
 
     useEffect(() => {
