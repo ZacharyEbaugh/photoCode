@@ -20,7 +20,6 @@ export const LoginButtons = (props) => {
 
     const setUserToContext = (user) => {
         setUser(user)
-        console.log("user in set context " + user.email)
     }
 
     const {authorize, user, clearSession} = useAuth0({
@@ -110,7 +109,6 @@ export const LoginButtons = (props) => {
     useEffect(() => {
         props.setUser(user);
         if(user != null) {
-            console.log("before set " + user)
             setUserToContext(user);
         }
     }, [user]);

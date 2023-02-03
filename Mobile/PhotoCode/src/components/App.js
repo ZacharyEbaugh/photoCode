@@ -29,7 +29,7 @@ import { Text, View } from 'react-native';
 
 const App = () => {
     const [user, setUser] = useState(null);
-    
+
     return (
         <loginContext.Provider value={{user, setUser}}>
             <MainContent />
@@ -103,7 +103,7 @@ const MainContent = () => {
                             />
                             <Stack.Screen
                                 name="SourceControl"
-                                component={() => <SourceControl user={user}/>}
+                                component={SourceControl}
                                 options={{ title: 'SourceControl' }}
                             />
                             <Stack.Screen

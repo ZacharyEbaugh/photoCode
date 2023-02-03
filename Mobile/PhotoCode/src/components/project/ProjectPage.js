@@ -43,14 +43,15 @@ function GoBackButton() {
   );
 }
 
-function GoToSourceControl() {
+function GoToSourceControl(props) {
     const navigation = useNavigation();
     const route = useRoute();
     const { projectId } = route.params;
+    console.log("commits in function " + props.commits[0]._id)
     return (
         <Pressable 
             style={styles.actionButton}
-            onPress={() => navigation.navigate('SourceControl', { projectId })}
+            onPress={() => navigation.navigate('SourceControl', { commits: props.commits})}
         >
             <Text style={styles.actionButtonText}>
                 Version Control
@@ -103,7 +104,7 @@ function ProjectPage(props) {
     const [folderSet, setFolderSet] = useState(false)
     const [currentFiles, setCurrentFiles] = useState([])
     const [filesFound, setFilesFound] = useState(false)
-    const [commits, setCommits] = useState([])
+    const [commits, setCommits] = useState(null)
 
     const [loading, setLoading] = useState(true)
 
@@ -145,7 +146,8 @@ function ProjectPage(props) {
         var response = await axios.post(baseUrl + `/getAllCommits`, {
             project_id: projectId,
         }).then(async res => {
-            setCommits(res.data.reverse())
+            await setCommits(res.data.reverse())
+            console.log(commits)
         });
     };
 
@@ -309,7 +311,7 @@ function ProjectPage(props) {
                 <View style={styles.greyLine} />
 
                 <View style={styles.buttonWrapper}>
-                    <GoToSourceControl commitList={commits}/>
+                    {commits != null ? <GoToSourceControl commits={commits}/> : null}
                     <GoToProjectSettings setIsLoading={props.setIsLoading}/>
                 </View>
             </View>

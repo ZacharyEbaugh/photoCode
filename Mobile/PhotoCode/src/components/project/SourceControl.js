@@ -22,23 +22,24 @@ const windowHeight = Dimensions.get('window').height;
 // API Setup
 const baseUrl = `https://photocode.app:8443`;
 
+function DisplayCommits() {
+    const route = useRoute();
+    const { commits } = route.params;
+
+    return (
+        commits.map((commit, i) => (
+            <CommitList
+                key={i}
+                UserImage={commit.picture}
+                CommitTitle={commit.title}
+                CommitDate={commit.date}
+                CommitMessage={commit.message}
+            />
+        ))
+    )
+}
+
 class SourceControl extends React.Component {
-
-    // const [loading, setLoading] = useState(true);
-
-    static propTypes = {
-        commitList: PropTypes.object.isRequired,
-    }
-    
-
-    // const route = useRoute();
-    // const { projectId } = route.params;
-
-   
-
-    // useEffect(() => {
-    //     getCommits(projectId);
-    // }, [])
     render() {
         return (
             <View style={styles.container}>
@@ -51,16 +52,7 @@ class SourceControl extends React.Component {
                         </View>
                 </View>
                 <ScrollView style={styles.main}>
-                    {/* {commits.map((commit, i) => (
-                        <CommitList
-                            key={i}
-                            UserImage={commit.picture}
-                            UserName={props.user.name}
-                            CommitTitle={commit.title}
-                            CommitDate={commit.date}
-                            CommitMessage={commit.message}
-                        />
-                    ))} */}
+                   <DisplayCommits />
                 </ScrollView>
             </View>
         );
