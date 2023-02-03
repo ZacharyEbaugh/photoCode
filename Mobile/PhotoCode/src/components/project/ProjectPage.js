@@ -26,6 +26,7 @@ const windowHeight = Dimensions.get('window').height;
 const newFolderIcon = require('./../../assets/images/newFolder.png');
 const newFileIcon = require('./../../assets/images/newFile.png');
 const xIcon = require('./../../assets/images/x.png');
+const deleteIcon = require('./../../assets/images/deleteFile.png');
 const blueFolder = require('./../../assets/images/blueFolder.png');
 const fileIcon = require('./../../assets/images/file.png');
 const goBackFolderIcon = require('./../../assets/images/backFolder.png');
@@ -91,6 +92,8 @@ var root_folder;
 
 // API Setup
 baseUrl = 'https://photocode.app:8443';
+
+var maxNameSize = 25;
 
 var loadingProgress = new Animated.Value(0);
 
@@ -196,6 +199,7 @@ function ProjectPage(props) {
                     autoCapitalize='none'
                     onChangeText={(text) => {this.state.newFileName = text}} 
                     onSubmitEditing={() => {console.log(this.state.newFileName); setNewFolder(false); uploadFolder()}}
+                    maxLength={maxNameSize}
                 />
                 <Pressable
                     onPress={() => {setNewFolder(false); this.state.newFileName = ""}}
@@ -212,13 +216,21 @@ function ProjectPage(props) {
             {currentFolders.map((folder, i) => (
                 <View key={i}>
                     <View style={styles.greyLine} />
-                    <Pressable
-                        style={styles.fileLine}
-                        onPress={() => {updateFolders(folder)}}
-                    >
-                        <Image style={styles.fileImage} source={blueFolder} />
-                        <Text style={styles.fileText}>{folder.name}</Text>
-                    </Pressable>
+                    <View style={styles.fileLineWrapper}>
+                        <Pressable
+                            style={styles.fileLine}
+                            onPress={() => {updateFolders(folder)}}
+                        >
+                            <Image style={styles.fileImage} source={blueFolder} />
+                            <Text style={styles.fileText}>{folder.name}</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.deleteFileIconWrapper}
+                            onPress={() => {deleteFolder(folder)}}
+                        >
+                            <Image style={styles.deleteFileIcon} source={deleteIcon} />
+                        </Pressable>
+                    </View>
                 </View>
             ))}
             {newFolder == true ? <NewFolderInput /> : null}
@@ -287,6 +299,19 @@ function ProjectPage(props) {
         await axios.get(baseUrl + `/getFolders?project_id=${parent_folder}`).then( async res => {
             setCurrentFolders(res.data)
         })
+    }
+
+    async function deleteFolder(folder) {
+        var folder_id = folder._id;
+        var parent_folder = currentFolders[0].parent_folder;
+
+        var response = await axios.post(baseUrl + '/deleteFolder', {
+            folder_id: folder_id,
+        })
+        await axios.get(baseUrl + `/getFolders?project_id=${parent_folder}`).then( async res => {
+            setCurrentFolders(res.data)
+        })
+
     }
 
     const loadingColor = loadingProgress.interpolate({
@@ -597,6 +622,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#808080',
         height: 1,
     },
+    fileLineWrapper: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 10,
+        // width: windowWidth,
+        marginVertical: 5,
+        // borderWidth: 2,
+    },
     fileLine: {
         display: 'flex',
         flexDirection: 'row',
@@ -611,7 +646,10 @@ const styles = StyleSheet.create({
     },
     fileText: {
         fontFamily: 'JetBrainsMono-Light',
-        fontSize: 20,
+        fontSize: 18,
+        flex: 0.85,
+        // flexWrap: 'wrap',
+        // flexShrink: ,
     },
     newNameWrapper: {
         flexDirection: 'row',
@@ -622,6 +660,18 @@ const styles = StyleSheet.create({
         fontFamily: 'JetBrainsMono-Light',
         fontSize: 20,
     },
+    deleteFileIconWrapper: {
+        borderColor: '#d8d8d8',
+        borderWidth: 3,
+        borderRadius: 5,
+        paddingVertical: 2.5,
+        paddingHorizontal: 5,
+        // border: 3px solid #d8d8d8;
+    },
+    deleteFileIcon: {
+        width: windowWidth * 0.075,
+        height: windowHeight * 0.0375,
+    }
 });
 
 export default ProjectPage;
