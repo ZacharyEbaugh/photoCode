@@ -241,6 +241,12 @@ function ProjectPage(props) {
     }
 
     function NewFileInput() {
+        current_folder = currentPath[currentPath.length - 1].name;
+        if(current_folder == 'root')
+            return (
+                Alert.alert("Cannot make file at root")
+            );
+
         return (
             <View style={styles.newNameWrapper}>
                 <TextInput
@@ -272,21 +278,29 @@ function ProjectPage(props) {
                 {currentFiles.map((file, i) => (
                     <View key={i}>
                         <View style={styles.greyLine} />
-                        <Pressable
-                            style={styles.fileLine}
-                            onPress={() => {navigation.navigate('TextEditor', {
-                                user: props.user,
-                                originFilename: file.filename, 
-                                fileId: file._id, 
-                                editorOrigin: 2, 
-                                projectId: projectId,
-                                projectName: projectName,
-                            })}}
-                        >
-                            
-                            <Image style={styles.fileImage} source={fileIcon} />
-                            <Text style={styles.fileText}>{file.filename}</Text>
-                        </Pressable>
+                        <View style={styles.fileLineWrapper}>
+                            <Pressable
+                                style={styles.fileLine}
+                                onPress={() => {navigation.navigate('TextEditor', {
+                                    user: props.user,
+                                    originFilename: file.filename, 
+                                    fileId: file._id, 
+                                    editorOrigin: 2, 
+                                    projectId: projectId,
+                                    projectName: projectName,
+                                })}}
+                            >
+                                
+                                <Image style={styles.fileImage} source={fileIcon} />
+                                <Text style={styles.fileText}>{file.filename}</Text>
+                            </Pressable>
+                            <Pressable
+                            style={styles.deleteFileIconWrapper}
+                            onPress={() => {deleteFile(file)}}
+                            >
+                                <Image style={styles.deleteFileIcon} source={deleteIcon} />
+                            </Pressable>
+                        </View>
                     </View>
                 ))}
                 {newFile == true ? <NewFileInput /> : null}
@@ -340,6 +354,14 @@ function ProjectPage(props) {
 
     }
 
+    function checkNewFileCreation() {
+        if (currentPath[currentPath.length - 1].name == 'root') {
+            Alert.alert("Cannot make new file at root");
+            return;
+        }
+        setNewFile(true)
+    }
+
     async function uploadFile() {
         var parent_folder = currentPath[currentPath.length - 1]._id;
         console.log(currentPath[currentPath.length - 1])
@@ -367,7 +389,24 @@ function ProjectPage(props) {
                 setFilesFound(false)
             }
         })
-        
+    }
+
+    async function deleteFile(file) {
+        var parent_folder = currentPath[currentPath.length - 1]._id;
+
+        var response = await axios.post(baseUrl + `/deleteFile`, {
+            file_id: file._id,
+        }).then(async res => {
+            var folders = await axios.get(baseUrl + `/getFolders?project_id=${parent_folder}`)
+            var files = await axios.get(baseUrl + `/getFiles?project_id=${parent_folder}`)
+            setCurrentFolders(folders.data)
+            if (files != undefined) {
+                setCurrentFiles(files.data)
+                setFilesFound(true)
+            } else {
+                setFilesFound(false)
+            }
+        })
     }
 
     const loadingColor = loadingProgress.interpolate({
@@ -392,7 +431,7 @@ function ProjectPage(props) {
                             <Image style={styles.createIcon} source={newFolderIcon} />
                         </Pressable>
 
-                        <Pressable style={styles.createImageWrapper} onPress={() => {setNewFile(true)}}>
+                        <Pressable style={styles.createImageWrapper} onPress={() => {checkNewFileCreation()}}>
                             <Image style={styles.createIcon} source={newFileIcon} />
                         </Pressable>
                     </View>
