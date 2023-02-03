@@ -23,8 +23,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const newFolder = require('./../../assets/images/newFolder.png');
-const newFile = require('./../../assets/images/newFile.png');
+const newFolderIcon = require('./../../assets/images/newFolder.png');
+const newFileIcon = require('./../../assets/images/newFile.png');
+const xIcon = require('./../../assets/images/x.png');
 const blueFolder = require('./../../assets/images/blueFolder.png');
 const fileIcon = require('./../../assets/images/file.png');
 const goBackFolderIcon = require('./../../assets/images/backFolder.png');
@@ -45,9 +46,6 @@ function GoBackButton() {
 
 function GoToSourceControl(props) {
     const navigation = useNavigation();
-    const route = useRoute();
-    const { projectId } = route.params;
-    console.log("commits in function " + props.commits[0]._id)
     return (
         <Pressable 
             style={styles.actionButton}
@@ -105,8 +103,13 @@ function ProjectPage(props) {
     const [currentFiles, setCurrentFiles] = useState([])
     const [filesFound, setFilesFound] = useState(false)
     const [commits, setCommits] = useState(null)
+    const [newFolder, setNewFolder] = useState(false)
 
     const [loading, setLoading] = useState(true)
+
+    state = {
+        newFolderNew: String, 
+    }
 
     const route = useRoute();
     // const { projectId, projectName, projectDescription, projectCollaborators } = route.params;
@@ -147,7 +150,6 @@ function ProjectPage(props) {
             project_id: projectId,
         }).then(async res => {
             await setCommits(res.data.reverse())
-            console.log(commits)
         });
     };
 
@@ -184,9 +186,30 @@ function ProjectPage(props) {
         setCurrentPath([...currentPath, folder])
     }
 
+    function NewFolderInput() {
+        return (
+            <View style={styles.newNameWrapper}>
+                <TextInput
+                    style={styles.newNameInput}
+                    placeholder='New Folder'
+                    placeholderTextColor='darkgrey'
+                    autoCapitalize='none'
+                    onChangeText={(text) => {this.state.newFileName = text}} 
+                    onSubmitEditing={() => {console.log(this.state.newFileName); setNewFolder(false); uploadFolder()}}
+                />
+                <Pressable
+                    onPress={() => {setNewFolder(false); this.state.newFileName = ""}}
+                >
+                   <Image style={styles.fileImage} source={xIcon} />
+                </Pressable>
+            </View>
+        )
+    }
+
     function DisplayFolders() {
         return (
-            currentFolders.map((folder, i) => (
+            <View>
+            {currentFolders.map((folder, i) => (
                 <View key={i}>
                     <View style={styles.greyLine} />
                     <Pressable
@@ -197,7 +220,9 @@ function ProjectPage(props) {
                         <Text style={styles.fileText}>{folder.name}</Text>
                     </Pressable>
                 </View>
-            ))
+            ))}
+            {newFolder == true ? <NewFolderInput /> : null}
+            </View>
         );
     }
 
@@ -252,6 +277,18 @@ function ProjectPage(props) {
         setCurrentPath(currentPath.slice(0, currentPath.length - 1));
     }
 
+    async function uploadFolder() {
+        var parent_folder = currentFolders[0].parent_folder;
+
+        var response = await axios.post(baseUrl + '/createFolder', {
+            name: this.state.newFileName,
+            parent_id: parent_folder,
+        });
+        await axios.get(baseUrl + `/getFolders?project_id=${parent_folder}`).then( async res => {
+            setCurrentFolders(res.data)
+        })
+    }
+
     const loadingColor = loadingProgress.interpolate({
         inputRange: [0, 10],
         outputRange: ['0%', '100%']
@@ -270,12 +307,12 @@ function ProjectPage(props) {
             <View style={styles.main}>
                 <View style={styles.searchCreateWrapper}>
                     <View style={styles.createButton}>
-                        <Pressable style={styles.createImageWrapper}>
-                            <Image style={styles.createIcon} source={newFolder} />
+                        <Pressable style={styles.createImageWrapper} onPress={() => {setNewFolder(true)}}>
+                            <Image style={styles.createIcon} source={newFolderIcon} />
                         </Pressable>
 
                         <Pressable style={styles.createImageWrapper}>
-                            <Image style={styles.createIcon} source={newFile} />
+                            <Image style={styles.createIcon} source={newFileIcon} />
                         </Pressable>
                     </View>
 
@@ -575,7 +612,16 @@ const styles = StyleSheet.create({
     fileText: {
         fontFamily: 'JetBrainsMono-Light',
         fontSize: 20,
-    }
+    },
+    newNameWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: 10,
+    },
+    newNameInput: {
+        fontFamily: 'JetBrainsMono-Light',
+        fontSize: 20,
+    },
 });
 
 export default ProjectPage;

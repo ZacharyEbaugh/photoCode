@@ -1,26 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import {    
     View, 
     Text,
-    Animated, 
-    Pressable, 
-    Image, 
     Dimensions, 
     StyleSheet, 
-    Easing, 
     ScrollView} from 'react-native';
-import axios from 'axios';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 
 import { BackButton } from './../BackButton';
 import { CommitList } from './CommitList';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-
-// API Setup
-const baseUrl = `https://photocode.app:8443`;
 
 function DisplayCommits() {
     const route = useRoute();
