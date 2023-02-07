@@ -285,7 +285,8 @@ const styles = StyleSheet.create({
     },
     header: {
         backgroundColor: '#0066FF',
-        flex: 1.5,
+        // flex: 1.5,
+        height: windowHeight*0.2,
         justifyContent: 'space-evenly',
     },
     main: {

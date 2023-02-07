@@ -23,7 +23,8 @@ const languages = ["HTML", "CSS", "JavaScript", "Python", "React", "Java"];
 var updatedText = "";
 var originalText = "";
 
-var selectedLanguage = '';
+// var selectedLanguage = '';
+
 
 function NewDocumentOrigin ({language}) {
     const keyboard = useKeyboard();
@@ -71,7 +72,7 @@ function getOriginCode() {
     return originalText;
 }
 
-function ProjectFileOrigin({language}) {
+function ProjectFileOrigin({language, fileName, setLanguage}) {
     const keyboard = useKeyboard();
     const insets = useSafeAreaInsets();
 
@@ -81,13 +82,21 @@ function ProjectFileOrigin({language}) {
     const [loading, setLoading] = useState(true)
 
     const [code, setCode] = useState('Hello World!');
-    
 
     const getFileContents = async() => {
         const response = await axios.get(`https://photocode.app:8443/getFile?file_id=${fileId}`);
         const buffer = Buffer.from(response.data.fileContents.data, 'hex');
         await setCode(buffer.toString());
         originalText = buffer.toString();
+
+        var fileLanguage = '';
+        const lastPeriod = fileName.lastIndexOf('.');
+        if (lastPeriod != fileName.length) {
+            fileLanguage = fileName.substring(fileName.lastIndexOf('.') + 1)
+            // setSelectedLanguage(fileLanguage)
+            // console.log(selectedLanguage)
+        }
+        setLanguage(fileLanguage.toUpperCase())
         setLoading(false);
     }
     getFileContents();
@@ -119,7 +128,7 @@ function ProjectFileOrigin({language}) {
     );
 }
 
-function BackButton({ screenName, fileName }) {
+function BackButton({ screenName, fileName, originFilename }) {
     const navigation = useNavigation();
     const route = useRoute();
 
@@ -142,6 +151,23 @@ function BackButton({ screenName, fileName }) {
         }
     }
 
+
+    // Checks if any changes have been made if not return instant back button
+    // Buggy and sometimes doesn't work states are not being reset or updated on each render or something
+    if (originFilename == undefined)
+        originFilename = '';
+
+    if (fileName == originFilename && getText() == getOriginCode()) {
+        return (
+            <Pressable
+                onPress={() =>  navigation.navigate(screenName, { projectId, projectName }) }
+            >
+                <Text style={styles.backText}>
+                    {'< Back'}
+                </Text>
+            </Pressable>
+        );
+    }
     return (
         <Pressable
             onPress={() => Alert.alert(
@@ -219,12 +245,20 @@ function TextEditor(props) {
     const { editorOrigin, originFilename } = route.params;
 
     var [fileName, setFileName] = useState("");
+    var [selectedLanguage, setSelectedLanguage] = useState("");
     
     useEffect(() => {
-        if (originFilename != undefined)
+        if (originFilename != undefined) {
             setFileName(originFilename)
+            // lastPeriod = fileName.lastIndexOf('.');
+            // if (lastPeriod != fileName.length) {
+            //     fileLanguage = fileName.substring(fileName.lastIndexOf('.') + 1)
+            //     setSelectedLanguage(fileLanguage)
+            //     console.log(selectedLanguage)
+            // }
+        }
         else
-            fileName = '';
+            setFileName('')
     }, [])
 
 
@@ -232,7 +266,7 @@ function TextEditor(props) {
         <View style={styles.container}>
             <View style={styles.header}>
                 <View style={styles.backButton}>
-                    {editorOrigin == 1 ? <BackButton screenName={'HomeScreen'} fileName={fileName} /> : <BackButton screenName={'ProjectPage'} fileName={fileName} />}
+                    {editorOrigin == 1 ? <BackButton screenName={'HomeScreen'} fileName={fileName} originFilename={originFilename}/> : <BackButton screenName={'ProjectPage'} fileName={fileName} originFilename={originFilename}/>}
                 </View>
                 <View style={styles.titleAndLanguage}>
                     <View style={styles.title}>
@@ -252,14 +286,15 @@ function TextEditor(props) {
                             data={languages}
                             dropdownStyle={styles.dropDown}
                             buttonStyle={styles.dropDownButton}
-                            defaultButtonText="Language"
+                            defaultButtonText={selectedLanguage}
                             onSelect={(selectedItem, index) => {
                                 console.log(selectedItem, index)
                             }}
                             buttonTextAfterSelection={(selectedItem, index) => {
                                 // text represented after item is selected
                                 // if data array is an array of objects then return selectedItem.property to render after item is selected
-                                selectedLanguage = languages[index]
+                                // selectedLanguage = languages[index]
+                                setSelectedLanguage(languages[index]);
                                 // console.warn(selectedLanguage)
                                 return selectedItem
                             }}
@@ -275,7 +310,7 @@ function TextEditor(props) {
             </View>
 
             <View style={styles.main}>
-                {editorOrigin == 1 ? <NewDocumentOrigin language={selectedLanguage}/> : <ProjectFileOrigin language={selectedLanguage}/>}
+                {editorOrigin == 1 ? <NewDocumentOrigin language={selectedLanguage}/> : <ProjectFileOrigin language={selectedLanguage} fileName={fileName} setLanguage={setSelectedLanguage}/>}
               
                 <SaveButton fileName={fileName} user={props.user} user_id={props.user_id} />
              

@@ -379,7 +379,8 @@ const styles = StyleSheet.create({
     },
     header: {
         backgroundColor: '#0066FF',
-        flex: 1.15,
+        // flex: 1.15,
+        height: windowHeight*0.2,
     },
     main: {
         flex: 5,
