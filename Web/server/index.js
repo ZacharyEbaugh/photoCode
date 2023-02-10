@@ -1266,11 +1266,11 @@ app.post('/changeEmail', async function (req, res) {
 
 // Function to delete account
 async function deleteAccount(req, callback) {
-  const user_id = ObjectId(req.body.user_id);
+  const user_id = req.body.user_id;
   console.log("In delete account function")
   // Remove user from collabs 
 
-  const user_collabs = {  collaborators: user_id  };
+  const user_collabs = { $or: [{ user: user_id }, { collaborators: user_id }] }
 
   const allProjects = await projects.find(user_collabs).toArray();
 
@@ -1302,7 +1302,7 @@ async function deleteAccount(req, callback) {
       // Delete the project
       // Delete all folders and files
       console.log(allProjects[i])
-      files_array = await file.find({ 'metadata.project_id': allProjects[i]._id.toString() }).toArray();
+      files_array = await files.find({ 'metadata.project_id': allProjects[i]._id.toString() }).toArray();
       for (let j = 0; j < files_array.length; j++)
         await chunks.deleteOne({ files_id: files_array[j]._id });
       await files.deleteMany({ 'metadata.project_id': allProjects[i]._id.toString() });
