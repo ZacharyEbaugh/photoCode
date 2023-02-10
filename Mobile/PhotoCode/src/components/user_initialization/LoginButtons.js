@@ -10,9 +10,18 @@ import githubLogo from './../../assets/images/github-mark-white.png';
 import LinkedInLogo from './../../assets/images/LinkedInLogo.png';
 
 import { useAuth0 } from 'react-native-auth0';
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
+
+import loginContext from './loginContext';
 
 export const LoginButtons = (props) => {
+
+    const { setUser } = useContext(loginContext);
+
+    const setUserToContext = (user) => {
+        setUser(user)
+    }
+
     const {authorize, user, clearSession} = useAuth0({
         clientId: "MpksNgQRuYsc9tp9ZJcsgODwhOqjbn1n",
         domain: "photocode.us.auth0.com",
@@ -99,6 +108,9 @@ export const LoginButtons = (props) => {
 
     useEffect(() => {
         props.setUser(user);
+        if(user != null) {
+            setUserToContext(user);
+        }
     }, [user]);
 
     return (

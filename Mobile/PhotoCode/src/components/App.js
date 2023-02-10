@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
@@ -21,12 +21,23 @@ import CreateProject from './user_initialization/CreateProject';
 import ProjectPage from './project/ProjectPage';
 import CameraView from './CameraView';
 
+import loginContext from './user_initialization/loginContext';
 
 const Stack = createNativeStackNavigator();
 
 import { Text, View } from 'react-native';
 
 const App = () => {
+    const [user, setUser] = useState(null);
+
+    return (
+        <loginContext.Provider value={{user, setUser}}>
+            <MainContent />
+        </loginContext.Provider>
+    );
+}
+
+const MainContent = () => {
 
     const [user, setUser] = useState(null);
     const [user_id, setUser_Id] = useState(null);
@@ -37,83 +48,84 @@ const App = () => {
         console.log(user_id);
     }, [user, user_id]);
 
+
     if (user == null) {
         return (
-            <Auth0Provider domain={"photocode.us.auth0.com"} clientId={"MpksNgQRuYsc9tp9ZJcsgODwhOqjbn1n"}>
-                <NavigationContainer>
-                    <Stack.Navigator screenOptions={{ headerShown: false}}>
-                        <Stack.Screen
-                            name="SplashPage"
-                            component={() => <SplashPage isUser={user} setUser={setUser} />}
-                            options={{ title: 'SplashPage' }}
-                        />
-                    </Stack.Navigator>
-                </NavigationContainer>
-            </Auth0Provider>
+                <Auth0Provider domain={"photocode.us.auth0.com"} clientId={"MpksNgQRuYsc9tp9ZJcsgODwhOqjbn1n"}>
+                    <NavigationContainer>
+                        <Stack.Navigator screenOptions={{ headerShown: false}}>
+                            <Stack.Screen
+                                name="SplashPage"
+                                component={() => <SplashPage isUser={user} setUser={setUser} />}
+                                options={{ title: 'SplashPage' }}
+                            />
+                        </Stack.Navigator>
+                    </NavigationContainer>
+                </Auth0Provider>
         );
     }
 
     else {
         return (
-            <Auth0Provider domain={"photocode.us.auth0.com"} clientId={"MpksNgQRuYsc9tp9ZJcsgODwhOqjbn1n"}>
-                <NavigationContainer>
-                    <Stack.Navigator screenOptions={{ headerShown: false}}>
-                        <Stack.Screen
-                            name="HomeScreen"
-                            component={() => <HomeScreen user={user} setUser={setUser} user_id={user_id} setUser_Id={setUser_Id} isLoading={isLoading} setIsLoading={setIsLoading}/>}
-                            options={{ title: 'My Home'}}
-                        />
-                        <Stack.Screen
-                            name="Settings"
-                            component={() => <Settings user={user} user_id={user_id}/>}
-                        />
-                        <Stack.Screen
-                            name="About Us"
-                            component={AboutUs}
-                            options={{ title: 'About Us' }}
-                        />
-                        <Stack.Screen
-                            name="Contact Us"
-                            component={ContactUs}
-                            options={{ title: 'Contact Us' }}
-                        />
-                        <Stack.Screen
-                            name="ProjectPage"
-                            component={() => <ProjectPage user={user} user_id={user_id}/>}
-                        />
-                        <Stack.Screen
-                            name="ProjectSettings"
-                            component={() => <ProjectSettings user={user} user_id={user_id} isLoading={isLoading} setIsLoading={setIsLoading}/> }
-                        />
-                        <Stack.Screen
-                            name="CreateProject"
-                            component={() => <CreateProject user={user} user_id={user_id} isLoading={isLoading} setIsLoading={setIsLoading}/>}
-                        />
-                        <Stack.Screen
-                            name="SourceControl"
-                            component={() => <SourceControl user={user}/>}
-                            options={{ title: 'SourceControl' }}
-                        />
-                        <Stack.Screen
-                            name="Commit"
-                            component={Commit}
-                            options={{ title: 'Commit' }}
-                        />
-                        <Stack.Screen
-                            name="CameraView"
-                            component={CameraView}
-                        />
-                        <Stack.Screen
-                            name="TextEditor"
-                            component={() => <TextEditor user={user} user_id={user_id}/>}
-                        />
-                        <Stack.Screen
-                            name="SaveDoc"
-                            component={() => <SaveDoc user={user} user_id={user_id}/>} 
-                        />
-                    </Stack.Navigator>
-                </NavigationContainer>
-            </Auth0Provider>
+                <Auth0Provider domain={"photocode.us.auth0.com"} clientId={"MpksNgQRuYsc9tp9ZJcsgODwhOqjbn1n"}>
+                    <NavigationContainer>
+                        <Stack.Navigator screenOptions={{ headerShown: false}}>
+                            <Stack.Screen
+                                name="HomeScreen"
+                                component={() => <HomeScreen user={user} setUser={setUser} user_id={user_id} setUser_Id={setUser_Id} isLoading={isLoading} setIsLoading={setIsLoading}/>}
+                                options={{ title: 'My Home'}}
+                            />
+                            <Stack.Screen
+                                name="Settings"
+                                component={() => <Settings user={user} user_id={user_id}/>}
+                            />
+                            <Stack.Screen
+                                name="About Us"
+                                component={AboutUs}
+                                options={{ title: 'About Us' }}
+                            />
+                            <Stack.Screen
+                                name="Contact Us"
+                                component={ContactUs}
+                                options={{ title: 'Contact Us' }}
+                            />
+                            <Stack.Screen
+                                name="ProjectPage"
+                                component={() => <ProjectPage user={user} user_id={user_id}/>}
+                            />
+                            <Stack.Screen
+                                name="ProjectSettings"
+                                component={() => <ProjectSettings user={user} user_id={user_id} isLoading={isLoading} setIsLoading={setIsLoading}/> }
+                            />
+                            <Stack.Screen
+                                name="CreateProject"
+                                component={() => <CreateProject user={user} user_id={user_id} isLoading={isLoading} setIsLoading={setIsLoading}/>}
+                            />
+                            <Stack.Screen
+                                name="SourceControl"
+                                component={SourceControl}
+                                options={{ title: 'SourceControl' }}
+                            />
+                            <Stack.Screen
+                                name="Commit"
+                                component={Commit}
+                                options={{ title: 'Commit' }}
+                            />
+                            <Stack.Screen
+                                name="CameraView"
+                                component={CameraView}
+                            />
+                            <Stack.Screen
+                                name="TextEditor"
+                                component={() => <TextEditor user={user} user_id={user_id}/>}
+                            />
+                            <Stack.Screen
+                                name="SaveDoc"
+                                component={() => <SaveDoc user={user} user_id={user_id}/>} 
+                            />
+                        </Stack.Navigator>
+                    </NavigationContainer>
+                </Auth0Provider>
         );
     }
 }
