@@ -97,10 +97,8 @@ const styles = StyleSheet.create({
     
     header: {
         backgroundColor: '#0066FF',
-        flex: 1,
-        // alignItems: 'center',
-        // justifyContent: 'space-around',
-        
+        height: windowHeight*0.2,
+        justifyContent: 'space-between',  
     },
 
     backButton: {
@@ -110,6 +108,7 @@ const styles = StyleSheet.create({
     backText: {
         fontSize: 20,
         color: '#FFFFFF',
+        fontFamily: 'JetBrainsMono-Regular',
     },
 
     title: {
@@ -118,7 +117,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         width: windowWidth,
         color: '#FFFFFF',
-        // fontFamily: 'JetBrainsMono-Regular',
+        fontFamily: 'JetBrainsMono-Regular',
+        marginBottom: windowHeight*0.02,
     },
 
     main: {
@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 25,
         marginLeft: 10,
+        fontFamily: 'JetBrainsMono-Regular',
     },
 
     NameIcon: {
@@ -175,6 +176,7 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 25,
         marginLeft: 10,
+        fontFamily: 'JetBrainsMono-Regular',
     },
 
     MailIcon: {
@@ -200,6 +202,7 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 25,
         marginLeft: 10,
+        fontFamily: 'JetBrainsMono-Regular',
     },
 
     SubjectIcon: {
@@ -227,6 +230,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         width: windowWidth * 0.76,
         height: windowHeight * 0.33,
+        fontFamily: 'JetBrainsMono-Regular',
     },
 
     SendButton: {
@@ -246,6 +250,7 @@ const styles = StyleSheet.create({
     SendText: {
         fontSize: 50,
         color: 'white',
+        fontFamily: 'JetBrainsMono-Regular',
     },
 });
 
