@@ -1299,7 +1299,6 @@ async function deleteAccount(req, callback) {
         console.log(updated);
       });
     } else {
-      // Delete the project
       // Delete all folders and files
       console.log(allProjects[i])
       files_array = await files.find({ 'metadata.project_id': allProjects[i]._id.toString() }).toArray();
@@ -1307,40 +1306,17 @@ async function deleteAccount(req, callback) {
         await chunks.deleteOne({ files_id: files_array[j]._id });
       await files.deleteMany({ 'metadata.project_id': allProjects[i]._id.toString() });
       await folders.deleteMany({ project_id: allProjects[i]._id.toString()});   
+
+      // Delete the project
+      await projects.deleteOne({ _id: ObjectId(req.body.project_id) });
     }
   }
 
   // delete user
-  
-
-//   const project_id = req.query.project_id;
-//   const collaborator = req.query.user_id;
-//   const project = {
-//     _id: ObjectId(project_id)
-//   };
-//   const newProject = {
-//     $pull: {
-//       collaborators: collaborator
-//     }
-//   };
-//   projects.updateOne(project, newProject, function (err, updated) {
-//     if (err) return callback(err);
-//     callback(null, updated);
-//   });
-// }
-
-
-  // Delete user files
-  // delete user folder
-  // delete user projects
-  // delete user
-
-
-
-  // users.updateOne({ _id: user_id }, { $set: { email: newEmail } }, function (err, result) {
-  //   if (err) return callback(err);
-  //   callback(null, result);
-  // });
+  users.deleteOne({ _id: ObjectId(user_id) }, function(err, deleted){
+    if (err) return callback(err)
+    return callback(null, deleted)
+  });
 }
 
 // Route handler to delete account

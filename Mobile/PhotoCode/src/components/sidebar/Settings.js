@@ -13,6 +13,9 @@ import {
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 
+import { useAuth0 } from 'react-native-auth0';
+import AsyncStorage from '@react-native-community/async-storage';
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -117,15 +120,41 @@ function Settings(props) {
         }
     }
 
+    const { clearSession } = useAuth0();
+
+    const onLogout = async () => {
+        console.log("Logging out...");
+        try {
+            await clearSession({
+                prompt: 'login',
+            },
+            {
+                ephemeralSession: true,
+            });
+            await AsyncStorage.removeItem('user_id');
+            props.setUser(null);
+        } catch (e) {
+            console.log('Log out cancelled');
+        }
+    };
+
     const deleteAccount = async () => {
         console.log('pressed')
         console.log(props.user_id)
         try {
+            console.log('running')
             var response = await axios.post(baseUrl + '/deleteAccount', {
                 user_id: props.user_id
-            })
+            });
+            console.log('ran')
+            id1 = await AsyncStorage.getItem('user_id');
+            console.log(id1);
+            await onLogout();
+            console.log('logout')
+            id2 = await AsyncStorage.getItem('user_id');
+            console.log(id2);
         } catch (err) {
-
+            console.log("Error deleting account")
         }
     }
 
