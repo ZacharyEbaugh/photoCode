@@ -716,6 +716,7 @@ const fileStorage = new GridFsStorage({
     const fileInfo = file.originalname.split(':::::');
     const filename = fileInfo[0];
     const parent_id = fileInfo[1];
+    const project_id = fileInfo[2];
     console.log(fileInfo);
     return new Promise((resolve, reject) => {
       const fileInfo = {
@@ -723,6 +724,7 @@ const fileStorage = new GridFsStorage({
         bucketName: "folders",
         metadata: {
           parent_folder: parent_id,
+          project_id: project_id,
         }
       };
       resolve(fileInfo);
@@ -742,9 +744,11 @@ app.post('/uploadFile', upload.array('files'), (req, res, next) => {
 async function createFolder(req, callback) {
   const name = req.body.name;
   const parent_id = req.body.parent_id;
+  const project_id = req.body.project_id;
   const folderSearch = {
     parent_folder: parent_id,
     name: name,
+    project_id: project_id,
   };
   try {
     const folderFound = await folders.findOneAndUpdate(
@@ -934,7 +938,8 @@ async function editFile(req, callback) {
               // contentType: encoding,
               contentType: file.contentType,
               metadata: {
-                parent_folder: file.metadata.parent_folder
+                parent_folder: file.metadata.parent_folder,
+                project_id: file.metadata.project_id
               }
             });
           
@@ -1262,14 +1267,51 @@ app.post('/changeEmail', async function (req, res) {
 // Function to delete account
 async function deleteAccount(req, callback) {
   const user_id = ObjectId(req.body.user_id);
-
+  console.log("In delete account function")
   // Remove user from collabs 
 
   const user_collabs = {  collaborators: user_id  };
 
   const allProjects = await projects.find(user_collabs).toArray();
 
-  console.log(allProjects)
+  // console.log(allProjects)
+
+  for (let i = 0; i < allProjects.length; i++) {
+    // Removes user from all collab projects
+    if (allProjects[i].collaborators[0] != user_id) {
+      console.log(allProjects[i])
+      console.log(allProjects[i]._id)
+      var project_id = allProjects[i]._id;
+      var collaborator = user_id
+
+      var project = {
+        _id: ObjectId(project_id)
+      };
+
+      var newProject = {
+        $pull: {
+          collaborators: collaborator
+        }
+      };
+
+      projects.updateOne(project, newProject, function (err, updated) {
+        if (err) return console.log(err);
+        console.log(updated);
+      });
+    } else {
+      // Delete the project
+      // Delete all folders and files
+      console.log(allProjects[i])
+      files_array = await file.find({ 'metadata.project_id': allProjects[i]._id.toString() }).toArray();
+      for (let j = 0; j < files_array.length; j++)
+        await chunks.deleteOne({ files_id: files_array[j]._id });
+      await files.deleteMany({ 'metadata.project_id': allProjects[i]._id.toString() });
+      await folders.deleteMany({ project_id: allProjects[i]._id.toString()});   
+    }
+  }
+
+  // delete user
+  
 
 //   const project_id = req.query.project_id;
 //   const collaborator = req.query.user_id;

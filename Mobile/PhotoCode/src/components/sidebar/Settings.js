@@ -117,6 +117,18 @@ function Settings(props) {
         }
     }
 
+    const deleteAccount = async () => {
+        console.log('pressed')
+        console.log(props.user_id)
+        try {
+            var response = await axios.post(baseUrl + '/deleteAccount', {
+                user_id: props.user_id
+            })
+        } catch (err) {
+
+        }
+    }
+
     return (
         <View style={styles.container}>
 
@@ -292,9 +304,9 @@ function Settings(props) {
                             
                         {/* Delete Account Button */}
                         <Pressable
-                            disabled={true}
-                            style={[styles.optionButtons, deletePressed && styles.opacity, styles.disabled]}
-                            onPress={() => {}}
+                            // disabled={true} && styles.opacity, styles.disabled
+                            style={[styles.optionButtons, deletePressed ]}
+                            onPress={() => {deleteAccount()}}
                             onPressOut={() => {
                                 setDeletePressed(!deletePressed)
                             }}

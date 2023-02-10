@@ -167,6 +167,7 @@ function ProjectPage(props) {
                     await setProject_Id(value);
                     await getCommits(value);
                     getProjectFiles(value);
+                    console.log("in use effect" + value)
                 }
             } catch (error) {
                 // Error retrieving data
@@ -331,9 +332,11 @@ function ProjectPage(props) {
 
     async function uploadFolder() {
         var parent_folder = currentPath[currentPath.length - 1]._id;
+        console.log(project_id);
 
         var response = await axios.post(baseUrl + '/createFolder', {
             name: this.state.newFolderName,
+            project_id: project_id,
             parent_id: parent_folder,
         });
         await axios.get(baseUrl + `/getFolders?project_id=${parent_folder}`).then( async res => {
@@ -366,7 +369,7 @@ function ProjectPage(props) {
         var parent_folder = currentPath[currentPath.length - 1]._id;
         console.log(currentPath[currentPath.length - 1])
 
-        var fileName = this.state.newFileName + ':::::' + parent_folder;
+        var fileName = this.state.newFileName + ':::::' + parent_folder + ':::::' + project_id;
 
         const file = new File([""], fileName, {type: "text/plain"});
 
