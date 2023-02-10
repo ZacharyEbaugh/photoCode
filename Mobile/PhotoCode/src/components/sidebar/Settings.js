@@ -265,8 +265,9 @@ function Settings(props) {
                         {'Delete Account'}
                     </Text>
                     <Text style={styles.deleteAccountDes}>
-                        {'You must hit continue in the next prompt.\n' +
-                          'Your account will still be deleted if you hit cancel but your app will not have fun!'}
+                        {'This is a permanent action! All your projects and files will be gone forever!\n' + 
+                          'You must hit continue in the next prompt\n' +
+                          '(if not you will have problems but you account will still be gone)'}
                     </Text>
                     {/* <TextInput
                         style={styles.changePromptInput}
