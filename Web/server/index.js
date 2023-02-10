@@ -1259,6 +1259,61 @@ app.post('/changeEmail', async function (req, res) {
   });
 });
 
+// Function to delete account
+async function deleteAccount(req, callback) {
+  const user_id = ObjectId(req.body.user_id);
+
+  // Remove user from collabs 
+
+  const user_collabs = {  collaborators: user_id  };
+
+  const allProjects = await projects.find(user_collabs).toArray();
+
+  console.log(allProjects)
+
+//   const project_id = req.query.project_id;
+//   const collaborator = req.query.user_id;
+//   const project = {
+//     _id: ObjectId(project_id)
+//   };
+//   const newProject = {
+//     $pull: {
+//       collaborators: collaborator
+//     }
+//   };
+//   projects.updateOne(project, newProject, function (err, updated) {
+//     if (err) return callback(err);
+//     callback(null, updated);
+//   });
+// }
+
+
+  // Delete user files
+  // delete user folder
+  // delete user projects
+  // delete user
+
+
+
+  // users.updateOne({ _id: user_id }, { $set: { email: newEmail } }, function (err, result) {
+  //   if (err) return callback(err);
+  //   callback(null, result);
+  // });
+}
+
+// Route handler to delete account
+app.post('/deleteAccount', async function (req, res) {
+  deleteAccount(req, function (err, result) {
+    if (err) {
+      console.log(err);
+      res.status(500).send({ error: err.message });
+    } else {
+      console.log(result);
+      res.status(200).send({ message: 'Account Deleted'})
+    }
+  });
+});
+
 
 /* 
 ||------------------User updates------------------||
