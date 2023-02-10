@@ -77,7 +77,7 @@ const MainContent = () => {
                             />
                             <Stack.Screen
                                 name="Settings"
-                                component={() => <Settings user={user} user_id={user_id}/>}
+                                component={() => <Settings user={user} user_id={user_id} setUser={setUser}/>}
                             />
                             <Stack.Screen
                                 name="About Us"

@@ -58,6 +58,7 @@ function Settings(props) {
     const [showChangeEmail, setShowChangeEmail] = useState(false)
     const [showChangeUsername, setShowChangeUsername] = useState(false)
     const [showChangePassword, setShowChangePassword] = useState(false)
+    const [showDeleteAccount, setShowDeleteAccount] = useState(false)
 
     const [confirmDisabled, setConfirmedDisabled] = useState(true)
     const [passwordConfirmDisabled, setPasswordConfirmDisabled] = useState(true)
@@ -121,6 +122,7 @@ function Settings(props) {
     }
 
     const { clearSession } = useAuth0();
+    const navigation = useNavigation();
 
     const onLogout = async () => {
         console.log("Logging out...");
@@ -146,13 +148,11 @@ function Settings(props) {
             var response = await axios.post(baseUrl + '/deleteAccount', {
                 user_id: props.user_id
             });
-            console.log('ran')
-            id1 = await AsyncStorage.getItem('user_id');
-            console.log(id1);
-            await onLogout();
-            console.log('logout')
-            id2 = await AsyncStorage.getItem('user_id');
-            console.log(id2);
+            console.log('Account Deleted')
+            await onLogout()
+            // await AsyncStorage.removeItem('user_id');
+            // props.setUser(null);
+            // navigation.navigate('SplashPage');
         } catch (err) {
             console.log("Error deleting account")
         }
@@ -258,6 +258,46 @@ function Settings(props) {
                 </View>
             )}
 
+            {/* Delete Account Prompt */}
+            {showDeleteAccount && (
+                <View style={[styles.changePrompt, styles.changePromptPasswordHeight, {zIndex: 2}]}>    
+                    <Text style={styles.changePromptHeader}>
+                        {'Delete Account'}
+                    </Text>
+                    <Text style={styles.deleteAccountDes}>
+                        {'You must hit continue in the next prompt.\n' +
+                          'Your account will still be deleted if you hit cancel but your app will not have fun!'}
+                    </Text>
+                    {/* <TextInput
+                        style={styles.changePromptInput}
+                        placeholder='New Password'
+                        placeholderTextColor='darkgrey'
+                        autoCapitalize='none'
+                        onChangeText={(text) => {setNewPassword(text); setConfirmedDisabled(false); if(text == ""){setConfirmedDisabled(true)} }} 
+                    /> */}
+                    {/* <TextInput
+                        style={styles.changePromptInput}
+                        placeholder='Confirm Password'
+                        placeholderTextColor='darkgrey'
+                        autoCapitalize='none'
+                        onChangeText={(text) => {setConfirmPassword(text); setPasswordConfirmDisabled(false); if(text == ""){setPasswordConfirmDisabled(true)} }} 
+                    /> */}
+                    <Pressable
+                        style={[styles.changePromptConfirmButton]}
+                        onPress={() => {setShowDeleteAccount(!showDeleteAccount); deleteAccount()}}
+                    >
+                        <Text style={styles.changePromptConfirmText}>{'Confirm'}</Text>
+                    </Pressable>
+
+                    <Pressable
+                        style={styles.changePromptCancelButton}
+                        onPress={() => {setShowDeleteAccount(!showDeleteAccount);}}
+                    >
+                    <Text style={styles.changePromptConfirmText}>{'Cancel'}</Text>
+                    </Pressable>
+                </View>
+            )}
+
             <View style={styles.header}>
                 <View style={styles.backButton}>
                     <BackButton screenName='HomeScreen' />
@@ -335,7 +375,7 @@ function Settings(props) {
                         <Pressable
                             // disabled={true} && styles.opacity, styles.disabled
                             style={[styles.optionButtons, deletePressed ]}
-                            onPress={() => {deleteAccount()}}
+                            onPress={() => {setShowDeleteAccount(!showDeleteAccount)}}
                             onPressOut={() => {
                                 setDeletePressed(!deletePressed)
                             }}
@@ -379,6 +419,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         paddingHorizontal: 15,
         color: 'white',
+        textAlign: 'center',
         // paddingVertical: 10,
     },
     changePromptInput: {
@@ -488,6 +529,13 @@ const styles = StyleSheet.create({
     },
     opacity: {
         opacity: 0.5,
+    },
+    deleteAccountDes: {
+        fontFamily: 'JetBrainsMono-Light',
+        fontSize: 15,
+        paddingHorizontal: 15,
+        color: 'white',
+        textAlign: 'center',
     },
 });
 
