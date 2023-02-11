@@ -75,7 +75,6 @@ function SaveDoc(props) {
                 file_id: fileId,
                 file_contents: code,
             }).then(async res => {
-                console.warn("PROJECT ID: " + (projectId == undefined) ? projectDestination : projectId);
                 const commitResponse = await axios.post(baseUrl + `/createCommit`, {
                     project_id: (projectId == undefined) ? projectDestination : projectId,
                     user_id: user_id,
@@ -112,15 +111,13 @@ function SaveDoc(props) {
         })
         .then(res => {
             // Update the folders state variable
-            console.warn(res.data);
-            updateFileContents("63e7fed9b5ebefc1e6b3e647", code, 'HomeScreen', projectId, projectName)
+            const fileId = res.data.fileIds[0];
+            updateFileContents(fileId, code, 'HomeScreen', projectId, projectName)
         });
     }
 
     function UpdateButton({ isDisabled, screenName }) {
         const { fileId, textToSave, editorOrigin, projectId, projectName } = route.params;
-        // if (editorOrigin == 1)
-
         return (
             <Pressable style={styles.SendButton}
                 onPress={async () =>
