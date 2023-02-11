@@ -9,6 +9,7 @@ import HomeScreen from './../user_initialization/HomeScreen';
 import SaveDestination from './SaveDestination';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -47,13 +48,13 @@ function SaveDoc(props) {
 
     const [folderDestination, setFolderDestination] = useState('');
 
-    const {filename, fileId, textToSave, projectId} = route.params;
+    const {filename, fileId, editorOrigin, textToSave, projectId} = route.params;
 
     useEffect(() => {
-        if (filename == '' || fileId == undefined || textToSave == undefined)
-            setDisabled(true)
-        const fileId = route.params.fileId;
-        console.warn(fileId);
+        // if (filename == '' || fileId == undefined || textToSave == undefined)
+        //     setDisabled(true)
+        // const fileId = route.params.fileId;
+        // console.warn(fileId);
         setCommitTitlePlaceholder("Update " + filename)
     }, [])
 
@@ -66,6 +67,9 @@ function SaveDoc(props) {
     }
 
     async function updateFileContents(fileId, code, screenName, projectId, projectName) {
+        console.log("fileId: " + fileId);
+        // const user_id = AsyncStorage.getItem('user_id');
+        // const user_picture = AsyncStorage.getItem('user_picture');
         if (fileId != undefined && code != undefined) {
             const response = await axios.post(baseUrl + `/updateFile`, {
             file_id: fileId,
@@ -82,14 +86,36 @@ function SaveDoc(props) {
                 navigation.navigate(screenName, { projectId, projectName })
             });
         } else {
-            // Create the new file Object and get the fileId
-            const file_id = await axios.post(baseUrl + `/uploadFile`, {
-                // file_name: filename,
-                // file_contents: code,
-                // project_id: projectId,
-            // Call updateFileContents again with the new fileId
-            Alert.alert("Could not update file");
+            addFile(code, screenName, projectId, projectName);
         }
+    }
+
+    async function addFile(code, screenName, projectId, projectName) {
+        if (folderDestination == '' || folderDestination == undefined) {
+            Alert.alert("Please select a folder to save to");
+            console.warn(code);
+            return;
+        }
+        // Handle generating unique file object name
+        const fileName = filename + ':::::' + folderDestination;
+        // Create a blank file to upload to gridfs
+        const file = new File([code], fileName, {type: "text/plain"});
+        // Create a form data object to send to the server
+        const formData = new FormData();
+        formData.append('files', file, fileName + ":::::" + folderDestination);
+        console.warn(formData);
+        // Axios call to upload file to gridfs
+        await axios.post('https://photocode.app:8443/uploadFile', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        .then(res => {
+            // Update the folders state variable
+            console.warn(res.data);
+            updateFileContents("63e7ecd7cc5eb3a05c856211", code, 'HomeScreen', projectId, projectName)
+            // navigation.navigate('HomeScreen');
+        });
     }
 
     function UpdateButton({ isDisabled, screenName }) {
@@ -128,17 +154,19 @@ function SaveDoc(props) {
                     {
                         flex: 1,
                         height: windowHeight * 1,
-                        paddingBottom: windowHeight + windowHeight * 0.05 * numProjects,
+                        paddingBottom: (editorOrigin == 1) ? windowHeight + windowHeight * 0.05 * numProjects : 0,
                         justifyContent: 'space-between',
                         alignItems: 'center',
                     }
                 }>
                 <View style={styles.inputBox}>
-                    <View style={styles.titleHeader}>
-                        <Text style={styles.subjectTitle}>Save Destination</Text>
-                        <View style={styles.underLine}></View>
-                        <SaveDestination setFolderDestination={setFolderDestination} setNumProjects={setNumProjects} user_id={props.user_id}/>
-                    </View>
+                    {editorOrigin == 1 ? 
+                        <View style={styles.titleHeader}>
+                            <Text style={styles.subjectTitle}>Save Destination</Text>
+                            <View style={styles.underLine}></View>
+                            <SaveDestination setFolderDestination={setFolderDestination} setNumProjects={setNumProjects} user_id={props.user_id}/>
+                        </View>
+                    : null}
                     <View style={styles.titleHeader}>
                         <Text style={styles.subjectTitle}>Commit Title</Text>
                         <View style={styles.underLine}></View>
