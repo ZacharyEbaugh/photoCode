@@ -11,6 +11,7 @@ import LinkedInLogo from './../../assets/images/LinkedInLogo.png';
 
 import { useAuth0 } from 'react-native-auth0';
 import { useEffect } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export const LoginButtons = (props) => {
     const {authorize, user, clearSession} = useAuth0({
@@ -99,6 +100,12 @@ export const LoginButtons = (props) => {
 
     useEffect(() => {
         props.setUser(user);
+        if (user != null)
+        {
+            AsyncStorage.setItem('user_picture', JSON.stringify(user.picture));
+            console.warn(user.picture);
+
+        }
     }, [user]);
 
     return (

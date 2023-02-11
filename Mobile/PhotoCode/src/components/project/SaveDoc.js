@@ -47,6 +47,7 @@ function SaveDoc(props) {
     const [numProjects, setNumProjects] = useState(0);
 
     const [folderDestination, setFolderDestination] = useState('');
+    const [projectDestination, setProjectDestination] = useState('');
 
     const {filename, fileId, editorOrigin, textToSave, projectId} = route.params;
 
@@ -67,19 +68,18 @@ function SaveDoc(props) {
     }
 
     async function updateFileContents(fileId, code, screenName, projectId, projectName) {
-        console.log("fileId: " + fileId);
-        // const user_id = AsyncStorage.getItem('user_id');
-        // const user_picture = AsyncStorage.getItem('user_picture');
+        const user_id = AsyncStorage.getItem('user_id');
+        const user_picture = await AsyncStorage.getItem('user_picture');
         if (fileId != undefined && code != undefined) {
             const response = await axios.post(baseUrl + `/updateFile`, {
-            file_id: fileId,
-            file_contents: code,
-            file_name: filename
+                file_id: fileId,
+                file_contents: code,
             }).then(async res => {
+                console.warn("PROJECT ID: " + (projectId == undefined) ? projectDestination : projectId);
                 const commitResponse = await axios.post(baseUrl + `/createCommit`, {
-                    project_id: projectId,
-                    user_id: props.user_id,
-                    picture: props.user.picture,
+                    project_id: (projectId == undefined) ? projectDestination : projectId,
+                    user_id: user_id,
+                    picture: user_picture.split('"')[1],
                     title: commitTitle === '' ? commitTitlePlaceholder : commitTitle,
                     message: commitMessage === '' ? commitMessagePlaceholder : commitMessage,
                 })
@@ -113,8 +113,7 @@ function SaveDoc(props) {
         .then(res => {
             // Update the folders state variable
             console.warn(res.data);
-            updateFileContents("63e7ecd7cc5eb3a05c856211", code, 'HomeScreen', projectId, projectName)
-            // navigation.navigate('HomeScreen');
+            updateFileContents("63e7fed9b5ebefc1e6b3e647", code, 'HomeScreen', projectId, projectName)
         });
     }
 
@@ -164,7 +163,7 @@ function SaveDoc(props) {
                         <View style={styles.titleHeader}>
                             <Text style={styles.subjectTitle}>Save Destination</Text>
                             <View style={styles.underLine}></View>
-                            <SaveDestination setFolderDestination={setFolderDestination} setNumProjects={setNumProjects} user_id={props.user_id}/>
+                            <SaveDestination setProjectDestination={setProjectDestination} setFolderDestination={setFolderDestination} setNumProjects={setNumProjects} user_id={props.user_id}/>
                         </View>
                     : null}
                     <View style={styles.titleHeader}>

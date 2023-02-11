@@ -88,6 +88,7 @@ function HomeScreen(props) {
         })
         .then(response => {
             props.setUser_Id(response.data._id);
+            AsyncStorage.setItem('user_id', response.data._id);
         })
         .catch(() => {
             console.log('Error');

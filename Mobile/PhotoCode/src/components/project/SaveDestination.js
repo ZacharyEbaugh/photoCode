@@ -39,6 +39,7 @@ function SaveDestination(props) {
     }
 
     async function getAllFolders(project_id) {
+        props.setProjectDestination(project_id);
         const folders = await axios.get(baseUrl + `/getFolders`, {
             params: {
                 project_id: project_id
