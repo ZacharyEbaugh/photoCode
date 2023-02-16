@@ -37,7 +37,7 @@ export default function Landing_page() {
 
   // Axios call sendemail to user on button click
     const sendEmail = () => {
-        Axios.post("http://localhost:3001/sendEmail", {
+        Axios.post("https://photocode.app:8443/sendEmail", {
             name: name,
             email: email,
             company: company,

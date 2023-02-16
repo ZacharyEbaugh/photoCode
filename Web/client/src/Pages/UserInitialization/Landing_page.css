@@ -32,14 +32,14 @@
 
   .SplashSection {
     width: 100%;
-    height: 100vh;
     background-image: linear-gradient(180deg, #0066FF 0%, #FFFFFF 64.17%);
   }
 
   .topNav {
     width: 100%;
-    height: 10vh;
     display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .NavLinks {
@@ -51,12 +51,12 @@
   }
 
   .NavLinks a {
-    margin: 2vw;
-    margin-left: 4vw;
+    margin: 2rem;
+    margin-left: 4rem;
   }
 
   .NavLinks button {
-    font-size: 1.5vw;
+    font-size: 3rem;
     color: white;
     background: none;
     border: none;
@@ -69,21 +69,21 @@
   }
 
   .UserInitialization {
-    width: 30%;
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 3rem;
+    margin-right: 6rem;
   }
 
   .LoginButton {
-    font-size: 1.5vw;
+    font-size: 3rem;
     color: white;
     background: none;
     border: none;
     font-family: "Mono-Regular";
-    margin: 2vw;
     cursor: pointer;
+    margin-right: 4rem;
   }
 
   .LoginButton:hover {
@@ -91,10 +91,10 @@
   }
 
   .RegisterButton {
-    font-size: 1.5vw;
+    font-size: 3rem;
     color: white;
     background: none;
-    padding: 0.5vw;
+    padding: 1rem;
     border-radius: 10px;
     border: 2px solid #FFFFFF;
     font-family: "Mono-Regular";
@@ -109,13 +109,13 @@
 
   .SplashInfo {
     width: 100%;
-    height: 90vh;
+    margin-top: 10rem;
+    margin-bottom: 10rem;
     display: flex;
   }
 
   .TitleInfo {
     width: 50%;
-    height: 90%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -123,7 +123,7 @@
   }
 
   .TitleInfo h1 {
-    font-size: 5rem;
+    font-size: 7rem;
     font-family: "Mono-Medium";
     text-align: center;
     z-index: 2;
@@ -131,11 +131,11 @@
   }
 
   .TitleInfo h2 {
-    width: 100%;
     font-family: 'Mono-Regular';
     font-style: normal;
     font-weight: lighter;
-    font-size: 3rem;
+    font-size: 4rem;
+    margin-top: 0;
     text-align: center;
     color: #000000;
     z-index: 2;
@@ -148,7 +148,6 @@
     align-items: center;
     margin-top: 1vw;
     margin-bottom: 1vw;
-    /* padding: 3vh; */
     z-index: 2;
   }
 
@@ -186,6 +185,7 @@
     font-size: 1.5vw;
     font-family: "Mono-Regular";
     font-weight: lighter;
+    color: black;
   }
 
   .HeroImg {
@@ -471,93 +471,67 @@
     border: 2px solid white;
   }
 
-  @media only screen and (max-width: 1200px) {
+  @media only screen and (max-width: 1400px) {
     .SplashInfo {
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      margin: 0;
+    }
+
+    .topNav {
+      justify-content: center;
+    }
+
+    .UserInitialization {
+      margin-right: 0;
+      margin-left: 0;
+    }
+
+    .NavLinks {
+      display: none;
     }
 
     .TitleInfo {
       width: 90%;
-      height: 60%;
-      margin-top: 30%;
     }
 
     .TitleInfo h1 {
-      font-size: 8vw;
       font-family: "Mono-Medium";
       text-align: center;
       overflow:visible;
     }
 
-    .TitleInfo h2 {
-      font-size: 4vw;
-      margin-top: 0;
-    }
-
-    .DownloadButtons {
-      display: flex;
-      width: 90%;
-      height: 20%;
-      margin-bottom: 10%;
-      justify-content: center;
-      align-items: center;
-      padding: 0;
-      z-index: 2;
-    }
-
-    .AppStoreButton {
-      width: 14vw;
-      min-width: 12rem;
-    }
-  
-    .GooglePlayButton {
-      width: 12vw;
-      min-width: 10rem;
-    }
-  
     .HeroImg {
-      object-fit:contain;
-      margin-bottom: 20%;
+      margin-top: 5%;
     }
-    
-  .ShowcaseSection {
-    width: 100%;
-    margin-top: 10%;
+      
+    .ShowcaseSection {
+      width: 100%;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+  .HeroImg {
+    display: none;
   }
 }
 
-@media only screen and (max-width: 1000px) {
-  .TitleInfo {
-    margin-top: 25%;
+@media only screen and (max-width: 850px) {
+  .TitleInfo h1 {
+    font-size: 5rem;
   }
 
-  .ShowcaseSection {
-    width: 100%;
-    margin-top: 15%;
+  .TitleInfo h2 {
+    font-size: 2rem;
   }
 
-  .HeroImg {
-    width: 60vw;
+  .topNav {
+    display: none;
   }
 }
 
-@media only screen and (max-width: 500px) {
-  .TitleInfo {
-    margin-top: -10%;
-  }
-
-  .ShowcaseSection {
-    width: 100%;
-    margin-top: -75%;
-  }
-
-  .HeroImg {
-    width: 60vw;
-    margin-top: -70%;
-  }
-
+@media only screen and (max-width: 600px) {
   .ContactInputs {
     margin-top: 27.5vw;
     height: 33.5vw;
@@ -569,5 +543,17 @@
 
   .NameInput {
     height: 30%;
+  }
+
+  .NavShowcase {
+    display: none;
+  }
+
+  .ContactUs {
+    display: none;
+  }
+
+  .TitleInfo h3 {
+    display: none;
   }
 }

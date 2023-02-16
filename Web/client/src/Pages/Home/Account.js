@@ -33,7 +33,7 @@ function Account(props) {
     useEffect(() => {
         // Get user information using user_id
         console.log(localStorage.getItem('user_id'));
-        axios.post("http://localhost:3001/getUserInfo", {
+        axios.post("https://photocode.app:8443/getUserInfo", {
             user_id: localStorage.getItem('user_id')
         })
         .then((res) => {
@@ -62,7 +62,7 @@ function Account(props) {
         props.setLoader(true);
         // Make axios call to send email to user with link to reset password
         try {
-            axios.post("http://localhost:3001/changeEmail", {
+            axios.post("https://photocode.app:8443/changeEmail", {
                 user_id: localStorage.getItem('user_id'),
                 newEmail: newEmail
             })
@@ -91,7 +91,7 @@ function Account(props) {
         props.setLoader(true);
         // Make axios call to send email to user with link to reset password
         try {
-            axios.post("http://localhost:3001/changeUsername", {
+            axios.post("https://photocode.app:8443/changeUsername", {
                 user_id: localStorage.getItem('user_id'),
                 newUsername: newUsername
             })
@@ -120,7 +120,7 @@ function Account(props) {
     //     props.setLoader(true);
     //     // Make axios call to send email to user with link to reset password
     //     try {
-    //         axios.post("http://localhost:3001/sendPasswordReset", {
+    //         axios.post("https://photocode.app:8443/sendPasswordReset", {
     //             email: user.email
     //         })
     //         .then((res) => {
@@ -147,7 +147,7 @@ function Account(props) {
         props.setLoader(true);
         // Make axios call to send email to user with link to reset password
         try {
-            axios.post("http://localhost:3001/resetPassword", {
+            axios.post("https://photocode.app:8443/resetPassword", {
                 email: user.email,
                 password: password,
                 passwordConfirm: passwordConfirm

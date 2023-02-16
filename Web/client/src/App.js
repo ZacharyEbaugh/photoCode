@@ -80,7 +80,7 @@ function App() {
           "code": localStorage.getItem("authorizationCode"),
           "client_id": "R15Hb8sCd5OiULwScyqwCBtTwQKbgYMs",
           "client_secret": "Y2aFtzhPni6-WT65su48BYzfyItcozp_ft1qeuap9KzaF2ED24AbWkEVNh9LWmXK",
-          "redirect_uri": "http://localhost:3000/Home"    
+          "redirect_uri": "https://photocode.app/Home"    
           },
           {
             headers: {
@@ -89,6 +89,7 @@ function App() {
           })
           .then(response => {
             // Local storage tokens
+            console.log("OAuth Responsse: " + response.data.access_token + "\t" + response.data.id_token);
             localStorage.setItem("access_token", response.data.access_token);
             localStorage.setItem("id_token", response.data.id_token);
             // Decode JWT
@@ -103,11 +104,9 @@ function App() {
             // Local Storage other user data
             localStorage.setItem("name", decoded.name);
             localStorage.setItem("picture", decoded.picture);
-            console.log(decoded);
-
             // Attempt to register the user, if they already exist, it will fail
             // If they are logging in with a social, this will ensure all users are stored in the database
-            axios.post("http://localhost:3001/register", {
+            axios.post("https://photocode.app:8443/register", {
               email: localStorage.getItem('email'),
               username: localStorage.getItem('name'),
               picture: localStorage.getItem('picture'),
@@ -115,8 +114,9 @@ function App() {
               connection: localStorage.getItem('connection'),
             })
             .then(response => {
+              console.log("After Register calling getUser");
               // Get user id from mongoDB
-              axios.post("http://localhost:3001/getUser", {
+              axios.post("https://photocode.app:8443/getUser", {
                 email: localStorage.getItem('email'),
                 connection: localStorage.getItem('connection'),
               })
@@ -125,7 +125,7 @@ function App() {
                 if (localStorage.getItem('picture') != response.data.picture)
                 {
                   // Axios call to update user picture in database if it is different from the one stored
-                  axios.post("http://localhost:3001/updateUserPicture", {
+                  axios.post("https://photocode.app:8443/updateUserPicture", {
                     user_id: localStorage.getItem('user_id'),
                     picture: localStorage.getItem('picture'),
                   })

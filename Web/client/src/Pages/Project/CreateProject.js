@@ -90,7 +90,7 @@ const CreateProject = (props) => {
       const project_id = response.data.project_id;
 
       // Create Folder that will act as the root folder for the project with a parent id of the project id
-      axios.post('http://localhost:3001/createFolder', {
+      axios.post('https://photocode.app:8443/createFolder', {
         name: projectName,
         parent_id: project_id,
       })
@@ -175,7 +175,7 @@ const CreateProject = (props) => {
         });
         try {
           // Upload the files to the server using the /uploadFile endpoint with the folder id as the parent folder id 
-          const response = await axios.post('http://localhost:3001/uploadFile', formData, {
+          const response = await axios.post('https://photocode.app:8443/uploadFile', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },

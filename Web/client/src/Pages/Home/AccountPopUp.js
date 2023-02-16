@@ -40,7 +40,9 @@ export default function AccountPopUp(props) {
                             localStorage.removeItem('access_token');
                             localStorage.removeItem('id_token');
                             localStorage.removeItem('user_id');
-                            logout({redirectUri: 'http://localhost:3000',})
+
+                            // navigate("/");
+                            logout({redirectUri: 'https://photocode.app',})
                         }}>Logout</button>
                     </div>
             </PopupMenu>
