@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Sign In with Auth0</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ </head>
+  <style>
+    
+    @font-face{
+      font-family: 'JetBrainsMono';
+      src: url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2') format('woff2'),
+        url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff/JetBrainsMono-Regular.woff') format('woff'),
+        url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/ttf/JetBrainsMono-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+    
+    
+    body, html {
+      height: 100%;
+      background-image: linear-gradient(#0066FF, #ff5e0085);
+    }
+
+    .login-container {
+      width: 100%;
+      height: 100%;
+      display:flex;
+    }
+    
+    .login-left {
+      width: 65%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      box-shadow: 5px 10px 2vw #000000c8;
+    }
+    
+    .login-right {
+      height: 100%;
+      width: 35%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-box {
+      height: 85%;
+      width: 100%;
+      background-color: #fff;
+      border-radius: 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-header {
+      text-align: center;
+    }
+    
+    .login-header h3 {
+      font-size: 7rem;
+      font-family: 'JetBrainsMono';
+      font-weight: bolder;
+    }
+
+    .RegisterFields {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 70%;
+      justify-content: center;
+    }
+
+    .input {
+      width: 93%;
+      height: 4vw;
+      font-size: 3rem;
+      display: flex;
+      background-color: #e6e6e6;
+      border: none;
+      border-radius: 15px;
+      margin-top: 4rem;
+    }
+    
+  .input::placeholder {
+    	font-size: 3rem;
+      font-family: "JetBrainsMono";
+      color: black;
+    }
+ 
+  .emailInput {
+    width: 100%;
+    height: 3.9vw;
+    background-color: #e6e6e6;
+    border: none;
+    border-radius: 15px;
+    font-size: 3rem;
+    font-family: "JetBrainsMono";
+  }
+  
+  .emailInput::placeholder {
+    font-size: 3rem;
+    font-family: "JetBrainsMono";
+    color: black;
+  }
+    
+  .emailInput:focus {
+    outline: none;
+    }
+    
+  .passwordInput {
+    width: 110%;
+    display: flex;
+    justify-content: left;
+    height: 3.9vw;
+    background-color: #e6e6e6;
+    border: none;
+    border-radius: 15px;
+    font-size: 3rem;
+    font-family: "JetBrainsMono";
+    
+  }
+  
+  .passwordInput::placeholder {
+    font-size: 3rem;
+    font-family: "JetBrainsMono";
+    color: black;
+  }
+  
+  .passwordInput:focus {
+    outline: none;
+  }
+    
+    
+  .fa {
+    width: 20%;
+    height: 100%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3vw;
+    position: relative;
+  }
+    
+   #btn-login {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5rem;
+    padding-left: 5rem;
+    padding-right: 5rem;
+    border-radius: 11px;
+    border: none;
+    background-color: #0066FF;
+    font-size: 4rem;
+    font-family: "JetBrainsMono";
+    color: white;
+    cursor: pointer;
+   }
+    
+   #btn-forgotPassword {
+     width: 30%;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     margin-top: 5rem;
+     padding-left: 5rem;
+     padding-right: 5rem;
+     border-radius: 11px;
+     border: none;
+     background-color: #0066FF;
+     font-size: 4rem;
+     font-family: "JetBrainsMono";
+     color: white;
+     cursor: pointer;
+   }
+    
+   .login-right h1 {
+     font-size: 5rem;
+     font-family: 'JetBrainsMono';
+     color: white;
+     text-align: center;
+    }
+    
+    .login-right h2 {
+      font-size: 3rem;
+     	font-family: 'JetBrainsMono';
+      color: white;
+      width: 80%;
+      text-align: center;
+    }
+    
+   .register-button {
+     margin-top: 1vw;
+     padding-left: 2vw;
+     padding-right: 2vw;
+     border-radius: 100px;
+     border: none;
+     background-color: white;
+     font-size: 4rem;
+     font-family: "JetBrainsMono";
+     color: #0066FF;
+     cursor: pointer;
+    }
+    
+    .register-button:hover {
+     	color:#0066FF;
+      text-decoration: none;
+    }
+    
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus, 
+    input:-webkit-autofill:active{
+        -webkit-box-shadow: 0 0 0 300px #e6e6e6 inset !important;
+    }
+    
+    .forgot-password-button {
+      font-size: 3rem;
+     	font-family: "JetBrainsMono";
+     	text-align: right;
+      align-self: flex-end;
+      margin-right: 5rem;
+    }
+
+    #error-message {
+      display: none;
+      position: absolute;
+      bottom: 15%;
+      border: 1px solid red;
+    }
+    
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Modal Content */
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto; /* 15% from the top and centered */
+      padding: 20px;
+      border: 1px solid #888;
+      width: 50%; /* Could be more or less, depending on screen size */
+      display:flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    /* The Close Button */
+    .close {
+      color: #aaa;
+      float: right;
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+  </style>
+<body>
+  <div class="login-container">
+    <div class="login-left">
+      <div class="login-box">
+        <div class="login-header">
+          <h3>Welcome to PhotoCode</h3>
+        </div>
+        <form class="RegisterFields" onsubmit="return false;" method="post">
+           <!-- <div class="RegisterFields"> -->
+              <div class="input">
+                <i class="fa fa-envelope-o"></i>
+                <input
+                  type="text"
+                  class="emailInput"
+                  id="emailInput"
+                  placeholder="Email or Username"
+                />
+              </div>
+              <div class="input">
+                <i class="fa fa-lock"></i>
+                <input
+                  type="password"
+                  class="passwordInput"
+                  id="passwordInput"
+                  placeholder="Password"
+                />
+              </div>
+              <a class="forgot-password-button" id='openModalButton'>
+                Forgot Password?
+              </a>
+           <!-- </div> -->
+          <div id="modal" class="modal">
+            <div class="modal-content">
+              <span class="close">&times;</span>
+              <form id="emailForm" onsubmit="return false;" method="post">
+                <div class="input">
+                  <i class="fa fa-envelope-o"></i>
+                  <input
+                    type="text"
+                    class="emailInput"
+                    id="forgotPasswordEmailInput"
+                    placeholder="Email"
+                  />
+              	</div>
+                <button type="submit" id='btn-forgotPassword'>Submit</button>
+              </form> 
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            id="btn-login"
+            class="btn btn-primary btn-block">
+              Login
+          </button>
+         <hr>
+          <div id="response-message" class="alert alert-response"></div>
+          <div id="error-message" class="alert alert-danger"></div>
+        </form>
+      </div>
+    </div>
+    <div class="login-right">
+      <h1>
+        New to PhotoCode?
+      </h1>
+      <h2>
+        Sign up to have access to the cloud storage service built to streamline photo-to-file conversion 
+      </h2>
+      <a
+        href="https://photocode.app/Register"
+      	id="register-redirect"
+        class="register-button">
+          Register
+      </a>
+    </div>
+  </div>
+
+  <!--[if IE 8]>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/ie8/0.2.5/ie8.js"></script>
+  <![endif]-->
+
+  <!--[if lte IE 9]>
+  <script src="https://cdn.auth0.com/js/polyfills/1.0/base64.min.js"></script>
+  <script src="https://cdn.auth0.com/js/polyfills/1.0/es5-shim.min.js"></script>
+  <![endif]-->
+
+  <script src="https://cdn.auth0.com/js/auth0/9.18/auth0.min.js"></script>
+  <script src="https://cdn.auth0.com/js/polyfills/1.0/object-assign.min.js"></script>
+  <script>
+    window.addEventListener('load', function() {
+
+      var config = JSON.parse(
+        decodeURIComponent(escape(window.atob('@@config@@')))
+      );
+
+      var leeway = config.internalOptions.leeway;
+      if (leeway) {
+        var convertedLeeway = parseInt(leeway);
+      
+        if (!isNaN(convertedLeeway)) {
+          config.internalOptions.leeway = convertedLeeway;
+        }
+      }
+
+      var params = Object.assign({
+        overrides: {
+          __tenant: config.auth0Tenant,
+          __token_issuer: config.authorizationServer.issuer
+        },
+        domain: config.auth0Domain,
+        clientID: config.clientID,
+        redirectUri: config.callbackURL,
+        responseType: 'code'
+      }, config.internalOptions);
+
+      var webAuth = new auth0.WebAuth(params);
+      var databaseConnection = 'Username-Password-Authentication';
+      var captcha = webAuth.renderCaptcha(
+        document.querySelector('.captcha-container')
+      );
+
+      function login(e) {
+        e.preventDefault();
+        var button = this;
+        var username = document.getElementById('emailInput').value;
+        var password = document.getElementById('passwordInput').value;
+        button.disabled = true;
+        webAuth.login({
+          realm: databaseConnection,
+          username: username,
+          connection: 'Username-Password-Authentication',
+          password: password,
+        }, function(err) {
+          if (err) displayError(err);
+          button.disabled = false;
+        });
+      }
+      
+      function forgotPassword(e) {
+        e.preventDefault();
+        var button = this;
+        var email = document.getElementById('forgotPasswordEmailInput').value;
+        console.log(email);
+      }
+
+      function displayError(err) {
+        captcha.reload();
+        var errorMessage = document.getElementById('error-message');
+        console.log(errorMessage);
+        errorMessage.innerHTML = err.policy || err.description;
+        errorMessage.style.display = 'block';
+      }
+      
+     	function displayResponse(res) {
+        captcha.reload();
+        var responseMessage = document.getElementById('response-message');
+        console.log(responseMessage);
+        responseMessage.innerHTML = err.policy || err.description;
+        responseMessage.style.display = 'block';
+      }
+
+      document.getElementById('btn-login').addEventListener('click', login);
+      document.getElementById('btn-forgetPassword').addEventListener('click', forgotPassword);
+      
+      // Get the modal
+    	var modal = document.getElementById("modal");
+
+      // Get the button that opens the modal
+      var btn = document.getElementById("openModalButton");
+
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+
+      // When the user clicks the button, open the modal 
+      btn.onclick = function() {
+        modal.style.display = "flex";
+      }
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+    });
+    
+   
+  </script>
+</body>
+</html>

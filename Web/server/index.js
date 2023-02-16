@@ -772,6 +772,32 @@ app.post('/createFolder', function (req, res) {
   });
 });
 
+// Function to verify if a folder exists and return the folder
+async function getFolder(req, callback) {
+  const folder_id = req.query.folder_id;
+  const folder = {
+    _id: ObjectId(folder_id)
+  };
+  try {
+    const folderFound = await folders.findOne(folder);
+    return callback(null, folderFound);
+  } catch (error) {
+    return callback(error);
+  }
+}
+
+// Route handler for getting a folder
+app.get('/getFolder', function (req, res) {
+  getFolder(req, function (err, folder) {
+    if (err) {
+      res.status(500).send({ error: err.message });
+    }
+    else {
+      res.send({ message: 'Folder found', folder: folder});
+    }
+  });
+});
+
 // Function to get a single file from the files collection by id and return the file
 async function getFile(req, callback) {
   const file_id = req.query.file_id;
