@@ -67,11 +67,20 @@ const CreateProject = (props) => {
     setProjectDescription(event.target.value);
   };
 
-  // handle create project button
-  const handleCreateProject = () => {
-    props.setLoader(true);
+  const handleCreateProject = async() => {
+    await props.setLoader(true);
+    Promise.resolve(createProject()).then(() => {
+      props.setLoader(false);
+      navigate('/Home');
+    });
+  };
+
+  // Create a project in the database and upload files to the project
+  // This will also create the folder structure for the project
+  const createProject = async() => {
+
     // Call /createProject endpoint to create project in the database and get the project id
-    axios.post('http://localhost:3001/createProject', {
+    const create_project = await axios.post('http://localhost:3001/createProject', {
       name: projectName,
       description: projectDescription,
       user: localStorage.getItem('user_id'),
@@ -79,51 +88,85 @@ const CreateProject = (props) => {
     })
     .then(async(response) => {
       const project_id = response.data.project_id;
+
       // Create Folder that will act as the root folder for the project with a parent id of the project id
       axios.post('http://localhost:3001/createFolder', {
         name: projectName,
         parent_id: project_id,
       })
       .then(async (response) => {
+
         // Upload files to the root folder
         const folder_id = response.data.folder.lastErrorObject.upserted;
-        console.log(folder_id);
+
         // Create form data object to send files and metadata to the server
         const formData = new FormData();
+
         // Loop over all files and create a promise for each file
         const filePromises = files.map(async (file) => {
+
           // If the file is in a subdirectory, create a folder with the name of the directory and the parent id of the parent folder
           // Traverse down the directory tree and create folders for each subdirectory
           // Append adjusted parent_id to each file in the form data
           if (file.directory != undefined && file.fullPath != undefined) {
+
             // Create an array of the subdirectories, excluding the root directory and the file name
             // For each entry in the array, every entry before it is the parent folder
             const folderPath = file.fullPath.split('/').slice(1, -1);
+
             // Initial parent_id should be the root folder id
             localStorage.setItem('parent_id', folder_id);
             for (let i = 0; i < folderPath.length; i++) {
-              // Check if the folder already exists in the database and if not
-              // create it with the parent id of the previous folder within this loop
-              const response = await axios.post('http://localhost:3001/createFolder', {
-                name: folderPath[i],
-                parent_id: localStorage.getItem('parent_id'),
-              })
-              .then((response) => {
-                if (response.data.folder.value === null) {
-                  // localStorage.setItem('parent_id', response.data.folder.lastErrorObject.upserted);
-                  localStorage.setItem('parent_id', response.data.folder.lastErrorObject.upserted);
-                }
-                else {
-                  // localStorage.setItem('parent_id', response.data.folder.value._id);
-                  localStorage.setItem('parent_id', response.data.folder.value._id);
-                }
-              });
-            }
+
+                const response = await axios.post('http://localhost:3001/createFolder', {
+                  name: folderPath[i],
+                  parent_id: localStorage.getItem('parent_id'),
+                })
+                .then(async (response) => {
+                  console.log(response);
+                  const folder_id = (response.data.folder.value === null) ? response.data.folder.lastErrorObject.upserted : response.data.folder.value._id;
+
+                  // Verify the folder exists and is recognized as an object in the database
+                  // If not found then wait and try again
+                  const retryInterval = 10000;
+                  const maxRetries = 1000;
+
+                  for (let i = 0; i < maxRetries; i++) {
+                    const verify = await axios.get('http://localhost:3001/getFolder', {
+                      folder_id: folder_id
+                    })
+                    .then((response) => {
+                      console.log("Found Folder");
+                      return true;
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                      return false;
+                    });
+
+                    if (verify) {
+                      break;
+                    }
+                    else {
+                      setTimeout(() => {}, retryInterval);
+                    }
+                    console.log("RESOLVING");
+                    Promise.resolve(verify);
+                  }
+                  localStorage.setItem('parent_id', folder_id);
+                });
+
+                Promise.resolve(response);
+                setTimeout(() => {}, 100000);
+              }
+
             // Append the parent id to the file which will be appended to the form data
             file.file.parent_id = localStorage.getItem('parent_id');
+            setTimeout(() => {}, 100000);
           }
           return file.file;
         });
+
         // Resolve all promises and append the files to the form data
         const resolvedFiles = await Promise.all(filePromises);
         resolvedFiles.forEach((file) => {
@@ -144,14 +187,12 @@ const CreateProject = (props) => {
       .catch((error) => {
         console.log(error);
       });
-      // Wait for the project to be created and the files to be uploaded before navigating to the home page
-      // await new Promise((resolve) => setTimeout(resolve, 1000));
-      navigate('/Home');
     })
     .catch((error) => {
       console.log(error);
     });
   };
+
 
   if (props.auth.isLoading) {
     return (
