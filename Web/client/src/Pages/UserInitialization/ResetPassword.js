@@ -53,7 +53,7 @@ function ResetPassword(props) {
             return;
         }
         try {
-            axios.post("https://photocode.app:8443/resetPassword", {
+            axios.post("http://localhost:3001/resetPassword", {
                 email: email,
                 password: password,
                 passwordConfirm: passwordConfirm

@@ -36,13 +36,13 @@ app.use((req, res, next) => {
   next();
 });
 
-const https = require('https');
-const fs = require('fs');
+// const https = require('https');
+// const fs = require('fs');
 
-const credentials = {
-  key: fs.readFileSync('generated-private-key.pem'),
-  cert: fs.readFileSync('fbc4b2fe0afb3741.pem')
-};
+// const credentials = {
+//   key: fs.readFileSync('generated-private-key.pem'),
+//   cert: fs.readFileSync('fbc4b2fe0afb3741.pem')
+// };
 
 // Connect to MongoDB Cluster
 const mongodbPS = process.env.MONGO_PASSWORD;
@@ -1062,7 +1062,7 @@ app.post('/sendProjectInvite', async function (req, res) {
       }
     });
     // Create the message
-    const message = `You have been invited to join ${project_name} on PhotoCode! Click the link below to accept the invite and join the project! \n\n https://photocode.app:8443/acceptInvite?project_id=${project_id}&user_id=${user_id}`;
+    const message = `You have been invited to join ${project_name} on PhotoCode! Click the link below to accept the invite and join the project! \n\n http://localhost:3001/acceptInvite?project_id=${project_id}&user_id=${user_id}`;
 
     // send the email
     transporter.sendMail({
@@ -1099,7 +1099,7 @@ app.post('/sendPasswordReset', async function (req, res) {
   });
   // Create the message with a link to the reset password page
   const message = `You have requested to reset your password for ${email}. Click the link below to reset your password.`;
-  const link = `https://photocode.app/resetPassword?email=${email}`;
+  const link = `http://localhost:3000/resetPassword?email=${email}`;
 
   // send the email
   transporter.sendMail({
@@ -1343,9 +1343,9 @@ app.post('/createCommit', async function (req, res) {
 */
 
 // Start the app
-// app.listen(3001, () => console.log('API listening on 3001'));
+app.listen(3001, () => console.log('API listening on 3001'));
 // var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
+// var httpsServer = https.createServer(credentials, app);
 
 // httpServer.listen(8080);
-httpsServer.listen(8443, () => console.log('API listening on 8443'));
+// httpsServer.listen(8443, () => console.log('API listening on 8443'));
