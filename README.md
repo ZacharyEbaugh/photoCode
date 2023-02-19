@@ -20,9 +20,9 @@
 -->
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
-[![Issues][issues-shield]][issues-url]
+<!-- [![Issues][issues-shield]][issues-url] -->
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
+<!-- [![LinkedIn][linkedin-shield]][linkedin-url] -->
 
 
 <!-- PROJECT LOGO -->
@@ -225,7 +225,7 @@ Use this space to list resources you find helpful and would like to give credit 
 [issues-shield]: https://img.shields.io/github/ZacharyEbaugh/photoCode.svg?style=for-the-badge
 [issues-url]: https://github.com/ZacharyEbaugh/photoCode/issues
 [license-shield]: https://img.shields.io/github/license/ZacharyEbaugh/photoCode.svg?style=for-the-badge
-[license-url]: https://github.com/ZacharyEbaugh/photoCode/blob/master/LICENSE.md
+[license-url]: https://github.com/ZacharyEbaugh/photoCode/blob/master/LICENSE.MD
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/photoCode
 <!-- [product-screenshot]: images/screenshot.png -->
