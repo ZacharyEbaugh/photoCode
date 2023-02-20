@@ -19,9 +19,9 @@
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
 <div align="center">
-  <img src="https://img.shields.io/github/contributors/ZacharyEbaugh/photoCode.svg?style=for-the-badge" alt="Logo" width="200" height="80">
-  <img src="https://img.shields.io/github/forks/ZacharyEbaugh/photoCode.svg?style=for-the-badge" alt="Logo" width="130" height="80">
-  <img src="https://img.shields.io/github/license/ZacharyEbaugh/photoCode.svg?style=for-the-badge" alt="Logo" width="240" height="80">
+  <img src="https://img.shields.io/github/contributors/ZacharyEbaugh/photoCode.svg?style=for-the-badge" alt="Logo" width="200" height="40">
+  <img src="https://img.shields.io/github/forks/ZacharyEbaugh/photoCode.svg?style=for-the-badge" alt="Logo" width="130" height="40">
+  <img src="https://img.shields.io/github/license/ZacharyEbaugh/photoCode.svg?style=for-the-badge" alt="Logo" width="240" height="40">
 </div>
 
 <!-- PROJECT LOGO -->
@@ -29,11 +29,11 @@
 <br />
 <div align="center">
   <a href="https://github.com/ZacharyEbaugh/photoCode">
-    <img src="https://user-images.githubusercontent.com/69406106/219903509-dda0cf03-2625-4f51-bd96-17de86d4d6f3.png" alt="Logo" width="80" height="80">
+    <!-- <img src="https://user-images.githubusercontent.com/69406106/219903509-dda0cf03-2625-4f51-bd96-17de86d4d6f3.png" alt="Logo" width="80" height="80"> -->
     
   </a>
 
-  <h3 align="center">PhotoCode</h3>
+  <h1 align="center">PhotoCode</h1>
 
   <p align="center">
     <h4>
@@ -96,11 +96,11 @@ PhotoCode is an in progress IOS app developed using ReactNative, MongoDB, Expres
       
 ### Built With
 <div align="center">
-  <a href="https://reactjs.org/"><img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="Logo" width="180" height="80"> </a>
-  <a href="https://reactnative.dev"><img src="https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB" alt="Logo" width="295" height="80"></a>
-  <a href="https://www.mongodb.com"><img src="https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white" alt="Logo" width="230" height="80"></a>
-  <a href="https://nodejs.org/en/"><img src="https://img.shields.io/badge/Node.js-43853d.svg?style=for-the-badge&logo=node.js&logoColor=white" alt="Logo" width="205" height="80"></a>
-  <a href="https://expressjs.com"><img src="https://img.shields.io/badge/Express.js-404d59.svg?style=for-the-badge" alt="Logo" width="210" height="80"></a>
+  <a href="https://reactjs.org/"><img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="Logo" width="180" height="60"> </a>
+  <a href="https://reactnative.dev"><img src="https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB" alt="Logo" width="295" height="60"></a>
+  <a href="https://www.mongodb.com"><img src="https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white" alt="Logo" width="230" height="60"></a>
+  <a href="https://nodejs.org/en/"><img src="https://img.shields.io/badge/Node.js-43853d.svg?style=for-the-badge&logo=node.js&logoColor=white" alt="Logo" width="205" height="60"></a>
+  <a href="https://expressjs.com"><img src="https://img.shields.io/badge/Express.js-404d59.svg?style=for-the-badge" alt="Logo" width="210" height="60"></a>
 </div>
 
 <p align="right"><a href="#readme-top">back to top</a></p>
