@@ -104,14 +104,14 @@ function Home(props) {
                     <div className='sidebar'>
                         <div className='projectsWrapper'>
                             <header className='projectsHeader'>
-                                <h1 className='projectsTitle'>Projects</h1>
+                                {/* <h1 className='projectsTitle'>Projects</h1> */}
                                 <div className='projectsButtonWrapper'>
                                     <div className="inputWrapper">
                                         <input
                                             type="text"
                                             id="search-input"
                                             className="searchProjects"
-                                            placeholder="Search Projects"
+                                            placeholder="Find a project..."
                                             value={searchQuery}
                                             onChange={event => search(event.target.value)}
                                         />
@@ -127,7 +127,12 @@ function Home(props) {
                                     </button>
                                 </div>
                             </header>
-                            {Object.entries((searchQuery === '') ? projects : searchResults).map(([key, project]) => {
+                            {(projects.length === 0) && <div className='noProjectsWrapper'>
+                                <h1 className='noProjectsTitle'>No Projects</h1>
+                                <h1 className='noProjectsDesc'>Create a new project to get started</h1>
+                                </div>
+                            }
+                            {(projects.length != 0) && Object.entries((searchQuery === '') ? projects : searchResults).map(([key, project]) => {
                                 return (
                                     <section className='project' key={project._id} onClick={() => {
                                         props.setLoader(true);

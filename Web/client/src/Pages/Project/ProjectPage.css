@@ -74,10 +74,11 @@ body {
     margin-bottom: 2rem;
 }
 
-.projectTitle {
+.projectPageTitle {
     font-family: "Mono-Regular";
     font-size: 2.5vw;
     margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 
 .create_search_file {
@@ -264,12 +265,13 @@ body {
 }
 
 .fileNameInput {
-    font-size: 1.5vw;
+    font-size: 2rem;
     font-weight: bold;
     margin-left: 1%;
     width: 90%;
     border: none;
     font-family: 'Mono-Regular';
+    font-weight: lighter;
     background: none;
 }
 
