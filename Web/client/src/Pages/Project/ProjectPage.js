@@ -234,18 +234,34 @@ function ProjectPage(props) {
   }
 
   const addFolder = async() => {
-    // Handle generating unique file object name
+    // Handle generating unique file object
     const newFolder = newFolderName;
+    const parent_folder_id = currentPath[currentPath.length - 1]._id;
+    const project_id = localStorage.getItem('project_id');
+
     // Axios call to create new folder
-    await axios.post('https://photocode.app:8443/createFolder', {
-      name: newFolder,
-      parent_id: currentFolder._id
-    })
-    .then(res => {
-      // Update the folders state variable
-      handleFolderClick(currentFolder);
-      setCreateFolder(false);
-    });
+    try {
+      await axios.post('https://photocode.app:8443/createFolder', {
+        name: newFolder,
+        parent_id: parent_folder_id,
+        project_id: project_id
+      })
+      .then(async res => {
+        // Set up folder object to update directory
+        const folder = {
+          _id: parent_folder_id,
+        }
+        // Update the folder and file directory
+        const [update_folders, files] = await updateDirContents(folder);
+        setFolders(update_folders);
+        setFiles(files);
+        // Finish creating folder
+        setCreateFolder(false);
+      });
+    } catch (err) {
+      console.log("Failed to Create Folder");
+      console.log(err);
+    }
   } 
 
   const addFile = async() => {
