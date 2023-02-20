@@ -7,6 +7,8 @@ import React, {
 import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
+import Markdown from 'markdown-to-jsx';
+
 
 import account_picture from '../../images/account.png';
 import folder_icon from '../../images/Folder_Icon.png';
@@ -45,6 +47,20 @@ function Home(props) {
     const handleClear = () => {
         setSearchQuery('');
     }
+
+    // Useeffect to populate the readme section with the readme of the project on github
+    const [postContent, setPostcontent] = useState('')
+    const [isDark, setIsDark] = useState(true)
+
+    useEffect(() => {
+        import('./../../README.md')
+        .then(res =>
+            fetch(res.default)
+            .then(response => response.text())
+            .then(response => setPostcontent(response))
+            .catch(err => console.log(err))
+        )
+    }, [])
 
     useEffect(() => {
         // Create a Promise to get the user ID from local storage
@@ -96,6 +112,7 @@ function Home(props) {
                                             id="search-input"
                                             className="searchProjects"
                                             placeholder="Search Projects"
+                                            value={searchQuery}
                                             onChange={event => search(event.target.value)}
                                         />
                                         {(searchQuery != '') && <button className="clearProjectSearch" onClick={handleClear}>
@@ -116,12 +133,12 @@ function Home(props) {
                                         props.setLoader(true);
                                         navigate('/ProjectPage?project_id=' + project._id, { state: { commits: project.commits } });
                                         }}>
-                                        <img className='projectImage' src={require("../../images/proj_1.png")} />
+                                        {/* <img className='projectImage' src={require("../../images/proj_1.png")} /> */}
                                         <div className='projectTitlesWrapper'>
                                             <h1 className='projectTitle'>{project.name}</h1>
                                             <h1 className='projectDesc'>{project.description}</h1>
                                         </div>
-                                        <div className='commonLangWrapper'>
+                                        {/* <div className='commonLangWrapper'>
                                             <div className='commonLang'>
                                                 <h2 className='lang'>{project.lang_1}</h2>
                                                 <span className='lang1Circle'></span>
@@ -134,7 +151,7 @@ function Home(props) {
                                                 <h2 className='lang'>{project.lang_3}</h2>
                                                 <span className='lang3Circle'></span>
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </section>
                                 );
                             })}
@@ -143,9 +160,9 @@ function Home(props) {
                     <div className='projectInformationWrapper'>
                         <div className='readMeWrapper'>
                             <h1 className='readMeTitle'>Read Me</h1>
-                        </div>
-                        <div className='releaseNotesWrapper'>
-                            <h1 className='releaseNotesTitle'>Release Notes</h1>
+                            <div className='markdown-body'>
+                                <Markdown className="readMe">{postContent}</Markdown>
+                            </div>
                         </div>
                     </div>
                 </div>

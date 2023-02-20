@@ -207,11 +207,11 @@ button, a {
 
 /* || Media Styles */
 /* #region */
-@media screen and (max-width: 1775px) {
+/* @media screen and (max-width: 1775px) {
     .main {
-        flex-direction: column-reverse;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
     }
-}
+} */
 /* #endregion */

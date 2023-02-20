@@ -33,6 +33,13 @@ button, a {
     cursor: pointer;
 }
 
+h1 {
+    font-family: 'Mono-Bold';
+    font-size: 4rem;
+    margin: 0;
+}
+
+
 .containerHome {
     display: flex;
     flex-direction: column;
@@ -44,10 +51,11 @@ button, a {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
+    justify-items: space-around;
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
-
+/* 
 .mainSkeleton {
     display: flex;
     flex-direction: row;
@@ -55,24 +63,24 @@ button, a {
     margin-top: 2rem;
     margin-bottom: 2rem;
     background-color: black;
-}
+} */
 
 
 /* || Projects Styles */
 /* #region */
 .sidebar {
-    margin: 0 0 0 5rem;
+    /* margin: 0 0 0 5rem; */
 }
 
 .projectsWrapper {
     background-color: white;
     box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
-    width: 80rem;
+    width: 62rem;
     /* height: 42rem; */
     border-radius: 1rem;
     display: flex;
     flex-direction: column;
-    padding: 3rem;
+    padding: 2rem;
     /* align-items: center; */
 }
 
@@ -80,13 +88,13 @@ button, a {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1%;
+    margin-bottom: 5%;
 }
 
 .projectsTitle {
     font-family: 'Mono-Regular';
     font-size: 4rem;
-    margin: 0 2.5rem 0 1.9rem;
+    margin: 0 1rem 0 1.9rem;
 }
 
 .projectsButtonWrapper {
@@ -108,8 +116,8 @@ button, a {
 
 .inputWrapper {
     /* margin: 0 0 0.75rem 0; */
-    width: 100%;
-    margin: 1rem;
+    /* margin: 1rem; */
+    width: 25rem;
     padding: 0.2rem 1rem 0.2rem 0.2rem;
     display: flex;
     align-items: center;
@@ -120,6 +128,7 @@ button, a {
 
 .searchProjects {
     font-family: "Mono-Regular";
+    width: 100%;
     font-size: 2.5rem;
     display: flex;
     align-items: center;
@@ -132,6 +141,7 @@ button, a {
 .clearProjectSearch {
     cursor: pointer;
     height: 100%;
+    width: 5rem;
     position: absolute;
     right: 0;
     background: none;
@@ -140,7 +150,7 @@ button, a {
 
 .clearProjectSearchIcon {
     height: 100%;
-    width: 50%;
+    width: 5rem;
     right: 0;
 }
 
@@ -200,7 +210,7 @@ button, a {
     /* justify-content: space-between; */
     padding: 0 1rem 0 1.17rem;
     align-items: center;
-    margin: 0 1.7rem 1.1rem 1.9rem;
+    margin: 0 1.7rem 2rem 1.9rem;
     border-radius: 0.75rem;
     box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.25);
     cursor: pointer;
@@ -219,14 +229,15 @@ button, a {
 .projectTitle {
     font-family: 'Mono-Regular';
     font-size: 3rem;
-    margin: 2rem 1rem;
+    margin: 1rem 1rem;
 }
 
 .projectDesc {
     font-family: 'Mono-Regular';
     font-size: 1.33rem;
-    width: 45rem;
-    height: 4rem;
+    font-weight: lighter;
+    width: 95%;
+    height: 10rem;
     overflow-y: auto;
     /* background-color: black; */
     margin: 0rem 0rem 0rem 1rem;
@@ -294,7 +305,7 @@ button, a {
 }
 
 .releaseNotesWrapper {
-    width: 70rem;
+    width: 50rem;
     height: 30rem;
     background-color: white;
     box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
@@ -315,13 +326,18 @@ button, a {
 /* || Read Me Styles */
 /* #region */
 .readMeWrapper {
-    width: 70rem;
-    height: 63rem;
+    width: 62rem;
+    /* height: 63rem; */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
     background-color: white;
     box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
     border-radius: 1rem;
-    margin: 0 2rem 0 3.33rem;
+    /* margin: 0 2rem 0 3.33rem; */
     margin-bottom: 3rem;
+    padding: 2rem;
 }
 
 .readMeTitle {
@@ -329,13 +345,85 @@ button, a {
     font-size: 3rem;
     margin: 1.1rem 0 0 2.5rem;
 }
+
+.readMe h1 {
+    font-family: 'Mono-Regular';
+    font-size: 3rem;
+    /* margin: 1.1rem 0 0 2.5rem; */
+}
+
+.readMe h2 {
+    font-family: 'Mono-Regular';
+    font-size: 2.5rem;
+    /* margin: 1.1rem 0 0 2.5rem; */
+}
+
+.readMe h3 {
+    font-family: 'Mono-Regular';
+    font-size: 2rem;
+    /* margin: 1.1rem 0 0 2.5rem; */
+    color: black;
+}
+
+.readMe h4 {
+    font-family: 'Mono-Regular';
+    font-size: 1.5rem;
+    /* margin: 1.1rem 0 0 2.5rem; */
+}
+
+.readMe h5 {
+    font-family: 'Mono-Regular';
+    font-size: 1.33rem;
+    /* margin: 1.1rem 0 0 2.5rem; */
+}
+
+.readMe p {
+    font-family: 'Mono-Regular';
+    font-size: 1.33rem;
+    /* margin: 1.1rem 0 0 2.5rem; */
+}
+
+.readMe a {
+    font-family: 'Mono-Regular';
+    font-size: 1.33rem;
+    color: #0055ff;
+}
+
+.readMe summary {
+    font-family: 'Mono-Regular';
+    font-size: 1.33rem;
+    margin: 1.1rem 0 0 2.5rem;
+    color: black;
+}
+
+.readMe li {
+    font-family: 'Mono-Regular';
+    font-size: 1.33rem;
+    /* margin: 1.1rem 0 0 2.5rem; */
+}
+
+.readMe code {
+    font-family: 'Mono-Regular';
+    font-size: 1.33rem;
+    /* margin: 1.1rem 0 0 2.5rem; */
+}
+
+.readMe em {
+    font-family: 'Mono-Regular';
+    font-size: 1.33rem;
+    /* margin: 1.1rem 0 0 2.5rem; */
+}
+
+.readMe img {
+    cursor: pointer;
+}
 /* #endregion */
 
 /* Media Queries */
 /* #region */
-@media screen and (max-width: 1400px) {
+/* @media screen and (max-width: 1400px) {
     .main {
         flex-direction: column-reverse;
     }
-}
+} */
 
