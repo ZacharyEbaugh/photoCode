@@ -84,52 +84,120 @@ const CreateProject = (props) => {
         name: projectName,
         parent_id: project_id,
       })
+      // I want to test separating the creation of folders and uploading files, this will create folders and as they are created map the parent id to the folder name in a dictionary
+      // This might need some weird workarounds as the problem is mongoDB being fast enough to recognize that the object is created
+      // Once this foldername -> folder_id mapping is created we can create the filenames to upload the list of files pulling the id from the map
       .then(async (response) => {
-        // Upload files to the root folder
-        const folder_id = response.data.folder.lastErrorObject.upserted;
-        console.log(folder_id);
-        // Create form data object to send files and metadata to the server
+        // Loop over files and isolate the structure of the folders, this can be a map of 
+        // folder_name -> {_id, children: [child_folder1_name, child_folder2_name]}
+        // child_folder1_name -> {_id, children: []}
+        // child_folder2_name -> {_id, children: []}
+        const folder_struct = {};
+        const filesLoop = files.map(async (file) => {
+
+          // If the directory is null, then this is a root file, there is no need to create a folder, continue
+          if (file.directory === undefined) {
+            return;
+          }
+
+          // Breakdown the directory string into a list of folders
+          const folderPath = file.directory.split('/').slice(1);
+
+          // Check if the root of the path is already in the folder structure
+          if (folder_struct[folderPath[0]] === undefined) {
+            // If not, create the root folder and add it to the folder structure
+            folder_struct[folderPath[0]] = {_id: '', children: {}, parent_id: response.data.folder.lastErrorObject.upserted};
+          }
+
+          // Check if there are any subfolders
+          if (folderPath.length === 1) {
+            // If not, continue
+            return;
+          }
+          
+          // If there are subfolders
+          // Traverse down the directory tree and create folders for each subdirectory and append each child to the folder before it
+          for (let i = 1; i < folderPath.length; i++) {
+
+            // Check if the folder already exists in the database and if not
+            // Check if the folder already exists in children of the parent folder
+            if (folder_struct[folderPath[i]] === undefined) {
+
+              // If not, create the folder and add it to the folder structure
+              folder_struct[folderPath[i]] = {_id: '', children: {}, parent_id: undefined};
+
+              // Check if the folder already exists in the children of the parent folder
+              if (folder_struct[folderPath[i-1]].children[folderPath[i]] === undefined) {
+
+                // If not, create the folder and add it to the folder structure
+                folder_struct[folderPath[i-1]].children[folderPath[i]] = {};
+              }
+            }
+          }
+          
+       
+        });
+
+        // Now that the folder structure is established in a local variable, we can loop over these folders and create them in the database, setting the parent_id to the parent folder id
+        // Create a queue of folders to create, start with folders that have a parent_id 
+        const folderQueue = [];
+        for (const folderName in folder_struct) {
+          if (folder_struct[folderName].parent_id !== undefined) {
+            folderQueue.push(folderName);
+          }
+        }
+
+        // For the folders that have a parent_id, create the folder and set the _id to the folder id, then set all it's children's parent_id to the folder id
+        while (folderQueue.length > 0) {
+          const folderName = folderQueue.shift();
+          if (folder_struct[folderName].parent_id !== undefined) {
+
+            // Create the folder
+            const folder = await axios.post('http://localhost:3001/createFolder', {
+              name: folderName,
+              parent_id: folder_struct[folderName].parent_id,
+            })
+            .then(async (response) => {
+
+              // Set the folder id to the folder structure
+              folder_struct[folderName]._id = response.data.folder.lastErrorObject.upserted;
+
+              // Set the parent_id of all the children to the folder id
+              for (const childFolderName in folder_struct[folderName].children) {
+                folder_struct[childFolderName].parent_id = folder_struct[folderName]._id;
+                folderQueue.push(childFolderName);
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+          }
+        }
+
+        // Once this structure is created we can loop over the folder structure as follows, create the folder on the top level, identify all children, after top level folder created, loop over children and use the parent_id of the top level folder to create the child folders
         const formData = new FormData();
         // Loop over all files and create a promise for each file
         const filePromises = files.map(async (file) => {
-          // If the file is in a subdirectory, create a folder with the name of the directory and the parent id of the parent folder
-          // Traverse down the directory tree and create folders for each subdirectory
-          // Append adjusted parent_id to each file in the form data
+          // For each file, identify the immediate parent folder of the file and append the folder_id to the form data
           if (file.directory != undefined && file.fullPath != undefined) {
-            // Create an array of the subdirectories, excluding the root directory and the file name
-            // For each entry in the array, every entry before it is the parent folder
-            const folderPath = file.fullPath.split('/').slice(1, -1);
-            // Initial parent_id should be the root folder id
-            localStorage.setItem('parent_id', folder_id);
-            for (let i = 0; i < folderPath.length; i++) {
-              // Check if the folder already exists in the database and if not
-              // create it with the parent id of the previous folder within this loop
-              const response = await axios.post('http://localhost:3001/createFolder', {
-                name: folderPath[i],
-                parent_id: localStorage.getItem('parent_id'),
-              })
-              .then((response) => {
-                if (response.data.folder.value === null) {
-                  // localStorage.setItem('parent_id', response.data.folder.lastErrorObject.upserted);
-                  localStorage.setItem('parent_id', response.data.folder.lastErrorObject.upserted);
-                }
-                else {
-                  // localStorage.setItem('parent_id', response.data.folder.value._id);
-                  localStorage.setItem('parent_id', response.data.folder.value._id);
-                }
-              });
-            }
+
+            // Isolate the parent folder name
+            const path = file.directory.split('/').slice(1);
+            const parentFolderName = path[path.length - 1];
+
             // Append the parent id to the file which will be appended to the form data
-            file.file.parent_id = localStorage.getItem('parent_id');
+            file.file.parent_id = folder_struct[parentFolderName]._id;
           }
           return file.file;
         });
+
         // Resolve all promises and append the files to the form data
         const resolvedFiles = await Promise.all(filePromises);
         resolvedFiles.forEach((file) => {
           formData.append('files', file, file.name + ":::::" + file.parent_id);
           console.log(file);
         });
+
         try {
           // Upload the files to the server using the /uploadFile endpoint with the folder id as the parent folder id 
           const response = await axios.post('http://localhost:3001/uploadFile', formData, {
@@ -140,12 +208,7 @@ const CreateProject = (props) => {
         } catch (error) {
           console.log(error);
         }
-      })
-      .catch((error) => {
-        console.log(error);
       });
-      // Wait for the project to be created and the files to be uploaded before navigating to the home page
-      // await new Promise((resolve) => setTimeout(resolve, 1000));
       navigate('/Home');
     })
     .catch((error) => {
