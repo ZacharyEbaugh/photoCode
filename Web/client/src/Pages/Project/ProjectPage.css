@@ -163,7 +163,7 @@ body {
 
 
 .dirPathButton {
-    height: 100%;
+    height: 5rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -176,9 +176,10 @@ body {
 }
 
 .dirPathButton:hover {
-    background-color: #e6e6e6;
-    height: 10%;
-    border-radius: 0px 0px 11px 11px;
+    /* background-color: #e6e6e6; */
+    color: #0066FF;
+    /* height: 10%; */
+    /* border-radius: 0px 0px 11px 11px; */
 }
 
 .dirPathButton h1 {

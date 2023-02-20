@@ -34,7 +34,9 @@
     align-items: center;
 }
 
-
+.commitsTitle {
+    margin-top: 2rem;
+}
 
 .commitsBox h1 {
     font-family: "Mono-Regular";
@@ -57,10 +59,12 @@
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
 .commitGeneralInfo:hover {
-    background-color: #E5E5E5; 
+    background-color: #f7f7f7; 
 }
 
 .commitGeneralInfoLast {
@@ -69,10 +73,13 @@
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1%;
 }
 
 .commitGeneralInfoLast:hover {
-    background-color: #E5E5E5;
+    background-color: #f7f7f7;
     border-radius: 0px 0px 11px 11px;
 }
 

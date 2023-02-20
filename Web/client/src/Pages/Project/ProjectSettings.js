@@ -247,7 +247,7 @@ function ProjectSettings(props) {
                         {(addCollab == true) ? 
                         <div className='AddCollaboratorBox'>
                             <div className='Title-Exit'>
-                                <h1>Add Collaborators</h1>
+                                <h1 className='addCollaboratorsTitle'>Add Collaborators</h1>
                                 <button className='ExitButton' onClick={() => setAddCollab(false)}>X</button>
                             </div>
                             <input

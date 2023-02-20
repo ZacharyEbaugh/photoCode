@@ -261,7 +261,7 @@
 .AddCollaboratorBox {
     display: flex;
     flex-direction: column;
-    width: 40%;
+    width: 60%;
     /* background: linear-gradient(180deg, #0066FF 0%, #FFFFFF 100%); */
     background: #FFFFFF;
     border-radius: 11px;
@@ -274,10 +274,21 @@
     align-items: center;
 }
 
-.AddCollaboratorBox h1 {
-    font-size: 1.5vw;
+.addCollaboratorsTitle {
+    font-family: "Mono-Regular";
+    font-size: 3rem;
     text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    color: black;
 }
+
+/* .AddCollaboratorBox h1 {
+    font-size: 1.5vw;
+    font-family: "Mono-Regular";
+    font-weight: lighter;
+    text-align: center;
+} */
 
 .AddCollaboratorBox input {
     width: 90%;
@@ -318,14 +329,26 @@
     align-items: center;
 }
 
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0.5rem;
+}
+
 .userFound h1 {
-    font-size: 1vw;
+    font-size: 2rem;
+    font-family: "Mono-Regular";
+    font-weight: lighter;
     color: black;
 }
 
 .userFound h2 {
-    font-size: 0.75vw;
-    color: black;
+    font-size: 1.5rem;
+    font-family: "Mono-Regular";
+    font-weight: lighter;
+    /* color: black; */
+    margin: 0;
 }
 
 .Title-Exit {
