@@ -40,7 +40,7 @@ button, a {
     min-height: 100vh;
 }
 
-.main {
+.mainContact {
     display: flex;
     width: 100%;
     justify-content: space-around;
@@ -60,6 +60,7 @@ button, a {
     box-shadow: inset 0px 0px 8px 4px rgba(0, 0, 0, 0.1);
     border-radius: 1.4rem;
     margin: 6.2rem 0 0 0;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -131,7 +132,7 @@ button, a {
     background-color: white;
     border-radius: 1.33rem;
     box-shadow: inset 0px 0px 8px 4px rgba(0, 0, 0, 0.1);
-    padding: 0 3.5rem 0 3rem;
+    padding: 3rem 3.5rem 0 3rem;
     margin: 6.2rem 2rem 0 0;
     display: flex;
     flex-direction: column;
@@ -207,11 +208,11 @@ button, a {
 
 /* || Media Styles */
 /* #region */
-/* @media screen and (max-width: 1775px) {
-    .main {
-        flex-direction: column;
-        justify-content: center;
+@media screen and (max-width: 1775px) {
+    .mainContact {
+        flex-direction: column-reverse;
+        justify-content: space-around;
         align-items: center;
     }
-} */
+}
 /* #endregion */

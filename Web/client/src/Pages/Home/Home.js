@@ -100,7 +100,7 @@ function Home(props) {
         return (
             <div className="containerHome">  
                 <PhotoCodeHeader  setLoader={props.setLoader}/>
-                <div className='main'>
+                <div className='mainHome'>
                     <div className='sidebar'>
                         <div className='projectsWrapper'>
                             <header className='projectsHeader'>

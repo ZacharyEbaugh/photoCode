@@ -47,13 +47,10 @@ h1 {
     min-height: 100vh;
 }
 
-.main {
+.mainHome {
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-items: space-around;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    width: 100%;
+    justify-content: space-around;
 }
 /* 
 .mainSkeleton {
@@ -342,8 +339,8 @@ h1 {
 
 .readMeTitle {
     font-family: 'Mono-Regular';
-    font-size: 3rem;
-    margin: 1.1rem 0 0 2.5rem;
+    font-size: 4rem;
+    margin: 1rem 1.9rem;
 }
 
 .readMe h1 {
@@ -419,11 +416,19 @@ h1 {
 }
 /* #endregion */
 
-/* Media Queries */
+/* || Media Styles */
 /* #region */
-/* @media screen and (max-width: 1400px) {
-    .main {
-        flex-direction: column-reverse;
+@media screen and (max-width: 1600px) {
+    .mainHome {
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
     }
-} */
+
+    .readMeWrapper {
+        margin-top: 3rem;
+    }
+}
+
+/* #endregion */
 
