@@ -350,6 +350,8 @@ h1 {
     border-radius: 1rem;
     /* margin: 0 2rem 0 3.33rem; */
     margin-bottom: 3rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
     padding: 2rem;
 }
 
@@ -434,7 +436,7 @@ h1 {
 
 /* || Media Styles */
 /* #region */
-@media screen and (max-width: 1600px) {
+@media screen and (max-width: 1660px) {
     .mainHome {
         flex-direction: column;
         justify-content: space-around;
