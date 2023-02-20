@@ -160,8 +160,9 @@ const CreateProject = (props) => {
   } else {
   return (
     <div className='CreateProjectContainer'>
+      <div className="CreateProjectMain">
         <PhotoCodeHeader setLoader={props.setLoader}/>
-        <h2>Create a new project</h2>
+        {/* <h2>Create a new project</h2> */}
         <div className='CreateProject'>
             <div className='CreateProjectForm'>
                 <input
@@ -213,6 +214,7 @@ const CreateProject = (props) => {
             )}
           </div>
         </div>
+      </div>
     </div>
   );
   }
