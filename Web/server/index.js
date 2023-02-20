@@ -40,8 +40,8 @@ const https = require('https');
 const fs = require('fs');
 
 const credentials = {
-  key: fs.readFileSync('generated-private-key.pem'),
-  cert: fs.readFileSync('fbc4b2fe0afb3741.pem')
+  key: fs.readFileSync('./../../../credentials/generated-private-key.pem'),
+  cert: fs.readFileSync('./../../../credentials/fbc4b2fe0afb3741.pem')
 };
 
 // Connect to MongoDB Cluster
