@@ -358,7 +358,7 @@ function ProjectPage(props) {
           <div className="directory-commits">
             <div className="directory">
               <div className="dirBlock">
-                <h1>{projectName}</h1>
+                <h1 className="projectTitle">{projectName}</h1>
                 <div className="create_search_file">
                   <button className="createFile" onClick={() => addNewFolder()}>            
                     <img src={newFolder} alt="new folder" className="newFolderButtonIcon"/> 
@@ -402,10 +402,10 @@ function ProjectPage(props) {
                             {folder.name}
                           </h1>
                         </div>
-                        <HiOutlineDownload
+                        {/* <HiOutlineDownload
                           className="downloadButton"
                           // onClick={() => handleDownload(folder)}
-                        />
+                        /> */}
                         <RiDeleteBin7Fill
                           className="deleteButton"
                           onClick={() => handleFolderDelete(folder)}

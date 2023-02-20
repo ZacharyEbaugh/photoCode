@@ -74,9 +74,10 @@ body {
     margin-bottom: 2rem;
 }
 
-.dirBlock h1 {
+.projectTitle {
     font-family: "Mono-Regular";
     font-size: 2.5vw;
+    margin-top: 2rem;
 }
 
 .create_search_file {
@@ -195,6 +196,7 @@ body {
 .folders {
     display: flex;
     align-items: center;
+    height: 5rem;
     /* border-bottom: 1px solid #D8D8D8; */
     cursor: pointer;
     position: relative;
@@ -210,18 +212,21 @@ body {
 }
 
 .folders h1 {
-    font-size: 1.5vw;
-    margin-left: 1%;
+    font-size: 2rem;
+    font-family: "Mono-Regular";
+    margin-left: 1rem;
+    font-weight: lighter;
 }
 
 .downloadButton {
-    width: 2vw;
-    height: 2vw;
+    width: 3rem;
+    height: 3rem;
     cursor: pointer;
     position: absolute;
     right: 10%;
-    top: 30%;
-    color: white;
+    top: 1.5rem;
+    bottom: 1rem;
+    color: #a2c7ff;
 }
 
 .downloadButton:hover {
@@ -229,13 +234,14 @@ body {
 }
 
 .deleteButton {
-    width: 2vw;
-    height: 2vw;
+    width: 3rem;
+    height: 3rem;
     cursor: pointer;
     position: absolute;
     right: 5%;
-    top: 30%;
-    color: white;
+    top: 1.5rem;
+    bottom: 1rem;
+    color: #a2c7ff;
 }
 
 .deleteButton:hover {
