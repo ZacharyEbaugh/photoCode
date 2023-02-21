@@ -734,7 +734,7 @@ const upload = multer( {storage: fileStorage} );
 
 // Route handler for uploading a file
 app.post('/uploadFile', upload.array('files'), (req, res, next) => {
-  res.status(200).send({ message: 'File uploaded' });
+  res.status(200).send({ message: 'File uploaded', file_id: req.files[0].id.toString()});
 });
 
 // Function to check if a folder exists, if it does return the folder document
@@ -916,7 +916,7 @@ app.post('/deleteFolder', function (req, res) {
 async function editFile(req, callback) {
   const file_id = req.body.file_id;
   const file_contents = req.body.file_contents;
-  console.log(file_contents);
+  const file_name = req.body.file_name;
 
   bucket.find({ _id: ObjectId(file_id) }).next(
     function (err, file) {
@@ -931,7 +931,6 @@ async function editFile(req, callback) {
           }
           else {
             const uploadStream = bucket.openUploadStreamWithId(file._id, file.filename, {
-              // contentType: encoding,
               contentType: file.contentType,
               metadata: {
                 parent_folder: file.metadata.parent_folder
@@ -941,6 +940,9 @@ async function editFile(req, callback) {
             // uploadStream.write(fileContents);
             // uploadStream.end();
     
+            // Update filename
+            uploadStream.filename = file_name;
+
             // Update the file
             uploadStream.end(Buffer.from(file_contents, 'utf8'), (err) => {
               if (err) {

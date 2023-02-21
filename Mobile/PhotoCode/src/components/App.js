@@ -25,8 +25,6 @@ import loginContext from './user_initialization/loginContext';
 
 const Stack = createNativeStackNavigator();
 
-import { Text, View } from 'react-native';
-
 const App = () => {
     const [user, setUser] = useState(null);
 
