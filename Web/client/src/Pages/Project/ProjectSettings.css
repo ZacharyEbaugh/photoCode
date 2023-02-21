@@ -32,33 +32,32 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 50vw;
+    height: 90vh;
     background: linear-gradient(180deg, #0066FF 0%, #FFFFFF 100%);
 }
 
 .Project-Name-Desc-Section h2 {
     font-family: "Mono-Regular";
-    font-size: 2.5vw;
+    font-size: 5rem;
     text-align: start;
-    margin-left: 5%;
     color: white;
 }
 
 .backButton {
     font-family: "Mono-Regular";
-    font-size: 2.5vw;
+    font-size: 4rem;
     color: white;
     border-radius: 11px;
     align-self: flex-start;
     border: none;
     background: none;
-    margin-left: 5%;
+    margin-left: 5rem;
 }
 
 .ProjectSettings {
     display: flex;
     flex-direction: row;
-    align-items: space-around;
+    align-items: space-between;
     justify-content: center;
     width: 100%;
     height: 100%;
@@ -67,15 +66,15 @@
 .ProjectSettingsContentLeft {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: center;
     width: 50%;
     height: 100%;
 }
 
 .ProjectSettingsContentLeft h2 {
     font-family: "Mono-Regular";
-    font-size: 2.5vw;
+    font-size: 4rem;
     text-align: left;
     color: white;
 }
@@ -93,17 +92,18 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 80%;
+    margin-top: 5rem;
+    /* width: 80%; */
+    width: 55rem;
     background-color: white;
     box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
     border-radius: 11px;
 }
 
 .ProjectSettingsInformation {
-    height: 25%;
-    width: 80%;
     display:flex;
     flex-direction: row;
+    max-width: 60rem;
     align-items: center;
 }
 
@@ -118,23 +118,25 @@
 
 .ProjectInput {
     font-family: "Mono-Regular";
-    font-size: 1.5vw;
-    width: 70%;
-    height: 92%;
-    margin-right: 5%;
+    font-size: 2.5rem;
+    max-width: 50rem;
+    /* height: 92%; */
+    padding: 1rem;
+    margin-right: 1rem;
     border-radius: 11px;
-    padding-left: 2%;
+    padding-left: 1rem;
     box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
     border: none;
 }
 
 .ProjectNameButton {
     font-family: "Mono-Regular";
-    font-size: 1.5vw;
-    width: 30%;
-    height: 100%;
+    font-size: 2.5rem;
+    /* width: 30%;
+    height: 100%; */
     /* padding-top: 2%; */
     /* padding-bottom: 2%; */
+    padding: 1rem;
     background: #FFFFFF;
     border: none;
     box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);    border-radius: 11px;
@@ -142,28 +144,29 @@
 
 .ProjectDescription {
     resize: none;
-    height: 100%;
-    width: 98%;
     border-radius: 11px;
+    min-height: 20rem;
+    max-height: 40rem;
+    width: 50rem;
     border: none;
-    padding-left: 2%;
-    padding-top: 2%;
+    padding: 1rem;
     font-family: "Mono-Regular";
-    font-size: 1.5vw;
+    font-size: 2.5rem;
     box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
 }
 
 .ProjectDescriptionButton {
     font-family: "Mono-Regular";
-    font-size: 1.5vw;
-    width: 50%;
-    height: 20%;
+    font-size: 2.5rem;
+    width: 52rem;
     background: #FFFFFF;
     border: none;
     box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
     border-radius: 11px;
-    margin-top: 2%;
-    align-self: center;
+    margin-top: 1rem;
+    padding: 1rem;
+    margin-bottom: 3rem;
+    /* align-self: center; */
 }
 
 .Title-addMember {
@@ -176,20 +179,21 @@
 
 .Title-addMember h2 {
     font-family: "Mono-Regular";
-    font-size: 2.5vw;
+    font-size: 4rem;
     text-align: left;
     color: black;
+    margin: 1rem;
 }
 
 .Title-addMember button {
     font-family: "Mono-Regular";
-    font-size: 2.5vw;
+    font-size: 3rem;
     background-color: #49cf14;
     color: white;
     box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
     border-radius: 11px;
-    height: 50%;
-    padding: 2%;
+    padding: 1rem;
+    margin: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -243,7 +247,7 @@
 
 .Member button {
     font-family: "Mono-Regular";
-    font-size: 1.5vw;
+    font-size: 2.5rem;
     background-color: rgb(184, 81, 81);
     color: white;
     box-shadow: inset 0px 0px 5px 3px rgba(59, 19, 19, 0.25);
@@ -375,16 +379,89 @@ h3 {
 }
 
 .DeleteProjectButton {
-    width: 30%;
-    height: 10%;
-    margin-top: 1%;
+    /* width: 30%;
+    height: 10%; */
+    margin-top: 1rem;
+    padding: 1rem;
     font-family: "Mono-Regular";
-    font-size: 1.5vw;
+    font-size: 2.5rem;
     background: rgb(228, 59, 59);
     border: none;
     box-shadow: inset 0px 0px 5px 3px rgba(59, 19, 19, 0.25);
     border-radius: 11px;
     color: white;
+    margin-bottom: 3rem;
 }
+
+/* || Media Styles */
+/* #region */
+@media screen and (max-width: 1450px) {
+    .Title-addMember {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+
+    }
+
+    .ProjectMemberSection {
+        width: 40rem;
+    }
+}
+
+@media screen and (max-width: 1330px) {
+    .ProjectSettings {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .ProjectSettingsContentLeft {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .Project-Name-Desc-Section {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        margin-top: 20rem;
+    }
+
+    .ProjectSettingsContentRight {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .AddCollaboratorBox {
+        width: 40rem;
+        margin-top: 10rem;
+    }
+
+    .projectNameTitle {
+        font-family: "Mono-Regular";
+        font-size: 4rem;
+        text-align: start;
+        color: white;
+        margin-top: 10rem;
+    }
+
+    .ProjectMemberSection {
+        margin-top: 10rem;
+    }
+
+}
+
+/* #endregion */
 
 

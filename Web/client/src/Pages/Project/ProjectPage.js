@@ -394,7 +394,7 @@ function ProjectPage(props) {
                 </div>
                 <div className="folderDisplay">
                     {Object.entries((searchQuery === '') ? folders : searchFoldersResults).map(([key, folder]) => (
-                      <button className='goToFolder'>
+                      <button className={(key == folders.length - 1 && files.length == 0) ? 'goToFolderLast' : 'goToFolder'}>
                         <div className="line"></div>
                         <div className="folders" key={key}  onClick={() => handleFolderClick(folder)}>
                           <img src={blueFolder} alt="blue folder" className="folderIcon"/>
@@ -413,7 +413,7 @@ function ProjectPage(props) {
                       </button>
                     ))}
                     {Object.entries((searchQuery === '') ? files : searchFilesResults).map(([key, file]) => (
-                      <button className='goToFolder'>
+                      <button className={(key == files.length - 1) ? 'goToFolderLast' : 'goToFolder'}>
                         <div className="line"></div>
                         <div className="folders" key={file._id}  onClick={() => 
                         {

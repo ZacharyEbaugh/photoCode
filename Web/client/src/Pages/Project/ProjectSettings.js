@@ -221,11 +221,11 @@ function ProjectSettings(props) {
         return (
             <div className='ProjectSettingsContainer'>
                 <PhotoCodeHeader setLoader={props.setLoader}/>
-                <button className='backButton' onClick={() => navigate(-1)}>{"<-"} Back to project</button>
+                <button className='backButton' onClick={() => navigate(-1)}>{"<-"} back to {projectNamePlaceholder}</button>
                 <div className='ProjectSettings'>
                     <div className='ProjectSettingsContentLeft'>
                         <div className='Project-Name-Desc-Section'>
-                            <h2>Project Name</h2>
+                            <h2 className='projectNameTitle'>Project Name</h2>
                             <div className='ProjectSettingsInformation'>
                                 <input 
                                     type='text' 
