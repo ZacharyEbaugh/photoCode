@@ -39,7 +39,7 @@ function ProjectSettings(props) {
       // Make a request to the MongoDB server to search for users
       async function fetchUsers() {
         try {
-          const response = await axios.get('https://photocode.app:8443/searchUsers', {
+          const response = await axios.get('http://localhost:3001/searchUsers', {
             params: {
               username: searchQuery
             }
@@ -75,7 +75,7 @@ function ProjectSettings(props) {
         });
         // Update project information
         const project_id = localStorage.getItem('project_id');
-        const response = await axios.post(`https://photocode.app:8443/updateProject`, {
+        const response = await axios.post(`http://localhost:3001/updateProject`, {
             project_id: project_id,
             name: projectName,
             description: projectDescriptionPlaceholder,
@@ -100,7 +100,7 @@ function ProjectSettings(props) {
         });
         // Update project information
         const project_id = localStorage.getItem('project_id');
-        const response = await axios.post(`https://photocode.app:8443/updateProject`, {
+        const response = await axios.post(`http://localhost:3001/updateProject`, {
             project_id: project_id,
             name: projectNamePlaceholder,
             description: projectDescription,
@@ -118,7 +118,7 @@ function ProjectSettings(props) {
         props.setLoader(true);
         // Update project information
         const project_id = localStorage.getItem('project_id');
-        await axios.post(`https://photocode.app:8443/sendProjectInvite`, {
+        await axios.post(`http://localhost:3001/sendProjectInvite`, {
             email: user.email,
             project_id: project_id,
             project_name: projectNamePlaceholder,
@@ -144,7 +144,7 @@ function ProjectSettings(props) {
         });
         // Update project information
         const project_id = localStorage.getItem('project_id');
-        const response = await axios.get(`https://photocode.app:8443/removeCollaborator`, {
+        const response = await axios.get(`http://localhost:3001/removeCollaborator`, {
             params: {
                 project_id: project_id,
                 user_id: user._id,
@@ -162,12 +162,12 @@ function ProjectSettings(props) {
         // Get project information
         const project_id = localStorage.getItem('project_id');
         async function getProject() {
-            const response = await axios.get(`https://photocode.app:8443/getProject?project_id=${project_id}`)
+            const response = await axios.get(`http://localhost:3001/getProject?project_id=${project_id}`)
             setProjectNamePlaceholder(response.data.name);
             setProjectOwner(response.data.user);
             setProjectDescriptionPlaceholder(response.data.description);
             // Get project collaborators information from users collection and add to projectMembers
-            const response2 = await axios.get('https://photocode.app:8443/getCollaborators', {
+            const response2 = await axios.get('http://localhost:3001/getCollaborators', {
                 params: {
                     project_id: project_id
                 }
@@ -188,12 +188,12 @@ function ProjectSettings(props) {
         });
         // Delete folders/files from projects contents
         const project_id = localStorage.getItem('project_id');
-        const response = await axios.post('https://photocode.app:8443/deleteFolder', {
+        const response = await axios.post('http://localhost:3001/deleteFolder', {
             "folder_id": project_id
         })
         .then(
             // Delete project object from projects collection
-            axios.post('https://photocode.app:8443/deleteProject', {
+            axios.post('http://localhost:3001/deleteProject', {
                 project_id: project_id
             })
         );

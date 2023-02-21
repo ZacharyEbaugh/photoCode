@@ -59,7 +59,7 @@ function Home(props) {
         // Wait for the Promise to resolve before making the API call
         getUserId.then(user_id => {
           // Fetch the projects from the database
-          axios.get(`https://photocode.app:8443/getAllProjects?user_id=${user_id}`)
+          axios.get(`http://localhost:3001/getAllProjects?user_id=${user_id}`)
             .then(res => {
               // Update the state with the fetched projects
               setProjects(res.data);
