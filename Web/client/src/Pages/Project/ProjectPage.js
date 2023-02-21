@@ -220,7 +220,10 @@ function ProjectPage(props) {
     if (event.key === 'Enter') {
       if (newFolderName == '')
       {
-        addFile();
+        if (currentPath[currentPath.length - 1].name == 'root')
+          window.alert("Cannot make file at root")
+        else
+          addFile();
       }
       else
       {
@@ -266,7 +269,10 @@ function ProjectPage(props) {
 
   const addFile = async() => {
     // Handle generating unique file object name
-    const fileName = newFileName + ':::::' + currentFolder._id;
+    const parent_folder_id = currentPath[currentPath.length - 1]._id;
+    const project_id = localStorage.getItem('project_id');
+    const fileName = newFileName + ':::::' + parent_folder_id + ':::::' + project_id;
+
     console.log(fileName)
     // Create a blank file to upload to gridfs
     const file = new File([""], fileName, {type: "text/plain"});
@@ -274,17 +280,29 @@ function ProjectPage(props) {
     const formData = new FormData();
     formData.append('files', file);
 
-    // Axios call to upload file to gridfs
-    await axios.post('https://photocode.app:8443/uploadFile', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-    .then(res => {
-      // Update the folders state variable
-      handleFolderClick(currentFolder);
-      setCreateFile(false);
-    });
+    try {
+      // Axios call to upload file to gridfs
+      await axios.post('https://photocode.app:8443/uploadFile', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      .then(async res => {
+        // Update the folders state variable
+        const folder = {
+          _id: parent_folder_id,
+        }
+        // Update the folder and file directory
+        const [update_folders, files] = await updateDirContents(folder);
+        setFolders(update_folders);
+        setFiles(files);
+
+        setCreateFile(false);
+      });
+    } catch (err) {
+      console.log("Failed to make file: " + newFileName);
+      console.log(err)
+    }
   }
 
   // const addFile = () => {
