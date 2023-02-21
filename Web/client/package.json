@@ -38,6 +38,7 @@
   },
   "scripts": {
     "start": "PORT=443 react-scripts start",
+    "start-local": "react-scripts start",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "build": "react-scripts build",

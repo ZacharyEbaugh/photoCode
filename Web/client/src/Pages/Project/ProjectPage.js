@@ -53,7 +53,7 @@ function ProjectPage(props) {
     const project_id = query.get('project_id');
     localStorage.setItem('project_id', project_id);
     console.log("ID: " + project_id);
-    axios.get(`https://photocode.app:8443/getFolders?project_id=${project_id}`)
+    axios.get(`http://localhost:3001/getFolders?project_id=${project_id}`)
       .then(res => {
         const root_folder_id = (res.data[0]._id != undefined) ? res.data[0]._id : null;
         setProjectName(res.data[0].name);
@@ -61,7 +61,7 @@ function ProjectPage(props) {
         res.data[0].name = "root";
         setCurrentPath([...currentPath, res.data[0]]);
         if (root_folder_id != null) {
-          axios.get(`https://photocode.app:8443/getFolders?project_id=${root_folder_id}`)
+          axios.get(`http://localhost:3001/getFolders?project_id=${root_folder_id}`)
           .then(async res => {
             setFolders(res.data);
             // Set Loader false after setFolders is done
@@ -85,8 +85,8 @@ function ProjectPage(props) {
   const updateDirContents = async(folder) => {
     // Get the folder_id from the folderName
     // Grab the folders and files within the folder that was clicked and change the states to display them
-    const update_folders = await axios.get(`https://photocode.app:8443/getFolders?project_id=${folder._id}`);
-    const files = await axios.get(`https://photocode.app:8443/getFiles?project_id=${folder._id}`);
+    const update_folders = await axios.get(`http://localhost:3001/getFolders?project_id=${folder._id}`);
+    const files = await axios.get(`http://localhost:3001/getFiles?project_id=${folder._id}`);
     return [update_folders.data, files.data];
   };
 
@@ -149,7 +149,7 @@ function ProjectPage(props) {
   };
 
   const handleDownload = async(file) => {
-    const response = await axios.get(`https://photocode.app:8443/getFile?file_id=${file._id}&file_name=${file.filename}`);
+    const response = await axios.get(`http://localhost:3001/getFile?file_id=${file._id}&file_name=${file.filename}`);
     // Convert the hex string to a buffer
     const buffer = Buffer.from(response.data.fileContents.data, 'hex')
     // Convert the buffer to a Blob object
@@ -169,7 +169,7 @@ function ProjectPage(props) {
   }
 
   const handleFileDelete = async(file) => {
-    const response = await axios.post('https://photocode.app:8443/deleteFile', {
+    const response = await axios.post('http://localhost:3001/deleteFile', {
       "file_id": file._id
     });
 
@@ -182,7 +182,7 @@ function ProjectPage(props) {
   }
 
   const handleFolderDelete = async(folder) => {
-    const response = await axios.post('https://photocode.app:8443/deleteFolder', {
+    const response = await axios.post('http://localhost:3001/deleteFolder', {
     "folder": folder,  
     "folder_id": folder._id
     });
@@ -237,7 +237,7 @@ function ProjectPage(props) {
     // Handle generating unique file object name
     const newFolder = newFolderName;
     // Axios call to create new folder
-    await axios.post('https://photocode.app:8443/createFolder', {
+    await axios.post('http://localhost:3001/createFolder', {
       name: newFolder,
       parent_id: currentFolder._id
     })
@@ -259,7 +259,7 @@ function ProjectPage(props) {
     formData.append('files', file);
 
     // Axios call to upload file to gridfs
-    await axios.post('https://photocode.app:8443/uploadFile', formData, {
+    await axios.post('http://localhost:3001/uploadFile', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
