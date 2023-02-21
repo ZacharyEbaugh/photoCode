@@ -237,7 +237,7 @@ function ProjectPage(props) {
   }
 
   const addFolder = async() => {
-    // Handle generating unique file object
+    // Handle generating unique folder object
     const newFolder = newFolderName;
     const parent_folder_id = currentPath[currentPath.length - 1]._id;
     const project_id = localStorage.getItem('project_id');
@@ -258,7 +258,7 @@ function ProjectPage(props) {
         const [update_folders, files] = await updateDirContents(folder);
         setFolders(update_folders);
         setFiles(files);
-        // Finish creating folder
+        // Update folder state variable
         setCreateFolder(false);
       });
     } catch (err) {
@@ -268,14 +268,17 @@ function ProjectPage(props) {
   } 
 
   const addFile = async() => {
-    // Handle generating unique file object name
+    // Handle generating unique file object
     const parent_folder_id = currentPath[currentPath.length - 1]._id;
     const project_id = localStorage.getItem('project_id');
     const fileName = newFileName + ':::::' + parent_folder_id + ':::::' + project_id;
+    
+    /* For debugging */
+    // console.log(fileName)
 
-    console.log(fileName)
     // Create a blank file to upload to gridfs
     const file = new File([""], fileName, {type: "text/plain"});
+
     // Create a form data object to send to the server
     const formData = new FormData();
     formData.append('files', file);
@@ -288,16 +291,17 @@ function ProjectPage(props) {
         }
       })
       .then(async res => {
-        // Update the folders state variable
+        // Set up folder object to update directory
         const folder = {
           _id: parent_folder_id,
         }
-        // Update the folder and file directory
+        // Update folders and files
         const [update_folders, files] = await updateDirContents(folder);
         setFolders(update_folders);
         setFiles(files);
-
+        // Update file state variable
         setCreateFile(false);
+        console.log("Created file: " + newFileName)
       });
     } catch (err) {
       console.log("Failed to make file: " + newFileName);
