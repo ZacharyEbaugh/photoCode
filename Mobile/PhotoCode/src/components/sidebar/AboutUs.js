@@ -145,7 +145,8 @@ const styles = StyleSheet.create({
 
     header: {
         backgroundColor: '#0066FF',
-        flex: 1,
+        height: windowHeight*0.2,
+        justifyContent: 'space-between',
     },
 
     backButton: {
@@ -155,6 +156,7 @@ const styles = StyleSheet.create({
     backText: {
         fontSize: 20,
         color: '#FFFFFF',
+        fontFamily: 'JetBrainsMono-Regular',
     },
 
     title: {
@@ -162,6 +164,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         width: windowWidth,
         color: '#FFFFFF',
+        fontFamily: 'JetBrainsMono-Regular',
+        marginBottom: windowHeight*0.02,
     },
 
     main: {
@@ -179,7 +183,8 @@ const styles = StyleSheet.create({
 
     Name: {
         fontSize: 40,
-        fontWeight: 'bold',
+        // fontWeight: 'bold',
+        fontFamily: 'JetBrainsMono-Bold',
     },
 
     profilePicture: {

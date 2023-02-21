@@ -18,13 +18,14 @@ import SearchCollaborators from './SearchCollaborators';
 function ProjectSettings(props) {
     const [loading, setLoading] = useState(true);
 
+    const [user_id, setUser_Id] = useState('');
     const [project_id, setProject_Id] = useState('');
 
     const [projectNamePlaceholder, setProjectNamePlaceholder] = useState('');
     const [projectDescriptionPlaceholder, setProjectDescriptionPlaceholder] = useState('');
 
     const [projectName, setProjectName] = useState('');
-    const [projectDescription, setProjectDescription] = useState('');
+    const [projectDescription, setProjectDescription] = useState('\n');
 
     const [projectOwner, setProjectOwner] = useState('');
     const [collaboratorsInfo, setCollaboratorsInfo] = useState([]);
@@ -46,8 +47,11 @@ function ProjectSettings(props) {
         };
         async function getProject(project_id) {
             const response = await axios.get(`https://photocode.app:8443/getProject?project_id=${project_id}`)
+            const user_id = await AsyncStorage.getItem('user_id');
+            setUser_Id(user_id);
             setProjectNamePlaceholder(response.data.name);
             setProjectDescriptionPlaceholder(response.data.description);
+            setProjectDescription('');
             setProjectOwner(response.data.user);
             getCollaboratorsInfo(project_id);
         }
@@ -70,7 +74,7 @@ function ProjectSettings(props) {
                         setProjectDescriptionPlaceholder(projectDescription);
                     })
                     .catch((error) => {
-                        console.warn(error);
+                        console.warn("Update Project: " + error);
                     }
                 )
             }}>
@@ -131,9 +135,11 @@ function ProjectSettings(props) {
             name: (projectName === '') ? projectNamePlaceholder : projectName,
             description: (projectDescription === '') ? projectDescriptionPlaceholder : projectDescription
         })
-        .then(async(response) => {
-            await setProjectNamePlaceholder(projectName);
-            await setProjectDescriptionPlaceholder(projectDescription);
+        .then(() => {
+            if (projectName != '')
+                setProjectNamePlaceholder(projectName);
+            if (projectDescription != '')
+                setProjectDescriptionPlaceholder(projectDescription);
         })
         .catch((error) => {
             console.warn(error);
@@ -145,7 +151,8 @@ function ProjectSettings(props) {
 
     function DeleteProject() {
         const navigation = useNavigation();
-        if (props.user_id === projectOwner)
+
+        if (user_id === projectOwner)
             return (
                 <View style={styles.optionWrapper}>
                     <Text style={styles.dangerHeader}>
@@ -167,10 +174,11 @@ function ProjectSettings(props) {
                                             })
                                             .then((response) => {
                                                 console.log(response);
+                                                props.setIsLoading(true);
                                                 navigation.navigate('HomeScreen');
                                             })
                                             .catch((error) => {
-                                                console.log(error);
+                                                console.log("Delete project: " + error);
                                             });
                                         }
                                     },
@@ -233,10 +241,10 @@ function ProjectSettings(props) {
                             <View style={styles.section}>
                                 <TextInput
                                     editable
-                                    style={styles.newProjectName}
+                                    style={styles.newProjectDescription}
                                     placeholder={projectDescriptionPlaceholder}
                                     placeholderTextColor={'grey'}
-                                    multiline={true}
+                                    multiline
                                     numberOfLines={4}
                                     value={projectDescription}
                                     onChangeText={(text) => setProjectDescription(text)}
@@ -277,7 +285,8 @@ const styles = StyleSheet.create({
     },
     header: {
         backgroundColor: '#0066FF',
-        flex: 1.5,
+        // flex: 1.5,
+        height: windowHeight*0.2,
         justifyContent: 'space-evenly',
     },
     main: {
@@ -354,6 +363,19 @@ const styles = StyleSheet.create({
     newProjectName: {
         width: windowWidth * 0.8,
         height: 60,
+        backgroundColor: '#E9E9E9',
+        borderRadius: 10,
+        // borderWidth: 3,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        marginVertical: 10,
+        paddingLeft: 10,
+        fontSize: 24,
+        fontFamily: 'JetBrainsMono-light',
+    },
+    newProjectDescription: {
+        width: windowWidth * 0.8,
+        height: 100,
         backgroundColor: '#E9E9E9',
         borderRadius: 10,
         // borderWidth: 3,

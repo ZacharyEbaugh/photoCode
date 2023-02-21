@@ -19,7 +19,7 @@ const dateOptions = {month: 'short', day: 'numeric', year: 'numeric'};
 
 import { useNavigation } from '@react-navigation/native';
 
-export function CommitList({ UserName, UserImage, CommitTitle, CommitMessage, CommitDate }) {
+export function CommitList({ UserImage, CommitTitle, CommitMessage, CommitDate }) {
     const navigation = useNavigation();
     const [ShowMessage, setShowMessage] = useState(false);
 

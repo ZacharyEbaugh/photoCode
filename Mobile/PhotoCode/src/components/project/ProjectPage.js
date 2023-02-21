@@ -23,8 +23,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const newFolder = require('./../../assets/images/newFolder.png');
-const newFile = require('./../../assets/images/newFile.png');
+const newFolderIcon = require('./../../assets/images/newFolder.png');
+const newFileIcon = require('./../../assets/images/newFile.png');
+const xIcon = require('./../../assets/images/x.png');
+const deleteIcon = require('./../../assets/images/deleteFile.png');
 const blueFolder = require('./../../assets/images/blueFolder.png');
 const fileIcon = require('./../../assets/images/file.png');
 const goBackFolderIcon = require('./../../assets/images/backFolder.png');
@@ -43,14 +45,12 @@ function GoBackButton() {
   );
 }
 
-function GoToSourceControl() {
+function GoToSourceControl(props) {
     const navigation = useNavigation();
-    const route = useRoute();
-    const { projectId } = route.params;
     return (
         <Pressable 
             style={styles.actionButton}
-            onPress={() => navigation.navigate('SourceControl', { projectId })}
+            onPress={() => navigation.navigate('SourceControl', { commits: props.commits})}
         >
             <Text style={styles.actionButtonText}>
                 Version Control
@@ -93,6 +93,8 @@ var root_folder;
 // API Setup
 baseUrl = 'https://photocode.app:8443';
 
+var maxNameSize = 25;
+
 var loadingProgress = new Animated.Value(0);
 
 function ProjectPage(props) {
@@ -103,8 +105,16 @@ function ProjectPage(props) {
     const [folderSet, setFolderSet] = useState(false)
     const [currentFiles, setCurrentFiles] = useState([])
     const [filesFound, setFilesFound] = useState(false)
+    const [commits, setCommits] = useState(null)
+    const [newFolder, setNewFolder] = useState(false)
+    const [newFile, setNewFile] = useState(false)
 
     const [loading, setLoading] = useState(true)
+
+    state = {
+        newFolderName: String, 
+        newFileName: String,
+    }
 
     const route = useRoute();
     // const { projectId, projectName, projectDescription, projectCollaborators } = route.params;
@@ -131,21 +141,22 @@ function ProjectPage(props) {
            root_folder_id = (res.data[0]._id != undefined) ? res.data[0]._id : null;
            res.data[0].name = 'root'
            setCurrentPath([...currentPath, res.data[0]])
-        //    console.warn(root_folder_id);
-        //    console.warn(root_folder[0].name)
            if (root_folder_id != null) {
             axios.get(baseUrl + `/getFolders?project_id=${root_folder_id}`).then( async res => {
-                // console.warn(res.data[0])
                 setCurrentFolders(res.data)
-                // console.warn(currentFolders)
-                // await new Promise((resolve) => setTimeout(resolve, 1000));
                 animateLoadingProgress()
             })
            }
-            // axios.get(`https://photocode.app:8443/getFiles?project_id=${folder._id}`);
         });
-        // console.warn(response.data);
     }
+
+    async function getCommits(projectId) {  
+        var response = await axios.post(baseUrl + `/getAllCommits`, {
+            project_id: projectId,
+        }).then(async res => {
+            await setCommits(res.data.reverse())
+        });
+    };
 
     useEffect(() => {
         _retrieveData = async () => {
@@ -154,6 +165,7 @@ function ProjectPage(props) {
                 if (value !== null) {
                 // We have data!!
                     await setProject_Id(value);
+                    await getCommits(value);
                     getProjectFiles(value);
                 }
             } catch (error) {
@@ -179,21 +191,80 @@ function ProjectPage(props) {
         setCurrentPath([...currentPath, folder])
     }
 
+    function NewFolderInput() {
+        return (
+            <View style={styles.newNameWrapper}>
+                <TextInput
+                    style={styles.newNameInput}
+                    placeholder='New Folder'
+                    placeholderTextColor='darkgrey'
+                    autoCapitalize='none'
+                    onChangeText={(text) => {this.state.newFolderName = text}} 
+                    onSubmitEditing={() => {console.log(this.state.newFolderName); setNewFolder(false); uploadFolder()}}
+                    maxLength={maxNameSize}
+                />
+                <Pressable
+                    onPress={() => {setNewFolder(false); this.state.newFolderName = ""}}
+                >
+                   <Image style={styles.fileImage} source={xIcon} />
+                </Pressable>
+            </View>
+        )
+    }
+
     function DisplayFolders() {
         return (
-            currentFolders.map((folder, i) => (
+            <View>
+            {currentFolders.map((folder, i) => (
                 <View key={i}>
                     <View style={styles.greyLine} />
-                    <Pressable
-                        style={styles.fileLine}
-                        onPress={() => {updateFolders(folder)}}
-                    >
-                        <Image style={styles.fileImage} source={blueFolder} />
-                        <Text style={styles.fileText}>{folder.name}</Text>
-                    </Pressable>
+                    <View style={styles.fileLineWrapper}>
+                        <Pressable
+                            style={styles.fileLine}
+                            onPress={() => {updateFolders(folder)}}
+                        >
+                            <Image style={styles.fileImage} source={blueFolder} />
+                            <Text style={styles.fileText}>{folder.name}</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.deleteFileIconWrapper}
+                            onPress={() => {deleteFolder(folder)}}
+                        >
+                            <Image style={styles.deleteFileIcon} source={deleteIcon} />
+                        </Pressable>
+                    </View>
                 </View>
-            ))
+            ))}
+            {newFolder == true ? <NewFolderInput /> : null}
+            </View>
         );
+    }
+
+    function NewFileInput() {
+        current_folder = currentPath[currentPath.length - 1].name;
+        if(current_folder == 'root')
+            return (
+                Alert.alert("Cannot make file at root")
+            );
+
+        return (
+            <View style={styles.newNameWrapper}>
+                <TextInput
+                    style={styles.newNameInput}
+                    placeholder='New File'
+                    placeholderTextColor='darkgrey'
+                    autoCapitalize='none'
+                    onChangeText={(text) => {this.state.newFileName = text}} 
+                    onSubmitEditing={() => {console.log(this.state.newFileName); setNewFile(false); uploadFile()}}
+                    maxLength={maxNameSize}
+                />
+                <Pressable
+                    onPress={() => {setNewFile(false); this.state.newFileName = ""}}
+                >
+                   <Image style={styles.fileImage} source={xIcon} />
+                </Pressable>
+            </View>
+        )
     }
 
     function DisplayFiles() {
@@ -203,26 +274,37 @@ function ProjectPage(props) {
         const { projectId, projectName } = route.params;
          
         return (
-            currentFiles.map((file, i) => (
-                <View key={i}>
-                    <View style={styles.greyLine} />
-                    <Pressable
-                        style={styles.fileLine}
-                        onPress={() => {navigation.navigate('TextEditor', {
-                            user: props.user,
-                            originFilename: file.filename, 
-                            fileId: file._id, 
-                            editorOrigin: 2, 
-                            projectId: projectId,
-                            projectName: projectName,
-                        })}}
-                    >
-                        
-                        <Image style={styles.fileImage} source={fileIcon} />
-                        <Text style={styles.fileText}>{file.filename}</Text>
-                    </Pressable>
-                </View>
-            ))
+            <View>
+                {currentFiles.map((file, i) => (
+                    <View key={i}>
+                        <View style={styles.greyLine} />
+                        <View style={styles.fileLineWrapper}>
+                            <Pressable
+                                style={styles.fileLine}
+                                onPress={() => {navigation.navigate('TextEditor', {
+                                    user: props.user,
+                                    originFilename: file.filename, 
+                                    fileId: file._id, 
+                                    editorOrigin: 2, 
+                                    projectId: projectId,
+                                    projectName: projectName,
+                                })}}
+                            >
+                                
+                                <Image style={styles.fileImage} source={fileIcon} />
+                                <Text style={styles.fileText}>{file.filename}</Text>
+                            </Pressable>
+                            <Pressable
+                            style={styles.deleteFileIconWrapper}
+                            onPress={() => {deleteFile(file)}}
+                            >
+                                <Image style={styles.deleteFileIcon} source={deleteIcon} />
+                            </Pressable>
+                        </View>
+                    </View>
+                ))}
+                {newFile == true ? <NewFileInput /> : null}
+            </View>
         );
     }
 
@@ -247,6 +329,86 @@ function ProjectPage(props) {
         setCurrentPath(currentPath.slice(0, currentPath.length - 1));
     }
 
+    async function uploadFolder() {
+        var parent_folder = currentPath[currentPath.length - 1]._id;
+
+        var response = await axios.post(baseUrl + '/createFolder', {
+            name: this.state.newFolderName,
+            parent_id: parent_folder,
+        });
+        await axios.get(baseUrl + `/getFolders?project_id=${parent_folder}`).then( async res => {
+            setCurrentFolders(res.data)
+        })
+    }
+
+    async function deleteFolder(folder) {
+        var folder_id = folder._id;
+        var parent_folder = currentPath[currentPath.length - 1]._id;
+
+        var response = await axios.post(baseUrl + '/deleteFolder', {
+            folder_id: folder_id,
+        })
+        await axios.get(baseUrl + `/getFolders?project_id=${parent_folder}`).then( async res => {
+            setCurrentFolders(res.data)
+        })
+
+    }
+
+    function checkNewFileCreation() {
+        if (currentPath[currentPath.length - 1].name == 'root') {
+            Alert.alert("Cannot make new file at root");
+            return;
+        }
+        setNewFile(true)
+    }
+
+    async function uploadFile() {
+        var parent_folder = currentPath[currentPath.length - 1]._id;
+        console.log(currentPath[currentPath.length - 1])
+
+        var fileName = this.state.newFileName + ':::::' + parent_folder;
+
+        const file = new File([""], fileName, {type: "text/plain"});
+
+        const formData = new FormData();
+        formData.append('files', file);
+        
+
+        var response = await axios.post(baseUrl + '/uploadFile', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+        }).then(async res => {
+            var folders = await axios.get(baseUrl + `/getFolders?project_id=${parent_folder}`)
+            var files = await axios.get(baseUrl + `/getFiles?project_id=${parent_folder}`)
+            setCurrentFolders(folders.data)
+            if (files != undefined) {
+                setCurrentFiles(files.data)
+                setFilesFound(true)
+            } else {
+                setFilesFound(false)
+            }
+        })
+    }
+
+    async function deleteFile(file) {
+        var parent_folder = currentPath[currentPath.length - 1]._id;
+
+        var response = await axios.post(baseUrl + `/deleteFile`, {
+            file_id: file._id,
+        }).then(async res => {
+            var folders = await axios.get(baseUrl + `/getFolders?project_id=${parent_folder}`)
+            var files = await axios.get(baseUrl + `/getFiles?project_id=${parent_folder}`)
+            setCurrentFolders(folders.data)
+            if (files != undefined) {
+                setCurrentFiles(files.data)
+                setFilesFound(true)
+            } else {
+                setFilesFound(false)
+            }
+        })
+    }
+
     const loadingColor = loadingProgress.interpolate({
         inputRange: [0, 10],
         outputRange: ['0%', '100%']
@@ -265,12 +427,12 @@ function ProjectPage(props) {
             <View style={styles.main}>
                 <View style={styles.searchCreateWrapper}>
                     <View style={styles.createButton}>
-                        <Pressable style={styles.createImageWrapper}>
-                            <Image style={styles.createIcon} source={newFolder} />
+                        <Pressable style={styles.createImageWrapper} onPress={() => {setNewFolder(true)}}>
+                            <Image style={styles.createIcon} source={newFolderIcon} />
                         </Pressable>
 
-                        <Pressable style={styles.createImageWrapper}>
-                            <Image style={styles.createIcon} source={newFile} />
+                        <Pressable style={styles.createImageWrapper} onPress={() => {checkNewFileCreation()}}>
+                            <Image style={styles.createIcon} source={newFileIcon} />
                         </Pressable>
                     </View>
 
@@ -306,8 +468,8 @@ function ProjectPage(props) {
                 <View style={styles.greyLine} />
 
                 <View style={styles.buttonWrapper}>
-                    <GoToSourceControl/>
-                    <GoToProjectSettings/>
+                    {commits != null ? <GoToSourceControl commits={commits}/> : null}
+                    <GoToProjectSettings setIsLoading={props.setIsLoading}/>
                 </View>
             </View>
         </View>
@@ -555,6 +717,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#808080',
         height: 1,
     },
+    fileLineWrapper: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 10,
+        // width: windowWidth,
+        marginVertical: 5,
+        // borderWidth: 2,
+    },
     fileLine: {
         display: 'flex',
         flexDirection: 'row',
@@ -569,7 +741,31 @@ const styles = StyleSheet.create({
     },
     fileText: {
         fontFamily: 'JetBrainsMono-Light',
+        fontSize: 18,
+        flex: 0.85,
+        // flexWrap: 'wrap',
+        // flexShrink: ,
+    },
+    newNameWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: 10,
+    },
+    newNameInput: {
+        fontFamily: 'JetBrainsMono-Light',
         fontSize: 20,
+    },
+    deleteFileIconWrapper: {
+        borderColor: '#d8d8d8',
+        borderWidth: 3,
+        borderRadius: 5,
+        paddingVertical: 2.5,
+        paddingHorizontal: 5,
+        // border: 3px solid #d8d8d8;
+    },
+    deleteFileIcon: {
+        width: windowWidth * 0.075,
+        height: windowHeight * 0.0375,
     }
 });
 

@@ -70,6 +70,10 @@ function SaveDoc(props) {
     async function updateFileContents(fileId, code, screenName, projectId, projectName) {
         const user_id = AsyncStorage.getItem('user_id');
         const user_picture = await AsyncStorage.getItem('user_picture');
+
+        console.log(fileId);
+        console.log(code);
+
         if (fileId != undefined && code != undefined) {
             const response = await axios.post(baseUrl + `/updateFile`, {
                 file_id: fileId,
@@ -96,12 +100,12 @@ function SaveDoc(props) {
             return;
         }
         // Handle generating unique file object name
-        const fileName = filename + ':::::' + folderDestination;
+        const fileName = filename + ':::::' + folderDestination + ':::::' + projectDestination;
         // Create a blank file to upload to gridfs
-        const file = new File([code], fileName, {type: "text/plain"});
+        const file = new File([""], fileName, {type: "text/plain"});
         // Create a form data object to send to the server
         const formData = new FormData();
-        formData.append('files', file, fileName + ":::::" + folderDestination);
+        formData.append('files', file);
         console.warn(formData);
         // Axios call to upload file to gridfs
         await axios.post('https://photocode.app:8443/uploadFile', formData, {
@@ -111,7 +115,7 @@ function SaveDoc(props) {
         })
         .then(res => {
             // Update the folders state variable
-            const fileId = res.data.fileIds[0];
+            const fileId = res.data.file_id;
             updateFileContents(fileId, code, 'HomeScreen', projectId, projectName)
         });
     }

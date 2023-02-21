@@ -734,7 +734,7 @@ const upload = multer( {storage: fileStorage} );
 
 // Route handler for uploading a file
 app.post('/uploadFile', upload.array('files'), (req, res, next) => {
-  res.status(200).send({ message: 'File uploaded' });
+  res.status(200).send({ message: 'File uploaded', file_id: req.files[0].id.toString()});
 });
 
 // Function to check if a folder exists, if it does return the folder document

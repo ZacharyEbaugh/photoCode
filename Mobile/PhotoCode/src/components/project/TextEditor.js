@@ -23,7 +23,8 @@ const languages = ["HTML", "CSS", "JavaScript", "Python", "React", "Java"];
 var updatedText = "";
 var originalText = "";
 
-var selectedLanguage = '';
+// var selectedLanguage = '';
+
 
 function NewDocumentOrigin ({language, originalText, setOriginalText, updatedText, setUpdatedText}) {
     const keyboard = useKeyboard();
@@ -75,7 +76,7 @@ function getOriginCode() {
     return originalText;
 }
 
-function ProjectFileOrigin({language, setOriginalText, setUpdatedText}) {
+function ProjectFileOrigin({language, fileName, setLanguage, setOriginalText, setUpdatedText}) {
     const keyboard = useKeyboard();
     const insets = useSafeAreaInsets();
 
@@ -85,7 +86,6 @@ function ProjectFileOrigin({language, setOriginalText, setUpdatedText}) {
     const [loading, setLoading] = useState(true)
 
     const [code, setCode] = useState('Hello World!');
-    
 
     const getFileContents = async() => {
         const response = await axios.get(`https://photocode.app:8443/getFile?file_id=${fileId}`);
@@ -93,6 +93,15 @@ function ProjectFileOrigin({language, setOriginalText, setUpdatedText}) {
         await setCode(buffer.toString());
         originalText = buffer.toString();
         setOriginalText(buffer.toString());
+
+        var fileLanguage = '';
+        const lastPeriod = fileName.lastIndexOf('.');
+        if (lastPeriod != fileName.length) {
+            fileLanguage = fileName.substring(fileName.lastIndexOf('.') + 1)
+            // setSelectedLanguage(fileLanguage)
+            // console.log(selectedLanguage)
+        }
+        setLanguage(fileLanguage.toUpperCase())
         setLoading(false);
     }
     getFileContents();
@@ -247,15 +256,21 @@ function TextEditor(props) {
 
     const [originalText, setOriginalText] = useState("");
     const [updatedText, setUpdatedText] = useState("");
+
+    var [selectedLanguage, setSelectedLanguage] = useState("");
     
     useEffect(() => {
-        if (originFilename != undefined)
-        {
+        if (originFilename != undefined) {
             setFileName(originFilename);
             setOriginalFileName(originFilename);
-        }
-        else
-            fileName = '';
+            // lastPeriod = fileName.lastIndexOf('.');
+            // if (lastPeriod != fileName.length) {
+            //     fileLanguage = fileName.substring(fileName.lastIndexOf('.') + 1)
+            //     setSelectedLanguage(fileLanguage)
+            //     console.log(selectedLanguage)
+            // }
+        } else
+            setFileName('')
     }, [])
 
 
@@ -283,14 +298,15 @@ function TextEditor(props) {
                             data={languages}
                             dropdownStyle={styles.dropDown}
                             buttonStyle={styles.dropDownButton}
-                            defaultButtonText="Language"
+                            defaultButtonText={selectedLanguage}
                             onSelect={(selectedItem, index) => {
                                 console.log(selectedItem, index)
                             }}
                             buttonTextAfterSelection={(selectedItem, index) => {
                                 // text represented after item is selected
                                 // if data array is an array of objects then return selectedItem.property to render after item is selected
-                                selectedLanguage = languages[index]
+                                // selectedLanguage = languages[index]
+                                setSelectedLanguage(languages[index]);
                                 // console.warn(selectedLanguage)
                                 return selectedItem
                             }}
@@ -306,8 +322,14 @@ function TextEditor(props) {
             </View>
 
             <View style={styles.main}>
-                {editorOrigin == 1 ? <NewDocumentOrigin language={selectedLanguage} setOriginalText={setOriginalText} setUpdatedText={setUpdatedText}/> : <ProjectFileOrigin language={selectedLanguage} setOriginalText={setOriginalText} setUpdatedText={setUpdatedText}/>}
-              
+                {editorOrigin == 1 ? <NewDocumentOrigin 
+                        language={selectedLanguage} 
+                        setOriginalText={setOriginalText} setUpdatedText={setUpdatedText}/> 
+                : <ProjectFileOrigin 
+                    language={selectedLanguage} fileName={fileName} 
+                    setLanguage={setSelectedLanguage} setOriginalText={setOriginalText} 
+                    setUpdatedText={setUpdatedText}/>
+                }
                 <SaveButton fileName={fileName} user={props.user} user_id={props.user_id} />
              
             </View>

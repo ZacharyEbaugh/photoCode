@@ -79,6 +79,7 @@ export function GoToContact() {
     );
 }
 import { useAuth0 } from 'react-native-auth0';
+import AsyncStorage from '@react-native-community/async-storage';
 const showAlert = () => {
     const { clearSession } = useAuth0();
     Alert.alert(
@@ -112,7 +113,7 @@ export function GoToLogout(props) {
             {
                 ephemeralSession: true,
             });
-
+            await AsyncStorage.removeItem('user_id');
             props.setUser(null);
         } catch (e) {
             console.log('Log out cancelled');
@@ -121,8 +122,9 @@ export function GoToLogout(props) {
 
     return (
         <Pressable
-            onPress={() => {
-                onLogout();
+            onPress={async () => {
+                await onLogout();
+                props.closeSideBar();
             }}
            
             style={[styles.button, isPressed && styles.updateBackground]}

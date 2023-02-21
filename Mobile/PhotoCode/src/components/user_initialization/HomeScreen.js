@@ -1,7 +1,9 @@
-import React, {useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import {AsyncStorage} from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
+
+import loginContext from './loginContext';
 
 import {    
     View, 
@@ -15,10 +17,12 @@ import {
     StyleSheet, 
     Easing, 
     ScrollView,
-    Button} from 'react-native';
+    Button,
+    Alert} from 'react-native';
 
 import { Shadow } from 'react-native-shadow-2';
 import { useNavigation } from '@react-navigation/native';
+import { BlurView } from '@react-native-community/blur';
 
 import Header from '../Header';
 import SideBar from '../sidebar/SideBar';
@@ -51,13 +55,17 @@ function HomeScreen(props) {
     const [projects, setProjects] = useState({})
     const [projectsSet, setProjectsSet] = useState(false)
 
+    const { user } = useContext(loginContext)
+
+    console.log("user from context " + user.email)
+
 
     useEffect(() => {
         registerUser();
         getUser();
         getUserInfo()
         getAllProjects();
-        setIsLoading(false);
+        props.setIsLoading(false);
     }, []);
 
     async function registerUser() {
@@ -75,8 +83,8 @@ function HomeScreen(props) {
         .then(response => {
             console.log(response.data);
         })
-            .catch(error => {
-            console.log(error);
+        .catch(error => {
+            console.log("Register: " + error);
         });
     }
 
@@ -86,12 +94,13 @@ function HomeScreen(props) {
             email: props.user.email,
             connection: props.user.sub.split('|')[0]
         })
-        .then(response => {
+        .then(async(response) => {
+            console.log(response.data._id);
             props.setUser_Id(response.data._id);
-            AsyncStorage.setItem('user_id', response.data._id);
+            await AsyncStorage.setItem("user_id", response.data._id);
         })
-        .catch(() => {
-            console.log('Error');
+        .catch((e) => {
+            console.log('Get User: ' + e);
         });
     }
 
@@ -146,7 +155,9 @@ function HomeScreen(props) {
         animateCameraOptionsClose();
     };
     //#endregion
-        if (isLoading) {
+        if (props.isLoading) {
+            getAllProjects();
+            props.setIsLoading(false);
             return <View style={styles.container}>
                 <Text>Loading...</Text>
             </View>
@@ -169,7 +180,6 @@ function HomeScreen(props) {
                             {projectsSet == true ?
                                 projects.map((project, i) => (
                                     <GoToProject
-                                        style={styles.project}
                                         key={i}
                                         projectId={project._id}
                                         imageSource={require('./../../assets/images/siteIcon.png')}
@@ -179,17 +189,22 @@ function HomeScreen(props) {
                                         user={props.user}
                                         user_id={props.user_id}
                                     />
+                                    
                                 )) : null
                             }
+                            <View style={styles.padding}></View>
                         </ScrollView>
-                        <CreateProject/>
+                        <CreateProject user_id={props.user_id} setIsLoading={props.setIsLoading}/>
                         <Shadow viewStyle={{alignSelf: 'stretch'}}>
                             <View style={styles.actionView}>
                                 <GoToCamera onPress={this.openCameraOptions}/>
                                 <ToNewDoc/>
                             </View>
                         </Shadow>
-                        <Animated.View style={[{zIndex: 2}, { top: this.cameraOptionsYPos}, {left: windowWidth/2-(windowWidth * 0.6)/2}]}>
+
+                        <BlurView style={[styles.blur, cameraOptionsActive && {opacity: 1}]} blurType='light' blurAmount={10}/>
+
+                        <Animated.View style={[{zIndex: 5}, { top: this.cameraOptionsYPos}, {left: windowWidth/2-(windowWidth * 0.6)/2}]}>
                             <CameraOptions onPress={this.closeCameraOptions}/>
                         </Animated.View>
                     </View>
@@ -241,9 +256,6 @@ const styles = StyleSheet.create({
         // flex: 1,
         minHeight: windowHeight*0.637,
     },
-    project: {
-        // flex: 1,
-    },
     target: {
         fontSize: 40,
         paddingTop: 50,
@@ -294,6 +306,8 @@ const styles = StyleSheet.create({
         marginVertical: 1,
     },
     actionView: {
+        height: windowHeight * 0.125,
+        // position: 'absolute',
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
@@ -305,8 +319,18 @@ const styles = StyleSheet.create({
         height: windowHeight * 0.09,
         width: windowHeight * 0.09,
     },
-
-
+    blur: {
+        zIndex: 5,
+        position: "absolute",
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        opacity: 0
+    },
+    padding: {
+        height: windowHeight * 0.2,
+    }
 });
 
 export default HomeScreen;
