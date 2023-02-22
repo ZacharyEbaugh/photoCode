@@ -95,25 +95,26 @@ body {
 }
 
 .createFile {
-    border: 3px solid #D8D8D8;
+    border: 0px solid #D8D8D8;
     border-radius: 10px;
     background: none;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    padding: 0.8rem;
+    /* padding: 0.8rem; */
     margin-right: 1.2rem;
 }
 
 .newFileButtonIcon {
-    width: 4rem;
-    height: 4rem;
+    width: 5rem;
+    height: 5rem;
 }
 
 .newFolderButtonIcon {
-    width: 4rem;
-    height: 4rem;
+    margin-top: 1.2rem;
+    width: 5rem;
+    height: 5.2rem;
 }
 
 .searchBar {
@@ -159,7 +160,7 @@ body {
 
 .dirPath {
     width: 100%;
-    height: 5%;
+    height: 10rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -167,6 +168,21 @@ body {
 }
 
 
+
+.dirPathView {
+    /* width: 100%; */
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    /* padding: 2%; */
+}
+
+.dirPathView::-webkit-scrollbar {
+    display: none;
+}
 
 .dirPathButton {
     height: 5rem;
@@ -177,22 +193,21 @@ body {
 }
 
 .dirPathButton a {
-    width: 100%;
-    height: 10%;
+    /* width: 100%; */
+    /* height: 10rem; */
 }
 
 .dirPathButton:hover {
-    /* background-color: #e6e6e6; */
     color: #0066FF;
-    /* height: 10%; */
-    /* border-radius: 0px 0px 11px 11px; */
 }
 
 .dirPathButton h1 {
+    display: flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
     font-family: "Mono-Regular";
     font-size: 3.2rem;
-    margin-left: 1%;
-    width: 30%;
+    margin-left: 1rem;
 }
 
 .folderDisplay {
@@ -371,6 +386,10 @@ body {
 
 @media screen and (max-width: 1230px) {
     .dirBlock {
+        width: 60rem;
+    }
+
+    .dirPath {
         width: 60rem;
     }
 
