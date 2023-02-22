@@ -96,7 +96,17 @@ function ProjectPage(props) {
   };
 
   const handleFolderClick = async(folder) => {
+
+    // Handle loading and do not allow creating file/folder cross directories
     setPathLoader(true);
+    setCreateFile(false);
+    
+    // Clear any names input for these new files/folders
+    setNewFileName('');
+    setNewFolderName('');
+
+    setCreateFolder(false);
+
     setCurrentFolder(folder);
     const [update_folders, files] = await updateDirContents(folder);
     setFolders(update_folders);
@@ -149,7 +159,17 @@ function ProjectPage(props) {
   }, [searchQuery]);
 
   const handleDirPathClick = async(directory, index) => {
+    
+    // Handle loading and do not allow creating file/folder cross directories
     setPathLoader(true);
+    setCreateFile(false);
+
+    // Clear any names input for these new files/folders
+    setNewFileName('');
+    setNewFolderName('');
+
+    setCreateFolder(false);
+
     const [update_folders, files] = await updateDirContents(directory);
     setFolders(update_folders);
     setFiles(files);
@@ -214,31 +234,41 @@ function ProjectPage(props) {
 
   const addNewFolder = () => {
     setCreateFile(false);
+    setNewFileName('');
     setCreateFolder(true);
   }
 
   const addNewFile = () => {
     setCreateFolder(false);
+    setNewFolderName('');
     setCreateFile(true);
   }
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      if (newFolderName == '')
+      if (newFolderName == '' && newFileName == '')
       {
-        if (currentPath[currentPath.length - 1].name == 'root')
-          window.alert("Cannot make file at root")
-        else
-          addFile();
+        console.log("ERROR: Invalid new file/folder name");
+        return;
       }
-      else
+      else if (newFolderName != '' && newFolderName.length > 1)
       {
-        addFolder();
+          addFolder();
+      }
+      else if (newFileName != '' && newFileName.length > 1)
+      {
+        addFile();
       }
     }
     else if (event.key === 'Escape') {
+
+      // Close the create file/folder entry
       setCreateFile(false);
       setCreateFolder(false);
+
+      // Clear the new file/folder name
+      setNewFileName('');
+      setNewFolderName('');
     }
   }
 
@@ -250,7 +280,7 @@ function ProjectPage(props) {
 
     // Axios call to create new folder
     try {
-      await axios.post('https://photocode.app:8443/createFolder', {
+      await axios.post('http://localhost:3001/createFolder', {
         name: newFolder,
         parent_id: parent_folder_id,
         project_id: project_id
@@ -271,21 +301,6 @@ function ProjectPage(props) {
       console.log("Failed to Create Folder");
       console.log(err);
     }
-
-  //  // Handle generating unique file object name
-  //  const newFolder = newFolderName;
-
- //   // Axios call to create new folder
- //   await axios.post('http://localhost:3001/createFolder', {
-  //    name: newFolder,
-  //    parent_id: currentFolder._id
-   // })
-   // .then(res => {
-
-     // // Update the folders state variable
-     // handleFolderClick(currentFolder);
-     // setCreateFolder(false);
-    //});
   } 
 
   const addFile = async() => {
@@ -306,7 +321,7 @@ function ProjectPage(props) {
 
     try {
       // Axios call to upload file to gridfs
-      await axios.post('https://photocode.app:8443/uploadFile', formData, {
+      await axios.post('http://localhost:3001/uploadFile', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
