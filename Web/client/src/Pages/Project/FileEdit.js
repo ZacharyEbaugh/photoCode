@@ -3,13 +3,16 @@ import "./FileEdit.css";
 import LoadingPage from '../LoadingPage';
 
 import axios from 'axios';
+
 import CodeMirror from '@uiw/react-codemirror';
 import { langs, loadLanguage } from '@uiw/codemirror-extensions-langs';
-
 import {tags} from "@lezer/highlight"
 import {HighlightStyle} from "@codemirror/language"
 import {syntaxHighlighting} from "@codemirror/language"
-
+import { vscodeKeymap } from "@replit/codemirror-vscode-keymap";
+import { EditorView, keymap } from '@codemirror/view';
+import { EditorState } from '@codemirror/state';
+import { javascript } from '@codemirror/lang-javascript';
 
 import { Buffer } from 'buffer';
 
@@ -56,6 +59,14 @@ function File_Edit(props) {
       props.setLoader(false);
     });
   }, [fileId])
+
+  new EditorView({
+    state: EditorState.create({
+      code,
+      extensions: [keymap.of(vscodeKeymap), javascript()],
+    }),
+    parent: document.querySelector('#editor'),
+  });
 
   // API call to update file information
   const updateFile = async () => {
@@ -130,18 +141,33 @@ function File_Edit(props) {
                   onChange={(e) => setFileNameChange(e.target.value)}
                 />
               </div>
-              <CodeMirror 
-                className='CodeMirror'
-                value={code}
-                minHeight={'20vh'}
-                maxHeight={'60vh'}
-                theme='light'
-                extensions={[syntaxHighlighting(myHighlightStyle)]}
-                mode={'javascript'}
-                onChange={(editor, change) => {
-                  setCode(editor.valueOf());
-                }
-              }/>
+              <div className="codeEditor">
+                {/* <CodeMirror 
+                  className='CodeMirror'
+                  value={code}
+                  minHeight={'70rem'}
+                  maxHeight={'100rem'}
+                  theme='light'
+                  mode='java'
+                  color="#FFFFFF"
+                  renderLineHighlight="none"
+                  extensions={[langLoad]}
+                  // mode={'javascript'}
+                  onChange={(editor, change) => {
+                    setCode(editor.valueOf());
+                  }
+                }/> */}
+                <EditorView
+                  state={EditorState.create({
+                    doc: code,
+                    extensions: [javascript(), myHighlightStyle.extension],
+                  })}
+                  parent={document.querySelector('#editor')}
+                  onChange={(editor, change) => {
+                    setCode(editor.state.doc.toString());
+                  }}
+                />
+              </div>
             </div>
             </div>
             <div className="commit_information">
