@@ -39,10 +39,10 @@ app.use((req, res, next) => {
 // const https = require('https');
 // const fs = require('fs');
 
-// const credentials = {
-//   key: fs.readFileSync('generated-private-key.pem'),
-//   cert: fs.readFileSync('fbc4b2fe0afb3741.pem')
-// };
+const credentials = {
+  key: fs.readFileSync('./../../../credentials/generated-private-key.pem'),
+  cert: fs.readFileSync('./../../../credentials/fbc4b2fe0afb3741.pem')
+};
 
 // Connect to MongoDB Cluster
 const mongodbPS = process.env.MONGO_PASSWORD;
@@ -716,6 +716,7 @@ const fileStorage = new GridFsStorage({
     const fileInfo = file.originalname.split(':::::');
     const filename = fileInfo[0];
     const parent_id = fileInfo[1];
+    const project_id = fileInfo[2];
     console.log(fileInfo);
     return new Promise((resolve, reject) => {
       const fileInfo = {
@@ -723,6 +724,7 @@ const fileStorage = new GridFsStorage({
         bucketName: "folders",
         metadata: {
           parent_folder: parent_id,
+          project_id: project_id,
         }
       };
       resolve(fileInfo);
@@ -742,9 +744,11 @@ app.post('/uploadFile', upload.array('files'), (req, res, next) => {
 async function createFolder(req, callback) {
   const name = req.body.name;
   const parent_id = req.body.parent_id;
+  const project_id = req.body.project_id;
   const folderSearch = {
     parent_folder: parent_id,
     name: name,
+    project_id: project_id,
   };
   try {
     const folderFound = await folders.findOneAndUpdate(
@@ -933,7 +937,8 @@ async function editFile(req, callback) {
             const uploadStream = bucket.openUploadStreamWithId(file._id, file.filename, {
               contentType: file.contentType,
               metadata: {
-                parent_folder: file.metadata.parent_folder
+                parent_folder: file.metadata.parent_folder,
+                project_id: file.metadata.project_id
               }
             });
           
@@ -1257,6 +1262,73 @@ app.post('/changeEmail', async function (req, res) {
     } else {
       console.log(result);
       res.status(200).send({ message: 'Email changed successfully' });
+    }
+  });
+});
+
+// Function to delete account
+async function deleteAccount(req, callback) {
+  const user_id = req.body.user_id;
+
+  try {
+    const user = { $or: [{ user: user_id }, { collaborators: user_id }] }
+
+    const allProjects = await projects.find(user).toArray();
+
+    for (let i = 0; i < allProjects.length; i++) {
+      // Removes user from all collab projects
+      if (allProjects[i].collaborators[0] != user_id) {
+        var project_id = allProjects[i]._id;
+        var collaborator = user_id
+
+        var project = {
+          _id: ObjectId(project_id)
+        };
+
+        var newProject = {
+          $pull: {
+            collaborators: collaborator
+          }
+        };
+
+        projects.updateOne(project, newProject, function (err, updated) {
+          if (err) return console.log(err);
+          console.log(updated);
+        });
+      } else {
+        // Get and delete file contents
+        files_array = await files.find({ 'metadata.project_id': allProjects[i]._id.toString() }).toArray();
+        for (let j = 0; j < files_array.length; j++)
+          await chunks.deleteOne({ files_id: files_array[j]._id });
+
+        // Get file references and folders
+        await files.deleteMany({ 'metadata.project_id': allProjects[i]._id.toString() });
+        await folders.deleteMany({ project_id: allProjects[i]._id.toString()});   
+
+        // Delete project
+        await projects.deleteOne({ _id: ObjectId(req.body.project_id) });
+      }
+    }
+
+    // Delete user
+    users.deleteOne({ _id: ObjectId(user_id) }, function(err, deleted){
+      if (err) return callback(err)
+      return callback(null, deleted)
+    });
+  } catch (err) {
+    return callback(err);
+  }
+}
+
+// Route handler to delete account
+app.post('/deleteAccount', async function (req, res) {
+  deleteAccount(req, function (err, result) {
+    if (err) {
+      console.log(err);
+      res.status(500).send({ error: err.message });
+    } else {
+      console.log(result);
+      res.status(200).send({ message: 'Account Deleted'})
     }
   });
 });

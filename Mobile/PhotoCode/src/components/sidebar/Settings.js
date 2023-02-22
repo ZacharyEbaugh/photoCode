@@ -13,6 +13,9 @@ import {
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 
+import { useAuth0 } from 'react-native-auth0';
+import AsyncStorage from '@react-native-community/async-storage';
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -55,6 +58,7 @@ function Settings(props) {
     const [showChangeEmail, setShowChangeEmail] = useState(false)
     const [showChangeUsername, setShowChangeUsername] = useState(false)
     const [showChangePassword, setShowChangePassword] = useState(false)
+    const [showDeleteAccount, setShowDeleteAccount] = useState(false)
 
     const [confirmDisabled, setConfirmedDisabled] = useState(true)
     const [passwordConfirmDisabled, setPasswordConfirmDisabled] = useState(true)
@@ -114,6 +118,43 @@ function Settings(props) {
             Alert.alert("Password Changed to " + newPassword);
         } catch (err) {
             Alert.alert("Failed to change password");
+        }
+    }
+
+    const { clearSession } = useAuth0();
+    const navigation = useNavigation();
+
+    const onLogout = async () => {
+        console.log("Logging out...");
+        try {
+            await clearSession({
+                prompt: 'login',
+            },
+            {
+                ephemeralSession: true,
+            });
+            await AsyncStorage.removeItem('user_id');
+            props.setUser(null);
+        } catch (e) {
+            console.log('Log out cancelled');
+        }
+    };
+
+    const deleteAccount = async () => {
+        console.log('pressed')
+        console.log(props.user_id)
+        try {
+            console.log('running')
+            var response = await axios.post(baseUrl + '/deleteAccount', {
+                user_id: props.user_id
+            });
+            console.log('Account Deleted')
+            await onLogout()
+            // await AsyncStorage.removeItem('user_id');
+            // props.setUser(null);
+            // navigation.navigate('SplashPage');
+        } catch (err) {
+            console.log("Error deleting account")
         }
     }
 
@@ -217,6 +258,47 @@ function Settings(props) {
                 </View>
             )}
 
+            {/* Delete Account Prompt */}
+            {showDeleteAccount && (
+                <View style={[styles.changePrompt, styles.changePromptPasswordHeight, {zIndex: 2}]}>    
+                    <Text style={styles.changePromptHeader}>
+                        {'Delete Account'}
+                    </Text>
+                    <Text style={styles.deleteAccountDes}>
+                        {'This is a permanent action! All your projects and files will be gone forever!\n' + 
+                          'You must hit continue in the next prompt\n' +
+                          '(if not you will have problems but you account will still be gone)'}
+                    </Text>
+                    {/* <TextInput
+                        style={styles.changePromptInput}
+                        placeholder='New Password'
+                        placeholderTextColor='darkgrey'
+                        autoCapitalize='none'
+                        onChangeText={(text) => {setNewPassword(text); setConfirmedDisabled(false); if(text == ""){setConfirmedDisabled(true)} }} 
+                    /> */}
+                    {/* <TextInput
+                        style={styles.changePromptInput}
+                        placeholder='Confirm Password'
+                        placeholderTextColor='darkgrey'
+                        autoCapitalize='none'
+                        onChangeText={(text) => {setConfirmPassword(text); setPasswordConfirmDisabled(false); if(text == ""){setPasswordConfirmDisabled(true)} }} 
+                    /> */}
+                    <Pressable
+                        style={[styles.changePromptConfirmButton]}
+                        onPress={() => {setShowDeleteAccount(!showDeleteAccount); deleteAccount()}}
+                    >
+                        <Text style={styles.changePromptConfirmText}>{'Confirm'}</Text>
+                    </Pressable>
+
+                    <Pressable
+                        style={styles.changePromptCancelButton}
+                        onPress={() => {setShowDeleteAccount(!showDeleteAccount);}}
+                    >
+                    <Text style={styles.changePromptConfirmText}>{'Cancel'}</Text>
+                    </Pressable>
+                </View>
+            )}
+
             <View style={styles.header}>
                 <View style={styles.backButton}>
                     <BackButton screenName='HomeScreen' />
@@ -292,9 +374,9 @@ function Settings(props) {
                             
                         {/* Delete Account Button */}
                         <Pressable
-                            disabled={true}
-                            style={[styles.optionButtons, deletePressed && styles.opacity, styles.disabled]}
-                            onPress={() => {}}
+                            // disabled={true} && styles.opacity, styles.disabled
+                            style={[styles.optionButtons, deletePressed ]}
+                            onPress={() => {setShowDeleteAccount(!showDeleteAccount)}}
                             onPressOut={() => {
                                 setDeletePressed(!deletePressed)
                             }}
@@ -338,6 +420,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         paddingHorizontal: 15,
         color: 'white',
+        textAlign: 'center',
         // paddingVertical: 10,
     },
     changePromptInput: {
@@ -447,6 +530,13 @@ const styles = StyleSheet.create({
     },
     opacity: {
         opacity: 0.5,
+    },
+    deleteAccountDes: {
+        fontFamily: 'JetBrainsMono-Light',
+        fontSize: 15,
+        paddingHorizontal: 15,
+        color: 'white',
+        textAlign: 'center',
     },
 });
 

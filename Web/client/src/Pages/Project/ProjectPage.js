@@ -226,7 +226,10 @@ function ProjectPage(props) {
     if (event.key === 'Enter') {
       if (newFolderName == '')
       {
-        addFile();
+        if (currentPath[currentPath.length - 1].name == 'root')
+          window.alert("Cannot make file at root")
+        else
+          addFile();
       }
       else
       {
@@ -240,44 +243,91 @@ function ProjectPage(props) {
   }
 
   const addFolder = async() => {
-
-    // Handle generating unique file object name
+    // Handle generating unique folder object
     const newFolder = newFolderName;
+    const parent_folder_id = currentPath[currentPath.length - 1]._id;
+    const project_id = localStorage.getItem('project_id');
 
     // Axios call to create new folder
-    await axios.post('http://localhost:3001/createFolder', {
-      name: newFolder,
-      parent_id: currentFolder._id
-    })
-    .then(res => {
+    try {
+      await axios.post('https://photocode.app:8443/createFolder', {
+        name: newFolder,
+        parent_id: parent_folder_id,
+        project_id: project_id
+      })
+      .then(async res => {
+        // Set up folder object to update directory
+        const folder = {
+          _id: parent_folder_id,
+        }
+        // Update the folder and file directory
+        const [update_folders, files] = await updateDirContents(folder);
+        setFolders(update_folders);
+        setFiles(files);
+        // Update folder state variable
+        setCreateFolder(false);
+      });
+    } catch (err) {
+      console.log("Failed to Create Folder");
+      console.log(err);
+    }
 
-      // Update the folders state variable
-      handleFolderClick(currentFolder);
-      setCreateFolder(false);
-    });
+  //  // Handle generating unique file object name
+  //  const newFolder = newFolderName;
+
+ //   // Axios call to create new folder
+ //   await axios.post('http://localhost:3001/createFolder', {
+  //    name: newFolder,
+  //    parent_id: currentFolder._id
+   // })
+   // .then(res => {
+
+     // // Update the folders state variable
+     // handleFolderClick(currentFolder);
+     // setCreateFolder(false);
+    //});
   } 
 
   const addFile = async() => {
-    // Handle generating unique file object name
-    const fileName = newFileName + ':::::' + currentFolder._id;
-    console.log(fileName)
+    // Handle generating unique file object
+    const parent_folder_id = currentPath[currentPath.length - 1]._id;
+    const project_id = localStorage.getItem('project_id');
+    const fileName = newFileName + ':::::' + parent_folder_id + ':::::' + project_id;
+    
+    /* For debugging */
+    // console.log(fileName)
+
     // Create a blank file to upload to gridfs
     const file = new File([""], fileName, {type: "text/plain"});
+
     // Create a form data object to send to the server
     const formData = new FormData();
     formData.append('files', file);
 
-    // Axios call to upload file to gridfs
-    await axios.post('http://localhost:3001/uploadFile', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-    .then(res => {
-      // Update the folders state variable
-      handleFolderClick(currentFolder);
-      setCreateFile(false);
-    });
+    try {
+      // Axios call to upload file to gridfs
+      await axios.post('https://photocode.app:8443/uploadFile', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      .then(async res => {
+        // Set up folder object to update directory
+        const folder = {
+          _id: parent_folder_id,
+        }
+        // Update folders and files
+        const [update_folders, files] = await updateDirContents(folder);
+        setFolders(update_folders);
+        setFiles(files);
+        // Update file state variable
+        setCreateFile(false);
+        console.log("Created file: " + newFileName)
+      });
+    } catch (err) {
+      console.log("Failed to make file: " + newFileName);
+      console.log(err)
+    }
   }
 
 
