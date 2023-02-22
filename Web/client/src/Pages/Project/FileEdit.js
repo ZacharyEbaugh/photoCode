@@ -160,7 +160,7 @@ function File_Edit(props) {
                 <EditorView
                   state={EditorState.create({
                     doc: code,
-                    extensions: [javascript(), myHighlightStyle.extension],
+                    extensions: [keymap.of(vscodeKeyMap), javascript()],
                   })}
                   parent={document.querySelector('#editor')}
                   onChange={(editor, change) => {
