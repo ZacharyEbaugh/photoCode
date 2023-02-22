@@ -149,10 +149,12 @@ function ProjectPage(props) {
   }, [searchQuery]);
 
   const handleDirPathClick = async(directory, index) => {
+    setPathLoader(true);
     const [update_folders, files] = await updateDirContents(directory);
     setFolders(update_folders);
     setFiles(files);
     setCurrentPath(currentPath.slice(0, index + 1));
+    setPathLoader(false);
   };
 
   const handleDownload = async(file) => {
@@ -332,64 +334,66 @@ function ProjectPage(props) {
                     }
                   </div>
                 </div>
-                <div className="folderDisplay">
-                    {Object.entries((searchQuery === '') ? folders : searchFoldersResults).map(([key, folder]) => (
-                      <button className={(key == folders.length - 1 && files.length == 0) ? 'goToFolderLast' : 'goToFolder'}>
-                        <div className="line"></div>
-                        <div className="folders" key={key}  onClick={() => handleFolderClick(folder)}>
-                          <img src={blueFolder} alt="blue folder" className="folderIcon"/>
-                          <h1>
-                            {folder.name}
-                          </h1>
-                        </div>
-                        {/* <HiOutlineDownload
-                          className="downloadButton"
-                          // onClick={() => handleDownload(folder)}
-                        /> */}
-                        <RiDeleteBin7Fill
-                          className="deleteButton"
-                          onClick={() => handleFolderDelete(folder)}
+
+                {(pathLoader === true) ? <PathLoader /> :
+                  <div className="folderDisplay">
+                      {Object.entries((searchQuery === '') ? folders : searchFoldersResults).map(([key, folder]) => (
+                        <button className={(key == folders.length - 1 && files.length == 0) ? 'goToFolderLast' : 'goToFolder'}>
+                          <div className="line"></div>
+                          <div className="folders" key={key}  onClick={() => handleFolderClick(folder)}>
+                            <img src={blueFolder} alt="blue folder" className="folderIcon"/>
+                            <h1>
+                              {folder.name}
+                            </h1>
+                          </div>
+                          {/* <HiOutlineDownload
+                            className="downloadButton"
+                            // onClick={() => handleDownload(folder)}
+                          /> */}
+                          <RiDeleteBin7Fill
+                            className="deleteButton"
+                            onClick={() => handleFolderDelete(folder)}
+                          />
+                        </button>
+                      ))}
+                      {Object.entries((searchQuery === '') ? files : searchFilesResults).map(([key, file]) => (
+                        <button className='goToFolder'>
+                          <div className="line"></div>
+                          <div className="folders" key={file._id}  onClick={() => 
+                          {
+                            navigate('/FileEdit?file_id=' + file._id + '&file_name=' + file.filename)
+                            props.setLoader(true);
+                          }
+                          }>
+                            <img src={fileIcon} alt="blue folder" className="folderIcon"/>
+                            <h1>
+                              {file.filename}
+                            </h1>
+                          </div>
+                          <HiOutlineDownload
+                            className="downloadButton"
+                            onClick={() => handleDownload(file)}
+                          />
+                          <RiDeleteBin7Fill
+                            className="deleteButton"
+                            onClick={() => handleFileDelete(file)}
+                          />
+                        </button>
+                      ))}
+                    {(createFile) && <button className="newFileInput">
+                      <div className="line"></div>
+                      <div className="newFile">
+                        <img src={fileIcon} alt="language" className="folderIcon"/>
+                        <input 
+                          type="text" 
+                          className="fileNameInput" 
+                          placeholder="New File Name"
+                          onChange={(event) => {setNewFileName(event.target.value)}}
+                          onKeyDown={(event) => {handleKeyDown(event)}}
+                          autoFocus
                         />
-                      </button>
-                    ))}
-                    {Object.entries((searchQuery === '') ? files : searchFilesResults).map(([key, file]) => (
-                      <button className={(key == files.length - 1) ? 'goToFolderLast' : 'goToFolder'}>
-                        <div className="line"></div>
-                        <div className="folders" key={file._id}  onClick={() => 
-                        {
-                          navigate('/FileEdit?file_id=' + file._id + '&file_name=' + file.filename)
-                          props.setLoader(true);
-                        }
-                        }>
-                          <img src={fileIcon} alt="blue folder" className="folderIcon"/>
-                          <h1>
-                            {file.filename}
-                          </h1>
-                        </div>
-                        <HiOutlineDownload
-                          className="downloadButton"
-                          onClick={() => handleDownload(file)}
-                        />
-                        <RiDeleteBin7Fill
-                          className="deleteButton"
-                          onClick={() => handleFileDelete(file)}
-                        />
-                      </button>
-                    ))}
-                  {(createFile) && <button className="newFileInput">
-                    <div className="line"></div>
-                    <div className="newFile">
-                      <img src={fileIcon} alt="language" className="folderIcon"/>
-                      <input 
-                        type="text" 
-                        className="fileNameInput" 
-                        placeholder="New File Name"
-                        onChange={(event) => {setNewFileName(event.target.value)}}
-                        onKeyDown={(event) => {handleKeyDown(event)}}
-                        autoFocus
-                      />
-                    </div>
-                  </button>}
+                      </div>
+                    </button>}
                   {(createFolder) && <button className="newFileInput">
                     <div className="line"></div>
                     <div className="newFile">
