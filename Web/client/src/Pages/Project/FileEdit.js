@@ -60,14 +60,15 @@ function File_Edit(props) {
   // API call to update file information
   const updateFile = async () => {
     props.setLoader(true);
-    if (code === originCode) {
+    if (code === originCode && fileNameChange === '') {
       setError('File will not update since no changes were made');
       props.setLoader(false);
       return;
     }
     const response = await axios.post(`http://localhost:3001/updateFile`, {
       file_id: fileId,
-      file_contents: code
+      file_contents: code,
+      file_name: (fileNameChange === '') ? fileName : fileNameChange,
     });
     if (response.status === 200) {
       // Create commit for file update
