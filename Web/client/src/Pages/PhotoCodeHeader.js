@@ -8,7 +8,20 @@ export function PhotoCodeHeader (props) {
    const location = useLocation();
     return (
         <header className='header'>
-            <h1 className='headerTextPhotocode'>PhotoCode</h1>
+            {/* <h1 className='headerTextPhotocode'>PhotoCode</h1> */}
+            <button className='headerTitleNav' onClick={() => 
+                    {
+                        if (location.pathname !== "/Home")
+                        {
+                            navigate("/Home");
+                            props.setLoader(true);
+                        }
+                        else
+                        {
+                            console.log("AT HOME");
+                        }
+                    }
+                }><h1 className="headerTextPhotocode">PhotoCode</h1></button> 
             <div className='headerRight'>
                 <button className='headerTextNav' onClick={() => 
                     {

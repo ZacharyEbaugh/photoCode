@@ -44,7 +44,7 @@ function Contact(props) {
       <div className="containerContact">  
         <PhotoCodeHeader  setLoader={props.setLoader}/>
 
-        <section className='main'>
+        <section className='mainContact'>
             <div className='profileCardWrapper'>
                 <div className='profileCard'>
                     <h1 className='profileName'>Zachary Licong Ebaugh</h1>
