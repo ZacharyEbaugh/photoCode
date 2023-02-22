@@ -23,7 +23,7 @@ export function ProjectCommits() {
 
     return (
         <div className="commitsBox">
-            <h1>Updates</h1>
+            <h1 className='commitsTitle'>Updates</h1>
             {commits.map((commit, index) => {
                 const className = (index === commits.length - 1) ? 'commitGeneralInfoLast' : 'commitGeneralInfo';
                 return (

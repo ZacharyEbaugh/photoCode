@@ -52,14 +52,23 @@
     cursor: default;
 }
 
-.headerTextNav {
-    font-size: 2.5vw;
+.headerTitleNav {
     color: white;
     background: none;
     border: none;
     font-family: "Mono-Regular";
     cursor: pointer;
-    margin-right: 1vw;
+    margin-right: 2rem;
+}
+
+.headerTextNav {
+    font-size: 4.5rem;
+    color: white;
+    background: none;
+    border: none;
+    font-family: "Mono-Regular";
+    cursor: pointer;
+    margin-right: 2rem;
 }
 
 .headerTextNav:hover {
@@ -77,6 +86,22 @@
 .headerPicture {
     height: 7.25rem;
     width: 7.25rem;
+}
+
+/* #endregion */
+
+/* || Media Styles */
+/* #region */
+@media screen and (max-width: 1350px) {
+    .headerTextNav {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 930px) {
+    .headerTextPhotocode {
+        font-size: 4rem;
+    }
 }
 
 /* #endregion */

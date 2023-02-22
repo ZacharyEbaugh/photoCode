@@ -23,7 +23,7 @@
 }
 
 .commitsBox {
-    width: 100%;
+    width: 62rem;
     /* height: 80%; */
     background: #FFFFFF;
     box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
@@ -34,11 +34,13 @@
     align-items: center;
 }
 
-
+.commitsTitle {
+    margin-top: 2rem;
+}
 
 .commitsBox h1 {
     font-family: "Mono-Regular";
-    font-size: 2.5vw;
+    font-size: 5rem;
 }
 
 .commits {
@@ -57,10 +59,12 @@
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
 .commitGeneralInfo:hover {
-    background-color: #E5E5E5; 
+    background-color: #f7f7f7; 
 }
 
 .commitGeneralInfoLast {
@@ -69,10 +73,13 @@
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1%;
 }
 
 .commitGeneralInfoLast:hover {
-    background-color: #E5E5E5;
+    background-color: #f7f7f7;
     border-radius: 0px 0px 11px 11px;
 }
 
@@ -89,7 +96,7 @@
 
 .commits h1 {
     font-family: "Mono-Regular";
-    font-size: 1.2vw;
+    font-size: 2.8rem;
     width: 50%;
 }
 
@@ -99,7 +106,7 @@
 
 .commits h2 {
     font-family: "Mono-Regular";
-    font-size: 1vw;
+    font-size: 2.1rem;
     width: 70%;
     font-weight: lighter;
 }
@@ -116,7 +123,7 @@
 
 .commitTime h1 {
     font-family: "Mono-Regular";
-    font-size: 1vw;
+    font-size: 2.1rem;
     width: 100%;
     font-weight: lighter;
 }
