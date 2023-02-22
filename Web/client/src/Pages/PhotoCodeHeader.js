@@ -13,8 +13,8 @@ export function PhotoCodeHeader (props) {
                     {
                         if (location.pathname !== "/Home")
                         {
-                            navigate("/Home");
                             props.setLoader(true);
+                            navigate("/Home");
                         }
                         else
                         {
@@ -27,8 +27,8 @@ export function PhotoCodeHeader (props) {
                     {
                         if (location.pathname !== "/Home")
                         {
-                            navigate("/Home");
                             props.setLoader(true);
+                            navigate("/Home");
                         }
                         else
                         {
@@ -38,11 +38,11 @@ export function PhotoCodeHeader (props) {
                 }>Home</button> 
                 <button className='headerTextNav' onClick={() => 
                     {
-                        navigate("/Contact");
                         props.setLoader(true);
+                        navigate("/Contact");
                     }
                 }>Contact</button>    
-                <AccountPopUp/>
+                <AccountPopUp setLoader={props.setLoader}/>
             </div>
         </header>
     );
