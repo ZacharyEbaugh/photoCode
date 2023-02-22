@@ -24,6 +24,7 @@ function File_Edit(props) {
   const navigate = useNavigate();
   // State variable to holder file information
   const [fileName, setFileName] = useState('');
+  const [fileNameChange, setFileNameChange] = useState('');
   const [fileId, setFileId] = useState('');
   const [code, setCode] = useState('Hello World!');
   const [originCode, setOriginCode] = useState('Hello World!');
@@ -42,6 +43,7 @@ function File_Edit(props) {
       const urlParams = new URLSearchParams(window.location.search);
       const idPromise = setFileId(urlParams.get('file_id'));
       const namePromise = setFileName(urlParams.get('file_name'));
+      // setFileNameChange(urlParams.get('file_name'));
 
       await Promise.resolve(idPromise, namePromise).then(async() => {
         const response = await axios.get(`http://localhost:3001/getFile?file_id=${urlParams.get('file_id')}`);
@@ -114,9 +116,19 @@ function File_Edit(props) {
               }>
                 {"<- Back to " + fileName.split('.')[0] + ""}
               </button>
-              <h1 className="fileTitle">
+              {/* <h1 className="fileTitle">
                 Editing {fileName}
-              </h1>
+              </h1> */}
+              <div className='fileTitleLabel'>
+                <h1 className='fileTitle'>Editing</h1>
+                <input
+                  type="text"
+                  className="fileTitleInput"
+                  placeholder={fileName}
+                  value={fileNameChange}
+                  onChange={(e) => setFileNameChange(e.target.value)}
+                />
+              </div>
               <CodeMirror 
                 className='CodeMirror'
                 value={code}
