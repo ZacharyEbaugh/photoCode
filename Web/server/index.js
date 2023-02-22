@@ -39,10 +39,10 @@ app.use((req, res, next) => {
 // const https = require('https');
 // const fs = require('fs');
 
-const credentials = {
-  key: fs.readFileSync('./../../../credentials/generated-private-key.pem'),
-  cert: fs.readFileSync('./../../../credentials/fbc4b2fe0afb3741.pem')
-};
+// const credentials = {
+//   key: fs.readFileSync('./../../../credentials/generated-private-key.pem'),
+//   cert: fs.readFileSync('./../../../credentials/fbc4b2fe0afb3741.pem')
+// };
 
 // Connect to MongoDB Cluster
 const mongodbPS = process.env.MONGO_PASSWORD;
