@@ -105,7 +105,7 @@ class SideBar extends React.Component {
                         <GoToAbout/>
                         <GoToContact/>
                         <GoToSettings />
-                        <Pressable
+                        {/* <Pressable
                             onPressOut={() => {
                                 this.setState({help: !this.state.help})
                             }}
@@ -117,7 +117,7 @@ class SideBar extends React.Component {
                             <Text style={styles.options}>
                                 {'Help'}
                             </Text>
-                        </Pressable>
+                        </Pressable> */}
                         <GoToLogout setUser={this.props.setUser} closeSideBar={this.props.onPress}/>
                     </View>
                     <View style={styles.creatorInfoWrapper}>
