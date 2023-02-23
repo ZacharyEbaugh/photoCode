@@ -42,17 +42,17 @@ function File_Edit(props) {
   // Map of string to loadLanguage function
   const lang_map = {
     'java': loadLanguage('java'),
-    'python': loadLanguage('python'),
+    'py': loadLanguage('python'),
     'c': loadLanguage('c'),
     'cpp': loadLanguage('cpp'),
-    'csharp': loadLanguage('csharp'),
-    'javascript': loadLanguage('javascript'),
+    'cs': loadLanguage('csharp'),
+    'js': loadLanguage('javascript'),
     'html': loadLanguage('html'),
     'css': loadLanguage('css'),
     'php': loadLanguage('php'),
-    'ruby': loadLanguage('ruby'),
+    'rb': loadLanguage('ruby'),
     'go': loadLanguage('go'),
-    'rust': loadLanguage('rust'),
+    'rs': loadLanguage('rust'),
   }
  
   // Axios call to get file information
