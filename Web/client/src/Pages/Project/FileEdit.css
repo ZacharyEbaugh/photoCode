@@ -22,12 +22,16 @@
       url("../.././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
   }
 
+  .backgroundContainer {
+    background: linear-gradient(180deg, #0066FF 0%, #FFFFFF 100%);
+    height: 110rem;
+    width: 100%;
+  }
+
   .containerFileEdit {
     display: flex;
     flex-direction: column;
-    height: 55vh;
-    width: 100%;
-    background: linear-gradient(180deg, #0066FF 0%, #FFFFFF 100%);
+
   }
 
   .containerProject {
@@ -39,7 +43,7 @@
   }
 
   .Edit_Commit {
-    width: 95%;
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: row;
@@ -48,13 +52,10 @@
   }
 
   .File {
-    width: 140rem;
-    height: 100rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     border-radius: 11px;
-    margin-right: 6rem;
   }
 
   .fileTitle {
@@ -66,55 +67,61 @@
     color: white;
   }
 
-  .editor {
-    height: 100%;
-    width: 130rem;
-  }
+.editor {
+  width: 130rem;
+}
 
 .CodeMirror * {
   font-family: 'Mono-Regular';
-  font-size: 2rem;
+  font-size: 1.8rem;
 }
 
 .codeEditor {
   padding-top: 5rem;
   padding-bottom: 5rem;
-  background-color: #fafeff;
+  background-color: #FFFFFF;
   border-radius: 11px;
   border: 1px solid #000000;
+}
 
+.Editor {
+  padding-bottom: 3rem;
 }
 
 .commit_information {
   width: 60rem;
   height: 70rem;
-  margin-top: 2.2rem;
+  margin-top: 12rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .titleName {
-  margin-top: 17%;
-  width: 98%;
-  height: 10%;
+  width: 100%;
+  height: 7rem;
   border: none;
   background: #FFFFFF;
   box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
   border-radius: 11px;
   font-family: "Mono-Regular";
   font-size: 3.1rem;
-  padding-left: 2%;
+  padding-left: 2rem;
+  outline: none;
 }
 
 .buttons {
   width: 100%;
-  height: 10%;
+  height: 7rem;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  margin-top: 2%;
+  justify-content: center;
+  margin-top: 1rem;
 }
 
 .cancelButton {
-  width: 45%;
+  width: 40%;
   height: 100%;
   border: none;
   background-color: #a1a1a1;
@@ -123,10 +130,15 @@
   font-size: 3.1rem;
   border-radius: 11px;
   cursor: pointer;
+  margin: 1rem;
+}
+
+.cancelButton:hover {
+  background-color: #808080;
 }
 
 .updateFile {
-  width: 45%;
+  width: 40%;
   height: 100%;
   border: none;
   background-color: #0066FF;
@@ -135,12 +147,17 @@
   font-size: 3.1rem;
   border-radius: 11px;
   cursor: pointer;
+  margin: 1rem;
+}
+
+.updateFile:hover {
+  background-color: #0077FF;
 }
 
 .description {
-  width: 98%;
+  width: 100%;
   height: 40%;
-  margin-top: 2%;
+  margin-top: 1rem;
   border: none;
   background: #FFFFFF;
   box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
@@ -148,18 +165,16 @@
   font-family: "Mono-Regular";
   font-size: 3.1rem;
   resize: none;
-  padding-left: 2%;
-  padding-top: 1%;
+  padding-left: 2rem;
+  padding-top: 1rem;
+  outline: none
 }
 
 .fileTitleInput {
   font-family: "Mono-Regular";
+  max-width: 50rem;
   font-size: 4rem;
   margin-left: 2rem;
-  /* height: 10rem; */
-  /* margin-top: 2%; */
-  /* margin-left: 5%; */
-  /* margin-bottom: 5%; */
   color: white;
   background: none;
   border: none;
@@ -185,3 +200,63 @@
   align-items: center;
 }
 
+/* || Media Styles */
+/* #region */
+@media screen and (max-width: 2350px) {
+  .Edit_Commit {
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+  }
+
+  .commit_information {
+      margin-top: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+  }
+
+  
+}
+
+@media screen and (max-width: 1600px) {
+  .editor {
+    width: 100rem;
+  }
+}
+
+@media screen and (max-width: 1250px) {
+  .editor {
+    width: 90rem;
+  }
+}
+
+@media screen and (max-width: 1125px) {
+  .editor {
+    width: 80rem;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .editor {
+    width: 70rem;
+  }
+
+  .fileTitleInput {
+    max-width: 30rem;
+    overflow: auto;
+  }
+
+  .fileTitleInput::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 950px) {
+  .editor {
+    width: 62rem;
+  }
+}
+
+/* #endregion */

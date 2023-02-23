@@ -34,33 +34,25 @@ body {
     display: flex;
     flex-direction: column;
     background-image: linear-gradient(#0066FF, #FFFFFF);
-    min-height: 100vh;
+    height: 100rem;
 }
 
 .ProjectPageContainer {
-    width: 100%;
-    max-height: 100vh;
-    /* height: 100%; */
-    /* background: linear-gradient(50vh, #0066FF 0%, #FFFFFF 100%); */
+    /* width: 100%; */
     display: flex;
     flex-direction: column;
 }
 
 .directory-commits {
-    /* background-color: black; */
-    /* width: 100%; */
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: space-around;
     align-items: flex-start;
-    margin-top: 2%;
 }
 
 .directory {
     width: 58%;
-    /* height: 100%; */
-    /* background-color: red; */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -69,7 +61,6 @@ body {
 
 .dirBlock {
     width: 100rem;
-    /* height: 80%; */
     background: #FFFFFF;
     box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
     border-radius: 11px;
@@ -85,11 +76,12 @@ body {
     font-size: 5rem;
     margin-top: 2rem;
     margin-bottom: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .create_search_file {
     width: 100%;
-    height: 5%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -168,8 +160,6 @@ body {
     /* padding: 2%; */
 }
 
-
-
 .dirPathView {
     /* width: 100%; */
     height: 100%;
@@ -213,7 +203,6 @@ body {
 
 .folderDisplay {
     width: 100%;
-    margin-top: 2%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -242,7 +231,15 @@ body {
     font-size: 2rem;
     font-family: "Mono-Regular";
     margin-left: 1rem;
+    text-align: left;
     font-weight: lighter;
+    max-width: 80%;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+.folders h1::-webkit-scrollbar {
+    display: none;
 }
 
 .downloadButton {
@@ -314,10 +311,9 @@ body {
 
 .goToFolder:hover {
     background-color: #e6e6e685;
-    height: 10%;
     width: 99.8%;
     align-self: center;
-    /* border-radius: 11px; */
+    border-radius: 11px;
 }
 
 .goToFolderLast {
@@ -326,11 +322,11 @@ body {
     border: none;
     background: none;
     position: relative;
+    margin-bottom: 0.2rem
 }
 
 .goToFolderLast:hover {
     background-color: #e6e6e685;
-    height: 10%;
     width: 99.8%;
     align-self: center;
     border-radius: 0px 0px 11px 11px;
@@ -378,15 +374,11 @@ body {
 
 .settingsButton {
     width: 62rem;
-    /* height: 10%; */
     border-radius: 11px;
-    /* border: 2px solid black; */
     background: #262626;
-    /* box-shadow: inset 01px 0px 5px 3px rgba(0, 0, 0, 0.25); */
     display: flex;
     justify-content: center;
     align-items: center;
-    /* align-self: flex-start; */
     font-family: 'Mono-Regular';
     font-size: 3rem;
     color: #ffffff;
@@ -394,8 +386,6 @@ body {
     margin-bottom: 1rem;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    /* padding-top: 5%; */
-    /* padding-bottom: 5%; */
 }
 
 /* || Media Styles */
@@ -406,6 +396,26 @@ body {
         justify-content: space-around;
         align-items: center;
     }
+
+    .directory {
+        width: 100%;
+    }
+
+    .settings-commits {
+        width: 100%;
+    }
+
+    .commitContent {
+        width: 100%;
+    }
+
+    .settingsButton {
+        width: 60rem;
+    }
+
+    /* .folders h1 {
+        width: 80%;
+    } */
 }
 
 @media screen and (max-width: 1230px) {
@@ -419,6 +429,14 @@ body {
 
     .projectPageTitle {
         font-size: 4rem;
+        padding: 1rem;
+    }
+    .folders h1 {
+        width: 70%;
+    }
+
+    .downloadButton {
+        padding-right: 1rem;
     }
 }
 
