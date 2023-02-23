@@ -217,16 +217,18 @@ h1 {
 .project {
     position: relative;
     display: flex;
-    /* width: 85%; */
+    width: 60rem;
+    height: 15rem;
     background-color: white;
     box-shadow: inset 0px 0px 5px 3px rgba(0, 0, 0, 0.25);
     /* justify-content: space-between; */
-    padding: 0 1rem 0 1.17rem;
+    padding: 1rem;
     align-items: center;
-    margin: 0 1.7rem 2rem 1.9rem;
+    margin: 1rem;
     border-radius: 0.75rem;
     /* box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.25); */
     cursor: pointer;
+    align-self: center;
 }
 
 .projectImage {
@@ -236,7 +238,7 @@ h1 {
 }
 
 .projectTitlesWrapper {
-    /* text-align: center; */
+    width: 100%;
 }
 
 .projectTitle {
@@ -445,6 +447,59 @@ h1 {
 
     .readMeWrapper {
         margin-top: 3rem;
+    }
+
+    .project {
+        width: 64rem;
+        height: 15rem;
+        padding: 1rem;
+    }
+}
+
+@media screen and (max-width: 825px) {
+
+    .projectsHeader {
+        width: 90%;
+        align-self: center;
+    }
+
+    /* .projectsButtonWrapper {
+        width: 60%;
+        align-self: center;
+    } */
+
+    .project {
+        width: 90%;
+        align-self: center;
+        padding: 1rem;
+    }
+
+    .inputWrapper {
+        width: 60%;
+        align-self: center;
+    }
+
+    .searchProjects {
+        /* width: 60%; */
+        /* align-self: center; */
+    }
+
+    .projectsWrapper {
+        width: 100%;
+        align-self: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    .projectTitlesWrapper {
+        width: 100%;
+        height: 100%;
+        align-self: center;
+    }
+
+    .readMeWrapper {
+        width: 85%;
+        align-self: center;
     }
 }
 
