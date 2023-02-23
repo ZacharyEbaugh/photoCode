@@ -246,7 +246,7 @@ const CreateProject = (props) => {
                     Create Project
                 </button>
             </div>
-            <div className='CreateProjectFileUploader'>
+            <div className={(files.length == 0) ? 'CreateProjectFileUploader' : 'CreateProjectFileUploaderAfter'}>
             <file-attachment
               className="GitHubFileAttach"
               input="file"
@@ -259,20 +259,22 @@ const CreateProject = (props) => {
                 multiple />
             </file-attachment>
             {(files.length > 0 || folders.length > 0) && (
-              <div className='listUploadedFiles'>
-                {files.map((file, i) => (
-                  <div className="uploadedFile" key={i}>
-                    <h1>
-                      {(file.fullPath != undefined) ? file.fullPath : file.file.name}
-                    </h1>
-                    {/* <h1>
-                      {file.file.type.split('/')[1]}
-                    </h1> */}
-                    <button onClick={() => handleDeleteFile(i)}>
-                        <img src={deleteFile} alt="delete"/>
-                    </button>
-                  </div>
-                ))}
+              <div className="listUploadedFilesContainer">
+                <div className='listUploadedFiles'>
+                  {files.map((file, i) => (
+                    <div className={(i == files.length - 1) ? "uploadedFileLast" : "uploadedFile"} key={i}>
+                      <h1>
+                        {(file.fullPath != undefined) ? file.fullPath : file.file.name}
+                      </h1>
+                      {/* <h1>
+                        {file.file.type.split('/')[1]}
+                      </h1> */}
+                      <button onClick={() => handleDeleteFile(i)}>
+                          <img src={deleteFile} alt="delete"/>
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
