@@ -1,10 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useContext } from 'react';
+import axios from 'axios';
 
-import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, Alert } from 'react-native';
-import { Shadow } from 'react-native-shadow-2';
+import { 
+    View, 
+    Pressable, 
+    Text, 
+    Image, 
+    TextInput, 
+    Dimensions, 
+    StyleSheet, 
+    Alert 
+} from 'react-native';
 
 import HomeScreen from '../user_initialization/HomeScreen';
+import loginContext from '../user_initialization/loginContext';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -27,27 +36,69 @@ function GoToButton({ screenName }) {
     );
 }
 
+function SendMessage() {
+    const { user } = useContext(loginContext);
 
-function SendButton({ screenName }) {
-    const navigation = useNavigation();
+    const [companyName, setCompanyName] = useState('');
+    const [message, setMessage] = useState('');
 
-    return (
-        <Pressable style={styles.SendButton}
-            onPress={() => 
-                [Alert.alert("Message Sent"),
-                navigation.navigate(screenName)]}
-        >
-            <Text style={styles.SendText}>
-                Send
-            </Text>
+    const baseUrl = "https://photocode.app:8443";
+    const email = user.email;
+    const name = user.name; 
 
-        </Pressable>
+    function sendEmail() {
+        axios.post(baseUrl + "/sendEmail", {  
+                name: name,
+                email: email,
+                company: companyName,
+                message: message,
+        }).then((response) => {
+            if (response.data.message) {
+                Alert.alert(response.data.message);
+            } else {
+                Alert.alert("Email sent successfully!");
+            } 
+        });
+        // Clear input fields after email is sent
+        setCompanyName('');
+        setMessage('');
+    };
 
+    return(
+        <View style={styles.inputBox}>
+            <View style={styles.Name}>
+                <Image style={styles.NameIcon} source={require('../../assets/images/NameIcon.png')} />
+                <TextInput 
+                    style={styles.NameInput} 
+                    placeholder={'Company/Organization'}
+                    placeholderTextColor='darkgrey'
+                    onChangeText={(text) => {setCompanyName(text)}}
+                    value={companyName}
+                />
+            </View>
+            <View style={styles.Message}>
+                <TextInput 
+                    style={styles.MessageInput}
+                    multiline={true}
+                    numberOfLines={'auto'}
+                    placeholder={'Type your message here.'}
+                    onChangeText={(text) => {setMessage(text)}}
+                    value={message}
+                />
+            </View>
+            <Pressable 
+                style={styles.SendButton}
+                onPress={() => {sendEmail()}}
+            >
+                <Text style={styles.SendText}>
+                    {'Send'}
+                </Text>
+            </Pressable>
+        </View>
     );
-}
+};
 
 class ContactUs extends React.Component {
-
     render() {
         return (
             <View style={styles.container}>
@@ -61,29 +112,7 @@ class ContactUs extends React.Component {
                 </View>
 
                 <View style={styles.main}>
-                    <View style={styles.inputBox}>
-                        <View style={styles.Name}>
-                            <Image style={styles.NameIcon} source={require('../../assets/images/NameIcon.png')} />
-                            <TextInput style={styles.NameInput} placeholder="Name"></TextInput>
-                        </View>
-                        <View style={styles.Email}>
-                            <Image style={styles.MailIcon} source={require('../../assets/images/MailIcon.png')} />
-                            <TextInput style={styles.EmailInput} placeholder="Photo@gmail.com"></TextInput>
-                        </View>
-                        <View style={styles.Subject}>
-                            <Image style={styles.SubjectIcon} source={require('../../assets/images/SubjectIcon.png')} />
-                            <TextInput style={styles.SubjectInput} placeholder="Subject"></TextInput>
-                        </View>
-                        <View style={styles.Message}>
-                            <TextInput 
-                                style={styles.MessageInput}
-                                multiline={true}
-                                numberOfLines={'auto'}
-                                placeholder="Type your message here."
-                            ></TextInput>
-                        </View>
-                        <SendButton screenName={HomeScreen}/>
-                    </View>
+                    <SendMessage />
                 </View>
             </View>
         );
@@ -128,11 +157,14 @@ const styles = StyleSheet.create({
 
 
     inputBox: {
-        height: windowHeight * 0.9,
+        // height: windowHeight * 0.9,
+        flex: 1,
         width: windowWidth,
         // marginTop: windowHeight * 0.07,
+        marginBottom: 50,
         backgroundColor: 'white',
         alignItems: 'center',
+        justifyContent: 'space-between',
     },
 
     Name: {
@@ -148,7 +180,7 @@ const styles = StyleSheet.create({
 
     NameInput: {
         flex: 1,
-        fontSize: 25,
+        fontSize: 20,
         marginLeft: 10,
         fontFamily: 'JetBrainsMono-Regular',
     },
