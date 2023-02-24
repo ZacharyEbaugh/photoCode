@@ -34,14 +34,21 @@ export default function AccountPopUp(props) {
                         <h1>Signed in as</h1>
                         <h2>{user.name}</h2>
                     </div>
-                    <button className='actionButton' onClick={() => {navigate("/Account")}}>Account</button>
+                    <button className='actionButton' onClick={() => {
+                        if (location.pathname !== "/Account")
+                        {
+                            props.setLoader(true);
+                            navigate("/Account")
+                        }
+                        }}>Account</button>
                     <button className='actionButton'onClick={() => 
                         {
+                            // Remove all user information from local storage
                             localStorage.removeItem('access_token');
                             localStorage.removeItem('id_token');
                             localStorage.removeItem('user_id');
 
-                            // navigate("/");
+                            // Return the user to the splash page
                             logout({redirectUri: 'http://localhost:3000',})
                         }}>Logout</button>
                     </div>

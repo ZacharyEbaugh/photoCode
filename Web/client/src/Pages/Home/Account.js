@@ -32,8 +32,11 @@ function Account(props) {
 
     useEffect(() => {
         // Get user information using user_id
-        console.log(localStorage.getItem('user_id'));
-        axios.post("http://localhost:3001/getUserInfo", {
+        loadAllContent();
+    }, [])
+
+    const loadAllContent = async() => {
+        const userInfo = await axios.post("http://localhost:3001/getUserInfo", {
             user_id: localStorage.getItem('user_id')
         })
         .then((res) => {
@@ -50,7 +53,10 @@ function Account(props) {
         .catch((err) => {
             console.log(err);
         })
-    }, [])
+        Promise.resolve(userInfo).then(() => {
+            props.setLoader(false);
+        })
+    }
 
     const tooltip = (
         <Tooltip id="tooltip">
