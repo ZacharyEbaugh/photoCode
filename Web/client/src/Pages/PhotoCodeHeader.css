@@ -102,6 +102,10 @@
     .headerTextPhotocode {
         font-size: 4rem;
     }
+
+    .header {
+        margin-bottom: 2rem;
+    }
 }
 
 /* #endregion */

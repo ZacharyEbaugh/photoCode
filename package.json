@@ -1,5 +1,13 @@
 {
   "devDependencies": {
     "eslint-plugin-react-hooks": "^4.6.0"
+  },
+  "dependencies": {
+    "@codemirror/lang-javascript": "^6.1.4",
+    "@codemirror/state": "^6.2.0",
+    "@codemirror/view": "^6.9.1",
+    "@replit/codemirror-vscode-keymap": "^6.0.2",
+    "codemirror": "^5.65.12",
+    "react-codemirror2": "^7.2.1"
   }
 }

@@ -3,13 +3,16 @@ import "./FileEdit.css";
 import LoadingPage from '../LoadingPage';
 
 import axios from 'axios';
+
 import CodeMirror from '@uiw/react-codemirror';
 import { langs, loadLanguage } from '@uiw/codemirror-extensions-langs';
-
 import {tags} from "@lezer/highlight"
 import {HighlightStyle} from "@codemirror/language"
 import {syntaxHighlighting} from "@codemirror/language"
-
+import { vscodeKeymap } from "@replit/codemirror-vscode-keymap";
+import { EditorView, keymap } from '@codemirror/view';
+import { EditorState } from '@codemirror/state';
+import { javascript } from '@codemirror/lang-javascript';
 
 import { Buffer } from 'buffer';
 
@@ -34,7 +37,23 @@ function File_Edit(props) {
 
   const [error, setError] = useState('');
 
-  const langLoad = loadLanguage('java');
+  const [fileLang, setFileLang] = useState('java');
+
+  // Map of string to loadLanguage function
+  const lang_map = {
+    'java': loadLanguage('java'),
+    'py': loadLanguage('python'),
+    'c': loadLanguage('c'),
+    'cpp': loadLanguage('cpp'),
+    'cs': loadLanguage('csharp'),
+    'js': loadLanguage('javascript'),
+    'html': loadLanguage('html'),
+    'css': loadLanguage('css'),
+    'php': loadLanguage('php'),
+    'rb': loadLanguage('ruby'),
+    'go': loadLanguage('go'),
+    'rs': loadLanguage('rust'),
+  }
  
   // Axios call to get file information
   useEffect(() => {
@@ -43,8 +62,15 @@ function File_Edit(props) {
       const urlParams = new URLSearchParams(window.location.search);
       const idPromise = setFileId(urlParams.get('file_id'));
       const namePromise = setFileName(urlParams.get('file_name'));
-      // setFileNameChange(urlParams.get('file_name'));
+      const fileLang = fileName.split('.').pop();
+      if (fileLang in lang_map) {
+        setFileLang(lang_map[fileLang]);
+      }
+      else {
+        setFileLang('text');
+      }
 
+      // setFileNameChange(urlParams.get('file_name'));
       await Promise.resolve(idPromise, namePromise).then(async() => {
         const response = await axios.get(`http://localhost:3001/getFile?file_id=${urlParams.get('file_id')}`);
         const buffer = Buffer.from(response.data.fileContents.data, 'hex')
@@ -60,18 +86,18 @@ function File_Edit(props) {
   // API call to update file information
   const updateFile = async () => {
     props.setLoader(true);
-    if (code === originCode) {
+    if (code === originCode && fileNameChange === '') {
       setError('File will not update since no changes were made');
       props.setLoader(false);
       return;
     }
     const response = await axios.post(`http://localhost:3001/updateFile`, {
       file_id: fileId,
-      file_contents: code
+      file_contents: code,
+      file_name: (fileNameChange === '') ? fileName : fileNameChange,
     });
     if (response.status === 200) {
       // Create commit for file update
-      console.log(updateTitle + "\t" + updateDescription);
       const commitResponse = await axios.post(`http://localhost:3001/createCommit`, {
         project_id: localStorage.getItem('project_id'),
         user_id: localStorage.getItem('user_id'),
@@ -80,7 +106,6 @@ function File_Edit(props) {
         message: (updateDescription === '') ? "Changes made by " + localStorage.getItem('name') : updateDescription,
       });
       if (commitResponse.status === 200) {
-        console.log('Commit created');
         navigate(-1);
       }
       else {
@@ -103,6 +128,7 @@ function File_Edit(props) {
     )
   } else {
     return (
+      <div className='backgroundContainer'>
       <div className="containerFileEdit">
         <PhotoCodeHeader setLoader={props.setLoader}/>
         <div className="Edit_Commit">
@@ -116,9 +142,6 @@ function File_Edit(props) {
               }>
                 {"<- Back to " + fileName.split('.')[0] + ""}
               </button>
-              {/* <h1 className="fileTitle">
-                Editing {fileName}
-              </h1> */}
               <div className='fileTitleLabel'>
                 <h1 className='fileTitle'>Editing</h1>
                 <input
@@ -129,18 +152,34 @@ function File_Edit(props) {
                   onChange={(e) => setFileNameChange(e.target.value)}
                 />
               </div>
-              <CodeMirror 
-                className='CodeMirror'
-                value={code}
-                minHeight={'20vh'}
-                maxHeight={'60vh'}
-                theme='light'
-                extensions={[syntaxHighlighting(myHighlightStyle)]}
-                mode={'javascript'}
-                onChange={(editor, change) => {
-                  setCode(editor.valueOf());
-                }
-              }/>
+              <div className="Editor">
+                <div className="codeEditor">
+                  {(fileLang == 'text') ? 
+                    <CodeMirror 
+                      className='CodeMirror'
+                      value={code}
+                      minHeight={'70rem'}
+                      maxHeight={'100rem'}
+                      theme='light'
+                      onChange={(editor, change) => {
+                        setCode(editor.valueOf());
+                      }
+                    }/>
+                  :
+                    <CodeMirror 
+                        className='CodeMirror'
+                        value={code}
+                        minHeight={'70rem'}
+                        maxHeight={'100rem'}
+                        theme='light'
+                        extensions={[fileLang]}
+                        onChange={(editor, change) => {
+                          setCode(editor.valueOf());
+                        }
+                      }/>
+                  }
+                </div>
+              </div>
             </div>
             </div>
             <div className="commit_information">
@@ -172,6 +211,7 @@ function File_Edit(props) {
             </div>
         </div>
       </div>
+    </div>
     )
   }
 }

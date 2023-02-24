@@ -934,7 +934,7 @@ async function editFile(req, callback) {
             return callback(err, null);
           }
           else {
-            const uploadStream = bucket.openUploadStreamWithId(file._id, file.filename, {
+            const uploadStream = bucket.openUploadStreamWithId(file._id, file_name, {
               contentType: file.contentType,
               metadata: {
                 parent_folder: file.metadata.parent_folder,
