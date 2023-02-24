@@ -28,7 +28,7 @@ class ProjectSettings extends React.Component {
 function ProjectSettingsMain() {
     const [loading, setLoading] = useState(true);
 
-    const { user, userId } = useContext(LoginContext);
+    const { user, userId, setUpdateProjects } = useContext(LoginContext);
 
     const [user_id, setUser_Id] = useState('');
     const [project_id, setProject_Id] = useState('');
@@ -187,6 +187,7 @@ function ProjectSettingsMain() {
                                             .then((response) => {
                                                 console.log(response);
                                                 // props.setIsLoading(true);
+                                                setUpdateProjects(true);
                                                 navigation.navigate('HomeScreen');
                                             })
                                             .catch((error) => {

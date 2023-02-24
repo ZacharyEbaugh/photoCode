@@ -63,7 +63,7 @@ function Home(props) {
     const [projectsSet, setProjectsSet] = useState(false)
     const [userInfoState, setUserInfoState] = useState(null)
 
-    const { user, userId, setUserId, userInfo, setUserInfo } = useContext(loginContext)
+    const { user, userId, setUserId, userInfo, setUserInfo, updateProjects, setUpdateProjects } = useContext(loginContext)
 
     // console.log("user from context " + user.email)
 
@@ -74,7 +74,7 @@ function Home(props) {
         getUser();
         getUserInfo();
         getAllProjects();
-        // rprops.setIsLoading(false);
+        // setUpdateProjects(false);
     }, [projectsSet]);
 
     async function registerUser() {
@@ -172,9 +172,9 @@ function Home(props) {
         animateCameraOptionsClose();
     };
     //#endregion
-        if (props.isLoading) {
+        if (updateProjects) {
             getAllProjects();
-            props.setIsLoading(false);
+            setUpdateProjects(false);
             return <View style={styles.container}>
                 <Text>Loading...</Text>
             </View>
@@ -211,7 +211,7 @@ function Home(props) {
                             }
                             <View style={styles.padding}></View>
                         </ScrollView>
-                        <CreateProject user_id={props.user_id} setIsLoading={props.setIsLoading}/>
+                        <CreateProject />
                         <Shadow viewStyle={{alignSelf: 'stretch'}}>
                             <View style={styles.actionView}>
                                 <GoToCamera onPress={this.openCameraOptions}/>

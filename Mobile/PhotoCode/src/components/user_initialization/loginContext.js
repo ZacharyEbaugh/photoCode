@@ -7,7 +7,9 @@ const userContext = createContext({
   userId: null,
   setUserId: (userId) => {},
   userInfo: null,
-  setUserInfo: (userInfo) => {}
+  setUserInfo: (userInfo) => {},
+  updateProjects: false,
+  setUpdateProjects: (updateProject) => {}
 });
 
 export default userContext;

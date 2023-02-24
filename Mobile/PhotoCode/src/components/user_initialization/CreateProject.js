@@ -22,7 +22,7 @@ const CreateProjectMain = () => {
     const [projectDescription, setProjectDescription] = useState("");
     const [responseMessage, setResponseMessage] = useState("");
 
-    const { user, userId } = useContext(LoginContext);
+    const { user, userId, setUpdateProjects } = useContext(LoginContext);
 
     const [pan] = useState(new Animated.Value(0));
     const [panResponder] = useState(
@@ -80,7 +80,7 @@ const CreateProjectMain = () => {
                 setProjectName("");
                 setProjectDescription("");
                 handleModalClose();
-                // props.setIsLoading(true);
+                setUpdateProjects(true);
             })
             .catch((error) => {
                 console.log(error);

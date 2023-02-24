@@ -30,8 +30,10 @@ const App = () => {
     const [userId, setUserId] = useState(null);
     const [userInfo, setUserInfo] = useState(null);
 
+    const [updateProjects, setUpdateProjects] = useState(false);
+
     return (
-        <loginContext.Provider value={{user, setUser, userId, setUserId, userInfo, setUserInfo}}>
+        <loginContext.Provider value={{user, setUser, userId, setUserId, userInfo, setUserInfo, updateProjects, setUpdateProjects}}>
             <MainContent />
         </loginContext.Provider>
     );
