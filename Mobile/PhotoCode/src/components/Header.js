@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { 
     View,
     Animated, 
@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import SideBar from './sidebar/SideBar';
+import LoginContext from './user_initialization/loginContext';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -34,7 +35,8 @@ topBarSpin = new Animated.Value(0);
 bottomBar = new Animated.Value(0);
 bottomBarSpin = new Animated.Value(0);
 
-function Header(props) {
+function Header() {
+    const { user, setUser } = useContext(LoginContext);
     const [sideBarActive, setSideBarActive] = useState(false);
 
     animateSideBarOpen = () => {
@@ -171,7 +173,7 @@ function Header(props) {
             <View style={[styles.topBar, {zIndex: 2}]}>
                 <View style={styles.topBarShift}>
                     <Animated.View style={[ { left: sideBarXPos}, {top: (windowHeight/1.55)}, {zIndex: 2}]}>
-                        <SideBar onPress={this.logoutCloseSidebar} user={props.user} setUser={props.setUser} />
+                        <SideBar onPress={this.logoutCloseSidebar} user={user} />
                     </Animated.View>
 
                     <Pressable
@@ -185,7 +187,7 @@ function Header(props) {
                     <Text style={[styles.title, {zIndex: 1}]}>
                         {'PhotoCode'}
                     </Text>
-                    <GoToSettings picture={props.user.picture} />
+                    <GoToSettings picture={user.picture} />
                 </View>
             </View>
 

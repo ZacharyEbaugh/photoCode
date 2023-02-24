@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext} from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Buffer } from 'buffer';
@@ -8,6 +8,7 @@ import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextI
 import SelectDropdown from 'react-native-select-dropdown'
 
 import { useNavigation, useRoute } from '@react-navigation/native';
+import LoginContext from '../user_initialization/loginContext';
 
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useKeyboard } from '@react-native-community/hooks';
@@ -245,9 +246,19 @@ function SaveButton({ fileName, originalFileName }) {
     );
 }
 
+class TextEditor extends React.Component {
+    render() {
+        return (
+            <TextEditorMain />
+        );
+    }
+}
 
-function TextEditor(props) {
+
+
+function TextEditorMain() {
     const route = useRoute();
+    const { user, userId } = useContext(LoginContext)
 
     // Possible Origins: camera/new document (1), project file (2)
     const { editorOrigin, originFilename } = route.params;
@@ -330,7 +341,7 @@ function TextEditor(props) {
                     setLanguage={setSelectedLanguage} setOriginalText={setOriginalText} 
                     setUpdatedText={setUpdatedText}/>
                 }
-                <SaveButton fileName={fileName} user={props.user} user_id={props.user_id} />
+                <SaveButton fileName={fileName} user={user} user_id={userId} />
              
             </View>
         </View>

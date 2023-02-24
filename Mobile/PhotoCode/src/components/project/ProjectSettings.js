@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import PropTypes from 'prop-types';
+import LoginContext from '../user_initialization/loginContext';
 
 import { View, ScrollView, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
@@ -15,8 +16,19 @@ import { useNavigation } from '@react-navigation/native';
 import { BackButton } from './../BackButton';
 import SearchCollaborators from './SearchCollaborators';
 
-function ProjectSettings(props) {
+class ProjectSettings extends React.Component {
+    render() {
+        return (
+            <ProjectSettingsMain />
+        );
+    }
+}
+
+
+function ProjectSettingsMain() {
     const [loading, setLoading] = useState(true);
+
+    const { user, userId } = useContext(LoginContext);
 
     const [user_id, setUser_Id] = useState('');
     const [project_id, setProject_Id] = useState('');
@@ -103,7 +115,7 @@ function ProjectSettings(props) {
                         {collaborator.username}
                     </Text>
                     {(collaborator._id === projectOwner) ? <Text style={styles.collaboratorOwner}>Owner</Text> : 
-                        (props.user_id != projectOwner) ? <Text style={styles.collaboratorOwner}>Member</Text>  :
+                        (userId != projectOwner) ? <Text style={styles.collaboratorOwner}>Member</Text>  :
                         <Pressable style={styles.removeCollaborator} onPress={() => {removeCollaborator(collaborator._id, project_id)}}>
                         <Text style={styles.removeCollaboratorText}>
                             {'x'}
@@ -174,7 +186,7 @@ function ProjectSettings(props) {
                                             })
                                             .then((response) => {
                                                 console.log(response);
-                                                props.setIsLoading(true);
+                                                // props.setIsLoading(true);
                                                 navigation.navigate('HomeScreen');
                                             })
                                             .catch((error) => {

@@ -1,5 +1,7 @@
-import React, { startTransition, useEffect } from 'react';
+import React, { startTransition, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
+
+import LoginContext from './loginContext';
 
 import { 
     View, 
@@ -12,14 +14,23 @@ import { LoginButtons } from './LoginButtons';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const SplashPage = (props) => {
+class SplashPage extends React.Component {
+    render() {
+        return (
+           <SplashPageMain />
+        );
+    }
+}
+
+
+const SplashPageMain = () => {
     return (
         <View style = {styles.container}>
             <Text style = {styles.PText}>P</Text>
             <Text style={styles.TitleText}>{'PhotoCode'}</Text>
             <Text style={styles.SubTitleText}>{'Scan-in\nRepository'}</Text>
             <Text style={styles.CText}>C</Text>
-            <LoginButtons style={styles.loginButtons} isUser={props.isUser} setUser={props.setUser}/>
+            <LoginButtons />
         </View>
     );
 };

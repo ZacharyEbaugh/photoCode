@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import PropTypes from 'prop-types';
 import { 
     View, 
@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import LoginContext from '../user_initialization/loginContext';
 
 import { useAuth0 } from 'react-native-auth0';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -38,7 +39,16 @@ function BackButton({ screenName }) {
 const baseUrl = "https://photocode.app:8443";
 var userInfo; 
 
-function Settings(props) {
+class Settings extends React.Component {
+    render() {
+        return (
+            <MainSettings />
+        );
+    }
+}
+
+
+function MainSettings() {
 
     state = {
         newUsername: String,
@@ -66,22 +76,18 @@ function Settings(props) {
     const [email, setEmail] = useState("")
     const [username, setUsername] = useState("")
 
+    const { userInfo, setUser } = useContext(LoginContext);
+
     useEffect(() => {
-        async function getUserInfo() {
-            var userInfoResponse = await axios.post(baseUrl + '/getUserInfo', {
-                user_id: props.user_id
-            })
-            userInfo = userInfoResponse.data;
-            setEmail(userInfo.email)
-            setUsername(userInfo.username)
-        }
-        getUserInfo()
+        console.warn(userInfo);
+        setEmail(userInfo.email)
+        setUsername(userInfo.username)
     }, []);
 
     const changeEmail = async (newEmail) => {
         try {
             var response = await axios.post(baseUrl + '/changeEmail', {
-                user_id: props.user_id,
+                user_id: userInfo._id,
                 newEmail: newEmail,
             });
             setEmail(newEmail);
@@ -94,7 +100,7 @@ function Settings(props) {
     const changeUsername = async (newUsername) => {
         try {
             var response = await axios.post(baseUrl + '/changeUsername', {
-                user_id: props.user_id,
+                user_id: userInfo._id,
                 newUsername: newUsername,
             });
             setUsername(newUsername);
@@ -111,7 +117,7 @@ function Settings(props) {
         }
         try {
             var response = await axios.post(baseUrl + '/resetPassword', {
-                email: props.user.email,
+                email: userInfo.email,
                 password: newPassword,
                 passwordConfirm: newPassword
             });
@@ -134,7 +140,7 @@ function Settings(props) {
                 ephemeralSession: true,
             });
             await AsyncStorage.removeItem('user_id');
-            props.setUser(null);
+            setUser(null);
         } catch (e) {
             console.log('Log out cancelled');
         }
@@ -142,11 +148,11 @@ function Settings(props) {
 
     const deleteAccount = async () => {
         console.log('pressed')
-        console.log(props.user_id)
+        console.log(userInfo._id,)
         try {
             console.log('running')
             var response = await axios.post(baseUrl + '/deleteAccount', {
-                user_id: props.user_id
+                user_id: userInfo._id,
             });
             console.log('Account Deleted')
             await onLogout()

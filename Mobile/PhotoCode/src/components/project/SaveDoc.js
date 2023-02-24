@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -7,6 +7,7 @@ import { Shadow } from 'react-native-shadow-2';
 
 import HomeScreen from './../user_initialization/HomeScreen';
 import SaveDestination from './SaveDestination';
+import LoginContext from '../user_initialization/loginContext';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -32,17 +33,27 @@ function GoToButton({ screenName }) {
     );
 };
 
+class SaveDoc extends React.Component {
+    render() {
+        return (
+            <SaveDocMain />
+        );
+    }
+}
 
-function SaveDoc(props) {
+
+
+function SaveDocMain() {
     const navigation = useNavigation()
     const route = useRoute();
+    const { user, userId } = useContext(LoginContext);
     const [disabled, setDisabled] = useState(false);
 
     const [commitTitle, setCommitTitle] = useState("");
     const [commitMessage, setCommitMessage] = useState("");
 
     const [commitTitlePlaceholder, setCommitTitlePlaceholder] = useState();
-    const [commitMessagePlaceholder, setCommitMessagePlaceholder] = useState("Commit from " + props.user.name);
+    const [commitMessagePlaceholder, setCommitMessagePlaceholder] = useState("Commit from " + user.name);
 
     const [numProjects, setNumProjects] = useState(0);
 
@@ -164,7 +175,7 @@ function SaveDoc(props) {
                         <View style={styles.titleHeader}>
                             <Text style={styles.subjectTitle}>Save Destination</Text>
                             <View style={styles.underLine}></View>
-                            <SaveDestination setProjectDestination={setProjectDestination} setFolderDestination={setFolderDestination} setNumProjects={setNumProjects} user_id={props.user_id}/>
+                            <SaveDestination setProjectDestination={setProjectDestination} setFolderDestination={setFolderDestination} setNumProjects={setNumProjects} user_id={userId}/>
                         </View>
                     : null}
                     <View style={styles.titleHeader}>
