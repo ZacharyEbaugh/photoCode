@@ -186,35 +186,37 @@ function Home(props) {
                 <View style={styles.container}>
                     <View style={[styles.main]}>
                         <Header setProjectSearch={setProjectSearch}/>
-                        <ScrollView 
-                            contentContainerStyle={[styles.projectWrapper]}
-                            onScroll={e => {
-                                setScrollY(e.nativeEvent.contentOffset.y);
-                                if (scrollY < -50) {
-                                    getAllProjects();
+                        <View style={styles.projectScrollWrapper}>
+                            <ScrollView 
+                                contentContainerStyle={[styles.projectWrapper]}
+                                onScroll={e => {
+                                    setScrollY(e.nativeEvent.contentOffset.y);
+                                    if (scrollY < -50) {
+                                        getAllProjects();
+                                    }
+                                }}
+                                scrollEventThrottle={250}
+                            >
+                                {projectsSet == true ?
+                                    projects
+                                        .filter((project) => (project.name.match(new RegExp(projectSearch, 'i'))))
+                                        .map((project, i) => (
+                                        <GoToProject
+                                            key={i}
+                                            projectId={project._id}
+                                            imageSource={require('./../../assets/images/siteIcon.png')}
+                                            projectName={project.name}
+                                            projectDescription={project.description}
+                                            projectCollaborators={project.collaborators}
+                                            // user={props.user}
+                                            // user_id={props.user_id}
+                                        />
+                                        
+                                    )) : null
                                 }
-                            }}
-                            scrollEventThrottle={250}
-                        >
-                            {projectsSet == true ?
-                                projects
-                                    .filter((project) => (project.name.match(new RegExp(projectSearch, 'i'))))
-                                    .map((project, i) => (
-                                    <GoToProject
-                                        key={i}
-                                        projectId={project._id}
-                                        imageSource={require('./../../assets/images/siteIcon.png')}
-                                        projectName={project.name}
-                                        projectDescription={project.description}
-                                        projectCollaborators={project.collaborators}
-                                        // user={props.user}
-                                        // user_id={props.user_id}
-                                    />
-                                    
-                                )) : null
-                            }
-                            <View style={styles.padding}></View>
-                        </ScrollView>
+                                <View style={styles.padding}></View>
+                            </ScrollView>
+                        </View>
                         <CreateProject />
                         <Shadow viewStyle={{alignSelf: 'stretch'}}>
                             <View style={styles.actionView}>
@@ -260,22 +262,15 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     main: {
-        // height: windowHeight,
-        // position: 'absolute',
-        // justifyContent: 'flex-start',
-        // position: 'absolute',
-        // backgroundColor: '#FFFFFF',
-        // flex: 5,
+        
+    },
+    projectScrollWrapper: {
+        // Height is: (total height) - (header height + action bar height)
+        height: windowHeight - (windowHeight*0.2 + windowHeight * 0.125),
+        backgroundColor: '#FFFFFF',
     },
     projectWrapper: {
         backgroundColor: '#FFFFFF',
-        // minHeight must be cameraOptions height + actionBar height + header height
-        // cameraOptions height is windowHeight*0.25 + 64 
-        // actionBar height is 125
-        // headerHeight is 150
-        // minHeight: m,
-        // flex: 1,
-        minHeight: windowHeight*0.637,
     },
     target: {
         fontSize: 40,
