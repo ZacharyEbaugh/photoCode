@@ -63,6 +63,8 @@ function Home(props) {
     const [projectsSet, setProjectsSet] = useState(false)
     const [userInfoState, setUserInfoState] = useState(null)
 
+    const [projectSearch, setProjectSearch] = useState("")
+
     const { user, userId, setUserId, userInfo, setUserInfo, updateProjects, setUpdateProjects } = useContext(loginContext)
 
     // console.log("user from context " + user.email)
@@ -183,7 +185,7 @@ function Home(props) {
             return (
                 <View style={styles.container}>
                     <View style={[styles.main]}>
-                        <Header />
+                        <Header setProjectSearch={setProjectSearch}/>
                         <ScrollView 
                             contentContainerStyle={[styles.projectWrapper]}
                             onScroll={e => {
@@ -195,7 +197,9 @@ function Home(props) {
                             scrollEventThrottle={250}
                         >
                             {projectsSet == true ?
-                                projects.map((project, i) => (
+                                projects
+                                    .filter((project) => (project.name.match(new RegExp(projectSearch, 'i'))))
+                                    .map((project, i) => (
                                     <GoToProject
                                         key={i}
                                         projectId={project._id}

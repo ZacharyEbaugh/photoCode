@@ -35,9 +35,10 @@ topBarSpin = new Animated.Value(0);
 bottomBar = new Animated.Value(0);
 bottomBarSpin = new Animated.Value(0);
 
-function Header() {
+function Header(props) {
     const { user, setUser } = useContext(LoginContext);
     const [sideBarActive, setSideBarActive] = useState(false);
+    const [currentSearch, setCurrentSearch] = useState("");
 
     animateSideBarOpen = () => {
         Animated.timing(sideBarXPos, {
@@ -192,13 +193,12 @@ function Header() {
             </View>
 
             <View style={[styles.searchArea]}>
-                <TouchableOpacity onPress={() => {}}>
-                    <Image style={styles.searchImage} source={require('../assets/images/search.png')} />
-                </TouchableOpacity>
                 <TextInput
                     style={styles.search}
                     placeholder='Search Projects'
-                    placeholderTextColor='darkgrey' 
+                    placeholderTextColor='darkgrey'
+                    onChangeText={(text) => {text = text.replace(/[`~0-9!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, ''); props.setProjectSearch(text); setCurrentSearch(text)}}
+                    value={currentSearch}
                 />
             </View>
         </View>
