@@ -1,17 +1,36 @@
-import React, { startTransition, useEffect } from 'react';
+import React, { startTransition, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 
-import {View, Text, StyleSheet} from 'react-native';
+import LoginContext from './loginContext';
+
+import { 
+    View, 
+    Text, 
+    StyleSheet,
+    Dimensions
+} from 'react-native';
 import { LoginButtons } from './LoginButtons';
 
-const SplashPage = (props) => {
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
+class SplashPage extends React.Component {
+    render() {
+        return (
+           <SplashPageMain />
+        );
+    }
+}
+
+
+const SplashPageMain = () => {
     return (
         <View style = {styles.container}>
             <Text style = {styles.PText}>P</Text>
-            <Text style={styles.TitleText}>PhotoCode</Text>
-            <Text style={styles.SubTitleText}>Scan-in Repository</Text>
+            <Text style={styles.TitleText}>{'PhotoCode'}</Text>
+            <Text style={styles.SubTitleText}>{'Scan-in\nRepository'}</Text>
             <Text style={styles.CText}>C</Text>
-            <LoginButtons style={styles.loginButtons} isUser={props.isUser} setUser={props.setUser}/>
+            <LoginButtons />
         </View>
     );
 };
@@ -27,14 +46,14 @@ const styles = StyleSheet.create({
         width: '130%',
         color: '#0049B8',
         fontWeight: 'bold',
-        fontSize: 700,
+        fontSize: windowWidth <= 390 ? 700 : 900,
         position: 'absolute',
         textAlign: 'left',
         alignSelf: 'flex-start',
         zIndex: -1,
         elevation: -1,
-        top: -200,
-        left: -60,
+        top: windowWidth <= 390 ? -200 : -185,
+        left: windowWidth <= 390 ? -60 : -60,
         fontFamily: 'JetBrainsMono-Medium',
     },
 
@@ -42,13 +61,13 @@ const styles = StyleSheet.create({
         width: '130%',
         color: '#0049B8',
         fontWeight: 'bold',
-        fontSize: 700,
+        fontSize: windowWidth <= 390 ? 700 : 900,
         position: 'absolute',
         textAlign: 'left',
         alignSelf: 'flex-start',
         zIndex: -2,
         elevation: -2,
-        top: 270,
+        top: windowWidth <= 390 ? 270 : 300,
         left: 60,
         fontFamily: 'JetBrainsMono-Medium',
         // backgroundColor: 'white',
@@ -57,19 +76,19 @@ const styles = StyleSheet.create({
 
     TitleText: {
         color:'white',
-        fontSize: 70,
+        fontSize: windowWidth <= 390 ? 70 : 80,
         position: 'absolute',
         top: 190,
-        left: -155,
+        left: windowWidth <= 390 ? -160 : -145,
         transform: [{ rotate: '90deg' }],
         fontFamily: 'JetBrainsMono-Medium',
     },
 
     SubTitleText: {
         color: 'white',
-        fontSize: 45,
-        top: 310,
-        left: 95,
+        fontSize: windowWidth <= 390 ? 45 : 55,
+        top: windowWidth <= 390 ? 310 : 335,
+        left: windowWidth <= 390 ? 95 : 130,
         fontFamily: 'JetBrainsMono-Medium',
     },
 

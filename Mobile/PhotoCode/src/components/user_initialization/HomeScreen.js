@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useContext } from 'react';
+import React, {useState, useEffect, useRef, useContext, memo} from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -40,8 +40,15 @@ const baseUrl = "https://photocode.app:8443";
 // Animation Starting Values
 cameraOptionsYPos = new Animated.Value(windowHeight);
 
+class HomeScreen extends React.Component { 
+    render() {
+        return (
+            <Home />
+        );
+    }
+}
 
-function HomeScreen(props) {
+function Home(props) {
 
     const [scrollY, setScrollY] = useState(0);
 
@@ -54,31 +61,35 @@ function HomeScreen(props) {
     const [username, setUsername] = useState("")
     const [projects, setProjects] = useState({})
     const [projectsSet, setProjectsSet] = useState(false)
+    const [userInfoState, setUserInfoState] = useState(null)
 
-    const { user } = useContext(loginContext)
+    const [projectSearch, setProjectSearch] = useState("")
 
-    console.log("user from context " + user.email)
+    const { user, userId, setUserId, userInfo, setUserInfo, updateProjects, setUpdateProjects } = useContext(loginContext)
+
+    // console.log("user from context " + user.email)
 
 
     useEffect(() => {
+        // console.log(user)
         registerUser();
         getUser();
-        getUserInfo()
+        getUserInfo();
         getAllProjects();
-        props.setIsLoading(false);
-    }, []);
+        // setUpdateProjects(false);
+    }, [projectsSet]);
 
     async function registerUser() {
-        if (props.user.sub.split('|')[0] === 'auth0')
-            props.user.sub = 'Username-Password-Authentication';
-        else if (props.user.sub.split('|')[0] === 'google-oauth2')
-            props.user.sub = 'google';
+        if (user.sub.split('|')[0] === 'auth0')
+            user.sub = 'Username-Password-Authentication';
+        else if (user.sub.split('|')[0] === 'google-oauth2')
+            user.sub = 'google';
         axios.post('https://photocode.app:8443/register', {
-            email: props.user.email,
-            username: props.user.name,
-            picture: props.user.picture,
+            email: user.email,
+            username: user.name,
+            picture: user.picture,
             password: '',
-            connection: props.user.sub.split('|')[0],
+            connection: user.sub.split('|')[0],
         })
         .then(response => {
             console.log(response.data);
@@ -91,13 +102,14 @@ function HomeScreen(props) {
     async function getUser() {
         // Get user id using the user information
         axios.post('https://photocode.app:8443/getUser', {
-            email: props.user.email,
-            connection: props.user.sub.split('|')[0]
+            email: user.email,
+            connection: user.sub.split('|')[0]
         })
         .then(async(response) => {
             console.log(response.data._id);
-            props.setUser_Id(response.data._id);
+            // props.setUser_Id(response.data._id);
             await AsyncStorage.setItem("user_id", response.data._id);
+            setUserId(response.data._id);
         })
         .catch((e) => {
             console.log('Get User: ' + e);
@@ -105,17 +117,24 @@ function HomeScreen(props) {
     }
 
     async function getUserInfo() {
+        user_id = await AsyncStorage.getItem("user_id");
         const userInfoResponse = await axios.post(baseUrl + '/getUserInfo', {
-            user_id: props.user_id
+            user_id: user_id
         })
-        userInfo = userInfoResponse.data;
-        setEmail(userInfo.email)
-        setUsername(userInfo.username)
-        getAllProjects()
+        newUserInfo = userInfoResponse.data;
+        setUserInfo(newUserInfo)
+        
+        
+        
+        setEmail(newUserInfo.email)
+        setUsername(newUserInfo.username)
+
+        // getAllProjects()
     }
 
     async function getAllProjects() {
-        const response = await axios.get(baseUrl + `/getAllProjects?user_id=${props.user_id}`);
+        user_id = await AsyncStorage.getItem("user_id");
+        const response = await axios.get(baseUrl + `/getAllProjects?user_id=${user_id}`);
         setProjects(response.data);
         setProjectsSet(true);
     }
@@ -155,9 +174,9 @@ function HomeScreen(props) {
         animateCameraOptionsClose();
     };
     //#endregion
-        if (props.isLoading) {
+        if (updateProjects) {
             getAllProjects();
-            props.setIsLoading(false);
+            setUpdateProjects(false);
             return <View style={styles.container}>
                 <Text>Loading...</Text>
             </View>
@@ -166,35 +185,39 @@ function HomeScreen(props) {
             return (
                 <View style={styles.container}>
                     <View style={[styles.main]}>
-                        <Header user={props.user} setUser={props.setUser} />
-                        <ScrollView 
-                            contentContainerStyle={[styles.projectWrapper]}
-                            onScroll={e => {
-                                setScrollY(e.nativeEvent.contentOffset.y);
-                                if (scrollY < -50) {
-                                    getAllProjects();
+                        <Header setProjectSearch={setProjectSearch}/>
+                        <View style={styles.projectScrollWrapper}>
+                            <ScrollView 
+                                contentContainerStyle={[styles.projectWrapper]}
+                                onScroll={e => {
+                                    setScrollY(e.nativeEvent.contentOffset.y);
+                                    if (scrollY < -50) {
+                                        getAllProjects();
+                                    }
+                                }}
+                                scrollEventThrottle={250}
+                            >
+                                {projectsSet == true ?
+                                    projects
+                                        .filter((project) => (project.name.match(new RegExp(projectSearch, 'i'))))
+                                        .map((project, i) => (
+                                        <GoToProject
+                                            key={i}
+                                            projectId={project._id}
+                                            imageSource={require('./../../assets/images/siteIcon.png')}
+                                            projectName={project.name}
+                                            projectDescription={project.description}
+                                            projectCollaborators={project.collaborators}
+                                            // user={props.user}
+                                            // user_id={props.user_id}
+                                        />
+                                        
+                                    )) : null
                                 }
-                            }}
-                            scrollEventThrottle={250}
-                        >
-                            {projectsSet == true ?
-                                projects.map((project, i) => (
-                                    <GoToProject
-                                        key={i}
-                                        projectId={project._id}
-                                        imageSource={require('./../../assets/images/siteIcon.png')}
-                                        projectName={project.name}
-                                        projectDescription={project.description}
-                                        projectCollaborators={project.collaborators}
-                                        user={props.user}
-                                        user_id={props.user_id}
-                                    />
-                                    
-                                )) : null
-                            }
-                            <View style={styles.padding}></View>
-                        </ScrollView>
-                        <CreateProject user_id={props.user_id} setIsLoading={props.setIsLoading}/>
+                                <View style={styles.padding}></View>
+                            </ScrollView>
+                        </View>
+                        <CreateProject />
                         <Shadow viewStyle={{alignSelf: 'stretch'}}>
                             <View style={styles.actionView}>
                                 <GoToCamera onPress={this.openCameraOptions}/>
@@ -239,22 +262,15 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     main: {
-        // height: windowHeight,
-        // position: 'absolute',
-        // justifyContent: 'flex-start',
-        // position: 'absolute',
-        // backgroundColor: '#FFFFFF',
-        // flex: 5,
+        
+    },
+    projectScrollWrapper: {
+        // Height is: (total height) - (header height + action bar height)
+        height: windowHeight - (windowHeight*0.2 + windowHeight * 0.125),
+        backgroundColor: '#FFFFFF',
     },
     projectWrapper: {
         backgroundColor: '#FFFFFF',
-        // minHeight must be cameraOptions height + actionBar height + header height
-        // cameraOptions height is windowHeight*0.25 + 64 
-        // actionBar height is 125
-        // headerHeight is 150
-        // minHeight: m,
-        // flex: 1,
-        minHeight: windowHeight*0.637,
     },
     target: {
         fontSize: 40,

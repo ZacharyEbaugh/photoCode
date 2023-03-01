@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import { Pressable, Text, Alert, Dimensions, StyleSheet } from 'react-native';
+import LoginContext from '../user_initialization/loginContext';
 
 import { useNavigation } from '@react-navigation/native';
 import {useState} from 'react';
@@ -102,6 +103,7 @@ const showAlert = () => {
 
 export function GoToLogout(props) {
     const { clearSession } = useAuth0();
+    const { setUser } = useContext(LoginContext);
     const [isPressed, setIsPressed] = useState(false);
 
     const onLogout = async () => {
@@ -114,7 +116,7 @@ export function GoToLogout(props) {
                 ephemeralSession: true,
             });
             await AsyncStorage.removeItem('user_id');
-            props.setUser(null);
+            setUser(null);
         } catch (e) {
             console.log('Log out cancelled');
         }

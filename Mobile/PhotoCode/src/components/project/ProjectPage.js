@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -19,6 +19,7 @@ import { BaseRouter, useNavigation, useRoute } from '@react-navigation/native';
 import { height } from '@mui/system';
 import { BackButton } from './../BackButton';
 import AsyncStorage from '@react-native-community/async-storage';
+import LoginContext from '../user_initialization/loginContext';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -97,7 +98,16 @@ var maxNameSize = 25;
 
 var loadingProgress = new Animated.Value(0);
 
-function ProjectPage(props) {
+class ProjectPage extends React.Component {
+    render() {
+        return (
+            <ProjectPageMain />
+        );
+    }
+}
+
+
+function ProjectPageMain() {
 
     const [project_id, setProject_Id] = useState('');
     const [currentFolders, setCurrentFolders] = useState([])
@@ -110,6 +120,8 @@ function ProjectPage(props) {
     const [newFile, setNewFile] = useState(false)
 
     const [loading, setLoading] = useState(true)
+
+    const { user } = useContext(LoginContext);
 
     state = {
         newFolderName: String, 
@@ -283,7 +295,7 @@ function ProjectPage(props) {
                             <Pressable
                                 style={styles.fileLine}
                                 onPress={() => {navigation.navigate('TextEditor', {
-                                    user: props.user,
+                                    user: user,
                                     originFilename: file.filename, 
                                     fileId: file._id, 
                                     editorOrigin: 2, 
@@ -472,7 +484,7 @@ function ProjectPage(props) {
 
                 <View style={styles.buttonWrapper}>
                     {commits != null ? <GoToSourceControl commits={commits}/> : null}
-                    <GoToProjectSettings setIsLoading={props.setIsLoading}/>
+                    <GoToProjectSettings />
                 </View>
             </View>
         </View>

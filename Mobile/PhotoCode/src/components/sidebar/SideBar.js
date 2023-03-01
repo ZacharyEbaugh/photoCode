@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { View, Pressable, Text, Image, Alert, Linking, Dimensions, StyleSheet, Animated, Easing } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
 
-
+import LoginContext from '../user_initialization/loginContext';
 import { GoToSettings } from './SideBarButtonFunctions';
 import { GoToAbout } from './SideBarButtonFunctions';
 import { GoToContact } from './SideBarButtonFunctions';
@@ -105,7 +105,7 @@ class SideBar extends React.Component {
                         <GoToAbout/>
                         <GoToContact/>
                         <GoToSettings />
-                        <Pressable
+                        {/* <Pressable
                             onPressOut={() => {
                                 this.setState({help: !this.state.help})
                             }}
@@ -117,8 +117,8 @@ class SideBar extends React.Component {
                             <Text style={styles.options}>
                                 {'Help'}
                             </Text>
-                        </Pressable>
-                        <GoToLogout setUser={this.props.setUser} closeSideBar={this.props.onPress}/>
+                        </Pressable> */}
+                        <GoToLogout closeSideBar={this.props.onPress}/>
                     </View>
                     <View style={styles.creatorInfoWrapper}>
                         <View style={styles.creatorInfo}>

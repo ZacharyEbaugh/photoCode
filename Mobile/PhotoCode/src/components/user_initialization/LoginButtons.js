@@ -15,7 +15,7 @@ import { useEffect, useContext } from 'react';
 
 import loginContext from './loginContext';
 
-export const LoginButtons = (props) => {
+export const LoginButtons = () => {
 
     const { setUser } = useContext(loginContext);
 
@@ -108,11 +108,9 @@ export const LoginButtons = (props) => {
     };
 
     useEffect(() => {
-        props.setUser(user);
         if (user != null)
         {
             AsyncStorage.setItem('user_picture', JSON.stringify(user.picture));
-            console.warn(user.picture);
             setUserToContext(user);
         }
     }, [user]);

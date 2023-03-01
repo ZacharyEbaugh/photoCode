@@ -1,16 +1,28 @@
 import { Modal, PanResponder, Animated, TextInput, TouchableOpacity, Pressable, View, Image, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
+import LoginContext from './loginContext';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const CreateProject = (props) => {
+class CreateProject extends React.Component {
+    render() {
+        return (
+            <CreateProjectMain />
+        );
+    }
+}
+
+
+const CreateProjectMain = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [projectName, setProjectName] = useState("");
     const [projectDescription, setProjectDescription] = useState("");
     const [responseMessage, setResponseMessage] = useState("");
+
+    const { user, userId, setUpdateProjects } = useContext(LoginContext);
 
     const [pan] = useState(new Animated.Value(0));
     const [panResponder] = useState(
@@ -55,7 +67,7 @@ const CreateProject = (props) => {
         axios.post('https://photocode.app:8443/createProject', {
             name: projectName,
             description: projectDescription,
-            user: props.user_id,
+            user: userId,
         })
         .then((response) => {
             const project_id = response.data.project_id;
@@ -68,7 +80,7 @@ const CreateProject = (props) => {
                 setProjectName("");
                 setProjectDescription("");
                 handleModalClose();
-                props.setIsLoading(true);
+                setUpdateProjects(true);
             })
             .catch((error) => {
                 console.log(error);

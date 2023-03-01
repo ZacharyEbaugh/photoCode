@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from 'react';
+import React, { useState, useEffect, createContext, useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
@@ -27,9 +27,13 @@ const Stack = createNativeStackNavigator();
 
 const App = () => {
     const [user, setUser] = useState(null);
+    const [userId, setUserId] = useState(null);
+    const [userInfo, setUserInfo] = useState(null);
+
+    const [updateProjects, setUpdateProjects] = useState(false);
 
     return (
-        <loginContext.Provider value={{user, setUser}}>
+        <loginContext.Provider value={{user, setUser, userId, setUserId, userInfo, setUserInfo, updateProjects, setUpdateProjects}}>
             <MainContent />
         </loginContext.Provider>
     );
@@ -37,14 +41,18 @@ const App = () => {
 
 const MainContent = () => {
 
-    const [user, setUser] = useState(null);
-    const [user_id, setUser_Id] = useState(null);
+    // const [user, setUser] = useState(null);
+    // const [user_id, setUser_Id] = useState(null);
+    const {user, setUser, userId, setUserId } = useContext(loginContext);
+
+    // Need to integrate into context
+    // For now it is removed 
     const [isLoading, setIsLoading] = useState(false);
     
     useEffect(() => {
         console.log(user);
-        console.log(user_id);
-    }, [user, user_id]);
+        console.log(userId);
+    }, [user, userId]);
 
 
     if (user == null) {
@@ -54,7 +62,8 @@ const MainContent = () => {
                         <Stack.Navigator screenOptions={{ headerShown: false}}>
                             <Stack.Screen
                                 name="SplashPage"
-                                component={() => <SplashPage isUser={user} setUser={setUser} />}
+                                // component={() => <SplashPage isUser={user} setUser={setUser} />}
+                                component={SplashPage}
                                 options={{ title: 'SplashPage' }}
                             />
                         </Stack.Navigator>
@@ -70,12 +79,14 @@ const MainContent = () => {
                         <Stack.Navigator screenOptions={{ headerShown: false}}>
                             <Stack.Screen
                                 name="HomeScreen"
-                                component={() => <HomeScreen user={user} setUser={setUser} user_id={user_id} setUser_Id={setUser_Id} isLoading={isLoading} setIsLoading={setIsLoading}/>}
+                                // component={() => <HomeScreen user={user} setUser={setUser} user_id={user_id} setUser_Id={setUser_Id} isLoading={isLoading} setIsLoading={setIsLoading}/>}
+                                component={HomeScreen}
                                 options={{ title: 'My Home'}}
                             />
                             <Stack.Screen
                                 name="Settings"
-                                component={() => <Settings user={user} user_id={user_id} setUser={setUser}/>}
+                                // component={() => <Settings user={user} user_id={user_id} setUser={setUser}/>}
+                                component={Settings}
                             />
                             <Stack.Screen
                                 name="About Us"
@@ -89,15 +100,18 @@ const MainContent = () => {
                             />
                             <Stack.Screen
                                 name="ProjectPage"
-                                component={() => <ProjectPage user={user} user_id={user_id}/>}
+                                // component={() => <ProjectPage user={user} user_id={user_id}/>}
+                                component={ProjectPage}
                             />
                             <Stack.Screen
                                 name="ProjectSettings"
-                                component={() => <ProjectSettings user={user} user_id={user_id} isLoading={isLoading} setIsLoading={setIsLoading}/> }
+                                // component={() => <ProjectSettings user={user} user_id={user_id} isLoading={isLoading} setIsLoading={setIsLoading}/> }
+                                component={ProjectSettings}
                             />
                             <Stack.Screen
                                 name="CreateProject"
-                                component={() => <CreateProject user={user} user_id={user_id} isLoading={isLoading} setIsLoading={setIsLoading}/>}
+                                // component={() => <CreateProject user={user} user_id={user_id} isLoading={isLoading} setIsLoading={setIsLoading}/>}
+                                component={CreateProject}
                             />
                             <Stack.Screen
                                 name="SourceControl"
@@ -115,11 +129,13 @@ const MainContent = () => {
                             />
                             <Stack.Screen
                                 name="TextEditor"
-                                component={() => <TextEditor user={user} user_id={user_id}/>}
+                                // component={() => <TextEditor user={user} user_id={user_id}/>}
+                                component={TextEditor}
                             />
                             <Stack.Screen
                                 name="SaveDoc"
-                                component={() => <SaveDoc user={user} user_id={user_id}/>} 
+                                // component={() => <SaveDoc user={user} user_id={user_id}/>} 
+                                component={SaveDoc}
                             />
                         </Stack.Navigator>
                     </NavigationContainer>
