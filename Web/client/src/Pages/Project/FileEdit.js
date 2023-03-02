@@ -72,7 +72,7 @@ function File_Edit(props) {
 
       // setFileNameChange(urlParams.get('file_name'));
       await Promise.resolve(idPromise, namePromise).then(async() => {
-        const response = await axios.get(`http://localhost:3001/getFile?file_id=${urlParams.get('file_id')}`);
+        const response = await axios.get(`https://photocode.app:8443/getFile?file_id=${urlParams.get('file_id')}`);
         const buffer = Buffer.from(response.data.fileContents.data, 'hex')
         await setCode(buffer.toString());
         await setOriginCode(buffer.toString());
@@ -91,14 +91,14 @@ function File_Edit(props) {
       props.setLoader(false);
       return;
     }
-    const response = await axios.post(`http://localhost:3001/updateFile`, {
+    const response = await axios.post(`https://photocode.app:8443/updateFile`, {
       file_id: fileId,
       file_contents: code,
       file_name: (fileNameChange === '') ? fileName : fileNameChange,
     });
     if (response.status === 200) {
       // Create commit for file update
-      const commitResponse = await axios.post(`http://localhost:3001/createCommit`, {
+      const commitResponse = await axios.post(`https://photocode.app:8443/createCommit`, {
         project_id: localStorage.getItem('project_id'),
         user_id: localStorage.getItem('user_id'),
         picture: localStorage.getItem('picture'),
