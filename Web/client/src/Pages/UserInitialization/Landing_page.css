@@ -383,7 +383,7 @@
     /* height: 33vw; */
     margin-top: 27vw;
     z-index: 2;
-    padding: 2rem;
+    padding: 4rem;
     border-radius: 20px;
   }
 
@@ -398,7 +398,7 @@
   .UserInput {
     height: 100%;
     width: 100%;
-    margin-top: 2rem;
+    /* margin-top: 2rem; */
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -415,6 +415,7 @@
   .UserInfo h1 {
     font-size: 2vw;
     margin-left: 3vw;
+    margin-top: 2rem;
   }
 
   /* .NameInput {
@@ -435,13 +436,14 @@
     background-color: #E6E6E6;
     border-radius: 5px;
     margin-left: 3vw;
-    margin-top: 0.5vw;
+    margin-top: 1rem;
   }
 
   .UserMessage {
     width: 50%;
     display: flex;
     flex-direction: column;
+    margin-top: 2rem;
   }
 
   .UserMessage h1 {
@@ -459,6 +461,7 @@
     background-color: #E6E6E6;
     text-align: start;
     resize: none;
+    margin-top: 1rem;
   }
 
   .UserMessage button {
