@@ -1421,5 +1421,5 @@ app.post('/createCommit', async function (req, res) {
 // var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
 
-httpServer.listen(8080);
+// httpServer.listen(8080);
 httpsServer.listen(8443, () => console.log('API listening on 8443'));
