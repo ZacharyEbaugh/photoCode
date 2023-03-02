@@ -36,13 +36,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// const https = require('https');
-// const fs = require('fs');
+const https = require('https');
+const fs = require('fs');
 
-// const credentials = {
-//   key: fs.readFileSync('./../../../credentials/generated-private-key.pem'),
-//   cert: fs.readFileSync('./../../../credentials/fbc4b2fe0afb3741.pem')
-// };
+const credentials = {
+  key: fs.readFileSync('./../../../credentials/generated-private-key.pem'),
+  cert: fs.readFileSync('./../../../credentials/fbc4b2fe0afb3741.pem')
+};
 
 // Connect to MongoDB Cluster
 const mongodbPS = process.env.MONGO_PASSWORD;
@@ -1417,9 +1417,9 @@ app.post('/createCommit', async function (req, res) {
 */
 
 // Start the app
-app.listen(3001, () => console.log('API listening on 3001'));
+// app.listen(3001, () => console.log('API listening on 3001'));
 // var httpServer = http.createServer(app);
-// var httpsServer = https.createServer(credentials, app);
+var httpsServer = https.createServer(credentials, app);
 
-// httpServer.listen(8080);
-// httpsServer.listen(8443, () => console.log('API listening on 8443'));
+httpServer.listen(8080);
+httpsServer.listen(8443, () => console.log('API listening on 8443'));
