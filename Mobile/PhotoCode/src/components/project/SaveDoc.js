@@ -8,6 +8,7 @@ import { Shadow } from 'react-native-shadow-2';
 import HomeScreen from './../user_initialization/HomeScreen';
 import SaveDestination from './SaveDestination';
 import LoginContext from '../user_initialization/loginContext';
+import DoneBar from '../DoneBar';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -61,6 +62,9 @@ function SaveDocMain() {
     const [projectDestination, setProjectDestination] = useState('');
 
     const {filename, fileId, editorOrigin, textToSave, projectId} = route.params;
+
+    const commitTitleId = '1';
+    const commitDesId = '2';
 
     useEffect(() => {
         // if (filename == '' || fileId == undefined || textToSave == undefined)
@@ -185,7 +189,9 @@ function SaveDocMain() {
                             style={styles.SubjectInput} 
                             placeholder={commitTitlePlaceholder}
                             onChangeText={(text) => {updateCommitTitle(text)}}
+                            inputAccessoryViewID={commitTitleId}
                         />
+                        <DoneBar inputId={commitTitleId} />
                     </View>
                     <View style={styles.Message}>
                         <Text style={styles.subjectTitle}>Description</Text>
@@ -196,7 +202,9 @@ function SaveDocMain() {
                             numberOfLines={'auto'}
                             placeholder={commitMessagePlaceholder}
                             onChangeText={(text) => {updateCommitMessage(text)}}
-                        ></TextInput>
+                            inputAccessoryViewID={commitDesId}
+                        />
+                        <DoneBar inputId={commitDesId} />
                     </View>
                     {projectId == undefined ? 
                         <UpdateButton isDisabled={disabled} screenName={'HomeScreen'} /> 
