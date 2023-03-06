@@ -8,8 +8,6 @@ import loginContext from './loginContext';
 import {    
     View, 
     Text,
-    TouchableOpacity,
-    TextInput,
     Animated, 
     Pressable, 
     Image, 
@@ -17,15 +15,13 @@ import {
     StyleSheet, 
     Easing, 
     ScrollView,
-    Button,
-    Alert} from 'react-native';
+} from 'react-native';
 
 import { Shadow } from 'react-native-shadow-2';
 import { useNavigation } from '@react-navigation/native';
 import { BlurView } from '@react-native-community/blur';
 
 import Header from '../Header';
-import SideBar from '../sidebar/SideBar';
 import CreateProject from './CreateProject';
 import { GoToProject } from '../project/GoToProject';
 import GoToCamera from '../GoToCamera';
@@ -48,7 +44,7 @@ class HomeScreen extends React.Component {
     }
 }
 
-function Home(props) {
+function Home() {
 
     const [scrollY, setScrollY] = useState(0);
 
@@ -137,6 +133,7 @@ function Home(props) {
         const response = await axios.get(baseUrl + `/getAllProjects?user_id=${user_id}`);
         setProjects(response.data);
         setProjectsSet(true);
+        setUpdateProjects(false);
     }
 
     function handleProjectCreation() {
@@ -176,7 +173,6 @@ function Home(props) {
     //#endregion
         if (updateProjects) {
             getAllProjects();
-            setUpdateProjects(false);
             return <View style={styles.container}>
                 <Text>Loading...</Text>
             </View>
