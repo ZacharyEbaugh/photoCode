@@ -58,7 +58,7 @@ function ProjectPage(props) {
     const project_id = query.get('project_id');
     localStorage.setItem('project_id', project_id);
     console.log("ID: " + project_id);
-    axios.get(`http://localhost:3001/getFolders?project_id=${project_id}`)
+    axios.get(`https://photocode.app:8443/getFolders?project_id=${project_id}`)
       .then(async(res) => {
         const root_folder_id = (res.data[0]._id != undefined) ? res.data[0]._id : null;
         setProjectName(res.data[0].name);
@@ -90,8 +90,8 @@ function ProjectPage(props) {
 
     // Get the folder_id from the folderName
     // Grab the folders and files within the folder that was clicked and change the states to display them
-    const update_folders = await axios.get(`http://localhost:3001/getFolders?project_id=${folder._id}`);
-    const files = await axios.get(`http://localhost:3001/getFiles?project_id=${folder._id}`);
+    const update_folders = await axios.get(`https://photocode.app:8443/getFolders?project_id=${folder._id}`);
+    const files = await axios.get(`https://photocode.app:8443/getFiles?project_id=${folder._id}`);
     return [update_folders.data, files.data];
   };
 
@@ -178,7 +178,7 @@ function ProjectPage(props) {
   };
 
   const handleDownload = async(file) => {
-    const response = await axios.get(`http://localhost:3001/getFile?file_id=${file._id}&file_name=${file.filename}`);
+    const response = await axios.get(`https://photocode.app:8443/getFile?file_id=${file._id}&file_name=${file.filename}`);
 
     // Convert the hex string to a buffer
     const buffer = Buffer.from(response.data.fileContents.data, 'hex')

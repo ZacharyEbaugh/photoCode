@@ -51,7 +51,7 @@ function Register() {
     }
     
     try {
-      axios.post("http://localhost:3001/register", {
+      axios.post("https://photocode.app:8443/register", {
         email: email,
         username: username,
         password: password,

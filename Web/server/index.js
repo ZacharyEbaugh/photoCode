@@ -1069,7 +1069,7 @@ app.post('/sendProjectInvite', async function (req, res) {
       }
     });
     // Create the message
-    const message = `You have been invited to join ${project_name} on PhotoCode! Click the link below to accept the invite and join the project! \n\n http://localhost:3001/acceptInvite?project_id=${project_id}&user_id=${user_id}`;
+    const message = `You have been invited to join ${project_name} on PhotoCode! Click the link below to accept the invite and join the project! \n\n https://photocode.app:8443/acceptInvite?project_id=${project_id}&user_id=${user_id}`;
 
     // send the email
     transporter.sendMail({
