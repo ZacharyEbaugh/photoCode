@@ -1418,7 +1418,7 @@ app.post('/createCommit', async function (req, res) {
 
 // Start the app
 // app.listen(3001, () => console.log('API listening on 3001'));
-var httpServer = http.createServer(app);
+// var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
 
 // httpServer.listen(8080);
