@@ -1,421 +1,424 @@
 @font-face {
-    font-family: "Mono-Regular";
-    src: local("JetBrainsMono-Regular"),
-      url("../.././fonts/JetBrainsMono-Regular.ttf") format("truetype");
-  }
-  
-  @font-face {
-    font-family: "Mono-Medium";
-    src: local("JetBrainsMono-Medium"),
-      url("../.././fonts/JetBrainsMono-Medium.ttf") format("truetype");
-  }
-  
-  @font-face {
-    font-family: "Mono-Bold";
-    src: local("JetBrainsMono-Bold"),
-      url("../.././fonts/JetBrainsMono-Bold.ttf") format("truetype");
-  }
-  
-  @font-face {
-    font-family: "Mono-ExtraBold"; 
-    src: local("JetBrainsMono-ExtraBold"),
-      url("../.././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
-  }
-  
-  .LandingPageContainer {
-    width: 100%;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-  }
+  font-family: "Mono-Regular";
+  src: local("JetBrainsMono-Regular"),
+    url("../.././fonts/JetBrainsMono-Regular.ttf") format("truetype");
+}
 
-  .SplashSection {
-    width: 100%;
-    background-image: linear-gradient(180deg, #0066FF 0%, #FFFFFF 64.17%);
-  }
+@font-face {
+  font-family: "Mono-Medium";
+  src: local("JetBrainsMono-Medium"),
+    url("../.././fonts/JetBrainsMono-Medium.ttf") format("truetype");
+}
 
-  .topNav {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+@font-face {
+  font-family: "Mono-Bold";
+  src: local("JetBrainsMono-Bold"),
+    url("../.././fonts/JetBrainsMono-Bold.ttf") format("truetype");
+}
 
-  .NavLinks {
-    width: 70%;
-    height: 100%;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-  }
+@font-face {
+  font-family: "Mono-ExtraBold";
+  src: local("JetBrainsMono-ExtraBold"),
+    url("../.././fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
+}
 
-  .NavLinks a {
-    margin: 2rem;
-    margin-left: 4rem;
-  }
+.LandingPageContainer {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
 
-  .NavLinks button {
-    font-size: 3rem;
-    color: white;
-    background: none;
-    border: none;
-    font-family: "Mono-Regular";
-    cursor: pointer;
-  }
+.SplashSection {
+  width: 100%;
+  background-image: linear-gradient(180deg, #0066FF 0%, #FFFFFF 64.17%);
+}
 
-  .NavLinks button:hover {
-    color: black;
-  }
+.topNav {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  .UserInitialization {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 3rem;
-    margin-right: 6rem;
-  }
+.NavLinks {
+  width: 70%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
 
-  .LoginButton {
-    font-size: 3rem;
-    color: white;
-    background: none;
-    border: none;
-    font-family: "Mono-Regular";
-    cursor: pointer;
-    margin-right: 4rem;
-  }
+.NavLinks a {
+  margin: 2rem;
+  margin-left: 4rem;
+}
 
-  .LoginButton:hover {
-    color: black;
-  }
+.NavLinks button {
+  font-size: 3rem;
+  color: white;
+  background: none;
+  border: none;
+  font-family: "Mono-Regular";
+  cursor: pointer;
+}
 
-  .RegisterButton {
-    font-size: 3rem;
-    color: white;
-    background: none;
-    padding: 1rem;
-    border-radius: 10px;
-    border: 2px solid #FFFFFF;
-    font-family: "Mono-Regular";
-    cursor: pointer;
-  }
+.NavLinks button:hover {
+  color: black;
+}
 
-  .RegisterButton:hover {
-    color: black;
-    background-color: white;
-    border: 2px solid black;
-  }
+.UserInitialization {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 3rem;
+  margin-right: 6rem;
+}
 
-  .SplashInfo {
-    width: 100%;
-    margin-top: 10rem;
-    margin-bottom: 10rem;
-    display: flex;
-  }
+.LoginButton {
+  font-size: 3rem;
+  color: white;
+  background: none;
+  border: none;
+  font-family: "Mono-Regular";
+  cursor: pointer;
+  margin-right: 4rem;
+}
 
-  .TitleInfo {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+.LoginButton:hover {
+  color: black;
+}
 
-  .TitleInfo h1 {
-    font-size: 7rem;
-    font-family: "Mono-Medium";
-    text-align: center;
-    z-index: 2;
-    overflow:visible;
-  }
+.RegisterButton {
+  font-size: 3rem;
+  color: white;
+  background: none;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 2px solid #FFFFFF;
+  font-family: "Mono-Regular";
+  cursor: pointer;
+}
 
-  .TitleInfo h2 {
-    font-family: 'Mono-Regular';
-    font-style: normal;
-    font-weight: lighter;
-    font-size: 4rem;
-    margin-top: 0;
-    text-align: center;
-    color: #000000;
-    z-index: 2;
-  }
+.RegisterButton:hover {
+  color: black;
+  background-color: white;
+  border: 2px solid black;
+}
 
-  .DownloadButtons {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    margin-top: 1vw;
-    margin-bottom: 1vw;
-    z-index: 2;
-  }
+.SplashInfo {
+  width: 100%;
+  margin-top: 10rem;
+  margin-bottom: 10rem;
+  display: flex;
+}
 
-  .AppStoreButton {
-    background: none;
-    border: none;
-    cursor: pointer;
-    width: 13vw;
-    margin-right: 1vw;
-    min-width: 15rem;
-  }
+.TitleInfo {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
-  .AppStoreButton img {
-    width: 100%;
-  }
+.TitleInfo h1 {
+  font-size: 7rem;
+  font-family: "Mono-Medium";
+  text-align: center;
+  z-index: 2;
+  overflow: visible;
+}
 
-  .GooglePlayButton {
-    background: none;
-    border: none;
-    cursor: pointer;
-    width: 11vw;
-    margin-left: 1vw;
-    min-width: 13rem;
-  }
+.TitleInfo h2 {
+  font-family: 'Mono-Regular';
+  font-style: normal;
+  font-weight: lighter;
+  font-size: 4rem;
+  margin-top: 0;
+  text-align: center;
+  color: #000000;
+  z-index: 2;
+}
 
-  .GooglePlayButton img {
-    width: 100%;
-  }
+.DownloadButtons {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1vw;
+  margin-bottom: 1vw;
+  z-index: 2;
+}
 
-  .TitleInfo h3 {
-    position: absolute;
-    left: 1vw;
-    bottom: 0;
-    margin-bottom: 1vw;
-    font-size: 1.5vw;
-    font-family: "Mono-Regular";
-    font-weight: lighter;
-    color: black;
-  }
+.AppStoreButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 13vw;
+  margin-right: 1vw;
+  min-width: 15rem;
+}
 
-  .HeroImg {
-    width: 45%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.AppStoreButton img {
+  width: 100%;
+}
 
-  .AppImage {
-    height: auto;
-    width: 80%;
-    max-width: 800px;
-    object-fit: contain;
-    z-index: 2;
-    filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.25));
-  }
+.GooglePlayButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 11vw;
+  margin-left: 1vw;
+  min-width: 13rem;
+}
 
-  .ShowcaseSection {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  }
+.GooglePlayButton img {
+  width: 100%;
+}
 
-  .NavShowcase {
-    width: 80%;
-    height: 3%;
-    margin-left: 10%;
-  }
+.TitleInfo h3 {
+  position: absolute;
+  left: 1vw;
+  bottom: 0;
+  margin-bottom: 1vw;
+  font-size: 1.5vw;
+  font-family: "Mono-Regular";
+  font-weight: lighter;
+  color: black;
+}
 
-  .NavShowcase button {
-    font-size: 1.5vw;
-    margin: 1vw;
-    color: black;
-    background: none;
-    border: none;
-    font-family: "Mono-Regular";
-    cursor: pointer;
-  }
+.HeroImg {
+  width: 45%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .NavShowcase button:hover {
-    color: #0066FF;
-  }
+.AppImage {
+  height: auto;
+  width: 80%;
+  max-width: 800px;
+  object-fit: contain;
+  z-index: 2;
+  filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.25));
+}
 
-  .MobileShowcase {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.ShowcaseSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
 
-  }
+.NavShowcase {
+  width: 80%;
+  height: 3%;
+  margin-left: 10%;
+}
 
-  .ShowcaseImage {
-    height: auto;
-    width: 90%;
-    object-fit: contain;
-  }
+.NavShowcase button {
+  font-size: 1.5vw;
+  margin: 1vw;
+  color: black;
+  background: none;
+  border: none;
+  font-family: "Mono-Regular";
+  cursor: pointer;
+}
 
-  .InfoContactSection {
-    height: 85vw;
-    width: 100%;
-    background-image: linear-gradient(0deg, #0066FF 0%, #FFFFFF 64.17%);
-  }
+.NavShowcase button:hover {
+  color: #0066FF;
+}
 
-  .AboutUs {
-    height: 20%;
-    display: flex;
-  }
+.MobileShowcase {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  .ZacProfile {
-    width: 30vw;
-    height: 21vw;
-    margin-left: 15vw;
-    margin-top: 0.5vh;
-    box-shadow: inset 0px 0px 8px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 17px;
-    display: flex;
-    flex-direction: column;
-  }
+}
 
-  
-  .BrandonProfile {
-    width: 30vw;
-    height: 21vw;
-    margin-left: 18vw;
-    margin-top: -4.5vw;
-    box-shadow: inset 0px 0px 8px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 17px;
-    display: flex;
-    flex-direction: column;
-  }
+.ShowcaseImage {
+  height: auto;
+  width: 90%;
+  object-fit: contain;
+}
 
-  .name {
-    width: 100%;
-    height: 40%;
-  }
+.InfoContactSection {
+  height: 85vw;
+  width: 100%;
+  background-image: linear-gradient(0deg, #0066FF 0%, #FFFFFF 64.17%);
+}
 
-  .name h1 {
-    font-size: 3vw;
-    font-family: "Mono-Regular";
-    text-align: center;
-    margin-top: 0.5vw;
-  }
+.AboutUs {
+  height: 20%;
+  display: flex;
+}
 
-  .Info {
-    width: 100%;
-    height: 60%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.ZacProfile {
+  width: 30vw;
+  height: 21vw;
+  margin-left: 15vw;
+  margin-top: 0.5vh;
+  box-shadow: inset 0px 0px 8px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 17px;
+  display: flex;
+  flex-direction: column;
+}
 
-  .profilePic {
-    width: 50%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 
-  .profilePic img {
-    width: 70%;
-    display: flex;
-  }
+.BrandonProfile {
+  width: 30vw;
+  height: 21vw;
+  margin-left: 18vw;
+  margin-top: -4.5vw;
+  box-shadow: inset 0px 0px 8px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 17px;
+  display: flex;
+  flex-direction: column;
+}
 
-  .PersonalLinks {
-    width: 50%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+.name {
+  width: 100%;
+  height: 40%;
+}
 
-  .PersonalLinks img {
-    width: 15%;
-  }
+.name h1 {
+  font-size: 3vw;
+  font-family: "Mono-Regular";
+  text-align: center;
+  margin-top: 0.5vw;
+}
 
-  .PersonalLinks a {
-    font-size: 1.8vw;
-    font-family: "Mono-Regular";
-    text-decoration: none;
-    color: black;
-    align-self: center;
-    padding-left: 1vw;
-  }
+.Info {
+  width: 100%;
+  height: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .PersonalLinks a:hover {
-    color: #0066FF;
-    z-index: 2;
-  }
+.profilePic {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .LinkedIn {
-    display: flex;
-    align-items: center;
-    padding-bottom: 1vw;
-  }
+.profilePic img {
+  width: 70%;
+  display: flex;
+}
 
-  .GitHub {
-    display: flex;
-    align-items: center;
-    padding-bottom: 1vw;
-  }
+.PersonalLinks {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
-  .Portfolio {
-    display: flex;
-    align-items: center;
-    padding-bottom: 1vw;
-    z-index: 2;
-  }
+.PersonalLinks img {
+  width: 15%;
+}
 
-  .ContactUs {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    margin-bottom: 2vw;
+.PersonalLinks a {
+  font-size: 1.8vw;
+  font-family: "Mono-Regular";
+  text-decoration: none;
+  color: black;
+  align-self: center;
+  padding-left: 1vw;
+}
 
-  }
+.PersonalLinks a:hover {
+  color: #0066FF;
+  z-index: 2;
+}
 
-  .ContactUs img {
-    object-fit: contain;
-    width: 70%;
-    position: absolute;
-    z-index: 1;
-  }
+.LinkedIn {
+  display: flex;
+  align-items: center;
+  padding-bottom: 1vw;
+}
 
-  .ContactInputs {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 70%;
-    height: 33vw;
-    margin-top: 27vw;
-    z-index: 2;
-    border-radius: 20px;
-  }
+.GitHub {
+  display: flex;
+  align-items: center;
+  padding-bottom: 1vw;
+}
 
-  .ContactInputs h1 {
-    height: 10%;
-    width: 90%;
-    font-size: 3vw;
-    font-family: "Mono-Regular";
-    font-weight: lighter;
-  }
+.Portfolio {
+  display: flex;
+  align-items: center;
+  padding-bottom: 1vw;
+  z-index: 2;
+}
 
-  .UserInput {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-  }
+.ContactUs {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  /* margin-bottom: 2vw; */
 
-  .UserInfo {
-    height: 100%;
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-  }
+}
 
-  .UserInfo h1 {
-    font-size: 2vw;
-    margin-left: 3vw;
-  }
+.ContactUs img {
+  object-fit: contain;
+  width: 70%;
+  position: absolute;
+  z-index: 1;
+}
 
-  .UserInfo input{
+.ContactInputs {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  /* height: 33vw; */
+  margin-top: 27vw;
+  z-index: 2;
+  padding: 4rem;
+  border-radius: 20px;
+}
+
+.ContactInputs h1 {
+  height: 10%;
+  width: 90%;
+  font-size: 3vw;
+  font-family: "Mono-Regular";
+  font-weight: lighter;
+}
+
+.UserInput {
+  height: 100%;
+  width: 100%;
+  /* margin-top: 2rem; */
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.UserInfo {
+  /* height: 100%; */
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.UserInfo h1 {
+  font-size: 2vw;
+  margin-left: 3vw;
+  margin-top: 2rem;
+}
+
+/* .NameInput {
     width: 80%;
     height: 35%;
     font-size: 2vw;
@@ -423,92 +426,102 @@
     background-color: #E6E6E6;
     border-radius: 5px;
     margin-left: 3vw;
-    margin-top: 0.5vw;
-  }
+  } */
 
-  .UserMessage {
-    height: 100%;
-    width: 50%;
-    display: flex;
+.UserInfo input {
+  width: 80%;
+  height: 35%;
+  font-size: 2vw;
+  border: none;
+  background-color: #E6E6E6;
+  border-radius: 5px;
+  margin-left: 3vw;
+  margin-top: 1rem;
+}
+
+.UserMessage {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+}
+
+.UserMessage h1 {
+  font-size: 2vw;
+  margin-left: 5%;
+}
+
+.UserMessage textarea {
+  width: 80%;
+  height: 50%;
+  margin-left: 5%;
+  font-size: 2vw;
+  border: none;
+  border-radius: 5px;
+  background-color: #E6E6E6;
+  text-align: start;
+  resize: none;
+  margin-top: 1rem;
+}
+
+.UserMessage button {
+  font-size: 2vw;
+  color: black;
+  width: 40%;
+  margin-left: 25%;
+  margin-top: 5%;
+  background: none;
+  border-radius: 10px;
+  border: 2px solid black;
+  font-family: "Mono-Regular";
+  cursor: pointer;
+}
+
+.UserMessage button:hover {
+  font-size: 2vw;
+  background-color: black;
+  color: white;
+  border: 2px solid white;
+}
+
+@media only screen and (max-width: 1400px) {
+  .SplashInfo {
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
   }
 
-  .UserMessage h1 {
-    font-size: 2vw;
-    margin-left: 5%;
+  .topNav {
+    justify-content: center;
   }
 
-  .UserMessage textarea {
-    width: 80%;
-    height: 50%;
-    margin-left: 5%;
-    margin-top: -1.3vw;
-    font-size: 2vw;
-    border: none;
-    border-radius: 5px;
-    background-color: #E6E6E6;
-    text-align: start;
-    resize: none;
+  .UserInitialization {
+    margin-right: 0;
+    margin-left: 0;
   }
 
-  .UserMessage button {
-    font-size: 2vw;
-    color: black;
-    width: 40%;
-    margin-left: 25%;
+  .NavLinks {
+    display: none;
+  }
+
+  .TitleInfo {
+    width: 90%;
+  }
+
+  .TitleInfo h1 {
+    font-family: "Mono-Medium";
+    text-align: center;
+    overflow: visible;
+  }
+
+  .HeroImg {
     margin-top: 5%;
-    background: none;
-    border-radius: 10px;
-    border: 2px solid black;
-    font-family: "Mono-Regular";
-    cursor: pointer;
   }
 
-  .UserMessage button:hover {
-    font-size: 2vw;
-    background-color: black;
-    color: white;
-    border: 2px solid white;
+  .ShowcaseSection {
+    width: 100%;
   }
-
-  @media only screen and (max-width: 1400px) {
-    .SplashInfo {
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      margin: 0;
-    }
-
-    .topNav {
-      justify-content: center;
-    }
-
-    .UserInitialization {
-      margin-right: 0;
-      margin-left: 0;
-    }
-
-    .NavLinks {
-      display: none;
-    }
-
-    .TitleInfo {
-      width: 90%;
-    }
-
-    .TitleInfo h1 {
-      font-family: "Mono-Medium";
-      text-align: center;
-      overflow:visible;
-    }
-
-    .HeroImg {
-      margin-top: 5%;
-    }
-      
-    .ShowcaseSection {
-      width: 100%;
-    }
 }
 
 @media only screen and (max-width: 1200px) {
