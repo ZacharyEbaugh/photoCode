@@ -80,7 +80,7 @@ function App() {
           "code": localStorage.getItem("authorizationCode"),
           "client_id": "R15Hb8sCd5OiULwScyqwCBtTwQKbgYMs",
           "client_secret": "Y2aFtzhPni6-WT65su48BYzfyItcozp_ft1qeuap9KzaF2ED24AbWkEVNh9LWmXK",
-          "redirect_uri": "http://localhost:3000/Home"    
+          "redirect_uri": "https://photocode.app/Home"    
           },
           {
             headers: {

@@ -1106,7 +1106,7 @@ app.post('/sendPasswordReset', async function (req, res) {
   });
   // Create the message with a link to the reset password page
   const message = `You have requested to reset your password for ${email}. Click the link below to reset your password.`;
-  const link = `http://localhost:3000/resetPassword?email=${email}`;
+  const link = `https://photocode.app/resetPassword?email=${email}`;
 
   // send the email
   transporter.sendMail({
