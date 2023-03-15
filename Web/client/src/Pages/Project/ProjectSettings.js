@@ -39,7 +39,7 @@ function ProjectSettings(props) {
       // Make a request to the MongoDB server to search for users
       async function fetchUsers() {
         try {
-          const response = await axios.get('http://localhost:3001/searchUsers', {
+          const response = await axios.get('https://photocode.app:8443/searchUsers', {
             params: {
               username: searchQuery
             }
@@ -167,7 +167,7 @@ function ProjectSettings(props) {
             setProjectOwner(response.data.user);
             setProjectDescriptionPlaceholder(response.data.description);
             // Get project collaborators information from users collection and add to projectMembers
-            const response2 = await axios.get('http://localhost:3001/getCollaborators', {
+            const response2 = await axios.get('https://photocode.app:8443/getCollaborators', {
                 params: {
                     project_id: project_id
                 }
@@ -188,12 +188,12 @@ function ProjectSettings(props) {
         });
         // Delete folders/files from projects contents
         const project_id = localStorage.getItem('project_id');
-        const response = await axios.post('http://localhost:3001/deleteFolder', {
+        const response = await axios.post('https://photocode.app:8443/deleteFolder', {
             "folder_id": project_id
         })
         .then(
             // Delete project object from projects collection
-            axios.post('http://localhost:3001/deleteProject', {
+            axios.post('https://photocode.app:8443/deleteProject', {
                 project_id: project_id
             })
         );

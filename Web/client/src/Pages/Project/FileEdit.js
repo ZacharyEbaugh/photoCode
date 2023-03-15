@@ -9,7 +9,7 @@ import { langs, loadLanguage } from '@uiw/codemirror-extensions-langs';
 import {tags} from "@lezer/highlight"
 import {HighlightStyle} from "@codemirror/language"
 import {syntaxHighlighting} from "@codemirror/language"
-import { vscodeKeymap } from "@replit/codemirror-vscode-keymap";
+// import { vscodeKeymap } from "@replit/codemirror-vscode-keymap";
 import { EditorView, keymap } from '@codemirror/view';
 import { EditorState } from '@codemirror/state';
 import { javascript } from '@codemirror/lang-javascript';

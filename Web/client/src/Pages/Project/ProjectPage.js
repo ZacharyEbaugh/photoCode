@@ -206,7 +206,7 @@ function ProjectPage(props) {
   }
 
   const handleFileDelete = async(file) => {
-    const response = await axios.post('http://localhost:3001/deleteFile', {
+    const response = await axios.post('https://photocode.app:8443/deleteFile', {
       "file_id": file._id
     });
 
@@ -219,7 +219,7 @@ function ProjectPage(props) {
   }
 
   const handleFolderDelete = async(folder) => {
-    const response = await axios.post('http://localhost:3001/deleteFolder', {
+    const response = await axios.post('https://photocode.app:8443/deleteFolder', {
     "folder": folder,  
     "folder_id": folder._id
     });
@@ -280,7 +280,7 @@ function ProjectPage(props) {
 
     // Axios call to create new folder
     try {
-      await axios.post('http://localhost:3001/createFolder', {
+      await axios.post('https://photocode.app:8443/createFolder', {
         name: newFolder,
         parent_id: parent_folder_id,
         project_id: project_id
@@ -321,7 +321,7 @@ function ProjectPage(props) {
 
     try {
       // Axios call to upload file to gridfs
-      await axios.post('http://localhost:3001/uploadFile', formData, {
+      await axios.post('https://photocode.app:8443/uploadFile', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

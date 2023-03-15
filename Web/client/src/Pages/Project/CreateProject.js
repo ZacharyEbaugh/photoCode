@@ -71,7 +71,7 @@ const CreateProject = (props) => {
   const handleCreateProject = () => {
     props.setLoader(true);
     // Call /createProject endpoint to create project in the database and get the project id
-    axios.post('http://localhost:3001/createProject', {
+    axios.post('https://photocode.app:8443/createProject', {
       name: projectName,
       description: projectDescription,
       user: localStorage.getItem('user_id'),
@@ -80,7 +80,7 @@ const CreateProject = (props) => {
     .then(async(response) => {
       const project_id = response.data.project_id;
       // Create Folder that will act as the root folder for the project with a parent id of the project id
-      axios.post('http://localhost:3001/createFolder', {
+      axios.post('https://photocode.app:8443/createFolder', {
         name: projectName,
         parent_id: project_id,
       })
@@ -153,7 +153,7 @@ const CreateProject = (props) => {
           if (folder_struct[folderName].parent_id !== undefined) {
 
             // Create the folder
-            const folder = await axios.post('http://localhost:3001/createFolder', {
+            const folder = await axios.post('https://photocode.app:8443/createFolder', {
               name: folderName,
               parent_id: folder_struct[folderName].parent_id,
             })
@@ -200,7 +200,7 @@ const CreateProject = (props) => {
 
         try {
           // Upload the files to the server using the /uploadFile endpoint with the folder id as the parent folder id 
-          const response = await axios.post('http://localhost:3001/uploadFile', formData, {
+          const response = await axios.post('https://photocode.app:8443/uploadFile', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
