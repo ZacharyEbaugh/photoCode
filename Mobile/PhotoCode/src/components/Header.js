@@ -14,6 +14,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import SideBar from './sidebar/SideBar';
 import LoginContext from './user_initialization/loginContext';
+import DoneBar from './DoneBar';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -39,6 +40,8 @@ function Header(props) {
     const { user, setUser } = useContext(LoginContext);
     const [sideBarActive, setSideBarActive] = useState(false);
     const [currentSearch, setCurrentSearch] = useState("");
+
+    const searchTextId = '1';
 
     animateSideBarOpen = () => {
         Animated.timing(sideBarXPos, {
@@ -199,7 +202,9 @@ function Header(props) {
                     placeholderTextColor='darkgrey'
                     onChangeText={(text) => {text = text.replace(/[`~0-9!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, ''); props.setProjectSearch(text); setCurrentSearch(text)}}
                     value={currentSearch}
+                    inputAccessoryViewID={searchTextId}
                 />
+                <DoneBar inputId={searchTextId} />
             </View>
         </View>
     );

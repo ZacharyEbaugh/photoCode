@@ -3,7 +3,17 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Buffer } from 'buffer';
 
-import { View, Animated, Pressable, Text, Button, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, Alert } from 'react-native';
+import { 
+    View, 
+    Pressable, 
+    Text, 
+    TextInput, 
+    Dimensions, 
+    StyleSheet, 
+    Alert,
+    Keyboard,
+    InputAccessoryView
+} from 'react-native';
 
 import SelectDropdown from 'react-native-select-dropdown'
 
@@ -15,6 +25,7 @@ import { useKeyboard } from '@react-native-community/hooks';
 import CodeEditor, { CodeEditorSyntaxStyles } from '@rivascva/react-native-code-editor';
 
 import HomeScreen from './../user_initialization/HomeScreen';
+import DoneBar from '../DoneBar';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -34,32 +45,40 @@ function NewDocumentOrigin ({language, originalText, setOriginalText, updatedTex
     const route = useRoute();
     const { initialText } = route.params;
 
-    console.warn(initialText);
+    const inputAccessoryViewID = '2'
+
+    console.log("Initial Text " + initialText);
     return (
-        <SafeAreaView style={styles.codeEditorBox}>
-            <CodeEditor
-                style={{
-                    ...{
-                        fontSize: 20,
-                        inputLineHeight: 26,
-                        highlighterLineHeight: 26,
-                        height: windowHeight * 0.75,
-                        width: windowWidth,
-                        marginTop: windowHeight * -0.06,
-                    },
-                    ...(keyboard.keyboardShown
-                        ? { marginBottom: keyboard.keyboardHeight - insets.bottom }
-                        : {}),
-                }}
-                language={language}
-                syntaxStyle={CodeEditorSyntaxStyles.vs2015}
-                showLineNumbers
-                initialValue={initialText}
-                onChange={(text) => {
-                    updateText(text);
-                    setUpdatedText(text);
-                }}
-            />
+        <SafeAreaView style={styles.codeEditorBox} >
+                <CodeEditor
+                    style={{
+                        ...{
+                            fontSize: 20,
+                            inputLineHeight: 26,
+                            highlighterLineHeight: 26,
+                            height: windowHeight * 0.75,
+                            width: windowWidth,
+                            marginTop: windowHeight * -0.06,
+                        },
+                        ...(keyboard.keyboardShown
+                            ? { marginBottom: keyboard.keyboardHeight - insets.bottom }
+                            : {}),
+                    }}
+                    language={language}
+                    syntaxStyle={CodeEditorSyntaxStyles.vs2015}
+                    
+                    showLineNumbers
+                    initialValue={initialText}
+                    onChange={(text) => {
+                        updateText(text);
+                        setUpdatedText(text);
+                    }}
+                />
+                {/* <InputAccessoryView nativeID={inputAccessoryViewID}> */}
+                {/* {keyboard.keyboardShown ?  */}
+                    
+                {/* : <View></View>} */}
+                {/* </InputAccessoryView> */}
         </SafeAreaView>
     );
 };
@@ -69,7 +88,7 @@ function updateText(text) {
 }
 
 function getText() {
-    console.warn(updatedText);
+    console.log(updatedText);
     return updatedText;
 }
 
@@ -268,7 +287,9 @@ function TextEditorMain() {
     const [originalText, setOriginalText] = useState("");
     const [updatedText, setUpdatedText] = useState("");
 
-    var [selectedLanguage, setSelectedLanguage] = useState("");
+    var [selectedLanguage, setSelectedLanguage] = useState("Select Language");
+
+    const inputAccessoryViewID = '1'
     
     useEffect(() => {
         if (originFilename != undefined) {
@@ -297,11 +318,21 @@ function TextEditorMain() {
                         {/* <TitleInput title={docTitle}/> */}
                         <TextInput
                             style={styles.titleInput}
+                            inputAccessoryViewID={inputAccessoryViewID}
                             placeholder="Title.txt"
                             onChangeText={(newName) => setFileName(newName)}
                             defaultValue={fileName}
                             keyboardType="default"
                         />
+                        <DoneBar inputId={inputAccessoryViewID} />
+                        {/* <InputAccessoryView nativeID={inputAccessoryViewID}>
+                            <View style={styles.doneBar}> 
+                                <Pressable onPress={() => {Keyboard.dismiss()}}>
+                                    <Text style={styles.doneBarText}>{'Done'}</Text>
+                                </Pressable>
+                            </View>
+                        </InputAccessoryView> */}
+
                     </View>
 
                     <View style={styles.languageChoice}>
@@ -309,6 +340,8 @@ function TextEditorMain() {
                             data={languages}
                             dropdownStyle={styles.dropDown}
                             buttonStyle={styles.dropDownButton}
+                            buttonTextStyle={styles.dropDownButtonText}
+                            rowTextStyle={styles.dropDownButtonText}
                             defaultButtonText={selectedLanguage}
                             onSelect={(selectedItem, index) => {
                                 console.log(selectedItem, index)
@@ -327,6 +360,9 @@ function TextEditorMain() {
                                 return item
                             }}
                         />
+                        <Pressable onPress={Keyboard.dismiss} style={styles.hideKeyboardButton}>
+                            <Text style={styles.hideKeyboardText}>{'Hide Keyboard'}</Text>
+                        </Pressable>
                     </View>
 
                 </View>
@@ -395,7 +431,11 @@ const styles = StyleSheet.create({
     dropDownButton: {
         borderRadius: 15,
         width: windowWidth * 0.3,
+        height: 30,
+    },
+    dropDownButtonText: {
         fontFamily: 'JetBrainsMono-Medium',
+        fontSize: 15,
     },
 
     title: {
@@ -441,6 +481,37 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: '5%',
         fontFamily: 'JetBrainsMono-Medium',
+    },
+    doneBar: {
+        // display: 'flex',
+        // width: windowWidth,
+        backgroundColor: 'white',
+        marginRight: 20,
+        opacity: 0.75
+    },
+    doneBarText: {
+        // backgroundColor: 'white',
+        fontFamily: 'JetBrainsMono-Medium',
+        fontSize: 20,
+        textAlign: 'right',
+        marginRight: 20,
+        marginVertical: 10,
+        color: 'black',
+
+    },
+    hideKeyboardButton: {
+        backgroundColor: 'white',
+        borderRadius: 20,
+        marginTop: 10,
+        // padding: 5,
+        justifyContent: 'center',
+        height: 30,
+    },
+    hideKeyboardText: {
+        fontFamily: 'JetBrainsMono-Medium',
+        color: 'black',
+        fontSize: 16,
+        textAlign: 'center',
     }
 
 

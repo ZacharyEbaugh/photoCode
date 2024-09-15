@@ -1,6 +1,20 @@
-import { Modal, PanResponder, Animated, TextInput, TouchableOpacity, Pressable, View, Image, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+
+import { 
+    Modal, 
+    PanResponder, 
+    Animated, 
+    TextInput, 
+    TouchableOpacity, 
+    Pressable, 
+    View, 
+    Image, 
+    Text, 
+    StyleSheet, 
+    Dimensions, 
+} from 'react-native';
+
 import AsyncStorage from '@react-native-community/async-storage';
 import LoginContext from './loginContext';
 
